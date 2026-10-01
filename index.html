@@ -140,12 +140,12 @@
   <script async="" type="module" src="https://cdn.jsdelivr.net/npm/@finsweet/attributes@2/attributes.js" fs-list=""></script>
   <!--  PE-83 console (hero). Replaced the gameboy-embed.js fork on 2026-09-25;
         that file stays in src/js as a backup. Do not load both. -->
-  <link rel="stylesheet" href="css/pe-console.css?v=a94ee95b">
+  <link rel="stylesheet" href="css/pe-console.css?v=1576f310">
   <link rel="stylesheet" href="css/pe-chat-buddy.css?v=dd73e1be">
-  <link rel="stylesheet" href="css/hero-swiper.css?v=4d11b631">
+  <link rel="stylesheet" href="css/hero-swiper.css?v=fe77502f">
   <!--  Site music (11 tracks, on by default, starts on the first tap). js/pe-music.js loads
         before the console so the console's top screen can drive it.  -->
-  <link rel="stylesheet" href="css/pe-music.css?v=2e4a8c95">
+  <link rel="stylesheet" href="css/pe-music.css?v=11cb1acc">
   <script src="js/pe-music.js?v=83f883ed" defer></script>
   <script src="js/pe-console/games/slicer.js?v=0fa7ad38" defer></script>
   <script src="js/pe-console/games/servicio.js?v=f1e9e2b2" defer></script>
@@ -153,7 +153,7 @@
   <script src="js/pe-console/games/emplatado.js?v=479f3168" defer></script>
   <script src="js/pe-console/games/equilibrio.js?v=4e7bd236" defer></script>
   <script src="js/pe-console/games/punto.js?v=d644dd06" defer></script>
-  <script src="js/pe-console/pe-console.js?v=d15aa045" defer></script>
+  <script src="js/pe-console/pe-console.js?v=aa970731" defer></script>
   <script src="js/hero-dock.js?v=8cdf4df5" defer></script>
   <script src="js/hero-swiper.js?v=7c39220e" defer></script>
   <script src="js/pe-motion.js?v=5bf7ae92" defer></script>
@@ -175,8 +175,8 @@
 <!-- Original site CSS — 1:1 fidelity baseline -->
 <link rel="stylesheet" href="css/original.css?v=5502636d">
 <link rel="stylesheet" href="css/framework.css?v=48e7fd28">
-<link rel="stylesheet" href="css/variables.css?v=855e97c8">
-<link rel="stylesheet" href="css/project.css?v=1595197c">
+<link rel="stylesheet" href="css/variables.css?v=caf20025">
+<link rel="stylesheet" href="css/project.css?v=7c09f724">
 <link rel="stylesheet" href="css/pe-motion.css?v=71450f25">
 <script>(function(h){try{if(!h.classList.contains('modo-entropia')&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){h.classList.add('pe-m-boot');setTimeout(function(){h.classList.remove('pe-m-boot')},3000)}}catch(e){}})(document.documentElement);</script>
   <script src="data/pe-experiencias.js"></script>
@@ -1794,7 +1794,7 @@
                   <div class="hero_title-wrapper">
                     <div class="padding-section-xl grow hero_stack">
                       <div class="hero_content-wrapper hero_cluster">
-                        <div class="button-group gap-0 hero_pills">
+                        <div class="button-group gap-0 is-chips hero_pills">
                           <a href="talleres-v2.html" class="button is-secondary is-simple is-tiny hero_pill w-button"><strong class="hero_pill-kicker">Energía /</strong> Talleres</a>
                           <a href="team-building-v2.html" class="button is-secondary is-simple is-tiny hero_pill w-button"><strong class="hero_pill-kicker">Fusión /</strong> Team Building</a>
                           <a href="cenas-v2.html" class="button is-secondary is-simple is-tiny hero_pill w-button"><strong class="hero_pill-kicker">Materia /</strong> Chef&#x27;s Table</a>
@@ -1829,7 +1829,7 @@
                       --marquee-gap: var(--_size-primitives---sm, 1rem);
                       --marquee-item-height: 20vh;
                       --marquee-item-width: 15rem;
-                      --marquee-radius: var(--_ui-styles-semantics---radius--radius-2xs, 0.5rem);
+                      --marquee-radius: var(--_radius---control-sm);
                       position: relative;
                       width: 100%;
                       height: 100%;
@@ -3365,7 +3365,7 @@
                 gap: var(--_size-primitives---xs, 0.75rem);
                 padding: var(--_size-primitives---sm, 1rem) var(--_size-primitives---md, 1.5rem);
                 border: var(--_ui-styles-semantics---stroke--border-width, 1.5px) solid var(--color-scheme-1--border, currentColor);
-                border-radius: var(--_ui-styles-semantics---radius--radius-2xs, 0.5rem);
+                border-radius: var(--_radius---control-sm);
                 background-color: var(--color-scheme-1--foreground, transparent);
                 min-width: 10rem;
                 white-space: nowrap;
@@ -3486,7 +3486,7 @@
                       <div class="productos-card-subtitle margin-bottom margin-medium">
                         <div class="text-style-tagline">Energía [Lo que somos]</div>
                       </div>
-                      <p>Experiencias inmersivas de cocina diseñadas para aprender haciendo. Cada taller es un espacio de exploración culinaria donde las recetas, los ingredientes y las técnicas se convierten en vehículos de expresión y comunidad.</p>
+                      <p class="u-text-style-main u-weight-light">Experiencias inmersivas de cocina diseñadas para aprender haciendo. Cada taller es un espacio de exploración culinaria donde las recetas, los ingredientes y las técnicas se convierten en vehículos de expresión y comunidad.</p>
                     </div>
                   </div>
                 </div>
@@ -3510,7 +3510,7 @@
                       <div class="productos-card-subtitle margin-bottom margin-medium">
                         <div class="text-style-tagline">Fusión [Donde nos encontramos]</div>
                       </div>
-                      <p>Actividades diseñadas para empresas o grupos que buscan fortalecer vínculos a través de la cocina. Dinámicas colaborativas que combinan desafío, creatividad y disfrute, todo en un entorno relajado y con propósito.</p>
+                      <p class="u-text-style-main u-weight-light">Actividades diseñadas para empresas o grupos que buscan fortalecer vínculos a través de la cocina. Dinámicas colaborativas que combinan desafío, creatividad y disfrute, todo en un entorno relajado y con propósito.</p>
                     </div>
                   </div>
                 </div>
@@ -3534,7 +3534,7 @@
                       <div class="productos-card-subtitle margin-bottom margin-medium">
                         <div class="text-style-tagline">Materia [Lo que nace]</div>
                       </div>
-                      <p>Cenas diseñadas para grupos privados, empresas o celebraciones íntimas. Un entorno cuidado donde se combinan narrativa gastronómica, ambientación y servicio cercano. Cada cena puede tener un storytelling o eje conceptual.</p>
+                      <p class="u-text-style-main u-weight-light">Cenas diseñadas para grupos privados, empresas o celebraciones íntimas. Un entorno cuidado donde se combinan narrativa gastronómica, ambientación y servicio cercano. Cada cena puede tener un storytelling o eje conceptual.</p>
                     </div>
                   </div>
                 </div>
@@ -3605,7 +3605,7 @@
                         <div>Recetas exclusivas</div>
                       </div>
                     </div>
-                    <p class="text-size-large">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                    <p class="u-text-style-main u-weight-light">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
                   </div>
                 </div>
                 <div class="margin-top margin-medium">
@@ -3661,7 +3661,7 @@
                         <div>Recetas exclusivas</div>
                       </div>
                     </div>
-                    <p class="text-size-large">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                    <p class="u-text-style-main u-weight-light">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
                   </div>
                 </div>
                 <div class="margin-top margin-medium">
@@ -3717,7 +3717,7 @@
                         <div>Recetas exclusivas</div>
                       </div>
                     </div>
-                    <p class="text-size-large">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                    <p class="u-text-style-main u-weight-light">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
                   </div>
                 </div>
                 <div class="margin-top margin-medium">
@@ -3773,7 +3773,7 @@
                         <div>Recetas exclusivas</div>
                       </div>
                     </div>
-                    <p class="text-size-large">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                    <p class="u-text-style-main u-weight-light">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
                   </div>
                 </div>
                 <div class="margin-top margin-medium"></div>
@@ -3809,7 +3809,7 @@
                         <div class="margin-bottom margin-small">
                           <h3 class="u-text-style-h2">El taller</h3>
                         </div>
-                        <p>En Calle Zurbano 83, Madrid, ofrecemos ambientes adaptables para todo tipo de eventos. Desde talleres de cocina hasta cenas privadas, cada rincón está diseñado para inspirar y deleitar.</p>
+                        <p class="u-text-style-main u-weight-light">En Calle Zurbano 83, Madrid, ofrecemos ambientes adaptables para todo tipo de eventos. Desde talleres de cocina hasta cenas privadas, cada rincón está diseñado para inspirar y deleitar.</p>
                       </div>
                     </div>
                     <div class="layer align-bottom-left hide-tablet">
@@ -3838,7 +3838,7 @@
                         <div class="margin-bottom margin-small">
                           <h3 class="u-text-style-h2">El local</h3>
                         </div>
-                        <p>Ubicados en Calle Zurbano 83, ofrecemos un entorno inspirador y accesible. Disfruta de nuestras instalaciones modernas y acogedoras para tus experiencias culinarias.</p>
+                        <p class="u-text-style-main u-weight-light">Ubicados en Calle Zurbano 83, ofrecemos un entorno inspirador y accesible. Disfruta de nuestras instalaciones modernas y acogedoras para tus experiencias culinarias.</p>
                       </div>
                     </div>
                     <div class="layer align-right-left hide-tablet">
@@ -3861,7 +3861,7 @@
                         <div class="margin-bottom margin-small">
                           <h3 class="u-text-style-h2">Zurbano 83</h3>
                         </div>
-                        <p>Nuestro espacio combina modernidad y confort. Instalaciones diseñadas para ofrecerte una experiencia única en cada taller y evento.</p>
+                        <p class="u-text-style-main u-weight-light">Nuestro espacio combina modernidad y confort. Instalaciones diseñadas para ofrecerte una experiencia única en cada taller y evento.</p>
                       </div>
                     </div>
                     <div class="layer align-bottom-left hide-tablet">
@@ -5186,13 +5186,13 @@
               padding: 1rem !important;
               background: transparent !important;
               border: 1.5px solid rgba(232, 213, 196, 0.15) !important;
-              border-radius: 0.75rem !important;
+              border-radius: var(--_radius---card) !important;
               font-family: "Space Grotesk", sans-serif !important;
             }
             .cart-item_image {
               width: 80px !important;
               height: 80px !important;
-              border-radius: 0.5rem !important;
+              border-radius: var(--_radius---control-sm) !important;
               object-fit: cover !important;
               flex-shrink: 0 !important;
               border: 1.5px solid rgba(232, 213, 196, 0.1) !important;
@@ -5234,7 +5234,7 @@
               padding: 0 !important;
               background: transparent !important;
               border: 1.5px solid #e8d5c4 !important;
-              border-radius: 0.375rem !important;
+              border-radius: var(--_radius---control-sm) !important;
               color: #e8d5c4 !important;
               font-family: "Space Grotesk", sans-serif !important;
               font-size: 1rem !important;
@@ -5306,7 +5306,7 @@
               padding: 0.75rem 1rem;
               background: transparent !important;
               border: 1.5px solid #efa02e !important;
-              border-radius: 0.5rem;
+              border-radius: var(--_radius---control-sm);
               font-family: "Space Grotesk", sans-serif;
               font-size: 0.875rem;
               color: #efa02e !important;

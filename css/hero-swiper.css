@@ -29,10 +29,10 @@
     aspect-ratio: 4 / 5;
     overflow-x: hidden;
     overflow-y: hidden;
-    border-top-left-radius: var(--pe---radius--main, 1rem);
-    border-top-right-radius: var(--pe---radius--main, 1rem);
-    border-bottom-left-radius: var(--pe---radius--main, 1rem);
-    border-bottom-right-radius: var(--pe---radius--main, 1rem);
+    border-top-left-radius: var(--_radius---card);
+    border-top-right-radius: var(--_radius---card);
+    border-bottom-left-radius: var(--_radius---card);
+    border-bottom-right-radius: var(--_radius---card);
     background-color: #15222c;
   }
   .hero-swiper_img {
@@ -74,10 +74,10 @@
     border-right-color: #bf8024;
     border-bottom-color: #bf8024;
     border-left-color: #bf8024;
-    border-top-left-radius: 0.3rem;
-    border-top-right-radius: 0.3rem;
-    border-bottom-left-radius: 0.3rem;
-    border-bottom-right-radius: 0.3rem;
+    border-top-left-radius: var(--_radius---xs);
+    border-top-right-radius: var(--_radius---xs);
+    border-bottom-left-radius: var(--_radius---xs);
+    border-bottom-right-radius: var(--_radius---xs);
     background-color: transparent;
     transition-property: width, background-color;
     transition-duration: 0.3s;

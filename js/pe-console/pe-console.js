@@ -57,7 +57,10 @@
     close: '<path d="M3 3l10 10M13 3L3 13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square"/>',
     note: '<path d="M6 2h8v3H9v7.5A2.5 2.5 0 1 1 6.5 10H6z"/>',
     play: '<path d="M4 2l10 6-10 6z"/>',
-    pause: '<path d="M3 2h4v12H3zM9 2h4v12H9z"/>'
+    pause: '<path d="M3 2h4v12H3zM9 2h4v12H9z"/>',
+    // toast icons
+    mute: '<path d="M1 5.5h3l4-3.5v12l-4-3.5H1z"/><path d="M10.5 5.5l4.5 5M15 5.5l-4.5 5" fill="none" stroke="currentColor" stroke-width="1.8"/>',
+    power: '<path d="M8 1v6.5M4.2 3.6a5.6 5.6 0 1 0 7.6 0" fill="none" stroke="currentColor" stroke-width="2.2"/>'
   };
   var GLYPH = { '\u25B2': 'up', '\u25BC': 'down', '\u25C0': 'left', '\u25B6': 'right', '\u2715': 'close', '\u266A': 'note' };
   var GLYPH_RE = /[\u25B2\u25BC\u25C0\u25B6\u2715\u266A]/g;
@@ -341,9 +344,26 @@
     for (var i = 1; i <= max; i++) h += '<i data-v="' + i + '" class="' + (i <= n ? 'is-on' : '') + '"></i>';
     return h + '</span>';
   }
+  /* ONE TOAST: the cream bubble the volume and brightness feedback made
+     (mono label + something), top centre of the screen, 1.1 s. Every
+     transient console message uses it, in one of three shapes:
+       toast('Vol', { meter: [6, 10] })            label + segmented meter
+       toast('Carrito', { value: '+1' })           label + short value
+       toast('Sonido', { icon: 'mute' })           label + SVG icon
+     { warn: true } colours the value/icon rust (sold out, failed);
+     { ms } changes how long it stays. toast(html, ms) still takes raw HTML. */
   var toastT = 0;
-  function toast(html, ms) {
+  function toast(label, o) {
+    var html = label, warn = false, ms = 0;
+    if (o && typeof o === 'object') {
+      html = '<span class="pe-os_toast-label">' + esc(label) + '</span>';
+      if (o.meter) html += meter(o.meter[0], o.meter[1]);
+      else if (o.icon) html += ico(o.icon, 'pe-os_toast-ico');
+      else if (o.value != null) html += '<span class="pe-os_toast-val">' + esc(o.value) + '</span>';
+      warn = !!o.warn; ms = o.ms;
+    } else ms = o;
     toastEl.innerHTML = html;
+    toastEl.classList.toggle('is-warn', warn);
     toastEl.classList.add('is-on');
     clearTimeout(toastT);
     toastT = setTimeout(function () { toastEl.classList.remove('is-on'); }, ms || 1100);
@@ -407,7 +427,8 @@
     store('pe-con-bright', bright);
     applyBright();
     sampleSoon('boot');                        // same start-up sound as the first touch after load
-    toast('Brillo ' + meter(bright, 5));
+    toast('Brillo', { meter: [bright, 5] });
+    assist('screenOn');
     if (current && current.refresh) current.refresh();
     return true;
   }
@@ -566,14 +587,30 @@
     return Math.min(z.w, z.h) < 340 ? 2 : 3;
   }
 
+  // which app a view is, for the assistant's first-visit lines
+  function viewId(v) {
+    for (var i = 0; i < apps.length; i++) if (apps[i].view === v) return apps[i].id;
+    return v === videoView ? 'video' : v === recordsView ? 'records' : v === aboutView ? 'about' : v === navView ? 'nav' : '';
+  }
+  var seenApp = {}, leftApp = {};
   function go(app, opts) {
     if (current === app) return;
+    var prev = current;
     if (current) { current.el.classList.remove('is-active'); if (current.leave) current.leave(); }
     current = app;
     app.el.classList.add('is-active');
     setStatus(app.status || app.title || 'PE·OS');
     swapCart(app.cart || app.title || 'PE·OS', app.cartColor);
-    if (booted && app !== attract && app !== launcher) buddy.react('talk', 'Abriendo ' + String(app.title).toLowerCase() + '…', 1.6);
+    if (booted && app !== attract && app !== launcher) {
+      // first visit of an app has its own line; after that the plain "Abriendo …"
+      var id = viewId(app);
+      // (marked as seen only once the line really made it on screen)
+      if (id && !seenApp[id] && assist('enter', { sub: id })) seenApp[id] = 1;
+      else assist('open', { name: String(app.title).toLowerCase() });
+    } else if (booted && app === launcher && prev && prev !== attract && prev !== navView) {
+      var pid = viewId(prev);
+      if (pid && !leftApp[pid] && assist('leave', { sub: pid })) leftApp[pid] = 1;
+    }
     if (app.enter) app.enter(opts || {});
     idleT = 0;
   }
@@ -817,15 +854,17 @@
       countEl.textContent = ('0' + (idx + 1)).slice(-2) + ' / ' + ('0' + photos.length).slice(-2);
       el.classList.toggle('is-video', !!ITEMS[idx].video);
     }
+    // now and then the assistant says something about the photo on screen (SAY.gallery)
+    function comment() { if (!ITEMS[idx].video) assist('gallery'); }
     // the lightbox holds the photos only (index - 1: the video is slide 0)
     function openBox() {
       if (ITEMS[idx].video) { sfx('open'); go(videoView); return; }
-      lightbox.open(idx - 1, { nav: function (i) { show(i + 1); }, close: function (i) { show(i + 1); timer = 0; } });
+      lightbox.open(idx - 1, { nav: function (i) { show(i + 1); assist('gallery'); }, close: function (i) { show(i + 1); timer = 0; } });
     }
     el.addEventListener('click', function (e) { if (current === api_ && (!e.target.closest('button') || e.target.closest('[data-watch], [data-full]'))) openBox(); });
     drag(el, { axis: 'x', end: function (d, v) {
       if (!flung(d, v, el.clientWidth)) return;
-      sfx('nav'); timer = 0; show(idx + (d < 0 ? 1 : -1));
+      sfx('nav'); timer = 0; show(idx + (d < 0 ? 1 : -1)); comment();
     } });
     var api_ = {
       el: el, title: 'GALERÍA',
@@ -839,8 +878,8 @@
           else if (key === 'b' || key === 'a') lightbox.close();
           return;
         }
-        if (key === 'left' || key === 'up') { sfx('nav'); timer = 0; show(idx - 1); }
-        else if (key === 'right' || key === 'down') { sfx('nav'); timer = 0; show(idx + 1); }
+        if (key === 'left' || key === 'up') { sfx('nav'); timer = 0; show(idx - 1); comment(); }
+        else if (key === 'right' || key === 'down') { sfx('nav'); timer = 0; show(idx + 1); comment(); }
         else if (key === 'a') openBox();
         else if (key === 'b') { sfx('back'); go(launcher); }
       },
@@ -895,16 +934,17 @@
         el.setAttribute('data-ui', 'off');
       }, 2600);
     }
-    v.addEventListener('play', function () { el.classList.add('is-playing'); playTxt.textContent = 'Pausa'; wake_(); if (window.PEMusic) window.PEMusic.duck(true); });
+    v.addEventListener('play', function () { el.classList.add('is-playing'); playTxt.textContent = 'Pausa'; wake_(); if (window.PEMusic) window.PEMusic.duck(true); if (current === videoView) assist('videoPlay'); });
     ['pause', 'ended'].forEach(function (ev) { v.addEventListener(ev, function () { if (window.PEMusic) window.PEMusic.duck(false); }); });
     v.addEventListener('pause', function () {
       el.classList.remove('is-playing'); playTxt.textContent = 'Play';
       bigTxt.innerHTML = ico('play') + (v.currentTime > 0.5 ? ' Seguir' : ' Reproducir'); wake_();
+      if (current === videoView && !v.ended) assist('videoPause');   // not when leaving the view
     });
     v.addEventListener('timeupdate', sync);
     v.addEventListener('loadedmetadata', sync);
     function toggle() { v.volume = sound ? volume / 10 : 0; if (v.paused) v.play().catch(function () {}); else v.pause(); }
-    function setMuted(m) { v.muted = m; muteTxt.textContent = m ? 'Silencio' : 'Sonido'; muteIco.innerHTML = m ? ICON.mute : ICON.vol; muteBtn.classList.toggle('is-lit', m); }
+    function setMuted(m) { v.muted = m; muteTxt.textContent = m ? 'Silencio' : 'Sonido'; muteIco.innerHTML = m ? ICON.mute : ICON.vol; muteBtn.classList.toggle('is-lit', m); assist(m ? 'videoMute' : 'videoUnmute'); }
     // inside the shadow root document.fullscreenElement is retargeted to the host,
     // so ask the root the view actually lives in
     function isFull() {
@@ -919,7 +959,7 @@
       else if (v.webkitEnterFullscreen) v.webkitEnterFullscreen();   // iPhone Safari: native player
     }
     ['fullscreenchange', 'webkitfullscreenchange'].forEach(function (ev) {
-      document.addEventListener(ev, function () { var f = isFull(); fullTxt.textContent = f ? 'Salir' : 'Pantalla'; fullIco.innerHTML = f ? ICON.exit : ICON.full; fullBtn.classList.toggle('is-lit', f); wake_(); });
+      document.addEventListener(ev, function () { var f = isFull(); fullTxt.textContent = f ? 'Salir' : 'Pantalla'; fullIco.innerHTML = f ? ICON.exit : ICON.full; fullBtn.classList.toggle('is-lit', f); wake_(); if (f) assist('videoFull'); });
     });
     // seek by click / drag on the segments
     var seeking = false;
@@ -1030,8 +1070,7 @@
       var meta = [it.duracion, s.iso && it.seatsLeft != null ? 'Quedan ' + it.seatsLeft + ' plazas' : (s.iso ? '' : 'Te avisamos')].filter(Boolean).join(' · ');
       return dateHTML +
         '<div class="pe-os_ticket-body"><span class="pe-os_ticket-type">' + esc(it.tipo || (s.col === 'cenas' ? 'Cena' : 'Taller')) + '</span><span class="pe-os_ticket-name">' + esc(it.name) + '</span><span class="pe-os_ticket-meta">' + esc(meta) + '</span>' + (it.lead ? '<span class="pe-os_ticket-lead">' + esc(it.lead) + '</span>' : '') + '</div>' +
-        '<div class="pe-os_ticket-foot"><span class="pe-os_ticket-price">' + (it.precio != null ? '€' + esc(it.precio) : '') + '</span>' + seats + '</div>' +
-        '<div class="pe-os_stamp">Al carrito</div>';
+        '<div class="pe-os_ticket-foot"><span class="pe-os_ticket-price">' + (it.precio != null ? '€' + esc(it.precio) : '') + '</span>' + seats + '</div>';
     }
     function build() {
       list = fechasData();
@@ -1095,12 +1134,13 @@
         var btn = null;
         try { btn = document.querySelector('#modal-1 [data-cart-add][data-item-id="' + (window.CSS && CSS.escape ? CSS.escape(s.itemId) : s.itemId) + '"]'); } catch (e) {}
         if (btn) {
-          btn.click();
-          var st = $('.pe-os_stamp', tickets[idx]);
-          st.classList.remove('is-hit'); void st.offsetWidth; st.classList.add('is-hit');
-          sfx('stamp'); setTimeout(function () { sfx('coin'); }, 160);
-          buddy.react('happy', '¡Al carrito! Nos vemos.', 3);
-          shake(5, 260);
+          if (btn.disabled || (s.it.seatsLeft != null && s.it.seatsLeft <= 0)) {
+            sfx('back');
+            toast('Carrito', { value: 'Agotado', warn: true });
+            assist('cartSoldOut');
+            return;
+          }
+          cartAdd(btn, s.itemId);
           return;
         }
       }
@@ -1108,6 +1148,34 @@
       if (!openBookingModal(s.it.slug)) {
         location.href = s.col === 'cenas' ? 'cenas-v2.html' : 'taller-item-v2.html?slug=' + encodeURIComponent(s.it.slug);
       }
+    }
+    /* The cart (webflow-cart.js) adds asynchronously: it fires
+       'cart:updated' {action:'add'} on success and shows its own
+       .cart-notification-error on failure. The toast and the assistant
+       wait for the real outcome instead of claiming success up front. */
+    var cartBusy = false;
+    function cartAdd(btn, id) {
+      if (cartBusy) return;
+      cartBusy = true;
+      var t0 = Date.now(), stale = document.getElementById('cart-notification');
+      function finish(ok) {
+        if (!cartBusy) return;
+        cartBusy = false;
+        window.removeEventListener('cart:updated', onAdd);
+        if (ok) { sfx('coin'); toast('Carrito', { value: '+1' }); assist('cartOk'); }
+        else { sfx('back'); toast('Carrito', { value: 'No se pudo', warn: true }); assist('cartError'); }
+      }
+      function onAdd(e) { var d = e.detail || {}; if (d.action === 'add' && (!d.itemId || d.itemId === id)) finish(true); }
+      window.addEventListener('cart:updated', onAdd);
+      sfx('stamp');
+      try { btn.click(); } catch (x) { finish(false); return; }
+      (function poll() {
+        if (!cartBusy) return;
+        var n = document.getElementById('cart-notification');
+        if (n && n !== stale && /cart-notification-error/.test(n.className)) { finish(false); return; }
+        if (Date.now() - t0 > 8000) { finish(false); return; }
+        setTimeout(poll, 200);
+      })();
     }
     drag(rail, {
       axis: 'y',
@@ -1182,26 +1250,26 @@
       { id: 'vol', label: 'Volumen', type: 'meter', max: 10, desc: 'O gira la rueda del lateral.',
         get: function () { return volume; }, step: function (d) { setVolume(volume + d, true); } },
       { id: 'clicks', label: 'Clic de teclas', type: 'toggle', desc: 'El clic mecánico al pulsar cada botón.',
-        get: function () { return clicksOn; }, set: function () { clicksOn = !clicksOn; store('pe-con-clicks', clicksOn ? '1' : '0'); if (clicksOn) sfx('click'); } },
+        get: function () { return clicksOn; }, set: function () { clicksOn = !clicksOn; store('pe-con-clicks', clicksOn ? '1' : '0'); if (clicksOn) sfx('click'); assist(clicksOn ? 'clicksOn' : 'clicksOff'); } },
       { id: 'haptics', label: 'Vibración', type: 'toggle', desc: navigator.vibrate ? 'Un toque al pulsar, en el móvil.' : 'Tu dispositivo no vibra.',
-        get: function () { return hapticsOn; }, set: function () { hapticsOn = !hapticsOn; store('pe-con-haptics', hapticsOn ? '1' : '0'); haptic(20); } },
+        get: function () { return hapticsOn; }, set: function () { hapticsOn = !hapticsOn; store('pe-con-haptics', hapticsOn ? '1' : '0'); haptic(20); assist(hapticsOn ? 'hapticsOn' : 'hapticsOff'); } },
       { head: 'Música' },
       { id: 'music', label: 'Música', type: 'toggle', desc: 'La música de la web. También desde la pantallita de arriba.',
-        get: function () { return !!(window.PEMusic && window.PEMusic.playing()); }, set: function () { if (window.PEMusic) window.PEMusic.toggle(); } },
+        get: function () { return !!(window.PEMusic && window.PEMusic.playing()); }, set: function () { if (window.PEMusic) { musicAskedAt = Date.now(); window.PEMusic.toggle(); } } },
       { id: 'mvol', label: 'Volumen música', type: 'meter', max: 10, desc: 'Solo la música; los sonidos de la consola van aparte.',
         get: function () { return window.PEMusic ? Math.round(window.PEMusic.volume() * 10) : 0; },
         step: function (d) { if (window.PEMusic) { window.PEMusic.volume((Math.round(window.PEMusic.volume() * 10) + d) / 10); sfx('tick', 6); } } },
       { id: 'song', label: 'Siguiente canción', type: 'action', get desc() { return 'Suena: ' + (window.PEMusic ? window.PEMusic.track().title : '—') + '.'; },
-        run: function () { if (window.PEMusic) { window.PEMusic.next(); sfx('nav'); } } },
+        run: function () { if (window.PEMusic) { musicAskedAt = Date.now(); window.PEMusic.next(); sfx('nav'); } } },
       { head: 'Pantalla' },
       { id: 'bright', label: 'Brillo', type: 'meter', max: 5, desc: 'O usa el interruptor BRILLO junto al asistente.',
-        get: function () { return bright; }, step: function (d) { bright = clamp(bright + d, 0, 5); store('pe-con-bright', bright); applyBright(); sfx('tick', bright * 2); } },
+        get: function () { return bright; }, step: function (d) { bright = clamp(bright + d, 0, 5); store('pe-con-bright', bright); applyBright(); sfx('tick', bright * 2); assist(bright ? 'bright' : 'brightOff', { n: bright }); } },
       { id: 'pixel', label: 'Píxeles', type: 'toggle', desc: 'Los juegos en píxeles gordos, como una consola de verdad.',
-        get: function () { return pixelOn; }, set: function () { pixelOn = !pixelOn; store('pe-con-pixel', pixelOn ? '1' : '0'); sfx('tick', 6); } },
+        get: function () { return pixelOn; }, set: function () { pixelOn = !pixelOn; store('pe-con-pixel', pixelOn ? '1' : '0'); sfx('tick', 6); assist(pixelOn ? 'pixelOn' : 'pixelOff'); } },
       { id: 'lcd', label: 'Líneas LCD', type: 'toggle', desc: 'La trama de líneas de una pantalla de verdad.',
-        get: function () { return lcdOn; }, set: function () { lcdOn = !lcdOn; store('pe-con-lcd', lcdOn ? '1' : '0'); applyLcd(); sfx('tick', 6); } },
+        get: function () { return lcdOn; }, set: function () { lcdOn = !lcdOn; store('pe-con-lcd', lcdOn ? '1' : '0'); applyLcd(); sfx('tick', 6); assist(lcdOn ? 'lcdOn' : 'lcdOff'); } },
       { id: 'buddy', label: 'Asistente', type: 'toggle', desc: 'Apagado, la pantalla pequeña muestra la hora.',
-        get: function () { return buddyOn; }, set: function () { buddyOn = !buddyOn; store('pe-con-buddy', buddyOn ? '1' : '0'); buddy.setEnabled(buddyOn); sfx('tick', 6); } },
+        get: function () { return buddyOn; }, set: function () { buddyOn = !buddyOn; store('pe-con-buddy', buddyOn ? '1' : '0'); buddy.setEnabled(buddyOn); sfx('tick', 6); if (buddyOn) assist('buddyOn'); } },
       { head: 'Sistema' },
       { id: 'entropy', label: 'Modo entropía', type: 'toggle', desc: 'Desordena la página. También con el interruptor ORDEN / CAOS.',
         get: function () { return !!(window.__peEntropy && window.__peEntropy.active()); }, set: function () { toggleEntropy(); } },
@@ -1211,7 +1279,7 @@
         run: function () {
           if (!confirmReset) { confirmReset = true; sfx('nav'); return; }
           GAMES.forEach(function (g) { try { localStorage.removeItem('pe-con-best-' + g.id); } catch (e) {} });
-          confirmReset = false; sfx('stamp'); toast('Récords borrados');
+          confirmReset = false; sfx('stamp'); toast('Récords', { value: 'Borrados' }); assist('recordsReset');
         } },
       { id: 'about', label: 'Acerca de PE—83', type: 'action', desc: 'Qué es esta consola.',
         run: function () { sfx('open'); go(aboutView); } }
@@ -1367,7 +1435,7 @@
     }
     return {
       el: el, title: 'CHAT',
-      enter: function () { load(); buddy.react('happy', 'Te escucho. Escribe abajo.', 2.6); },
+      enter: function () { load(); assist('chat'); },
       input: function (key, type) { if (type === 'down' && key === 'b') { sfx('back'); go(launcher); } },
       preview: function (ctx, w, h, t) {
         // flat speech blocks, straight
@@ -1626,6 +1694,7 @@
     ledEl.classList.add('is-on');
     offEl.classList.add('is-gone');
     booted = true;
+    assist('boot');
   }
   function openNav(mode) {
     navMode = mode;
@@ -1705,7 +1774,7 @@
     var cv = $('canvas', el);
     var introP = $('[data-intro]', el), countP = $('[data-count]', el), pauseP = $('[data-pause]', el), resultP = $('[data-result]', el);
     var state = 'intro', inst = null, api = null, pauseSel = 0, parts = [], floats = [], t = 0, down = {};
-    var introCv = null, countT = 0, countN = 0, resultLock = 0, resultWait = -1, resultSfx = '';
+    var introCv = null, countT = 0, countN = 0, resultLock = 0, resultWait = -1, resultSfx = '', resultRecord = false;
     var paused = false;   // a layer over any state: intro, count, run, result
 
     function best() { return parseInt(store('pe-con-best-' + def.id) || '0', 10) || 0; }
@@ -1763,8 +1832,9 @@
     }
     function pause() {
       paused = true; pauseSel = 0; down = {}; renderPause(); panel(pauseP); setStatus('PAUSA'); sfx('back');
+      assist('pause', { sub: def.id });
     }
-    function resume() { paused = false; panel(panelFor()); setStatus(def.title); sfx('ok'); }
+    function resume() { paused = false; panel(panelFor()); setStatus(def.title); sfx('ok'); assist('resume', { sub: def.id }); }
     function exitToLauncher() { paused = false; sample('exit') || sfx('back'); go(launcher); }
     function renderPause() {
       pauseP.innerHTML = listHTML(['Continuar', state === 'intro' ? 'Empezar' : 'Reiniciar', 'Salir al menú'], pauseSel);
@@ -1785,6 +1855,7 @@
       // shown from tick() on game time, so step()-driven tests see it too
       resultWait = (res.delay != null ? res.delay : 500) / 1000;
       resultSfx = res.fail ? 'lose' : (record ? 'win' : 'result');
+      resultRecord = record;
     }
 
     function makeApi() {
@@ -1857,6 +1928,7 @@
     return {
       el: el, title: def.title, def: def,
       isPaused: function () { return paused; },
+      playing: function () { return state === 'run' && !paused; },
       enter: function () { t = 0; paused = false; showIntro(); sample('gamestart'); },
       leave: function () { destroy(); state = 'intro'; resultWait = -1; paused = false; panel(null); },
       exit: exitToLauncher,
@@ -1890,9 +1962,8 @@
           if (resultWait < 0) {
             panel(resultP);
             if (resultSfx === 'win') { sfx('win'); sample('result', 0.12); } else sample(resultSfx) || sfx(resultSfx === 'lose' ? 'fail' : 'ok');
-            if (resultSfx === 'win') buddy.react('happy', '¡Nuevo récord!', 3);
-            else if (resultSfx === 'lose') buddy.react('sad', '¡Uy! Otra vez.', 3);
-            else buddy.react('happy', '¡Bien servido!', 2.4);
+            // a record outranks the loss (SAY.record / SAY.lose / SAY.win, per game when there is a line)
+            assist(resultRecord ? 'record' : resultSfx === 'lose' ? 'lose' : 'win', { sub: def.id });
           }
         }
         if (resultLock > 0 && resultWait < 0) resultLock -= dt;
@@ -2032,6 +2103,171 @@
   }
 
   /* =============================================================
+     WHAT THE ASSISTANT SAYS — every line in one table. Edit the copy
+     freely; the logic below never needs to change.
+       lines  pool, picked at random, never the same line twice in a row.
+              {n} = a number (volume, brightness), {track} = song title.
+              Two short lines on the mini LCD at most (about 30 characters
+              on a phone): longer lines get cut with "…". No marquee.
+       p      priority 0-5. A line never interrupts a higher one still
+              on screen; same priority waits 1.2 s before replacing.
+       cd     seconds before the same event may speak again.
+       t      seconds on screen (default: by length, 2.4-4.2 s).
+       mood   the chef's face: happy, sad, talk, music, sleep, dizzy.
+       direct true = answers something the visitor just did, so it skips
+              the global rate limit (one unprompted line per 6 s).
+       chance 0-1 = speaks only sometimes (galería).
+     Per-game or per-app variants live under 'event.id' (e.g. 'lose.punto')
+     and are mixed with the event's general lines.
+     ============================================================= */
+  var SAY = {
+    // waking up
+    boot: { p: 2, cd: 0, mood: 'happy', lines: ['Hoy se cocina en Zurbano 83.', 'Fuego encendido. Pasa.', 'Delantal puesto. Empezamos.'] },
+    screenOn: { p: 3, cd: 0, direct: true, mood: 'happy', lines: ['Luz otra vez. Seguimos.', 'Ya te veo. Y tú a mí.'] },
+    saverWake: { p: 2, cd: 0, direct: true, mood: 'happy', lines: ['Me había quedado frito.', 'Reposaba la masa.'] },
+    // nothing happening for a while (rare, at most three in a row)
+    rest: { p: 0, cd: 60, mood: 'talk', lines: ['Aquí nadie sigue la receta.', 'Huele a sofrito, ¿no?', 'Pruébalo antes de salar.', 'Sigo aquí, removiendo.', 'Una pizca de caos y listo.', 'Si te aburres, hay juegos.', 'Nada memorable es perfecto.', 'Sin prisa, que se pega.'] },
+    // apps: first visit, every later visit, first time back out
+    open: { p: 1, cd: 0, direct: true, mood: 'talk', t: 1.6, lines: ['Abriendo {name}…'] },
+    'enter.fechas': { p: 1, cd: 0, direct: true, mood: 'talk', lines: ['Elige fecha. Yo guardo sitio.'] },
+    'enter.galeria': { p: 1, cd: 0, direct: true, mood: 'talk', lines: ['Así se ve un taller por dentro.'] },
+    'enter.ajustes': { p: 1, cd: 0, direct: true, mood: 'talk', lines: ['Ajusta el punto de sal.'] },
+    'enter.records': { p: 1, cd: 0, direct: true, mood: 'talk', lines: ['Tus marcas. Sin trampas.'] },
+    'enter.about': { p: 1, cd: 0, direct: true, mood: 'talk', lines: ['Sí, soy yo el que no se calla.'] },
+    'enter.slicer': { p: 1, cd: 0, direct: true, mood: 'talk', lines: ['Cuchillo afilado, dedos fuera.'] },
+    'enter.servicio': { p: 1, cd: 0, direct: true, mood: 'talk', lines: ['Del pase a la mesa. Sin tirar.'] },
+    'enter.comanda': { p: 1, cd: 0, direct: true, mood: 'talk', lines: ['Lee bien la comanda.'] },
+    'enter.emplatado': { p: 1, cd: 0, direct: true, mood: 'talk', lines: ['Que entre por los ojos.'] },
+    'enter.equilibrio': { p: 1, cd: 0, direct: true, mood: 'talk', lines: ['Pulso firme, bandeja recta.'] },
+    'enter.punto': { p: 1, cd: 0, direct: true, mood: 'talk', lines: ['Ni crudo ni pasado.'] },
+    leave: { p: 1, cd: 0, direct: true, mood: 'talk', lines: ['Vuelve cuando quieras.', 'Te lo dejo como estaba.', 'Eso queda apuntado.'] },
+    chat: { p: 2, cd: 0, direct: true, mood: 'happy', t: 2.6, lines: ['Te escucho. Escribe abajo.'] },
+    toFechas: { p: 2, cd: 0, direct: true, mood: 'happy', lines: ['¡Vamos a las fechas!'] },
+    toRecord: { p: 2, cd: 0, direct: true, mood: 'happy', lines: ['¡A por el récord!'] },
+    // games
+    lose: { p: 4, cd: 0, direct: true, mood: 'sad', t: 3, lines: ['¡Uy! Otra vez.', 'Se quemó. Pasa en las mejores.', 'Eso no sale a sala.', 'Respira. Otra tanda.'] },
+    'lose.slicer': { lines: ['Corte torcido. Nadie mira.', 'Juliana creativa, digamos.'] },
+    'lose.servicio': { lines: ['La mesa 4 sigue esperando.', 'Ese pase se ha enfriado.'] },
+    'lose.comanda': { lines: ['La comanda decía otra cosa.', 'Ese plato vuelve a cocina.'] },
+    'lose.emplatado': { lines: ['Sabe bien. Se ve regular.', 'El plato pide otra mano.'] },
+    'lose.equilibrio': { lines: ['La gravedad gana hoy.', 'Bandeja y orgullo, al suelo.'] },
+    'lose.punto': { lines: ['Pasado. Al menos huele bien.', 'Eso ya es carbón.'] },
+    win: { p: 4, cd: 0, direct: true, mood: 'happy', t: 2.6, lines: ['¡Bien servido!', 'Limpio. Sale a sala.', 'Eso tiene buena pinta.'] },
+    'win.slicer': { lines: ['Cortes de escuela.', 'Ni un milímetro de más.'] },
+    'win.servicio': { lines: ['Mesa servida, cliente feliz.', 'Pase limpio.'] },
+    'win.comanda': { lines: ['Comanda clavada.', 'Justo lo que pidieron.'] },
+    'win.emplatado': { lines: ['Plato de foto.', 'Eso entra por los ojos.'] },
+    'win.equilibrio': { lines: ['Ni una gota fuera.', 'Pulso de cirujano.'] },
+    'win.punto': { lines: ['En su punto. Literal.', 'Dorado perfecto.'] },
+    record: { p: 5, cd: 0, direct: true, mood: 'happy', t: 3, lines: ['¡Nuevo récord!', 'Récord nuevo. Lo apunto.', 'Eso va a la pizarra.'] },
+    'record.slicer': { lines: ['Récord a cuchillo.'] },
+    'record.servicio': { lines: ['Récord de servicio.'] },
+    'record.comanda': { lines: ['Récord de comandas.'] },
+    'record.emplatado': { lines: ['Récord de emplatado.'] },
+    'record.equilibrio': { lines: ['Récord sin derramar.'] },
+    'record.punto': { lines: ['Récord en su punto.'] },
+    pause: { p: 3, cd: 6, direct: true, mood: 'talk', lines: ['Tapo la olla y espero.', 'Pausa. El fuego no se va.', 'Me quedo vigilando.'] },
+    resume: { p: 3, cd: 6, direct: true, mood: 'happy', t: 1.8, lines: ['Seguimos.', 'Fuego otra vez.', 'A lo tuyo.'] },
+    // vídeo
+    videoPlay: { p: 3, cd: 20, direct: true, mood: 'happy', lines: ['Un minuto en Zurbano 83.', 'Palomitas no, croquetas.'] },
+    videoPause: { p: 3, cd: 4, direct: true, mood: 'talk', lines: ['Pausa. Nadie se mueve.', 'Congelado, como el helado.'] },
+    videoMute: { p: 3, cd: 0, direct: true, mood: 'sleep', lines: ['Sin sonido. Se lee igual.', 'Mudo, como un buen camarero.'] },
+    videoUnmute: { p: 3, cd: 0, direct: true, mood: 'music', lines: ['Vuelve el ruido de cocina.', 'Ahora sí suena la sartén.'] },
+    videoFull: { p: 3, cd: 10, direct: true, mood: 'happy', lines: ['A lo grande.', 'Pantalla entera para ti.'] },
+    // galería: now and then, never on every photo
+    gallery: { p: 1, cd: 25, chance: 0.35, mood: 'talk', lines: ['Esa luz no se finge.', 'Mira esas manos.', 'Ese plato no duró mucho.', 'Ahí se rió todo el mundo.', 'Un martes cualquiera.'] },
+    // ajustes and hardware
+    volume: { p: 3, cd: 0, direct: true, mood: 'music', t: 1.6, lines: ['Volumen {n} de 10'] },
+    volumeZero: { p: 3, cd: 0, direct: true, mood: 'music', t: 1.6, lines: ['Sin volumen'] },
+    soundOn: { p: 3, cd: 0, direct: true, mood: 'happy', t: 1.8, lines: ['¡Ya te oigo!'] },
+    soundOff: { p: 3, cd: 0, direct: true, mood: 'sleep', lines: ['Silencio. Me echo una siesta.'] },
+    bright: { p: 3, cd: 0, direct: true, mood: 'happy', t: 1.6, lines: ['Brillo {n} de 5'] },
+    brightOff: { p: 3, cd: 0, direct: true, mood: 'sleep', lines: ['Pantalla fuera. Yo sigo.'] },
+    clicksOn: { p: 3, cd: 0, direct: true, mood: 'happy', lines: ['Clic, clic. Así me gusta.'] },
+    clicksOff: { p: 3, cd: 0, direct: true, mood: 'talk', lines: ['Teclas mudas. Discreto.'] },
+    hapticsOn: { p: 3, cd: 0, direct: true, mood: 'happy', lines: ['Vibración puesta. Bzz.'] },
+    hapticsOff: { p: 3, cd: 0, direct: true, mood: 'talk', lines: ['Sin vibrar. Tranquilo.'] },
+    lcdOn: { p: 3, cd: 0, direct: true, mood: 'talk', lines: ['Rayas de pantalla vieja.'] },
+    lcdOff: { p: 3, cd: 0, direct: true, mood: 'talk', lines: ['Pantalla limpia, sin rayas.'] },
+    pixelOn: { p: 3, cd: 0, direct: true, mood: 'happy', lines: ['Píxeles gordos. Como antes.'] },
+    pixelOff: { p: 3, cd: 0, direct: true, mood: 'talk', lines: ['Píxeles finos. Qué fino.'] },
+    buddyOn: { p: 3, cd: 0, direct: true, mood: 'happy', lines: ['He vuelto a mi puesto.'] },
+    musicOn: { p: 3, cd: 0, direct: true, mood: 'music', lines: ['Música. Se cocina mejor.'] },
+    musicOff: { p: 3, cd: 0, direct: true, mood: 'talk', lines: ['Sin música. Se oye el fuego.'] },
+    track: { p: 2, cd: 0, mood: 'music', lines: ['Suena {track}.'] },
+    recordsReset: { p: 3, cd: 0, direct: true, mood: 'talk', lines: ['Pizarra limpia. A empezar.', 'Borrados. Sin rencor.'] },
+    // Modo Entropía
+    entropyOn: { p: 3, cd: 0, direct: true, mood: 'dizzy', lines: ['¡Todo se mueve!', 'Caos servido.', 'Que se mueva todo.'] },
+    entropyOff: { p: 3, cd: 0, direct: true, mood: 'happy', lines: ['Orden. Cada cosa en su sitio.', 'Recogido. Como debe ser.'] },
+    // carrito desde FECHAS
+    cartOk: { p: 5, cd: 0, direct: true, mood: 'happy', t: 3, lines: ['¡Al carrito! Nos vemos.', 'En el carrito. Nos vemos.'] },
+    cartSoldOut: { p: 5, cd: 0, direct: true, mood: 'sad', t: 3, lines: ['Agotado. Mira otra fecha.', 'Esta se llenó. Hay más.'] },
+    cartError: { p: 5, cd: 0, direct: true, mood: 'sad', t: 3, lines: ['No ha entrado. Prueba otra vez.', 'El carrito no responde.'] }
+  };
+
+  /* assist(event, ctx) — the one way the console makes the assistant talk.
+     ctx: { sub: 'punto' (variant key), n, track, name, direct }. Returns true
+     when the line went on screen. Respects the Asistente setting (off =
+     silent), never interrupts a higher-priority line, waits the per-event
+     cooldown and, for unprompted lines, a global gap. When the line ends the
+     LCD goes back to the channel it was showing. */
+  var SAY_GAP = 6, sayAt = {}, sayLast = {}, sayAny = -1e9;
+  // the assistant's own clock: runs only while the console is drawn, so
+  // cooldowns and the gap never expire while it is out of view
+  function sayNow() { return buddy.time(); }
+  function assist(evt, ctx) {
+    ctx = ctx || {};
+    var base = SAY[evt], sub = ctx.sub ? SAY[evt + '.' + ctx.sub] : null;
+    var spec = base || sub;
+    if (!spec || !buddyOn || !booted) return false;
+    var pool = (sub && sub.lines ? sub.lines : []).concat(base && base.lines ? base.lines : []);
+    if (!pool.length) return false;
+    var now = sayNow(), key = evt + (sub ? '.' + ctx.sub : '');
+    var direct = ctx.direct != null ? ctx.direct : !!spec.direct;
+    if (spec.cd && sayAt[evt] != null && now - sayAt[evt] < spec.cd) return false;
+    if (!direct && now - sayAny < SAY_GAP) return false;
+    if (spec.chance != null && Math.random() > spec.chance) return false;
+    // random, never the same line twice in a row
+    var line = pool[Math.floor(Math.random() * pool.length)];
+    if (pool.length > 1) while (line === sayLast[key]) line = pool[Math.floor(Math.random() * pool.length)];
+    var text = line.replace(/\{(\w+)\}/g, function (m, k) { return ctx[k] != null ? ctx[k] : ''; });
+    var dur = spec.t || clamp(1.6 + text.length * 0.06, 2.4, 4.2);
+    if (!buddy.speak(spec.p || 0, evt, spec.mood || 'talk', text, dur)) return false;
+    sayAt[evt] = now; sayAny = now; sayLast[key] = line;
+    return true;
+  }
+  /* Resting comments: after a long quiet stretch on screen (the loop only
+     runs while the console is in view and the tab is visible), at most three
+     before the visitor touches something again. */
+  var restT = 0, restN = 0, restNext = 70;
+  function restTick(dt) {
+    // never while a game is being played, the video runs, the menu is open or the screen is off
+    var busy = bright === 0 || sysmenu.open || (current && current.playing && current.playing());
+    if (busy) { restT = 0; return; }
+    restT += dt;
+    if (restT < restNext || restN >= 3) return;
+    restT = 0; restNext = rand(75, 120);
+    if (assist('rest')) restN++;
+  }
+  // music changes (Ajustes rows or the top music LCD): on/off and the song
+  var musicAskedAt = 0;
+  function bindMusicTalk() {
+    var M = window.PEMusic;
+    if (!M || !M.onChange) return;
+    var on = M.enabled(), ti = M.index();
+    M.onChange(function () {
+      var o = M.enabled(), i = M.index();
+      if (o !== on) { on = o; assist(o ? 'musicOn' : 'musicOff'); }
+      if (i !== ti) {
+        ti = i;
+        if (!o) return;                       // skipping songs with the music off says nothing
+        var asked = Date.now() - musicAskedAt < 2500;
+        assist('track', { track: (M.track() || {}).title || '', direct: asked });
+      }
+    });
+  }
+
+  /* =============================================================
      ASSISTANT — the small LCD under the screen and its resident.
      A chef-hatted blob that watches the hardware (looks where the
      d-pad points, jumps on A, sleeps on mute, gets dizzy in caos) and
@@ -2103,6 +2339,30 @@
     }
 
     function fit() { return fitCanvas(cv); }
+
+    /* Wrap a message into at most two lines that fit tw (one line with an
+       ellipsis when two do not fit under the tabs). cut = text was lost. */
+    var lay = null;
+    function wrap2(ctx, body, tw, lh, room, bs) {
+      var words = body.split(' '), lines2 = [''], li = 0, cut = false;
+      words.forEach(function (wd) {
+        var trial = lines2[li] ? lines2[li] + ' ' + wd : wd;
+        if (ctx.measureText(trial).width > tw && lines2[li]) {
+          if (li === 1) { lines2[1] = lines2[1] + ' ' + wd; return; }
+          li++; lines2[li] = wd;
+        } else lines2[li] = trial;
+      });
+      if (lines2[1]) {
+        while (ctx.measureText(lines2[1]).width > tw && lines2[1].length > 1) { lines2[1] = lines2[1].slice(0, -2) + '…'; cut = true; }
+      }
+      // two lines only when they fit under the tabs; otherwise one line with an ellipsis
+      if (lines2[1] && lh * 2 > room + bs * 0.25) {
+        lines2 = [lines2.join(' ')];
+        while (ctx.measureText(lines2[0]).width > tw && lines2[0].length > 1) { lines2[0] = lines2[0].slice(0, -2) + '…'; cut = true; }
+      }
+      if (ctx.measureText(lines2[0]).width > tw) cut = true;
+      return { lines: lines2, cut: cut };
+    }
 
     function drawGuy(ctx, x0, y0, u, mood) {
       var bob = Math.round(Math.sin(t * 3.2) * 0.5 + 0.5);
@@ -2184,13 +2444,35 @@
         cv = $('canvas', el);
         chatBtn = document.querySelector('[data-vanny-toggle]');
         el.addEventListener('mouseenter', function () { hover = true; if (!react && mode === 0 && enabled) say('Asistente', '¡Pulsa aquí!'); });
-        el.addEventListener('mouseleave', function () { hover = false; showChannel(); });
+        el.addEventListener('mouseleave', function () { hover = false; if (!react) showChannel(); });
         showChannel();
       },
-      react: function (kind, msg, dur) {
-        react = { kind: kind, t: 0, dur: dur || 2.4 };
-        if (msg) say(kind === 'music' ? 'Volumen' : CHANNELS[mode], msg);
-        if (kind === 'jump' || kind === 'happy') jumpT = 0;
+      /* speak(p, key, mood, text, dur): the only door for a reaction line
+         (assist() decides what and when). A line still on screen with a
+         higher priority is never cut; one of the same priority keeps the
+         screen for 1.2 s unless it is the same event (the volume wheel
+         replaces its own line as it turns). */
+      speak: function (p, key, kind, text, dur) {
+        if (!enabled) return false;
+        if (react && react.t < react.dur) {
+          if (react.p > p) return false;
+          if (react.p === p && react.key !== key && react.t < 1.2) return false;
+        }
+        react = { kind: kind, t: 0, dur: dur || 2.4, p: p, key: key };
+        say(kind === 'music' ? 'Volumen' : CHANNELS[mode], text);
+        var still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (still) msg.shown = msg.body.length;            // no typing, no hop
+        else if (kind === 'happy') jumpT = 0;
+        return true;
+      },
+      heard: function () { return msg.body; },
+      time: function () { return t; },
+      // QA: does this text fit the LCD's two lines at the current size?
+      fits: function (str) {
+        if (!lay) return null;
+        var c = lay.ctx;
+        c.font = '600 ' + lay.bs + 'px ' + FONT;
+        return !wrap2(c, str, lay.tw, lay.lh, lay.room, lay.bs).cut;
       },
       look: function (dir) {
         look.x = dir === 'left' ? -1 : dir === 'right' ? 1 : 0;
@@ -2199,7 +2481,8 @@
       },
       jump: function () { if (jumpT < 0) jumpT = 0; },
       setEnabled: function (on) { enabled = on; react = null; showChannel(); },
-      setChaos: function (on) { chaos = on; if (on) { react = null; say('Modo caos', '¡Todo se mueve!'); } else showChannel(); },
+      // the line for the switch itself comes from SAY.entropyOn / entropyOff (bindEntropy)
+      setChaos: function (on) { chaos = on; },
       cycle: function (d) {
         mode = (mode + d + 3) % 3;
         slide = 1; slideDir = d < 0 ? -1 : 1;
@@ -2221,8 +2504,8 @@
       },
       click: function () {
         if (!enabled) { window.PEConsole && PEConsole.open('ajustes'); return; }
-        if (mode === 0) { window.PEConsole && PEConsole.open('chat'); } else if (mode === 1) { window.PEConsole && PEConsole.open('fechas'); this.react('jump', '¡Vamos a las fechas!'); }
-        else { go(launcher); this.react('jump', '¡A por el récord!'); }
+        if (mode === 0) { window.PEConsole && PEConsole.open('chat'); } else if (mode === 1) { window.PEConsole && PEConsole.open('fechas'); assist('toFechas'); }
+        else { go(launcher); assist('toRecord'); }
       },
       tick: function (dt) {
         if (!cv) return;
@@ -2282,24 +2565,9 @@
         ctx.save();
         ctx.beginPath(); ctx.rect(tx, tabY + 7, tw, h - tabY - 7); ctx.clip();
         ctx.font = '600 ' + bs + 'px ' + FONT;
-        // wrap the whole message into at most two lines, then type it out
-        var words = msg.body.split(' '), lines2 = [''], li = 0;
-        words.forEach(function (wd) {
-          var trial = lines2[li] ? lines2[li] + ' ' + wd : wd;
-          if (ctx.measureText(trial).width > tw && lines2[li]) {
-            if (li === 1) { lines2[1] = lines2[1] + ' ' + wd; return; }
-            li++; lines2[li] = wd;
-          } else lines2[li] = trial;
-        });
-        if (lines2[1]) {
-          while (ctx.measureText(lines2[1]).width > tw && lines2[1].length > 1) lines2[1] = lines2[1].slice(0, -2) + '…';
-        }
         var lh = bs * 1.18, top = tabY + 8, room = h - top - 3;
-        // two lines only when they fit under the tabs; otherwise one line with an ellipsis
-        if (lines2[1] && lh * 2 > room + bs * 0.25) {
-          lines2 = [lines2.join(' ')];
-          while (ctx.measureText(lines2[0]).width > tw && lines2[0].length > 1) lines2[0] = lines2[0].slice(0, -2) + '…';
-        }
+        lay = { ctx: ctx, tw: tw, bs: bs, lh: lh, room: room };
+        var lines2 = wrap2(ctx, msg.body, tw, lh, room, bs).lines;
         var budget = Math.floor(msg.shown);
         var blockH = lh * (lines2.length - 1) + bs;
         var baseY = top + Math.max(0, (room - blockH) / 2) + bs * 0.86 + sy;
@@ -2607,6 +2875,7 @@
     // keyboard — only while the console is armed (last interaction was on it)
     document.addEventListener('pointerdown', function (e) {
       armed = hostEl.contains(e.target);
+      if (armed) { restT = 0; restN = 0; }
       audioUnlock();
       if (armed && consoleActivity()) { e.preventDefault(); e.stopPropagation(); swallowClickUntil = performance.now() + 500; }
     }, true);
@@ -2640,14 +2909,14 @@
 
     // tapping the screen: acts like A on the attract loop / launcher card
     screenEl.addEventListener('click', function (e) {
-      audio(); wake();
+      audio(); wake(); restT = 0; restN = 0;
       if (current === attract) enterFromAttract();
     });
 
     // the rocker (Juan's original up/down joystick) switches the assistant's channel
     var rocker = $('[data-pe-rocker]', root), rockT = 0;
     function rock(dir) {
-      audio(); wake();
+      audio(); wake(); restT = 0; restN = 0;
       rocker.classList.remove('is-up', 'is-down');
       rocker.classList.add(dir < 0 ? 'is-up' : 'is-down');
       clearTimeout(rockT);
@@ -2660,7 +2929,8 @@
       else if (bright === 0 && nb > 0) sampleSoon('boot');   // back on: the start-up sound
       else sfx('tick', nb * 2);
       if (nb !== bright) { bright = nb; store('pe-con-bright', bright); applyBright(); }
-      toast(bright === 0 ? 'Pantalla apagada' : 'Brillo ' + meter(bright, 5));
+      if (bright === 0) { toast('Pantalla', { value: 'Apagada' }); assist('brightOff'); }
+      else { toast('Brillo', { meter: [bright, 5] }); assist('bright', { n: bright }); }
       if (current && current.refresh) current.refresh();
     }
     if (rocker) {
@@ -2677,7 +2947,7 @@
     var mini = $('[data-pe-mini]', root);
     if (mini) {
       mini.addEventListener('click', function (e) {
-        audio(); wake();
+        audio(); wake(); restT = 0; restN = 0;
         var cvEl = $('canvas', mini), r = cvEl.getBoundingClientRect();
         buddy.clickAt(e.clientX - r.left, e.clientY - r.top);
       });
@@ -2690,7 +2960,7 @@
     // volume wheel
     var acc = 0, pos = 0, wheelId = null, lastY = 0;
     function turn(px) {
-      consoleIdle = 0;
+      consoleIdle = 0; restT = 0; restN = 0;
       pos += px;
       wheelEl.style.setProperty('--wheel-pos', pos + 'px');
       acc += px;
@@ -2846,8 +3116,9 @@
   var consoleIdle = 0;
   function consoleActivity() {
     consoleIdle = 0;
+    restT = 0; restN = 0;
     if (powerOn()) return true;
-    if (screenDvd && screenDvd.on && screenDvd.mode === 'idle') { screenDvd.hide(); return true; }
+    if (screenDvd && screenDvd.on && screenDvd.mode === 'idle') { screenDvd.hide(); assist('saverWake'); return true; }
     return false;
   }
   // the page saver: its own clock (the console loop stops when scrolled away)
@@ -2947,8 +3218,8 @@
     if (window.PEMusic && window.PEMusic.master) window.PEMusic.master(volume / 10);
     renderVolBars();
     sfx('tick', volume);
-    toast('Vol ' + meter(volume, 10));
-    buddy.react('music', volume ? 'Volumen ' + volume + ' de 10' : 'Sin volumen', 1.6);
+    toast('Vol', { meter: [volume, 10] });
+    assist(volume ? 'volume' : 'volumeZero', { n: volume });
     if (current && current.refresh) current.refresh();
   }
   function setSound(on) {
@@ -2958,8 +3229,8 @@
     renderVolBars();
     syncSoundKey();
     if (on) sfx('ok');
-    toast(on ? 'Sonido ' + meter(volume, 10) : 'Silencio');
-    if (on) buddy.react('happy', '¡Ya te oigo!', 1.8); else buddy.refresh();
+    if (on) toast('Sonido', { meter: [volume, 10] }); else toast('Sonido', { icon: 'mute' });
+    assist(on ? 'soundOn' : 'soundOff');
     if (current && current.refresh) current.refresh();
   }
   function syncSoundKey() {
@@ -3009,7 +3280,7 @@
       blinkLed();
       if (toggleEl) toggleEl.classList.toggle('is-on', on);
       buddy.setChaos(on);
-      if (booted) toast(on ? 'Modo caos' : 'Modo orden', 1300);
+      if (booted) { toast('Modo', { value: on ? 'Caos' : 'Orden', ms: 1300 }); assist(on ? 'entropyOn' : 'entropyOff'); }
       if (current && current.refresh) current.refresh();
     }).observe(sw, { attributes: true, attributeFilter: ['class'] });
   }
@@ -3036,6 +3307,7 @@
     entropyT += dt;
     if (entropyT > 0.3) { entropyT = 0; syncEntropy(); }
     if (booted && !dockKind && current === launcher) { idleT += dt; if (idleT > 45) go(attract); }
+    if (booted && !saving) restTick(dt);
     raf = requestAnimationFrame(loop);
   }
   function kick() { if (!raf) { last = 0; raf = requestAnimationFrame(loop); } }
@@ -3052,6 +3324,7 @@
       booted = true;
       // docked as the site menu before it ever booted: keep the menu up
       if (current !== navView) go(attract);
+      assist('boot');
     }, 1900);
   }
 
@@ -3210,6 +3483,7 @@
     tickClock();
     setInterval(tickClock, 15000);
     buddy.init($('[data-pe-mini]', root));
+    bindMusicTalk();
     ticker.init($('[data-pe-cart]', root));
     // the top slot LCD is also the music screen: waveform while a song plays,
     // hover/tap -> yellow, "Parar música" rises between two arrows (pe-music.js)
@@ -3259,6 +3533,20 @@
       // tap(k) releases immediately (safe inside synchronous step() scripts); tap(k, ms) holds for ms
       tap: function (k, ms) { press(k, 'api'); if (ms) setTimeout(function () { release(k); }, ms); else release(k); },
       freeze: function (on) { frozen = on !== false; if (!frozen) kick(); },
+      // QA: make the assistant say an event now (same rules as the real thing), the
+      // lines table, and which lines would be cut on the LCD at the current size
+      say: assist, lines: SAY, heard: function () { return buddy.heard(); },
+      fitCheck: function () {
+        var bad = [];
+        Object.keys(SAY).forEach(function (k) {
+          (SAY[k].lines || []).forEach(function (l) {
+            var txt = l.replace('{n}', '10').replace('{name}', 'equilibrio').replace('{track}', 'Mediterráneo');
+            if (buddy.fits(txt) === false) bad.push(k + ': ' + txt);
+          });
+        });
+        return bad;
+      },
+      toast: toast,
       // QA: show a saver now ('screen' | 'page'), or hide both
       saver: function (where) {
         if (where === 'page') pageDvd.show('page'); else if (where === 'screen') screenDvd.show('idle');

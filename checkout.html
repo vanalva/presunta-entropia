@@ -69,8 +69,8 @@
   <link rel="stylesheet" href="css/original.css?v=5502636d">
 
   <link rel="stylesheet" href="css/framework.css?v=48e7fd28">
-  <link rel="stylesheet" href="css/variables.css?v=855e97c8">
-  <link rel="stylesheet" href="css/project.css?v=1595197c">
+  <link rel="stylesheet" href="css/variables.css?v=caf20025">
+  <link rel="stylesheet" href="css/project.css?v=7c09f724">
   <script src="data/pe-cms.js"></script>
   <script src="data/pe-cms-lists.js" defer></script>
 </head>
@@ -1252,11 +1252,11 @@
             #checkout-items .checkout-item {
               display: flex; align-items: center; gap: 1.25rem; padding: 1.25rem;
               background: rgba(232, 213, 196, 0.05);
-              border: 1.5px solid rgba(232, 213, 196, 0.15); border-radius: 1rem;
+              border: 1.5px solid rgba(232, 213, 196, 0.15); border-radius: var(--_radius---card);
             }
             #checkout-items .checkout-item-image {
               width: 80px; height: 80px; flex-shrink: 0; overflow: hidden;
-              border-radius: 0.75rem; background: rgba(232, 213, 196, 0.1);
+              border-radius: var(--_radius---lg); background: rgba(232, 213, 196, 0.1);
             }
             #checkout-items .checkout-item-image img { width: 100%; height: 100%; object-fit: cover; }
             #checkout-items .checkout-item-details {
@@ -1273,7 +1273,7 @@
             #checkout-items .checkout-qty-btn {
               width: 2rem; height: 2rem; padding: 0; display: flex; align-items: center; justify-content: center;
               background: rgba(232, 213, 196, 0.1); border: 1px solid rgba(232, 213, 196, 0.2);
-              border-radius: 0.5rem; color: #e8d5c4; font-family: inherit; font-size: 1.125rem;
+              border-radius: var(--_radius---control-sm); color: #e8d5c4; font-family: inherit; font-size: 1.125rem;
               font-weight: 500; line-height: 1; cursor: pointer; transition: background-color 0.2s, border-color 0.2s;
             }
             #checkout-items .checkout-qty-btn:hover { background: rgba(232, 213, 196, 0.2); border-color: rgba(232, 213, 196, 0.4); color: #e8d5c4; }
@@ -1315,11 +1315,11 @@
             #checkout-form .participant-input { font-family: inherit; }
             #checkout-form .participant-form {
               padding: 1.25rem; background: rgba(232, 213, 196, 0.05);
-              border: 1.5px solid rgba(232, 213, 196, 0.15); border-radius: 1rem;
+              border: 1.5px solid rgba(232, 213, 196, 0.15); border-radius: var(--_radius---card);
             }
             #checkout-form .participant-input {
               height: 2.75rem; padding: 0 0.875rem; background: rgba(232, 213, 196, 0.05);
-              border: 1.5px solid rgba(232, 213, 196, 0.2); border-radius: 0.75rem; font-size: 0.9375rem; color: #e8d5c4;
+              border: 1.5px solid rgba(232, 213, 196, 0.2); border-radius: var(--_radius---control); font-size: 0.9375rem; color: #e8d5c4;
             }
             #checkout-form .participant-input:focus { outline: none; border-color: #efa02e; box-shadow: 0 0 0 3px rgba(239, 160, 46, 0.15); }
             #checkout-form .participant-input[readonly] { background: transparent; color: rgba(232, 213, 196, 0.6); }
