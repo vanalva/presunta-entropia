@@ -1,0 +1,89 @@
+<!-- ============================================================
+  FULLSCREEN MENU — navbar_fullscreen (XD artboard "Menu")
+  Webflow w-nav driven (needs webflow.js). Link list per client
+  feedback (ago 2025): Inicio, Reservas(modal), Talleres,
+  Team Building, Chef's Table, Método, El Equipo, Contacto.
+  Includes "Reservar ahora" CTA (opens
+  booking modal) + Cerrar pill bottom-right.
+  CSS lives in project.css (navbar18_*, menu_* classes).
+  Used on: index.html, taller-item-v2.html,
+  team-building-v2.html
+============================================================= -->
+<div data-collapse="all" data-animation="default" data-duration="0" data-easing2="ease" fs-scrolldisable-element="smart-nav" data-easing="ease" role="banner" class="navbar_fullscreen color-scheme-1 w-nav">
+        <div class="navbar_wrapper">
+          <div class="navbar_fixed-button-container">
+            <div class="navbar_menu-button button w-nav-button">
+              <div class="navbar_menu-button-wrapper">
+                <div>Menu</div>
+                <div class="menu-icon">
+                  <div class="menu-icon_wrapper">
+                    <div class="menu-icon4_line-top"></div>
+                    <div class="menu-icon4_line-bottom"></div>
+                  </div>
+                </div>
+              </div>
+            </div><button class="cart-header_button cart-header_button" data-cart-toggle=""><svg class="cart-header_icon cart-header_icon" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 22C9.55228 22 10 21.5523 10 21C10 20.4477 9.55228 20 9 20C8.44772 20 8 20.4477 8 21C8 21.5523 8.44772 22 9 22Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M20 22C20.5523 22 21 21.5523 21 21C21 20.4477 20.5523 20 20 20C19.4477 20 19 20.4477 19 21C19 21.5523 19.4477 22 20 22Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M1 1H5L7.68 14.39C7.77144 14.8504 8.02191 15.264 8.38755 15.5583C8.75318 15.8526 9.2107 16.009 9.68 16H19.4C19.8693 16.009 20.3268 15.8526 20.6925 15.5583C21.0581 15.264 21.3086 14.8504 21.4 14.39L23 6H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg><span class="cart-header_badge cart-header_badge" data-cart-count="">0</span></button>
+          </div>
+          <nav role="navigation" class="navbar_menu padding-global w-nav-menu">
+            <div class="navbar_menu-wrapper padding-global">
+              <a data-w-id="c75c1f82-4aeb-6a14-464e-23be1eabfba7" href="#" class="navbar_menu-close-button-wrapper button is-secondary w-inline-block">
+                <div class="navbar_menu-close-button-content">
+                  <div>Cerrar</div>
+                  <div class="menu-icon">
+                    <div class="menu-close-icon_wrapper">
+                      <div class="menu-close_line-top"></div>
+                      <div class="menu-close_line-bottom"></div>
+                    </div>
+                  </div>
+                </div>
+              </a>
+              <a href="#" data-modal-open="modal-1" class="menu_reservar-cta button is-secondary w-button">Reservar ahora</a>
+              <div class="navbar18_links-wrapper">
+                <a href="index.html" aria-current="page" class="w-inline-block w--current"><img src="../assets/images/identity_main-isologo.svg" loading="lazy" alt="Presunta Entropía" class="menu_fullscreen-icon"></a>
+                <a href="index.html" class="navbar18_link heading-style-h1 w-nav-link">Inicio</a>
+                <a href="#" data-modal-open="modal-1" class="navbar18_link heading-style-h1 w-nav-link">Reservas</a>
+                <a href="talleres-v2.html" class="navbar18_link heading-style-h1 w-nav-link">Talleres</a>
+                <a href="team-building-v2.html" class="navbar18_link heading-style-h1 w-nav-link">Team Building</a>
+                <a href="cenas-v2.html" class="navbar18_link heading-style-h1 w-nav-link">Chef&#x27;s Table</a>
+                <a href="la-escuela-v2.html" class="navbar18_link heading-style-h1 w-nav-link">Método</a>
+                <a href="nuestras-caras-v2.html" class="navbar18_link heading-style-h1 w-nav-link">El Equipo</a>
+                <a href="contacto-v2.html" class="navbar18_link heading-style-h1 w-nav-link">Contacto</a>
+              </div>
+              <div class="navbar18_bottom">
+                <a href="contacto-v2.html" class="text-size-large">Calle Zurbano 83, Madrid · info@presuntaentropia.com</a>
+                <div class="w-layout-grid navbar18_social-list">
+                  <a href="#" class="navbar18_social-link w-inline-block">
+                    <div class="icon-embed-xsmall w-embed"><svg width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22 12.0611C22 6.50451 17.5229 2 12 2C6.47715 2 2 6.50451 2 12.0611C2 17.0828 5.65684 21.2452 10.4375 22V14.9694H7.89844V12.0611H10.4375V9.84452C10.4375 7.32296 11.9305 5.93012 14.2146 5.93012C15.3088 5.93012 16.4531 6.12663 16.4531 6.12663V8.60261H15.1922C13.95 8.60261 13.5625 9.37822 13.5625 10.1739V12.0611H16.3359L15.8926 14.9694H13.5625V22C18.3432 21.2452 22 17.083 22 12.0611Z" fill="CurrentColor"></path>
+                      </svg></div>
+                  </a>
+                  <a href="#" class="navbar18_social-link w-inline-block">
+                    <div class="icon-embed-xsmall w-embed"><svg width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M16 3H8C5.23858 3 3 5.23858 3 8V16C3 18.7614 5.23858 21 8 21H16C18.7614 21 21 18.7614 21 16V8C21 5.23858 18.7614 3 16 3ZM19.25 16C19.2445 17.7926 17.7926 19.2445 16 19.25H8C6.20735 19.2445 4.75549 17.7926 4.75 16V8C4.75549 6.20735 6.20735 4.75549 8 4.75H16C17.7926 4.75549 19.2445 6.20735 19.25 8V16ZM16.75 8.25C17.3023 8.25 17.75 7.80228 17.75 7.25C17.75 6.69772 17.3023 6.25 16.75 6.25C16.1977 6.25 15.75 6.69772 15.75 7.25C15.75 7.80228 16.1977 8.25 16.75 8.25ZM12 7.5C9.51472 7.5 7.5 9.51472 7.5 12C7.5 14.4853 9.51472 16.5 12 16.5C14.4853 16.5 16.5 14.4853 16.5 12C16.5027 10.8057 16.0294 9.65957 15.1849 8.81508C14.3404 7.97059 13.1943 7.49734 12 7.5ZM9.25 12C9.25 13.5188 10.4812 14.75 12 14.75C13.5188 14.75 14.75 13.5188 14.75 12C14.75 10.4812 13.5188 9.25 12 9.25C10.4812 9.25 9.25 10.4812 9.25 12Z" fill="CurrentColor"></path>
+                      </svg></div>
+                  </a>
+                  <a href="#" class="navbar18_social-link w-inline-block">
+                    <div class="icon-embed-xsmall w-embed"><svg width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17.1761 4H19.9362L13.9061 10.7774L21 20H15.4456L11.0951 14.4066L6.11723 20H3.35544L9.80517 12.7508L3 4H8.69545L12.6279 9.11262L17.1761 4ZM16.2073 18.3754H17.7368L7.86441 5.53928H6.2232L16.2073 18.3754Z" fill="CurrentColor"></path>
+                      </svg></div>
+                  </a>
+                  <a href="#" class="navbar18_social-link w-inline-block">
+                    <div class="social-icon w-embed"><svg width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M5 3H19C20.1046 3 21 3.89543 21 5V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3ZM8 18C8.27614 18 8.5 17.7761 8.5 17.5V10.5C8.5 10.2239 8.27614 10 8 10H6.5C6.22386 10 6 10.2239 6 10.5V17.5C6 17.7761 6.22386 18 6.5 18H8ZM7.25 9C6.42157 9 5.75 8.32843 5.75 7.5C5.75 6.67157 6.42157 6 7.25 6C8.07843 6 8.75 6.67157 8.75 7.5C8.75 8.32843 8.07843 9 7.25 9ZM17.5 18C17.7761 18 18 17.7761 18 17.5V12.9C18.0325 11.3108 16.8576 9.95452 15.28 9.76C14.177 9.65925 13.1083 10.1744 12.5 11.1V10.5C12.5 10.2239 12.2761 10 12 10H10.5C10.2239 10 10 10.2239 10 10.5V17.5C10 17.7761 10.2239 18 10.5 18H12C12.2761 18 12.5 17.7761 12.5 17.5V13.75C12.5 12.9216 13.1716 12.25 14 12.25C14.8284 12.25 15.5 12.9216 15.5 13.75V17.5C15.5 17.7761 15.7239 18 16 18H17.5Z" fill="CurrentColor"></path>
+                      </svg></div>
+                  </a>
+                  <a href="#" class="navbar18_social-link w-inline-block">
+                    <div class="icon-embed-xsmall w-embed"><svg width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M20.5686 4.77345C21.5163 5.02692 22.2555 5.76903 22.5118 6.71673C23.1821 9.42042 23.1385 14.5321 22.5259 17.278C22.2724 18.2257 21.5303 18.965 20.5826 19.2213C17.9071 19.8831 5.92356 19.8015 3.40294 19.2213C2.45524 18.9678 1.71595 18.2257 1.45966 17.278C0.827391 14.7011 0.871044 9.25144 1.44558 6.73081C1.69905 5.78311 2.44116 5.04382 3.38886 4.78753C6.96561 4.0412 19.2956 4.282 20.5686 4.77345ZM9.86682 8.70227L15.6122 11.9974L9.86682 15.2925V8.70227Z" fill="CurrentColor"></path>
+                      </svg></div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </nav>
+        </div>
+      </div>

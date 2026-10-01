@@ -1,0 +1,126 @@
+/* =============================================================
+   CHAT BUDDY — round chat button beside the cart (js/pe-chat-buddy.js)
+   Same size and skin as .cart-header_button; widens into a pill with
+   "Chat en vivo" on hover. Bubbles sit straight above it (no tilt).
+   ============================================================= */
+button.chat-buddy {   /* element + class: outranks base.css "button, [type=button]" (border-width: 0) */
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  height: 3.1875rem;               /* the Menu button's height, so the three line up */
+  min-width: 3.1875rem;
+  padding-top: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+  padding-left: 0;
+  border-top: 1.5px solid #e8d5c4;
+  border-right: 1.5px solid #e8d5c4;
+  border-bottom: 1.5px solid #e8d5c4;
+  border-left: 1.5px solid #e8d5c4;
+  border-top-left-radius: var(--_radius---control);
+  border-top-right-radius: var(--_radius---control);
+  border-bottom-left-radius: var(--_radius---control);
+  border-bottom-right-radius: var(--_radius---control);
+  background-color: #0d161d;
+  color: #e8d5c4;
+  font-family: 'Space Grotesk', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 var(--pe---volume, 5px) 0 0 #bf8024;   /* the Menu's volume (dark yellow reads on light and dark sections) */
+  transition-property: border-color, transform, box-shadow;
+  transition-duration: 0.2s, 0.2s, 0.2s;
+  transition-timing-function: ease, ease, ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.chat-buddy { order: -10000; }                     /* left of the cart (order -9999) */
+.chat-buddy:hover,
+.chat-buddy:focus-visible { border-top-color: #efa02e; border-right-color: #efa02e; border-bottom-color: #efa02e; border-left-color: #efa02e; outline: none; }
+.chat-buddy:active { transform: translate(0, var(--pe---volume, 5px)); box-shadow: 0 0 0 0 #bf8024; }
+.chat-buddy_face {
+  display: block;
+  flex-shrink: 0;
+  width: calc(3.1875rem - 3px);
+  height: calc(3.1875rem - 3px);
+  image-rendering: pixelated;
+}
+.chat-buddy_label {
+  display: block;
+  max-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  opacity: 0;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1;
+  transition: max-width 0.38s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.2s ease, padding-right 0.38s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+.chat-buddy:hover .chat-buddy_label,
+.chat-buddy:focus-visible .chat-buddy_label {
+  max-width: 9rem;
+  padding-right: 1.1rem;
+  opacity: 1;
+}
+.chat-buddy_bubble {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 0.7rem);
+  width: max-content;
+  max-width: 15rem;
+  padding-top: 0.6rem;
+  padding-right: 0.85rem;
+  padding-bottom: 0.6rem;
+  padding-left: 0.85rem;
+  /* cream body with our stroke token in aztec, so the bubble has an edge
+     on every section (cream on cream had none) */
+  border-top: var(--pe---border-width, 0.094rem) solid #0d161d;
+  border-right: var(--pe---border-width, 0.094rem) solid #0d161d;
+  border-bottom: var(--pe---border-width, 0.094rem) solid #0d161d;
+  border-left: var(--pe---border-width, 0.094rem) solid #0d161d;
+  border-top-left-radius: var(--_radius---control-sm);
+  border-top-right-radius: var(--_radius---control-sm);
+  border-bottom-left-radius: var(--_radius---control-sm);
+  border-bottom-right-radius: var(--_radius---control-sm);
+  background-color: #e8d5c4;
+  color: #0d161d;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25;
+  text-align: left;
+  opacity: 0;
+  transform: translateY(6px) scale(0.96);
+  transform-origin: right bottom;
+  transition: opacity 0.22s ease, transform 0.32s cubic-bezier(0.3, 1.5, 0.4, 1);
+  pointer-events: none;
+}
+.chat-buddy_bubble::before,
+.chat-buddy_bubble::after {           /* tail, pointing at the chef */
+  content: '';
+  position: absolute;
+  right: 1.1rem;
+  border-left: 0.5rem solid transparent;
+  border-right: 0.5rem solid transparent;
+  border-top: 0.55rem solid #0d161d;   /* ::before = the stroke */
+  top: 100%;
+}
+.chat-buddy_bubble::after {           /* ::after = the fill, one stroke higher */
+  border-top-color: #e8d5c4;
+  margin-top: calc(-1 * var(--pe---border-width, 0.094rem) - 0.5px);
+}
+.chat-buddy_bubble.is-on { opacity: 1; transform: none; }
+.chat-buddy:hover .chat-buddy_bubble { opacity: 0; }
+
+/* the old ¿Hablamos? pill is replaced by the chat buddy */
+html.has-chat-buddy .vanny-launch { display: none; }
+
+/* phones: the buddy sits left of the cart, so a right-anchored bubble ran
+   off the left edge. Grow it to the right instead. */
+@media (max-width: 767px) {
+  .chat-buddy_bubble {
+    right: auto;
+    left: 0;
+    max-width: min(15rem, calc(100vw - 2rem));
+    transform-origin: left bottom;
+  }
+  .chat-buddy_bubble::before,
+  .chat-buddy_bubble::after { right: auto; left: 1.1rem; }
+}

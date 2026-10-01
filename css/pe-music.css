@@ -1,0 +1,232 @@
+/* =============================================================
+   PE MUSIC — music screens + the bottom-left float (js/pe-music.js).
+   Loaded by the page AND cloned into the console's shadow root, so the
+   console's top-slot screen uses these same rules.
+   ============================================================= */
+.pe-mlcd {
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  background-color: #0d161d;
+  font-family: 'Space Grotesk', sans-serif;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.pe-mlcd_view,
+.pe-mlcd_ctrl {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transition-property: transform;
+  transition-duration: 0.38s;
+  transition-timing-function: cubic-bezier(0.2, 0.9, 0.25, 1);
+}
+.pe-mlcd_wave { display: block; width: 100%; height: 100%; }
+/* the track title flashes over the waveform when the song changes */
+.pe-mlcd_title {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 6px;
+  padding-right: 6px;
+  background-color: #0d161d;
+  color: #efa02e;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0;
+  transition-property: opacity;
+  transition-duration: 0.25s;
+}
+.pe-mlcd.is-title .pe-mlcd_title { opacity: 1; }
+/* the browser is holding the music until a first tap: say so, blinking */
+.pe-mlcd.is-waiting .pe-mlcd_title {
+  opacity: 1;
+  column-gap: 5px;
+  animation-name: peMlcdBlink;
+  animation-duration: 1.2s;
+  animation-timing-function: steps(2, jump-none);
+  animation-iteration-count: infinite;
+}
+.pe-mlcd_title svg { flex-shrink: 0; width: 9px; height: 9px; }
+@keyframes peMlcdBlink { 0% { opacity: 1; } 100% { opacity: 0.35; } }
+.pe-con_cart .pe-mlcd.is-waiting .pe-mlcd_view { opacity: 1; }
+
+/* hover / tap: yellow, the waveform leaves upward, the controls rise */
+.pe-mlcd_ctrl {
+  display: flex;
+  align-items: stretch;
+  background-color: #efa02e;
+  color: #0d161d;
+  transform: translateY(100%);
+}
+.pe-mlcd.is-open .pe-mlcd_view { transform: translateY(-100%); }
+.pe-mlcd.is-open .pe-mlcd_ctrl { transform: translateY(0); }
+.pe-mlcd .pe-mlcd_ctrl button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0;
+  margin-right: 0;
+  margin-bottom: 0;
+  margin-left: 0;
+  padding-top: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+  padding-left: 0;
+  border-top-width: 0;
+  border-right-width: 0;
+  border-bottom-width: 0;
+  border-left-width: 0;
+  background-color: transparent;
+  color: inherit;
+  font-family: inherit;
+  cursor: pointer;
+}
+.pe-mlcd .pe-mlcd_ctrl .pe-mlcd_main {
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 0%;
+  min-width: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.pe-mlcd .pe-mlcd_ctrl .pe-mlcd_arrow {
+  flex-grow: 0;
+  flex-shrink: 0;
+  width: 26px;
+}
+.pe-mlcd_arrow svg { width: 9px; height: 9px; }
+.pe-mlcd .pe-mlcd_ctrl .pe-mlcd_arrow:hover,
+.pe-mlcd .pe-mlcd_ctrl .pe-mlcd_main:hover { background-color: #bf8024; }
+
+/* ---------- the float: bottom-left, once the console is out of view ---------- */
+.pe-float {
+  position: fixed;
+  z-index: 900;
+  left: 64px;
+  bottom: 68px;
+  display: flex;
+  align-items: center;
+  column-gap: 14px;
+  padding-top: 6px;
+  padding-right: 14px;
+  padding-bottom: 6px;
+  padding-left: 6px;
+  border-top-width: 0.094rem;
+  border-right-width: 0.094rem;
+  border-bottom-width: 0.094rem;
+  border-left-width: 0.094rem;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
+  border-top-color: #3a4a57;
+  border-right-color: #3a4a57;
+  border-bottom-color: #3a4a57;
+  border-left-color: #3a4a57;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  background-color: #0d161d;
+  box-shadow: 0 3px 0 0 #3a4a57;
+  transition-property: opacity, transform, visibility;
+  transition-duration: 0.3s, 0.35s, 0s;
+  transition-timing-function: ease, cubic-bezier(0.2, 0.9, 0.3, 1), linear;
+}
+.pe-float .pe-mlcd {
+  width: 150px;
+  height: 36px;
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+}
+.pe-float .entropy-switch_wrap { margin-top: 0; margin-bottom: 0; }
+/* hidden while the hero dock (cart + MENU) or the console is on screen */
+html.hero-dock-in-view .pe-float,
+html.pe-con-in-view .pe-float,
+html.pe-menu-sheet .pe-float {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition-delay: 0s, 0s, 0.35s;
+}
+
+/* phones: just the music screen, bottom-left, on the cart/MENU line (the
+   switch lives in the hero and in the console) */
+@media (max-width: 767px) {
+  .pe-float {
+    left: 16px;
+    bottom: 30px;                 /* level with the chat / cart / MENU row */
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    box-shadow: none;
+    background-color: transparent;
+  }
+  .pe-float .entropy-switch_wrap { display: none; }
+  .pe-float .pe-mlcd {
+    width: 94px;
+    height: 48px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-color: #e8d5c4;
+    border-right-color: #e8d5c4;
+    border-bottom-color: #e8d5c4;
+    border-left-color: #e8d5c4;
+  }
+  .pe-float .pe-mlcd .pe-mlcd_ctrl .pe-mlcd_main { font-size: 9px; letter-spacing: 0.04em; white-space: normal; line-height: 1.1; }
+  .pe-float .pe-mlcd .pe-mlcd_ctrl .pe-mlcd_arrow { width: 20px; }
+}
+
+/* ---------- inside the console: the top slot LCD ---------- */
+/* over the ticker; transparent while the music is off so the ticker shows */
+.pe-con_cart .pe-mlcd {
+  position: absolute;
+  top: 0.6cqi;
+  right: 0.6cqi;
+  bottom: 0.6cqi;
+  left: 0.6cqi;
+  border-top-left-radius: 0.5cqi;
+  border-top-right-radius: 0.5cqi;
+  border-bottom-left-radius: 0.5cqi;
+  border-bottom-right-radius: 0.5cqi;
+  background-color: transparent;
+  pointer-events: auto;
+}
+.pe-con_cart .pe-mlcd:not(.is-playing) .pe-mlcd_view { opacity: 0; }
+.pe-con_cart .pe-mlcd .pe-mlcd_ctrl .pe-mlcd_main { font-size: max(8px, 1.5cqi); }
+.pe-con_cart .pe-mlcd .pe-mlcd_ctrl .pe-mlcd_arrow { width: max(18px, 3.4cqi); }
+.pe-con_cart .pe-mlcd_title { font-size: max(8px, 1.4cqi); }

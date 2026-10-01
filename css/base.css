@@ -1,0 +1,456 @@
+/* ═══════════════════════════════════════════
+   Presunta Entropía — Base / Reset
+   Local development replacement for webflow.css + normalize.css.
+   NOT imported into Webflow — local preview only.
+   ═══════════════════════════════════════════ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin-top: 0;
+  margin-right: 0;
+  margin-bottom: 0;
+  margin-left: 0;
+  min-height: 100%;
+  background-color: var(--pe---color--aztec, #0d161d);
+  color: var(--pe---color--stark-white, #e8d5c4);
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+}
+
+/* webflow.css img defaults — svg/video are NOT display:block in Webflow */
+img {
+  max-width: 100%;
+  vertical-align: middle;
+  display: inline-block;
+  border-top-width: 0;
+  border-right-width: 0;
+  border-bottom-width: 0;
+  border-left-width: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ── webflow.css base typography reset ────────
+   These are the Webflow defaults. original.css overrides heading sizes/margins
+   and p margin-bottom, but webflow.css's `p { margin-top: 0 }` is load-bearing:
+   original.css only sets `p { margin-bottom: 0 }`, so without this the browser's
+   default 1em top margin leaks onto every <p>. */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+h1 { font-size: 38px; line-height: 44px; margin-top: 20px; }
+h2 { font-size: 32px; line-height: 36px; margin-top: 20px; }
+h3 { font-size: 24px; line-height: 30px; margin-top: 20px; }
+h4 { font-size: 18px; line-height: 24px; margin-top: 10px; }
+h5 { font-size: 14px; line-height: 20px; margin-top: 10px; }
+h6 { font-size: 12px; line-height: 18px; margin-top: 10px; }
+p {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+blockquote {
+  margin-top: 0;
+  margin-right: 0;
+  margin-bottom: 10px;
+  margin-left: 0;
+  padding-top: 10px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  border-left-width: 5px;
+  border-left-style: solid;
+  border-left-color: #e2e2e2;
+  font-size: 18px;
+  line-height: 22px;
+}
+figure { margin-top: 0; margin-right: 0; margin-bottom: 10px; margin-left: 0; }
+figcaption { margin-top: 5px; text-align: center; }
+ul, ol {
+  margin-top: 0;
+  margin-bottom: 10px;
+  padding-left: 40px;
+}
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+/* ── normalize.css: media + text-level defaults ── */
+audio, canvas, progress, video {
+  display: inline-block;
+  vertical-align: baseline;
+}
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+b, strong {
+  font-weight: bold;
+}
+/* normalize.css: SVG overflow (specificity 0,1,1 — beats bare .class svg styles) */
+svg:not(:root) {
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+/* ── normalize.css: form controls inherit typography ── */
+button, input, optgroup, select, textarea {
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  font-style: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  margin-top: 0;
+  margin-right: 0;
+  margin-bottom: 0;
+  margin-left: 0;
+}
+button, select {
+  text-transform: none;
+}
+/* normalize.css: Firefox sets line-height on inputs */
+input {
+  line-height: normal;
+}
+button, [type='button'], [type='reset'] {
+  border-top-width: 0;
+  border-right-width: 0;
+  border-bottom-width: 0;
+  border-left-width: 0;
+  cursor: pointer;
+  -webkit-appearance: button;
+}
+
+/* ── webflow.css: inline-block links ── */
+.w-inline-block {
+  max-width: 100%;
+  display: inline-block;
+}
+
+/* ── webflow.css: .w-button (line-height:inherit beats input{line-height:normal}) ── */
+.w-button {
+  display: inline-block;
+  padding-top: 9px;
+  padding-right: 15px;
+  padding-bottom: 9px;
+  padding-left: 15px;
+  background-color: #3898ec;
+  color: white;
+  border-top-width: 0;
+  border-right-width: 0;
+  border-bottom-width: 0;
+  border-left-width: 0;
+  line-height: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+input.w-button {
+  -webkit-appearance: button;
+}
+
+/* ── Webflow grid ─────────────────────────── */
+.w-layout-grid {
+  display: grid;
+  grid-row-gap: 16px;
+  grid-column-gap: 16px;
+  grid-auto-columns: 1fr;
+}
+
+/* ── Webflow slider ───────────────────────── */
+.w-slider {
+  position: relative;
+  height: 300px;
+  text-align: center;
+  clear: both;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-user-select: none;
+  user-select: none;
+}
+.w-slider-mask {
+  position: relative;
+  display: block;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  white-space: nowrap;
+  height: 100%;
+}
+.w-slide {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  width: 100%;
+  height: 100%;
+  white-space: normal;
+  text-align: left;
+}
+.w-slider-nav {
+  position: absolute;
+  z-index: 2;
+  top: auto;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin-top: auto;
+  margin-right: auto;
+  margin-bottom: auto;
+  margin-left: auto;
+  padding-top: 10px;
+  height: 40px;
+  text-align: center;
+  tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.w-slider-nav.w-round > div { border-radius: 100%; }
+.w-slider-nav.w-num > div {
+  width: auto;
+  height: auto;
+  padding-top: 0.2em;
+  padding-right: 0.5em;
+  padding-bottom: 0.2em;
+  padding-left: 0.5em;
+  font-size: inherit;
+  line-height: inherit;
+}
+.w-slider-nav-invert { color: #fff; }
+.w-slider-nav-invert > div { background-color: rgba(34, 34, 34, 0.4); }
+.w-slider-nav-invert > div.w-active { background-color: #222; }
+.w-slider-dot {
+  position: relative;
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+  border-bottom-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+  margin-top: 3px;
+  margin-right: 3px;
+  margin-bottom: 3px;
+  margin-left: 3px;
+  cursor: pointer;
+}
+.w-slider-dot.w-active { background-color: rgba(255, 255, 255, 1); }
+.w-slider-arrow-left,
+.w-slider-arrow-right {
+  position: absolute;
+  width: 80px;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  cursor: pointer;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  color: white;
+  font-size: 40px;
+  tap-highlight-color: rgba(0, 0, 0, 0);
+  user-select: none;
+}
+.w-slider-arrow-left { z-index: 3; right: auto; }
+.w-slider-arrow-right { z-index: 4; left: auto; }
+
+/* ── Webflow nav ──────────────────────────── */
+.w-nav {
+  position: relative;
+  background-color: #dddddd;
+  z-index: 1000;
+}
+.w-nav-brand { position: relative; float: left; text-decoration: none; color: #333333; }
+.w-nav-link { position: relative; display: inline-block; vertical-align: top; text-decoration: none; color: #222222; padding-top: 20px; padding-right: 20px; padding-bottom: 20px; padding-left: 20px; text-align: left; margin-left: auto; margin-right: auto; }
+.w-nav-menu { position: relative; }
+.w-nav-overlay {
+  position: absolute;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  display: none;
+  top: 100%;
+  left: 0;
+  right: 0;
+  width: 100%;
+}
+.w-nav-button {
+  position: relative;
+  float: right;
+  padding-top: 18px;
+  padding-right: 18px;
+  padding-bottom: 18px;
+  padding-left: 18px;
+  font-size: 24px;
+  display: none;
+  cursor: pointer;
+  tap-highlight-color: rgba(0, 0, 0, 0);
+  user-select: none;
+}
+[data-nav-menu-open] {
+  display: block !important;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #c8c8c8;
+  text-align: center;
+  overflow: visible;
+  min-width: 200px;
+}
+.w-nav-overlay [data-nav-menu-open] { top: 0; }
+.w-nav[data-collapse='all'] .w-nav-menu { display: none; }
+.w-nav[data-collapse='all'] .w-nav-button { display: block; }
+@media screen and (max-width: 991px) {
+  .w-nav[data-collapse='medium'] .w-nav-menu { display: none; }
+  .w-nav[data-collapse='medium'] .w-nav-button { display: block; }
+}
+@media screen and (max-width: 767px) {
+  .w-nav[data-collapse='small'] .w-nav-menu { display: none; }
+  .w-nav[data-collapse='small'] .w-nav-button { display: block; }
+}
+@media screen and (max-width: 479px) {
+  .w-nav[data-collapse='tiny'] .w-nav-menu { display: none; }
+  .w-nav[data-collapse='tiny'] .w-nav-button { display: block; }
+}
+
+/* ── Webflow tabs (only .w--tab-active pane shows) ── */
+.w-tabs { position: relative; }
+.w-tab-menu { position: relative; }
+.w-tab-link {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  text-decoration: none;
+  padding-top: 9px;
+  padding-right: 30px;
+  padding-bottom: 9px;
+  padding-left: 30px;
+  text-align: left;
+  cursor: pointer;
+  color: #222222;
+  background-color: #dddddd;
+}
+.w-tab-link.w--current { background-color: #c8c8c8; }
+.w-tab-link:focus { outline-width: 0; }
+.w-tab-content {
+  position: relative;
+  display: block;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+.w-tab-pane {
+  position: relative;
+  display: none;
+}
+.w--tab-active { display: block; }
+@media screen and (max-width: 479px) {
+  .w-tab-link { display: block; }
+}
+
+/* ── Webflow form ─────────────────────────── */
+.w-form { margin-top: 0; margin-right: 0; margin-bottom: 15px; margin-left: 0; }
+.w-input, .w-select {
+  display: block;
+  width: 100%;
+  height: 38px;
+  padding-top: 8px;
+  padding-right: 12px;
+  padding-bottom: 8px;
+  padding-left: 12px;
+  margin-top: 0;
+  margin-right: 0;
+  margin-bottom: 10px;
+  margin-left: 0;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #333333;
+  vertical-align: middle;
+  background-color: #ffffff;
+  border-top-width: 1px;
+  border-right-width: 1px;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
+  border-top-color: #cccccc;
+  border-right-color: #cccccc;
+  border-bottom-color: #cccccc;
+  border-left-color: #cccccc;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.w-input:focus, .w-select:focus {
+  border-top-color: #3898ec;
+  border-right-color: #3898ec;
+  border-bottom-color: #3898ec;
+  border-left-color: #3898ec;
+  outline-width: 0;
+}
+.w-checkbox { display: block; margin-bottom: 5px; padding-left: 20px; }
+.w-form-label { display: inline-block; cursor: pointer; font-weight: normal; margin-bottom: 0; }
+
+/* ── Webflow layout helpers ───────────────── */
+.w-container {
+  margin-top: 0;
+  margin-right: auto;
+  margin-bottom: 0;
+  margin-left: auto;
+  max-width: 940px;
+  padding-top: 0;
+  padding-right: 20px;
+  padding-bottom: 0;
+  padding-left: 20px;
+}
+.w-row::before, .w-row::after { content: " "; display: table; }
+.w-row::after { clear: both; }
+
+/* ── Webflow form success/error states (hidden until submit) ── */
+.w-form-done {
+  display: none;
+  padding-top: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+  padding-left: 20px;
+  text-align: center;
+  background-color: #dddddd;
+}
+.w-form-fail {
+  display: none;
+  margin-top: 10px;
+  padding-top: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  background-color: #ffdede;
+}
+
+/* ── Webflow CMS empty state ──────────────── */
+.w-dyn-empty { padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; background-color: #ddd; }
+.w-dyn-hide { display: none !important; }
+.w-dyn-bind-empty { display: none !important; }
+.w-condition-invisible { display: none !important; }
+
+/* ── Background + overlay ─────────────────── */
+.w-background-video { position: relative; overflow-x: hidden; overflow-y: hidden; height: 500px; color: white; background-size: cover; background-position: 50% 50%; }

@@ -1,0 +1,368 @@
+/* =============================================================
+   PE MOTION — companion stylesheet for js/pe-motion.js.
+
+   This is a JS-driven motion layer, not Webflow styleLess: in Webflow it
+   ships as a page embed next to the script. It holds two things: the
+   hero's waiting state before pe-motion.js takes over, and (at the end)
+   the three button hovers: slide + press, power on, ticker.
+
+   html.pe-m-boot is added by a one-line head snippet (see the report /
+   pe-motion.js header) and removed by pe-motion.js as soon as it has set
+   the hero parts' inline start states, or by the snippet's own 3s
+   timeout if the script never arrives. Without JS the class never
+   exists, so nothing here ever hides content on a static page.
+
+   Every other waiting state is written inline by pe-motion.js and
+   cleared when the element has revealed.
+   ============================================================= */
+
+/* hero parts wait behind their own mask (same shapes pe-motion.js uses) */
+html.pe-m-boot .hero_wrapper-left .navbar18_logo-link,
+html.pe-m-boot .hero_wrapper-left .hero-dock > *,
+html.pe-m-boot .hero_wrapper-left .button,
+html.pe-m-boot .hero_wrapper-left .text-style-tagline,
+html.pe-m-boot .hero_wrapper-left h1,
+html.pe-m-boot .hero_wrapper-left p,
+html.pe-m-boot .hero_wrapper-left .entropy-switch_wrap,
+html.pe-m-boot .hero_content-middle,
+html.pe-m-boot .hero_wrapper-right {
+    clip-path: inset(0% 0% 100% 0%);
+}
+
+/* Modo Entropía owns the page: never hold anything back while it is on */
+html.pe-m-boot.modo-entropia .hero_wrapper-left .navbar18_logo-link,
+html.pe-m-boot.modo-entropia .hero_wrapper-left .hero-dock > *,
+html.pe-m-boot.modo-entropia .hero_wrapper-left .button,
+html.pe-m-boot.modo-entropia .hero_wrapper-left .text-style-tagline,
+html.pe-m-boot.modo-entropia .hero_wrapper-left h1,
+html.pe-m-boot.modo-entropia .hero_wrapper-left p,
+html.pe-m-boot.modo-entropia .hero_wrapper-left .entropy-switch_wrap,
+html.pe-m-boot.modo-entropia .hero_content-middle,
+html.pe-m-boot.modo-entropia .hero_wrapper-right {
+    clip-path: none;
+}
+
+
+/* =============================================================
+   MAIN BUTTON — SLIDE + PRESS (lab 01b, chosen 2026-09-26)
+   On hover the volume button sinks 3px (project.css .button:hover, as
+   before) while its label leaves upward and an inverted state rises from
+   below: the button's own text colour becomes the fill, aztec the ink.
+   pe-motion.js adds .pe-rise and the inner spans to .button elements that
+   carry the volume (not .is-simple / .is-link / pills), so the page
+   markup never changes. Relational hover rules: embed, not styleLess.
+   ============================================================= */
+.pe-rise {
+    /* no position here: an absolutely placed button (the menu's CERRAR /
+       RESERVAR AHORA) must keep it; pe-motion.js makes static ones relative */
+    overflow-x: hidden;             /* fallback */
+    overflow-y: hidden;
+    overflow-x: clip;               /* clip keeps the flex min-size: hidden let flex columns crush the button (menu Cerrar/Reservar) */
+    overflow-y: clip;
+    isolation: isolate;
+}
+/* the rising state is an inner panel, like the music screen's: inset from
+   the frame by the same padding all round, with concentric corners
+   (control radius minus the inset), so the button's edge stays visible */
+.pe-rise {
+    --pe-rise-inset: 6px;
+}
+.pe-rise::before {
+    content: '';
+    position: absolute;
+    top: var(--pe-rise-inset);
+    right: var(--pe-rise-inset);
+    bottom: var(--pe-rise-inset);
+    left: var(--pe-rise-inset);
+    z-index: 0;
+    background-color: var(--pe-rise-bg, #efa02e);
+    border-top-left-radius: max(var(--_radius---xs, 4px), calc(var(--_radius---control, 12px) - var(--pe-rise-inset)));
+    border-top-right-radius: max(var(--_radius---xs, 4px), calc(var(--_radius---control, 12px) - var(--pe-rise-inset)));
+    border-bottom-left-radius: max(var(--_radius---xs, 4px), calc(var(--_radius---control, 12px) - var(--pe-rise-inset)));
+    border-bottom-right-radius: max(var(--_radius---xs, 4px), calc(var(--_radius---control, 12px) - var(--pe-rise-inset)));
+    transform: translate(0, calc(100% + var(--pe-rise-inset) + 2px));
+    transition-property: transform;
+    transition-duration: 0.32s;
+    transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+/* the label stays exactly where it was (the button never changes size);
+   the rising text is its own layer over the inner panel, centred, and
+   pe-motion.js shortens it until it fits inside the frame */
+.pe-rise_label {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    column-gap: inherit;
+    transition-property: transform;
+    transition-duration: 0.32s;
+    transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.pe-rise_alt {
+    position: absolute;
+    top: var(--pe-rise-inset);
+    right: var(--pe-rise-inset);
+    bottom: var(--pe-rise-inset);
+    left: var(--pe-rise-inset);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 0.45em;
+    white-space: nowrap;
+    font-size: 0.85em;              /* the music screen's second line is smaller too */
+    color: var(--pe-rise-ink, #0d161d);
+    transform: translate(0, calc(100% + var(--pe-rise-inset) + 2px));
+    transition-property: transform;
+    transition-duration: 0.32s;
+    transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.pe-rise_txt {
+    display: inline-flex;
+    align-items: center;
+    column-gap: 0.45em;
+}
+.pe-rise_glyph {
+    width: 0.6em;
+    height: 0.6em;
+    flex-shrink: 0;
+}
+.pe-rise:hover::before,
+.pe-rise:focus-visible::before { transform: translate(0, 0); }
+.pe-rise:hover .pe-rise_label,
+.pe-rise:focus-visible .pe-rise_label { transform: translate(0, -3em); }
+.pe-rise:hover .pe-rise_alt,
+.pe-rise:focus-visible .pe-rise_alt { transform: translate(0, 0); }
+@media (prefers-reduced-motion: reduce) {
+    .pe-rise::before,
+    .pe-rise_label,
+    .pe-rise_alt { transition-duration: 0s; }
+}
+
+
+/* =============================================================
+   FLAT SECONDARY BUTTONS — POWER ON (lab 06)
+   .is-simple buttons have no volume, so no press: the console's CRT
+   switch-on opens the inverted tone (text colour fills, aztec ink).
+   ============================================================= */
+.pe-pwr {
+    /* no position here: an absolutely placed button (the menu's CERRAR /
+       RESERVAR AHORA) must keep it; pe-motion.js makes static ones relative */
+    overflow-x: hidden;             /* fallback */
+    overflow-y: hidden;
+    overflow-x: clip;               /* clip keeps the flex min-size: hidden let flex columns crush the button (menu Cerrar/Reservar) */
+    overflow-y: clip;
+    isolation: isolate;
+}
+.pe-pwr::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 0;
+    background-color: var(--pe-fx-bg, #efa02e);
+    transform: scale(0, 0.04);
+    visibility: hidden;
+}
+.pe-pwr_label {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    column-gap: 0.5em;
+    transition-property: color;
+    transition-duration: 0.01s;
+    transition-delay: 0s;
+}
+/* the site's .is-simple hovers repaint the whole button instantly, which
+   hid the CRT line: hold the resting colours (read by pe-motion.js) and
+   let the animation do the change. Repeated class = outranks the
+   .button.is-secondary.is-simple.is-alternate:hover family. */
+.button.pe-pwr.pe-pwr.pe-pwr.pe-pwr:hover,
+.button.pe-pwr.pe-pwr.pe-pwr.pe-pwr:focus-visible {
+    background-color: var(--pe-rest-bg, transparent);
+    color: var(--pe-rest-color, inherit);
+}
+.pe-pwr:hover::before,
+.pe-pwr:focus-visible::before {
+    visibility: visible;
+    animation-name: pePwrOn;
+    animation-duration: 0.42s;
+    animation-timing-function: cubic-bezier(0.3, 0.7, 0.2, 1);
+    animation-fill-mode: forwards;
+}
+.pe-pwr:hover .pe-pwr_label,
+.pe-pwr:focus-visible .pe-pwr_label {
+    color: var(--pe-fx-ink, #0d161d);
+    transition-delay: 0.24s;
+}
+@keyframes pePwrOn {
+    0%   { transform: scale(0, 0.04); }
+    45%  { transform: scale(1, 0.04); }
+    100% { transform: scale(1, 1); }
+}
+
+/* =============================================================
+   SMALL BUTTONS, TAGS, PILLS — TICKER (lab 05)
+   On hover the chip becomes the console's LCD (aztec glass, yellow type
+   and edge) and its label runs like a news ticker. The label stays in
+   flow so the chip never changes size; the running copies sit in an
+   absolute track that only shows on hover.
+   ============================================================= */
+.pe-tick {
+    /* no position here: an absolutely placed button (the menu's CERRAR /
+       RESERVAR AHORA) must keep it; pe-motion.js makes static ones relative */
+    overflow-x: hidden;             /* fallback */
+    overflow-y: hidden;
+    overflow-x: clip;               /* clip keeps the flex min-size: hidden let flex columns crush the button (menu Cerrar/Reservar) */
+    overflow-y: clip;
+    isolation: isolate;
+}
+/* the label wrapper keeps a label + icon on one line (buttons with an
+   icon child: "Reserva ›" style links on the sub-pages) */
+.pe-tick_label {
+    display: inline-flex;
+    align-items: center;
+    column-gap: inherit;
+}
+
+.pe-tick_track {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    column-gap: 1.5em;
+    padding-left: var(--pe-tick-pad, 1rem);
+    visibility: hidden;
+    white-space: nowrap;
+}
+.pe-tick_track > span {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    column-gap: 0.4em;
+}
+.button.pe-tick.pe-tick.pe-tick.pe-tick:hover,
+.button.pe-tick.pe-tick.pe-tick.pe-tick:focus-visible,
+.pe-tick:hover,
+.pe-tick:focus-visible {
+    background-color: var(--_color-primitives---colors--aztec, #0d161d);
+    color: var(--_color-primitives---colors--fuel-yellow, #efa02e);
+    border-top-color: var(--_color-primitives---colors--fuel-yellow, #efa02e);
+    border-right-color: var(--_color-primitives---colors--fuel-yellow, #efa02e);
+    border-bottom-color: var(--_color-primitives---colors--fuel-yellow, #efa02e);
+    border-left-color: var(--_color-primitives---colors--fuel-yellow, #efa02e);
+}
+.pe-tick:hover .pe-tick_label,
+.pe-tick:focus-visible .pe-tick_label { visibility: hidden; }
+.pe-tick:hover .pe-tick_track,
+.pe-tick:focus-visible .pe-tick_track {
+    visibility: visible;
+    animation-name: peTick;
+    animation-duration: var(--pe-tick-dur, 2.4s);
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+@keyframes peTick {
+    from { transform: translate(0, 0); }
+    to   { transform: translate(calc(-50% - 0.75em), 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .pe-pwr:hover::before,
+    .pe-pwr:focus-visible::before { animation-duration: 0s; }
+    .pe-tick:hover .pe-tick_label,
+    .pe-tick:focus-visible .pe-tick_label { visibility: visible; }
+    .pe-tick:hover .pe-tick_track,
+    .pe-tick:focus-visible .pe-tick_track { visibility: hidden; animation-name: none; }
+}
+
+
+/* =============================================================
+   ICON BUTTONS — the same slide, for buttons with an icon and no label
+   (the navbar cart). The cart's badge sits outside the corner, so the
+   button itself cannot clip: the inner panel is its own clipped layer
+   (.pe-rise_clip, inset like the text buttons' panel) and the icon
+   leaves upward while an inverted copy rises inside it. The badge stays
+   on top, uncut. The press is still on :active (project.css).
+   ============================================================= */
+.pe-rise-icon {
+    --pe-rise-inset: 5px;
+}
+.pe-rise_clip {
+    position: absolute;
+    top: var(--pe-rise-inset);
+    right: var(--pe-rise-inset);
+    bottom: var(--pe-rise-inset);
+    left: var(--pe-rise-inset);
+    z-index: 0;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    overflow-x: clip;
+    overflow-y: clip;
+    border-top-left-radius: max(var(--_radius---xs, 4px), calc(var(--_radius---control, 12px) - var(--pe-rise-inset)));
+    border-top-right-radius: max(var(--_radius---xs, 4px), calc(var(--_radius---control, 12px) - var(--pe-rise-inset)));
+    border-bottom-left-radius: max(var(--_radius---xs, 4px), calc(var(--_radius---control, 12px) - var(--pe-rise-inset)));
+    border-bottom-right-radius: max(var(--_radius---xs, 4px), calc(var(--_radius---control, 12px) - var(--pe-rise-inset)));
+    pointer-events: none;
+}
+.pe-rise_clip::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: var(--pe-rise-bg, #e8d5c4);
+    transform: translate(0, 101%);
+    transition-property: transform;
+    transition-duration: 0.32s;
+    transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.pe-rise_ilabel,
+.pe-rise_ialt {
+    position: relative;
+    z-index: 1;
+    grid-row-start: 1;
+    grid-column-start: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition-property: transform;
+    transition-duration: 0.32s;
+    transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.pe-rise_ialt {
+    color: var(--pe-rise-ink, #0d161d);
+    transform: translate(0, 170%);
+}
+.pe-rise-icon:hover .pe-rise_clip::before,
+.pe-rise-icon:focus-visible .pe-rise_clip::before { transform: translate(0, 0); }
+.pe-rise-icon:hover .pe-rise_ilabel,
+.pe-rise-icon:focus-visible .pe-rise_ilabel { transform: translate(0, -170%); }
+.pe-rise-icon:hover .pe-rise_ialt,
+.pe-rise-icon:focus-visible .pe-rise_ialt { transform: translate(0, 0); }
+/* the cart's own hover painted it solid yellow; hold its resting skin so
+   the slide is the only change (resting values read by pe-motion.js) */
+button.pe-rise-icon.pe-rise-icon.pe-rise-icon:hover,
+button.pe-rise-icon.pe-rise-icon.pe-rise-icon:focus-visible {
+    background-color: var(--pe-rest-bg, transparent);
+    color: var(--pe-rest-color, inherit);
+    border-top-color: var(--pe-rest-border, currentColor);
+    border-right-color: var(--pe-rest-border, currentColor);
+    border-bottom-color: var(--pe-rest-border, currentColor);
+    border-left-color: var(--pe-rest-border, currentColor);
+}
+.pe-rise-icon .cart-header_badge { z-index: 2; }
+@media (prefers-reduced-motion: reduce) {
+    .pe-rise_clip::before,
+    .pe-rise_ilabel,
+    .pe-rise_ialt { transition-duration: 0s; }
+}

@@ -1,0 +1,132 @@
+<!--
+  PE-83 console (hero, right column). Replaces the old .presunta-game-wrapper
+  gameboy. Needs: ../css/pe-console.css, ../js/pe-console/pe-console.js and
+  ../js/pe-console/games/*.js (any order; games queue on window.PE_CONSOLE_GAMES).
+  Keeps .presunta-game-wrapper so entropy-mode.js treats it as a GENTLE-tier
+  element. The ORDEN/CAOS switch carries data-entropy-switch, so entropy-mode.js
+  binds + reflects it like the header switch. Layout: one 12-column grid, no
+  tilted parts (Juan, 2026-09-25).
+-->
+<div class="presunta-game-wrapper pe-con" data-pe-console>
+  <div class="pe-con_wheel" data-pe-wheel role="slider" tabindex="0" aria-label="Volumen" aria-valuemin="0" aria-valuemax="10" aria-valuenow="6">
+    <div class="pe-con_wheel-ridges"></div>
+  </div>
+  <div class="pe-con_body">
+    <span class="pe-con_screw is-tl"></span><span class="pe-con_screw is-tr"></span>
+    <span class="pe-con_screw is-bl"></span><span class="pe-con_screw is-br"></span>
+    <div class="pe-con_wheel-label"><span class="pe-con_silk">+</span><span class="pe-con_silk is-vol">VOL</span><span class="pe-con_silk">−</span></div>
+
+    <div class="pe-con_top">
+      <span class="pe-con_led" data-pe-led></span>
+      <span class="pe-con_silk">PWR</span>
+      <span class="pe-con_silk is-model">PE—83 · Entropía culinaria</span>
+      <div class="pe-con_cart" data-pe-cart aria-hidden="true"><canvas></canvas></div>
+    </div>
+
+    <div class="pe-con_bezel">
+      <div class="pe-screen" data-pe-screen>
+        <div class="pe-screen_inner" data-pe-shake>
+          <div class="pe-os_status">
+            <span class="pe-os_status-app" data-pe-status-app>PE·OS</span>
+            <span class="pe-os_status-right">
+              <span class="pe-os_vol" data-pe-status-vol></span>
+              <span data-pe-clock>--:--</span>
+            </span>
+          </div>
+          <div class="pe-os_stage" data-pe-stage></div>
+          <div class="pe-os_toast" data-pe-toast></div>
+        </div>
+        <div class="pe-screen_glass"></div>
+        <div class="pe-screen_dim" data-pe-dim></div>
+        <div class="pe-screen_off" data-pe-off>
+          <div class="pe-screen_line"></div>
+          <div class="pe-screen_boot-logo"><svg viewBox="0 0 101.82 78.55" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="currentColor" d="M101.82,77.78l-.65-14.31c-.03-.3-.23-.56-.52-.66l-32.86-10.82,4.41-3.46.04-.03,27.77-18.74c.43-.29.45-.92.03-1.24l-9.03-12.34c-.17-.49-.78-.67-1.19-.34l-26.21,20.89-.04.03-4.66,3.2-.08-5.61v-.05L60.7.8c.03-.52-.47-.91-.97-.77h-17.63c-.5-.14-1,.25-.97.77l1.86,33.5v.05l-.08,5.61-4.66-3.2-.04-.03L12,15.84c-.41-.33-1.02-.15-1.19.34L1.78,28.52c-.42.31-.4.94.03,1.24l27.77,18.74.04.03,4.41,3.46L1.17,62.81c-.29.1-.49.35-.52.66l-.65,14.31c0,.52.51.89,1,.73l37.81-12.8c2.33-.79,4.26-2.47,5.35-4.67l4.11-8.25c.52-1.04,1.54-1.53,2.54-1.5h.16c1-.04,2.02.45,2.54,1.49l4.11,8.25c1.1,2.2,3.02,3.88,5.35,4.67l37.81,12.8c.49.17,1.01-.2,1-.73h.04Z"/></svg></div>
+          <div class="pe-screen_boot-text">PRESUNTA ENTROPÍA</div>
+        </div>
+      </div>
+      <div class="pe-con_bezel-foot">
+        <span class="pe-con_silk is-light">Zurbano 83 · Madrid</span>
+        <span class="pe-con_bezel-bars"><span></span><span></span><span></span></span>
+      </div>
+    </div>
+
+    <div class="pe-con_speaker" data-pe-speaker aria-hidden="true"></div>
+
+    <div class="pe-con_deck">
+      <div class="pe-con_dpad" data-pe-dpad>
+        <svg viewBox="-3 -3 106 112" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <g fill="#442b26">
+            <rect x="30.5" y="-2.5" width="39" height="109" rx="9"/>
+            <rect x="-2.5" y="30.5" width="105" height="43" rx="9"/>
+          </g>
+          <g fill="#b2a79d" transform="translate(0 4.5)">
+            <rect x="33" y="0" width="34" height="100" rx="7"/>
+            <rect x="0" y="33" width="100" height="34" rx="7"/>
+          </g>
+          <g class="pe-con_dpad-face">
+            <g fill="#e8d5c4">
+              <rect x="33" y="0" width="34" height="100" rx="7"/>
+              <rect x="0" y="33" width="100" height="34" rx="7"/>
+            </g>
+            <circle cx="50" cy="50" r="7.5" fill="#c6baaf"/>
+            <polygon class="pe-con_dpad-arrow is-up" points="50,10 43.5,19 56.5,19"/>
+            <polygon class="pe-con_dpad-arrow is-down" points="50,90 43.5,81 56.5,81"/>
+            <polygon class="pe-con_dpad-arrow is-left" points="10,50 19,43.5 19,56.5"/>
+            <polygon class="pe-con_dpad-arrow is-right" points="90,50 81,43.5 81,56.5"/>
+          </g>
+        </svg>
+        <button type="button" class="pe-con_dkey is-up" data-pe-key="up" aria-label="Arriba"></button>
+        <button type="button" class="pe-con_dkey is-down-key" data-pe-key="down" aria-label="Abajo"></button>
+        <button type="button" class="pe-con_dkey is-left" data-pe-key="left" aria-label="Izquierda"></button>
+        <button type="button" class="pe-con_dkey is-right" data-pe-key="right" aria-label="Derecha"></button>
+      </div>
+
+      <div class="pe-con_keys">
+        <div class="pe-con_key-wrap">
+          <button type="button" class="pe-con_key" data-pe-key="menu" aria-label="Menú / pausa"></button>
+          <span class="pe-con_silk">Menú</span>
+        </div>
+        <div class="pe-con_key-wrap">
+          <button type="button" class="pe-con_key" data-pe-key="sound" data-pe-sound-key aria-label="Sonido"></button>
+          <span class="pe-con_silk">Sonido</span>
+        </div>
+      </div>
+
+      <div class="pe-con_ab">
+        <div class="pe-con_btn-wrap">
+          <button type="button" class="pe-con_btn is-b" data-pe-key="b" aria-label="Botón B"><span class="pe-con_btn-face"></span></button>
+          <span class="pe-con_silk">B</span>
+        </div>
+        <div class="pe-con_btn-wrap">
+          <button type="button" class="pe-con_btn is-a" data-pe-key="a" aria-label="Botón A"><span class="pe-con_btn-face"></span></button>
+          <span class="pe-con_silk">A</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pe-con_foot">
+      <div class="pe-con_toggle" data-pe-toggle>
+        <div class="pe-con_toggle-labels">
+          <span class="pe-con_silk">Orden</span>
+          <span class="pe-con_silk"><span class="pe-con_toggle-led"></span>Caos</span>
+        </div>
+        <button type="button" class="pe-con_slide" data-entropy-switch role="switch" aria-checked="false" aria-label="Modo entropía">
+          <span class="pe-con_slide-ico is-orden" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><rect x="2.2" y="2.2" width="8.4" height="8.4"/><rect x="13.4" y="2.2" width="8.4" height="8.4"/><rect x="2.2" y="13.4" width="8.4" height="8.4"/><rect x="13.4" y="13.4" width="8.4" height="8.4"/></svg></span><span class="pe-con_slide-ico is-caos" aria-hidden="true"><svg viewBox="0 0 101.82 78.55" fill="currentColor"><path d="M101.82,77.78l-.65-14.31c-.03-.3-.23-.56-.52-.66l-32.86-10.82,4.41-3.46.04-.03,27.77-18.74c.43-.29.45-.92.03-1.24l-9.03-12.34c-.17-.49-.78-.67-1.19-.34l-26.21,20.89-.04.03-4.66,3.2-.08-5.61v-.05L60.7.8c.03-.52-.47-.91-.97-.77h-17.63c-.5-.14-1,.25-.97.77l1.86,33.5v.05l-.08,5.61-4.66-3.2-.04-.03L12,15.84c-.41-.33-1.02-.15-1.19.34L1.78,28.52c-.42.31-.4.94.03,1.24l27.77,18.74.04.03,4.41,3.46L1.17,62.81c-.29.1-.49.35-.52.66l-.65,14.31c0,.52.51.89,1,.73l37.81-12.8c2.33-.79,4.26-2.47,5.35-4.67l4.11-8.25c.52-1.04,1.54-1.53,2.54-1.5h.16c1-.04,2.02.45,2.54,1.49l4.11,8.25c1.1,2.2,3.02,3.88,5.35,4.67l37.81,12.8c.49.17,1.01-.2,1-.73h.04Z"/></svg></span><span class="pe-con_slide-knob"></span>
+        </button>
+      </div>
+      <button type="button" class="pe-con_rocker" data-pe-rocker aria-label="Brillo de la pantalla">
+        <svg viewBox="0 0 71.75 134.19" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path fill="#442b26" d="M34.98,134.19h0c-19.09,0-34.57-15.48-34.57-34.57V34.57C.41,15.48,15.89,0,34.98,0h0c19.09,0,34.57,15.48,34.57,34.57v65.05c0,19.09-15.48,34.57-34.57,34.57Z"/>
+          <path fill="#b2a79d" d="M34.99,6.31h0c15.8,0,28.63,12.78,28.69,28.58l.04,22.27H6.26s.04-22.27.04-22.27c.06-15.8,12.88-28.58,28.69-28.58Z"/>
+          <path fill="#b2a79d" d="M34.99,128.04h0c-15.8,0-28.63-12.78-28.69-28.58l-.04-22.43h57.46s-.04,22.43-.04,22.43c-.06,15.8-12.88,28.58-28.69,28.58Z"/>
+          <polygon fill="#e8d5c4" points="0 57.16 71.75 57.16 71.75 77.03 0 77.03 0 57.16"/>
+        </svg>
+        <span class="pe-con_silk pe-con_rocker-label">Brillo</span>
+      </button>
+
+      <div class="pe-con_mini" data-pe-mini role="button" tabindex="0" aria-label="Asistente: habla con Presunta">
+        <div class="pe-con_mini-lcd"><canvas></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>

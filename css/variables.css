@@ -1,0 +1,609 @@
+/* ═══════════════════════════════════════════
+   Presunta Entropía — Design System Variables
+   Framework: flwr v1.0.0-alpha
+   Pinned version: see .flowriter-lock
+
+   Brand: Culinary arts studio, Madrid
+   Source: references/content/presuntaentropia.webflow/css/presuntaentropia.webflow.css
+   Extracted: 2026-05-17
+   ═══════════════════════════════════════════ */
+
+:root {
+
+    /* ────────────────────────────────────────────────
+       PALETTE SEEDS
+       Override the flwr framework's default seeds with
+       Presunta Entropía's brand palette.
+
+       Mapping:
+         core      → Fuel Yellow   #efa02e  (primary / golden amber)
+         alternate → Mule Fawn     #9b4933  (secondary / terracotta)
+         accent    → English Walnut #442b26 (spot color / deep warm brown)
+         neutral   → Aztec Dark canvas / Stark White text
+       ──────────────────────────────────────────────── */
+
+    --_palette---core--seed:        oklch(0.73 0.17 72);   /* Fuel Yellow  #efa02e  */
+    --_palette---alternate--seed:   oklch(0.46 0.13 35);   /* Mule Fawn    #9b4933  */
+    --_palette---accent--seed:      oklch(0.26 0.05 32);   /* English Walnut #442b26 */
+
+    /* Neutral — anchored to brand canvas + text (replaces flwr's default Flowriter palette) */
+    --_palette---neutral--canvas:   oklch(0.14 0.02 222);  /* Aztec Dark   #0d161d  */
+    --_palette---neutral--text:     oklch(0.88 0.03 55);   /* Stark White  #e8d5c4  */
+
+    /* Re-anchor the neutral ramp to project canvas/text.
+       flwr's neutral ramp uses fixed oklch() values; we override the
+       two poles so the framework's color-mix() expressions derive from
+       the brand palette rather than Flowriter's default grays. */
+    --_palette---neutral--0:        var(--_palette---neutral--text);    /* lightest — Stark White */
+    --_palette---neutral--900:      var(--_palette---neutral--canvas);  /* darkest  — Aztec Dark  */
+    --_palette---neutral--1000:     oklch(0.08 0.01 222);               /* deeper black           */
+
+    /* Intermediate stops — hand-tuned warm neutral ramp
+       anchored between canvas (#0d161d) and text (#e8d5c4) */
+    --_palette---neutral--50:       oklch(0.84 0.03 50);   /* near Stark White  */
+    --_palette---neutral--100:      oklch(0.77 0.03 48);
+    --_palette---neutral--200:      oklch(0.66 0.03 45);
+    --_palette---neutral--300:      oklch(0.54 0.03 40);
+    --_palette---neutral--400:      oklch(0.43 0.03 35);
+    --_palette---neutral--500:      oklch(0.34 0.03 30);
+    --_palette---neutral--600:      oklch(0.28 0.02 28);
+    --_palette---neutral--700:      oklch(0.22 0.02 225);
+    --_palette---neutral--800:      oklch(0.18 0.02 223);
+
+    /* ────────────────────────────────────────────────
+       TYPOGRAPHY
+       Override flwr's "Zalando Sans Expanded" default
+       with Space Grotesk (the project's brand font).
+       ──────────────────────────────────────────────── */
+
+    --_typography---family--sans:    'Space Grotesk', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    --_typography---family--display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+
+    /* Font sizes — override with source site's original clamp() values.
+       Source uses viewport range 20–100rem (320px–1600px at 16px base).
+       These are the exact values from the original Webflow CSS, simplified
+       to standard clamp() expressions for flwr compatibility. */
+    --_typography---size--display:  clamp(6rem,   calc(6rem   + ((1vw - 0.2rem) * 5.0)),  10rem);  /* Display: 6–10rem */
+    --_typography---size--h1:       clamp(3rem,   calc(3rem   + ((1vw - 0.2rem) * 3.75)), 6rem);   /* H1: 3–6rem       */
+    --_typography---size--h2:       clamp(2.5rem, calc(2.5rem + ((1vw - 0.2rem) * 1.875)), 4rem);  /* H2: 2.5–4rem     */
+    --_typography---size--h3:       clamp(2.25rem,calc(2.25rem + ((1vw - 0.2rem) * 0.9375)), 3rem);/* H3: 2.25–3rem    */
+    --_typography---size--h4:       clamp(1.75rem,calc(1.75rem + ((1vw - 0.2rem) * 0.3125)), 2rem);/* H4: 1.75–2rem    */
+    --_typography---size--h5:       clamp(1.375rem,calc(1.375rem + ((1vw - 0.2rem) * 0.15625)), 1.5rem); /* H5: 1.375–1.5rem */
+    --_typography---size--h6:       clamp(1rem,   calc(1rem   + ((1vw - 0.2rem) * 0.15625)), 1.125rem); /* H6: 1–1.125rem  */
+    --_typography---size--lead:     clamp(1.125rem,calc(1.125rem + ((1vw - 0.2rem) * 0.15625)), 1.25rem); /* Lead: 1.125–1.25rem */
+    --_typography---size--body:     clamp(1rem,   calc(1rem   + ((1vw - 0.2rem) * 0.15625)), 1.125rem); /* Body: 1–1.125rem */
+    --_typography---size--small:    0.875rem;
+    --_typography---size--tiny:     0.75rem;
+    --_typography---size--micro:    0.6875rem;
+
+    /* Font weights — from source: 100/300/400/500/700 */
+    --_typography---weight--light:   300;
+    --_typography---weight--regular: 400;
+    --_typography---weight--medium:  500;
+    --_typography---weight--bold:    700;
+
+    /* ────────────────────────────────────────────────
+       BRAND TOKENS — COLOR PRIMITIVES
+       Direct port from the source Webflow CSS.
+       These are the raw hex primitives from the original
+       design system, preserved for components that
+       reference them directly (outside the flwr ramp).
+       ──────────────────────────────────────────────── */
+
+    /* Primary — Fuel Yellow */
+    --pe---color--fuel-yellow:          #efa02e;
+    --pe---color--fuel-yellow-lighter:  #fbecd5;
+    --pe---color--fuel-yellow-lightest: #fdf5ea;
+    --pe---color--fuel-yellow-light:    #f3bc6c;
+    --pe---color--fuel-yellow-dark:     #bf8024;
+    --pe---color--fuel-yellow-darker:   #5f4012;
+    --pe---color--fuel-yellow-darkest:  #47300d;
+
+    /* Secondary — Mule Fawn / Terracota */
+    --pe---color--mule-fawn:            #9b4933;
+    --pe---color--mule-fawn-lightest:   #f5ecea;
+    --pe---color--mule-fawn-lighter:    #ebdad6;
+    --pe---color--mule-fawn-light:      #b97f70;
+    --pe---color--mule-fawn-dark:       #7c3a28;
+    --pe---color--mule-fawn-darker:     #3e1d14;
+    --pe---color--mule-fawn-darkest:    #2e150f;
+
+    /* Accent — English Walnut */
+    --pe---color--english-walnut:           #442b26;
+    --pe---color--english-walnut-lightest:  #ece9e9;
+    --pe---color--english-walnut-lighter:   #d9d4d3;
+    --pe---color--english-walnut-light:     #7c6a67;
+    --pe---color--english-walnut-dark:      #36221e;
+    --pe---color--english-walnut-darker:    #1b110f;
+    --pe---color--english-walnut-darkest:   #140c0b;
+
+    /* Background / Canvas */
+    --pe---color--aztec:                #0d161d;
+    --pe---color--aztec-light:          #555b60;
+    --pe---color--aztec-lighter:        #ced0d1;
+    --pe---color--aztec-lightest:       #e6e7e8;
+
+    /* Text */
+    --pe---color--stark-white:          #e8d5c4;
+    --pe---color--stark-white-lightest: #fcfaf9;
+    --pe---color--stark-white-lighter:  #faf6f3;
+    --pe---color--stark-white-light:    #eee1d5;
+    --pe---color--stark-white-dark:     #b9aa9c;
+    --pe---color--stark-white-darker:   #5c554e;
+    --pe---color--stark-white-darkest:  #453f3a;
+
+    /* Neutral grays */
+    --pe---color--neutral:              #858380;
+    --pe---color--neutral-dark:         #54524d;
+    --pe---color--neutral-light:        #b6b4b3;
+    --pe---color--neutral-lighter:      #dad9d9;
+    --pe---color--neutral-lightest:     #f2f2f2;
+    --pe---color--neutral-darker:       #24201b;
+    --pe---color--neutral-darkest:      #0d161d;
+
+    /* ────────────────────────────────────────────────
+       THREE COLOR SCHEMES
+       The source site runs three explicit color schemes.
+       Mapped to flwr section-theme overrides.
+
+       Scheme 1 (Dark — Default):  Aztec bg + Stark White text
+       Scheme 2 (Light):           Stark White bg + Aztec text
+       Scheme 3 (Brown):           English Walnut bg + Stark White text
+       ──────────────────────────────────────────────── */
+
+    --pe---scheme-dark--background:     var(--pe---color--aztec);
+    --pe---scheme-dark--text:           var(--pe---color--stark-white);
+    --pe---scheme-dark--border:         var(--pe---color--stark-white);
+    --pe---scheme-dark--accent:         var(--pe---color--fuel-yellow);
+    --pe---scheme-dark--foreground:     var(--pe---color--aztec);
+
+    --pe---scheme-light--background:    var(--pe---color--stark-white);
+    --pe---scheme-light--text:          var(--pe---color--neutral-darkest);
+    --pe---scheme-light--foreground:    var(--pe---color--stark-white);
+
+    --pe---scheme-brown--background:    var(--pe---color--english-walnut);
+    --pe---scheme-brown--text:          var(--pe---color--stark-white);
+    --pe---scheme-brown--accent:        var(--pe---color--mule-fawn);
+
+    /* ────────────────────────────────────────────────
+       SPACING — ALIAS LAYER  (unified 2026-07-17)
+       Formerly an independent "source site" scale. Its endpoints
+       are identical to flwr's --_spacing---space--N (the CANONICAL
+       scale — referenced ~17-19× each by original.css + project.css);
+       only the clamp middle differed. Now aliased 1:1 BY VALUE so
+       both scales render identically. --pe---space--* had 0 live
+       references; the alias keeps the names alive for ported CSS.
+       Drift (clamp middle) is catalogued in
+       design/token-unification-report.md.
+       ──────────────────────────────────────────────── */
+
+    --pe---space--1:  var(--_spacing---space--1);
+    --pe---space--2:  var(--_spacing---space--2);
+    --pe---space--3:  var(--_spacing---space--3);
+    --pe---space--4:  var(--_spacing---space--4);
+    --pe---space--5:  var(--_spacing---space--5);
+    --pe---space--6:  var(--_spacing---space--6);
+    --pe---space--7:  var(--_spacing---space--7);
+    --pe---space--8:  var(--_spacing---space--8);
+    --pe---space--9:  var(--_spacing---space--9);
+    --pe---space--10: var(--_spacing---space--10);
+    --pe---space--11: var(--_spacing---space--11);
+    --pe---space--12: var(--_spacing---space--12);
+
+    /* Section spacing (vertical rhythm) — ALIAS LAYER (unified 2026-07-17)
+       Aliased to canonical --_spacing---section-space--* (used by
+       original.css + project.css). Same endpoints, clamp middle unified. */
+    --pe---section-space--none:     var(--_spacing---section-space--none);
+    --pe---section-space--small:    var(--_spacing---section-space--small);
+    --pe---section-space--main:     var(--_spacing---section-space--main);
+    --pe---section-space--large:    var(--_spacing---section-space--large);
+    --pe---section-space--page-top: var(--_spacing---section-space--page-top);
+
+    /* ────────────────────────────────────────────────
+       UI — BORDERS & RADIUS
+       ──────────────────────────────────────────────── */
+
+    --pe---border-width:    0.094rem;
+    /* the depth of every volume button's solid offset shadow and of its
+       press on click (2026-09-26: was 3px, deeper so the click reads) */
+    --pe---volume:          5px;
+    --pe---border-width-2:  1.5px;
+    --pe---border-width-3:  2px;
+
+    /* --pe---radius--round is CANONICAL for the 50vw pill radius
+       (highest total usage, 7 refs). main/small are aliased below. */
+    --pe---radius--round:   50vw;
+    --pe---radius--main:    var(--_ui-styles-semantics---radius--radius-sm);   /* alias → 1rem canonical */
+    --pe---radius--small:   var(--_ui-styles-semantics---radius--radius-2xs);  /* alias → 0.5rem canonical */
+
+    /* ────────────────────────────────────────────────
+       SITE LAYOUT
+       ──────────────────────────────────────────────── */
+
+    --pe---site--viewport-min: 20;
+    --pe---site--viewport-max: 100;
+    --pe---site--column-count: 12;
+    --pe---site--gutter:       1rem;
+    --pe---site--margin:       1rem;
+
+    /* ALIAS LAYER — aliased to the bare --max-width--* namespace
+       (canonical: --max-width--main has 3 refs in original.css; the
+       --pe---max-width--* set had 0). Values equal at every endpoint. */
+    --pe---max-width--main:    var(--max-width--main);    /* alias → 100rem canonical */
+    --pe---max-width--medium:  var(--max-width--medium);  /* alias → 120rem canonical */
+    --pe---max-width--small:   var(--max-width--small);   /* alias → 100rem canonical */
+    --pe---max-width--full:    var(--max-width--full);    /* alias → 100% canonical */
+
+    /* ────────────────────────────────────────────────
+       NAVIGATION
+       ──────────────────────────────────────────────── */
+
+    --pe---nav--height:        4rem;
+    --pe---nav--banner-height: 2.4rem;
+    --pe---nav--radius:        50vw;
+
+    /* ────────────────────────────────────────────────
+       BUTTON SIZES
+       ──────────────────────────────────────────────── */
+
+    --pe---button-size--medium: 3rem;
+    --pe---button-size--large:  5rem;
+
+    /* ────────────────────────────────────────────────
+       LEGACY VARIABLE ALIASES
+       Maps the original Webflow variable names to the
+       project's --pe--- namespace so ported component
+       CSS can be copied without renaming every reference.
+       ──────────────────────────────────────────────── */
+
+    /* Color primitives — fuel yellow */
+    --_color-primitives---colors--fuel-yellow:          var(--pe---color--fuel-yellow);
+    --_color-primitives---colors--fuel-yellow-lighter:  var(--pe---color--fuel-yellow-lighter);
+    --_color-primitives---colors--fuel-yellow-lightest: var(--pe---color--fuel-yellow-lightest);
+    --_color-primitives---colors--fuel-yellow-light:    var(--pe---color--fuel-yellow-light);
+    --_color-primitives---colors--fuel-yellow-dark:     var(--pe---color--fuel-yellow-dark);
+    --_color-primitives---colors--fuel-yellow-darker:   var(--pe---color--fuel-yellow-darker);
+    --_color-primitives---colors--fuel-yellow-darkest:  var(--pe---color--fuel-yellow-darkest);
+
+    /* Color primitives — mule fawn */
+    --_color-primitives---colors--mule-fawn:            var(--pe---color--mule-fawn);
+    --_color-primitives---colors--mule-fawn-lightest:   var(--pe---color--mule-fawn-lightest);
+    --_color-primitives---colors--mule-fawn-lighter:    var(--pe---color--mule-fawn-lighter);
+    --_color-primitives---colors--mule-fawn-light:      var(--pe---color--mule-fawn-light);
+    --_color-primitives---colors--mule-fawn-dark:       var(--pe---color--mule-fawn-dark);
+    --_color-primitives---colors--mule-fawn-darker:     var(--pe---color--mule-fawn-darker);
+    --_color-primitives---colors--mule-fawn-darkest:    var(--pe---color--mule-fawn-darkest);
+
+    /* Color primitives — english walnut */
+    --_color-primitives---colors--english-walnut:           var(--pe---color--english-walnut);
+    --_color-primitives---colors--english-walnut-lightest:  var(--pe---color--english-walnut-lightest);
+    --_color-primitives---colors--english-walnut-lighter:   var(--pe---color--english-walnut-lighter);
+    --_color-primitives---colors--english-walnut-light:     var(--pe---color--english-walnut-light);
+    --_color-primitives---colors--english-walnut-dark:      var(--pe---color--english-walnut-dark);
+    --_color-primitives---colors--english-walnut-darker:    var(--pe---color--english-walnut-darker);
+    --_color-primitives---colors--english-walnut-darkest:   var(--pe---color--english-walnut-darkest);
+
+    /* Color primitives — aztec / background */
+    --_color-primitives---colors--aztec:                var(--pe---color--aztec);
+    --_color-primitives---colors--aztec-light:          var(--pe---color--aztec-light);
+    --_color-primitives---colors--aztec-lighter:        var(--pe---color--aztec-lighter);
+    --_color-primitives---colors--aztec-lightest:       var(--pe---color--aztec-lightest);
+
+    /* Color primitives — stark white / text */
+    --_color-primitives---colors--stark-white:          var(--pe---color--stark-white);
+    --_color-primitives---colors--stark-white-lightest: var(--pe---color--stark-white-lightest);
+    --_color-primitives---colors--stark-white-lighter:  var(--pe---color--stark-white-lighter);
+    --_color-primitives---colors--stark-white-light:    var(--pe---color--stark-white-light);
+    --_color-primitives---colors--stark-white-dark:     var(--pe---color--stark-white-dark);
+    --_color-primitives---colors--stark-white-darker:   var(--pe---color--stark-white-darker);
+    --_color-primitives---colors--stark-white-darkest:  var(--pe---color--stark-white-darkest);
+
+    /* Color primitives — neutrals */
+    --_color-primitives---colors--neutral:              var(--pe---color--neutral);
+    --_color-primitives---colors--neutral-dark:         var(--pe---color--neutral-dark);
+    --_color-primitives---colors--neutral-light:        var(--pe---color--neutral-light);
+    --_color-primitives---colors--neutral-lighter:      var(--pe---color--neutral-lighter);
+    --_color-primitives---colors--neutral-lightest:     var(--pe---color--neutral-lightest);
+    --_color-primitives---colors--neutral-darker:       var(--pe---color--neutral-darker);
+    --_color-primitives---colors--neutral-darkest:      var(--pe---color--neutral-darkest);
+
+    /* White / transparent shortcuts */
+    --_color-primitives---colors--white:                #ffffff;
+    --_color-primitives---opacity--transparent:         transparent;
+
+    /* Color schemes — unified 2026-07: all three schemes now expose the full
+       variable set. Values mirror what each scheme class already rendered, so
+       visuals stay put, while fixing rules that referenced the clean names and
+       silently failed (e.g. .talleres_card:hover, the scheme remap embeds).
+       Webflow's mangled "<deleted|...>" names in original.css stay untouched. */
+    --color-scheme-1--background:   var(--pe---scheme-dark--background);
+    --color-scheme-1--text:         var(--pe---scheme-dark--text);
+    --color-scheme-1--border:       var(--pe---scheme-dark--border);
+    --color-scheme-1--foreground:   var(--pe---scheme-dark--foreground);
+    --color-scheme-1--accent:       var(--pe---scheme-dark--accent);
+
+    --color-scheme-2--background:   var(--pe---scheme-light--background);
+    --color-scheme-2--text:         var(--pe---color--aztec);
+    --color-scheme-2--border:       var(--pe---color--aztec);
+    --color-scheme-2--foreground:   var(--pe---scheme-light--foreground);
+    --color-scheme-2--accent:       var(--pe---color--fuel-yellow);
+
+    --color-scheme-3--background:   var(--pe---scheme-brown--background);
+    --color-scheme-3--text:         var(--pe---scheme-brown--text);
+    --color-scheme-3--border:       var(--pe---color--stark-white);
+    --color-scheme-3--foreground:   var(--pe---scheme-brown--background);
+    --color-scheme-3--accent:       var(--pe---color--fuel-yellow);
+
+    /* Schemes 4 + 5 (2026-09-26): the design-system card colours. Same token
+       shape as 1-3, remapped onto --color-scheme-1--* by .color-scheme-4/5 in
+       project.css, so every scheme-aware child (buttons, tags, dividers,
+       headings) follows the card it sits in. */
+    --color-scheme-4--background:   var(--pe---color--fuel-yellow);
+    --color-scheme-4--text:         var(--pe---color--aztec);
+    --color-scheme-4--border:       var(--pe---color--aztec);
+    --color-scheme-4--foreground:   var(--pe---color--fuel-yellow);
+    --color-scheme-4--accent:       var(--pe---color--aztec);
+
+    --color-scheme-5--background:   var(--pe---color--mule-fawn);
+    --color-scheme-5--text:         var(--pe---color--stark-white);
+    --color-scheme-5--border:       var(--pe---color--stark-white);
+    --color-scheme-5--foreground:   var(--pe---color--mule-fawn);
+    --color-scheme-5--accent:       var(--pe---color--fuel-yellow);
+
+    /* Typography aliases */
+    --_typography-primitives---font-styles--heading:    var(--_typography---family--sans);
+    /* NOTE: these three fixed values are SHADOWED — the same three names are
+       re-declared as fluid clamp()s further down (Typography font sizes block)
+       which win the cascade (later :root declaration). Left as-is (dead) to
+       avoid churn; the effective aliased definitions are below. */
+    --_typography---font-size--text-small:              0.875rem;
+    --_typography---font-size--text-main:               1rem;
+    --_typography---font-size--text-large:              1.125rem;
+
+    /* UI semantic tokens */
+    --border-width--main:                               0.094rem;
+    --_ui-styles-semantics---stroke--border-width:      1.5px;
+    /* Radius — CANONICAL definitions (unified 2026-07-17).
+       These three carry the raw literals for the whole radius system;
+       every other radius name across the file aliases into them:
+         radius-2xs = 0.5rem  (0.5rem intent — 18 refs, canonical)
+         radius-xs  = 0.75rem (0.75rem intent — 22 refs, unique/canonical)
+         radius-sm  = 1rem    (1rem intent — 34 refs, canonical)
+       50vw pill radius is canonical on --pe---radius--round (7 refs). */
+    /* 2026-09-26: the three legacy steps now alias the flwr radius scale
+       below (identical values), so every radius in the site reads one scale. */
+    --_ui-styles-semantics---radius--radius-2xs:        var(--_radius---md);   /* 0.5rem  */
+    --_ui-styles-semantics---radius--radius-xs:         var(--_radius---lg);   /* 0.75rem */
+    --_ui-styles-semantics---radius--radius-sm:         var(--_radius---xl);   /* 1rem    */
+    --_ui-styles-semantics---radius--radius-main:       var(--_ui-styles-semantics---radius--radius-sm);  /* alias → 1rem (dup of radius-sm) */
+    --_ui-styles-semantics---radius--radius-round:      var(--pe---radius--round);                        /* alias → 50vw canonical */
+    --radius--main:                                     var(--_ui-styles-semantics---radius--radius-sm);  /* alias → 1rem canonical */
+    --radius--round:                                    var(--pe---radius--round);                        /* alias → 50vw canonical */
+    --radius--small:                                    var(--_ui-styles-semantics---radius--radius-2xs); /* alias → 0.5rem canonical */
+
+    /* ────────────────────────────────────────────────
+       ORIGINAL DESIGN SYSTEM TOKENS
+       Ported directly from presuntaentropia.webflow.css.
+       These are the exact variable names project.css references.
+       ──────────────────────────────────────────────── */
+
+    /* Site grid */
+    --site--viewport-min:    20;
+    --site--viewport-max:    100;
+    --site--column-count:    12;
+    --site--gutter:          1rem;
+    --site--margin:          1rem;
+    --max-width--main:       calc(var(--site--viewport-max) * 1rem);
+    --max-width--medium:     120rem;
+    --max-width--small:      100rem;
+    --max-width--full:       100%;
+    /* NOT aliased: endpoint differs (90rem vs the 100rem "main" canonical),
+       used by original.css + project.css (2 refs) — a genuinely narrower cap. */
+    --_default---max-width--main:  90rem;
+    /* NOT aliased: endpoint differs (80rem vs the 100rem "small" canonical),
+       used by project.css (1 ref) — a genuinely narrower cap. */
+    --_default---max-width--small: 80rem;
+    /* Radius — ALIAS LAYER (unified 2026-07-17). Same values, unified names. */
+    --_default---radius--main:     var(--_ui-styles-semantics---radius--radius-sm);  /* alias → 1rem canonical */
+    --_default---radius--round:    var(--pe---radius--round);                        /* alias → 50vw canonical */
+    --_default---radius--small:    var(--_ui-styles-semantics---radius--radius-2xs); /* alias → 0.5rem canonical */
+    --_column-count---value:       1;
+
+    /* Size primitives */
+    --_size-primitives---overlap: -1px;
+    --_size-primitives---cero:    0px;
+    --_size-primitives---3xs:     0.25rem;
+    --_size-primitives---2xs:     0.5rem;
+    --_size-primitives---xs:      0.75rem;
+    --_size-primitives---sm:      1rem;
+    --_size-primitives---md:      1.5rem;
+    --_size-primitives---lg:      2rem;
+    --_size-primitives---xl:      3rem;
+    --_size-primitives---2xl:     4rem;
+    --_size-primitives---3xl:     6rem;
+    --_size-primitives---4xl:     8rem;
+    --_size-primitives---5xl:     10rem;
+
+    /* Spacing scale — fluid clamp() values */
+    --_spacing---space--0:  0px;
+    --_spacing---space--1:  clamp(0.375rem, 0.325rem + 0.25vw, 0.5rem);
+    --_spacing---space--2:  clamp(0.625rem, 0.5375rem + 0.4375vw, 0.75rem);
+    --_spacing---space--3:  clamp(0.875rem, 0.75rem + 0.625vw, 1rem);
+    --_spacing---space--4:  clamp(1.25rem, 1.0625rem + 0.9375vw, 1.5rem);
+    --_spacing---space--5:  clamp(1.75rem, 1.5rem + 1.25vw, 2rem);
+    --_spacing---space--6:  clamp(2rem, 1.75rem + 1.25vw, 2.5rem);
+    --_spacing---space--7:  clamp(2.25rem, 1.875rem + 1.875vw, 3rem);
+    --_spacing---space--8:  clamp(2.5rem, 2rem + 2.5vw, 4rem);
+    --_spacing---space--9:  clamp(2.75rem, 2.125rem + 3.125vw, 4.5rem);
+    --_spacing---space--10: clamp(3rem, 2.25rem + 3.75vw, 5rem);
+    --_spacing---space--11: clamp(3.25rem, 2.375rem + 4.375vw, 5.5rem);
+    --_spacing---space--12: clamp(3.5rem, 2.625rem + 4.375vw, 6rem);
+    --_spacing---space--negative: -1rem;
+
+    /* Section spacing */
+    --_spacing---section-space--none:     0px;
+    --_spacing---section-space--small:    clamp(3rem, 2.25rem + 3.75vw, 5rem);
+    --_spacing---section-space--main:     clamp(4rem, 2.875rem + 5.625vw, 7rem);
+    --_spacing---section-space--large:    clamp(5.5rem, 3.875rem + 8.125vw, 10rem);
+    --_spacing---section-space--page-top: clamp(10rem, 8.5rem + 7.5vw, 14rem);
+
+    /* Spacing semantics — gaps */
+    --_spacing-semantics---gap--gap-0:   -1px;
+    --_spacing-semantics---gap--gap-2xs: 0.5rem;
+    --_spacing-semantics---gap--gap-xs:  0.75rem;
+    --_spacing-semantics---gap--gap-sm:  1rem;
+    --_spacing-semantics---gap--gap-md:  1.5rem;
+    --_spacing-semantics---gap--gap-lg:  2rem;
+    --_spacing-semantics---gap--gap-xl:  3rem;
+    --_spacing-semantics---gap--gap-2xl: 4rem;
+
+    /* Spacing semantics — section padding */
+    --_spacing-semantics---padding--pad-section-cero: 0px;
+    --_spacing-semantics---padding--pad-section-3xs:  0.25rem;
+    --_spacing-semantics---padding--pad-section-2xs:  0.5rem;
+    --_spacing-semantics---padding--pad-section-xs:   0.75rem;
+    --_spacing-semantics---padding--pad-section-sm:   1rem;
+    --_spacing-semantics---padding--pad-section-md:   1.5rem;
+    --_spacing-semantics---padding--pad-section-lg:   2rem;
+    --_spacing-semantics---padding--pad-section-xl:   3rem;
+    --_spacing-semantics---padding--pad-section-2xl:  4rem;
+    --_spacing-semantics---padding--pad-section-3xl:  6rem;
+    --_spacing-semantics---padding--pad-section-4xl:  8rem;
+    --_spacing-semantics---padding--pad-section-5xl:  10rem;
+
+    /* Spacing semantics — gutters */
+    --_spacing-semantics---gutters--gutter-desktop: 2rem;
+    --_spacing-semantics---gutters--gutter-tablet:  1.5rem;
+    --_spacing-semantics---gutters--gutter-mobile:  1rem;
+
+    /* Typography font families */
+    --_typography---font--primary-family:           'Space Grotesk', sans-serif;
+    --_typography-primitives---font-styles--body:    'Space Grotesk', sans-serif;
+    --_typography-primitives---font-styles--heading: 'Space Grotesk', sans-serif;
+    --_typography-primitives---font-styles--primary-family: 'Space Grotesk', sans-serif;
+
+    /* Typography font weights */
+    --_typography---font--primary-thin:    100;
+    --_typography---font--primary-light:   300;
+    --_typography---font--primary-regular: 400;
+    --_typography---font--primary-medium:  500;
+    --_typography---font--primary-bold:    700;
+    --_typography-primitives---font-styles--primary-regular: 400;
+    --_typography-primitives---font-styles--primary-medium:  500;
+
+    /* Typography font sizes — ALIAS LAYER (unified 2026-07-17).
+       Canonical type scale is --_typography---size--* (12 semantic
+       sizes, referenced ~97× by framework.css text-style utilities).
+       This "font-size--*" set is the ported-Webflow naming used by
+       original.css + project.css (~17 refs). Endpoints match the
+       canonical size--* scale; only the fluid clamp middle differed
+       (source used `Xrem + Nvw`, flwr uses the `(1vw - 0.2rem)*K`
+       20-100rem curve). Mapped BY VALUE, not by index. Clamp-middle
+       drift is catalogued in design/token-unification-report.md. */
+    --_typography---font-size--display:    var(--_typography---size--display);
+    --_typography---font-size--h1:         var(--_typography---size--h1);
+    --_typography---font-size--h1-2:       var(--_typography---size--h1);   /* 3-6rem → maps by value to size--h1 (no size--h1-2 exists) */
+    --_typography---font-size--h2:         var(--_typography---size--h2);
+    --_typography---font-size--h3:         var(--_typography---size--h3);
+    --_typography---font-size--h4:         var(--_typography---size--h4);
+    --_typography---font-size--h5:         var(--_typography---size--h5);
+    --_typography---font-size--h6:         var(--_typography---size--h6);
+    --_typography---font-size--text-large: var(--_typography---size--lead); /* 1.125-1.25rem → size--lead by value */
+    --_typography---font-size--text-main:  var(--_typography---size--body); /* 1-1.125rem → size--body by value */
+    /* NOT aliased: max endpoint differs (this clamps 0.875→1rem, but the
+       nearest canonical size--small is a FIXED 0.875rem). Kept literal. */
+    --_typography---font-size--text-small: clamp(0.875rem, 0.825rem + 0.25vw, 1rem);
+
+    /* Typography line heights */
+    --_typography---line-height--huge:   1.5;
+    --_typography---line-height--large:  1.3;
+    --_typography---line-height--medium: 1.1;
+    --_typography---line-height--small:  1;
+
+    /* Typography letter spacing */
+    --_typography-primitives---font-styles--0em:    0em;
+    --_typography-primitives---font-styles--0-03em: -0.03em;
+    --_typography---letter-spacing--normal:  0em;
+    --_typography---letter-spacing--tight:  -0.03em;
+
+    /* Typography text transforms */
+    --_typography---text-transform--uppercase:  uppercase;
+    --_typography---text-transform--lowercase:  lowercase;
+    --_typography---text-transform--capitalize: capitalize;
+    --_typography---text-transform--none:       none;
+
+    /* Typography trim values */
+    --_typography---font--primary-trim-top:    0.9em;
+    --_typography---font--primary-trim-bottom: 0.9em;
+    /* Leading-trim tokens. The LUMOS trim formula in the page embeds is
+       margin: calc(-0.5lh + trim) — it REQUIRES a proportional (em) trim.
+       The exported fixed 0.31rem was only right near 16px text; at 96px
+       headings it over-trimmed boxes to ~10px tall, collapsing every gap
+       around headings (the site-wide "cramped" bug, fixed 2026-07-17).
+       0.33em/0.38em are the LUMOS/flwr reference values → boxes now hug
+       the glyphs (cap-height trim) at every font size. */
+    --_typography---font--secondary-trim-top:    0.33em;
+    --_typography---font--secondary-trim-bottom: 0.38em;
+    --_text-style---trim-top:    0.33em;
+    --_text-style---trim-bottom: 0.38em;
+
+    /* Color opacity helpers */
+    --_color-primitives---opacity--neutral-darkest-5:  #0c08020d;
+    --_color-primitives---opacity--neutral-darkest-15: #0c080226;
+    --_color-primitives---opacity--white-5:   #ffffff0d;
+    --_color-primitives---opacity--white-10:  #ffffff1a;
+    --_color-primitives---opacity--white-15:  #ffffff26;
+    --_color-primitives---opacity--white-20:  #fff3;
+    --_color-primitives---opacity--white-30:  #ffffff4d;
+    --_color-primitives---opacity--white-60:  #fff9;
+
+    /* Marquee defaults */
+    --marquee-gap:        var(--_spacing---space--4);
+    --marquee-item-width: 200px;
+    --marquee-radius:     0px;
+
+    /* ────────────────────────────────────────────────
+       RADIUS — flwr 1.3 scale + roles (proportional corner radius)
+       A corner looks rounder on a small element than on a big one, so the
+       step follows the element's size. Rules use the ROLE, never a raw px.
+       The scale is flwr 1.3's (this project is pinned to flwr 1.0, which
+       has no radius tokens, so it lives here until a /flwr-bump).
+       Presunta sits ONE STEP ROUNDER than flwr's defaults: its buttons are
+       the brand's squared 12px, so every role moves up with them.
+         role         flwr   Presunta   used by
+         tag          4      6          tags, chips
+         control-sm   6      8          small buttons, date chips
+         control      8      12         buttons, inputs, selects, tabs
+         card         12     16         cards, portraits, summaries
+         panel        16     24         big feature cards (16 on phones)
+         modal        20     24         dialogs, hero surfaces (16 on phones)
+         pill         full   full       capsules, the switch track
+       Circles keep border-radius: 50%.
+       ──────────────────────────────────────────────── */
+    --_radius---xs:   0.25rem;
+    --_radius---sm:   0.375rem;
+    --_radius---md:   0.5rem;
+    --_radius---lg:   0.75rem;
+    --_radius---xl:   1rem;
+    --_radius---2xl:  1.25rem;
+    --_radius---3xl:  1.5rem;
+    --_radius---full: 9999px;
+
+    --_radius---tag:        var(--_radius---sm);
+    --_radius---control-sm: var(--_radius---md);
+    --_radius---control:    var(--_radius---lg);
+    --_radius---card:       var(--_radius---xl);
+    --_radius---panel:      var(--_radius---3xl);
+    --_radius---modal:      var(--_radius---3xl);
+    --_radius---pill:       var(--_radius---full);
+
+}
+
+/* Phones: big surfaces are physically smaller, so their corners step down
+   once to keep the same perceived roundness (flwr 1.3 behaviour). */
+@media (max-width: 767px) {
+    :root {
+        --_radius---panel: var(--_radius---xl);
+        --_radius---modal: var(--_radius---xl);
+    }
+}

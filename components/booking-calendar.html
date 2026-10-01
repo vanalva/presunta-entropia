@@ -1,0 +1,600 @@
+<!-- ============================================================
+  BOOKING CALENDAR MODAL — "Book now" (XD artboard 11)
+  Self-contained: markup + embed CSS + embed JS (demo data).
+  Usage: paste before </main>; any element with
+  data-modal-open="modal-1" opens it (menu RESERVAS, hero CTA).
+  Swap the WEEKS array in the script for CMS-fed items when
+  wiring to Webflow CMS / Finsweet list.
+  Used on: ALL v2 pages (site-wide reservas UI, Juan's pick 2026-07-17).
+  talleres-v2 and team-building-v2 previously shipped a cream Finsweet
+  CMS calendar under modal-1; those are DISARMED (renamed to
+  data-modal-id="modal-legacy-calendar", markup kept for future CMS
+  wiring). Never let two elements answer modal-1 on one page.
+============================================================= -->
+<div id="modal-1" class="booking-modal_component" role="dialog" aria-modal="true" aria-label="Calendario de reservas">
+      <div class="complex-css-embed w-embed">
+        <style>
+            /* =====================================================
+     BOOKING CALENDAR MODAL — "Book now" (XD artboard 11)
+     Presunta Entropia Design System
+     Tokens: aztec / stark-white / fuel-yellow / mule-fawn
+     ===================================================== */
+            .booking-modal_component {
+              position: fixed;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              z-index: 120000;
+              display: none;
+              background-color: var(--pe---color--aztec, #0d161d);
+              color: var(--pe---color--stark-white, #e8d5c4);
+              font-family: "Space Grotesk", sans-serif;
+            }
+            .booking-modal_component.is-open {
+              display: block;
+            }
+            .booking-modal_inner {
+              position: absolute;
+              top: 1rem;
+              left: 1rem;
+              right: 1rem;
+              bottom: 1rem;
+              border: 1.5px solid var(--pe---color--stark-white, #e8d5c4);
+              border-radius: var(--pe---radius--main, 1rem);
+              padding: clamp(1.25rem, 3vw, 2.5rem);
+              display: flex;
+              flex-direction: column;
+              gap: clamp(1rem, 2.5vh, 2rem);
+              overflow-y: auto;
+              overflow-x: hidden;
+            }
+            .booking-modal_topbar {
+              display: flex;
+              align-items: center;
+              gap: clamp(1rem, 2.5vw, 2.5rem);
+              flex-wrap: wrap;
+            }
+            .booking-modal_close {
+              display: inline-flex;
+              align-items: center;
+              gap: 0.6rem;
+              padding: 0.6rem 1.4rem;
+              background-color: var(--pe---color--aztec, #0d161d);
+              border: 1.5px solid var(--pe---color--fuel-yellow-dark, #bf8024);
+              border-radius: 12px;
+              color: var(--pe---color--stark-white, #e8d5c4);
+              font-weight: 700;
+              letter-spacing: 0.04em;
+              text-transform: uppercase;
+              text-decoration: none;
+              cursor: pointer;
+              transition: border-color 0.2s ease, color 0.2s ease;
+            }
+            .booking-modal_close:hover {
+              border-color: var(--pe---color--fuel-yellow, #efa02e);
+            }
+            .booking-modal_close-x {
+              color: var(--pe---color--fuel-yellow, #efa02e);
+              font-size: 1.1em;
+              line-height: 1;
+            }
+            .booking-modal_title {
+              font-size: clamp(2.5rem, 5vw, 4.5rem);
+              font-weight: 500;
+              line-height: 1;
+              margin: 0;
+              flex-grow: 1;
+            }
+            .booking-modal_controls {
+              display: flex;
+              align-items: center;
+              gap: 1rem;
+              flex-wrap: wrap;
+            }
+            .booking-modal_search-wrap {
+              border: 1.5px solid var(--pe---color--stark-white, #e8d5c4);
+              border-radius: 12px;
+              background-color: transparent;
+              color: var(--pe---color--stark-white, #e8d5c4);
+              font-family: inherit;
+              font-size: clamp(1.1rem, 1.6vw, 1.5rem);
+            }
+            .booking-modal_search-wrap {
+              display: inline-flex;
+              align-items: center;
+              gap: 0.75rem;
+              padding: 0.65rem 1.5rem;
+            }
+            .booking-modal_search {
+              background: transparent;
+              border: none;
+              outline: none;
+              color: inherit;
+              font-family: inherit;
+              font-size: inherit;
+              width: clamp(8rem, 14vw, 14rem);
+            }
+            .booking-modal_search::placeholder {
+              color: var(--pe---color--stark-white, #e8d5c4);
+              opacity: 0.55;
+            }
+            .booking-modal_search-icon {
+              width: 1.4em;
+              height: 1.4em;
+              border: 3px solid currentColor;
+              border-radius: 50%;
+              flex-shrink: 0;
+            }
+            .booking-modal_body {
+              display: grid;
+              grid-template-columns: minmax(16rem, 1fr) 2.2fr;
+              gap: clamp(1.5rem, 3.5vw, 4rem);
+              flex-grow: 1;
+              min-height: 0;
+            }
+            .booking-modal_side {
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+              gap: 1.5rem;
+              min-width: 0;
+            }
+            .booking-modal_brand {
+              width: clamp(4.5rem, 8vw, 8rem);
+              height: auto;
+            }
+            .booking-modal_heading {
+              font-size: clamp(2rem, 3.6vw, 3.75rem);
+              font-weight: 700;
+              text-transform: uppercase;
+              line-height: 1.06;
+              letter-spacing: 0.01em;
+            }
+            .booking-modal_heading .is-accent {
+              color: var(--pe---color--fuel-yellow, #efa02e);
+            }
+            .booking-modal_main {
+              display: flex;
+              flex-direction: column;
+              gap: 1.25rem;
+              min-width: 0;
+            }
+            .booking-modal_toolbar {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              gap: 1rem;
+              flex-wrap: wrap;
+            }
+            .booking-modal_week-nav {
+              display: inline-flex;
+              align-items: center;
+              gap: 0.9rem;
+              font-size: 1.15rem;
+            }
+            .booking-modal_week-arrow {
+              background: transparent;
+              border: none;
+              color: var(--pe---color--stark-white, #e8d5c4);
+              font-size: 1rem;
+              cursor: pointer;
+              padding: 0.25rem 0.5rem;
+              transition: color 0.2s ease;
+            }
+            .booking-modal_week-arrow:hover {
+              color: var(--pe---color--fuel-yellow, #efa02e);
+            }
+            .booking-modal_view-toggle {
+              display: inline-flex;
+              align-items: center;
+              gap: 0.35rem;
+            }
+            .booking-modal_view-btn {
+              background: transparent;
+              border: none;
+              border-radius: var(--pe---radius--small, 0.5rem);
+              color: var(--pe---color--stark-white, #e8d5c4);
+              font-family: inherit;
+              font-size: 1.05rem;
+              padding: 0.45rem 1.1rem;
+              cursor: pointer;
+              opacity: 0.7;
+              transition: background-color 0.2s ease, opacity 0.2s ease;
+            }
+            .booking-modal_view-btn.is-active {
+              background-color: rgba(232, 213, 196, 0.18);
+              opacity: 1;
+            }
+            .booking-modal_grid {
+              display: grid;
+              grid-template-columns: repeat(3, 1fr);
+              grid-auto-rows: 1fr;
+              gap: clamp(0.9rem, 1.8vw, 1.75rem);
+              flex-grow: 1;
+            }
+            .booking-modal_component.is-monthly .booking-modal_grid {
+              grid-template-columns: repeat(4, 1fr);
+            }
+            .booking-modal_card {
+              border: 1.5px solid var(--pe---color--stark-white, #e8d5c4);
+              border-radius: clamp(1rem, 1.8vw, 1.75rem);
+              padding: clamp(1rem, 1.8vw, 1.75rem);
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+              gap: 0.75rem;
+              min-height: clamp(9rem, 22vh, 13rem);
+              text-decoration: none;
+              color: inherit;
+              transition: border-color 0.2s ease, transform 0.2s ease;
+            }
+            .booking-modal_card:hover {
+              border-color: var(--pe---color--fuel-yellow, #efa02e);
+              transform: translateY(-3px);
+            }
+            .booking-modal_card.is-empty {
+              border: none;
+              background-color: rgba(232, 213, 196, 0.10);
+            }
+            .booking-modal_card-date {
+              font-size: clamp(1.5rem, 2.4vw, 2.25rem);
+              font-weight: 700;
+            }
+            .booking-modal_card-title {
+              font-size: clamp(1rem, 1.4vw, 1.35rem);
+              font-weight: 700;
+              text-transform: uppercase;
+              line-height: 1.15;
+            }
+            .booking-modal_card-meta {
+              display: flex;
+              align-items: baseline;
+              justify-content: space-between;
+              gap: 0.5rem;
+            }
+            .booking-modal_card-type {
+              font-size: 0.95rem;
+              opacity: 0.8;
+            }
+            .booking-modal_card-price {
+              font-size: clamp(1.4rem, 2.2vw, 2rem);
+              font-weight: 700;
+            }
+            @media (max-width: 991px) {
+              .booking-modal_body {
+                grid-template-columns: 1fr;
+              }
+              .booking-modal_side {
+                flex-direction: row;
+                align-items: flex-end;
+                justify-content: space-between;
+                flex-wrap: wrap;
+              }
+              .booking-modal_brand {
+                display: none;
+              }
+              .booking-modal_grid,
+              .booking-modal_component.is-monthly .booking-modal_grid {
+                grid-template-columns: repeat(2, 1fr);
+              }
+            }
+            @media (max-width: 767px) {
+              .booking-modal_inner {
+                top: 0.5rem;
+                left: 0.5rem;
+                right: 0.5rem;
+                bottom: 0.5rem;
+              }
+              .booking-modal_title {
+                font-size: 2.25rem;
+                order: -1;
+                flex-basis: 100%;
+              }
+              .booking-modal_heading {
+                display: none;
+              }
+              .booking-modal_card.is-empty {
+                display: none;
+              }
+              .booking-modal_grid,
+              .booking-modal_component.is-monthly .booking-modal_grid {
+                grid-template-columns: 1fr;
+              }
+            }
+
+            /* Date cards carry the cart button (webflow-cart.js binds [data-cart-add]) */
+            a.booking-modal_card-title {
+              color: inherit;
+              text-decoration: none;
+            }
+            a.booking-modal_card-title:hover {
+              color: var(--pe---color--fuel-yellow, #efa02e);
+            }
+            .booking-modal_card-date.is-soon {
+              font-size: clamp(1.1rem, 1.6vw, 1.5rem);
+              text-transform: uppercase;
+              opacity: 0.7;
+            }
+            .booking-modal_card-seats,
+            .booking-modal_card-soon {
+              font-size: 0.875rem;
+              opacity: 0.8;
+            }
+            .booking-modal_card-add {
+              width: 100%;
+              padding: 0.7rem 1rem;
+              border: 1.5px solid var(--pe---color--fuel-yellow-dark, #bf8024);
+              border-radius: 12px;
+              box-shadow: 0 3px 0 0 var(--pe---color--fuel-yellow-dark, #bf8024);
+              background: transparent;
+              color: var(--pe---color--fuel-yellow, #efa02e);
+              font: inherit;
+              font-size: 0.9rem;
+              text-transform: uppercase;
+              cursor: pointer;
+              transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+            }
+            .booking-modal_card-add:hover {
+              background-color: var(--pe---color--fuel-yellow, #efa02e);
+              color: var(--pe---color--aztec, #0d161d);
+              box-shadow: 0 0 0 0 var(--pe---color--fuel-yellow-dark, #bf8024);
+              transform: translateY(3px);
+            }
+            .booking-modal_card-add:focus-visible {
+              outline: 2px solid var(--pe---color--fuel-yellow, #efa02e);
+              outline-offset: 3px;
+            }
+            .booking-modal_card-add:disabled {
+              opacity: 0.6;
+              cursor: default;
+            }
+            .booking-modal_empty {
+              grid-column: 1 / -1;
+              padding: 2rem;
+              text-align: center;
+              opacity: 0.8;
+            }
+            /* rows size to their cards; a single card no longer stretches to fill the grid */
+            .booking-modal_grid {
+              grid-auto-rows: auto;
+              align-content: start;
+            }
+            /* the CMS list wrapper takes the grid's old place in the main column */
+            .booking-modal_list {
+              display: flex;
+              flex-direction: column;
+              flex-grow: 1;
+            }
+            .booking-modal_empty.w-dyn-empty {
+              background-color: transparent;
+            }
+            .booking-modal_card.is-hidden,
+            .booking-modal_empty.is-hidden {
+              display: none;
+            }
+          </style>
+      </div>
+      <div class="booking-modal_inner">
+        <div class="booking-modal_topbar">
+          <a href="#" class="booking-modal_close" data-modal-close="modal-1"><span class="booking-modal_close-x"><svg class="booking-modal_icon" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="2.2" stroke-linecap="square" fill="none"/></svg></span><span>Cerrar</span></a>
+          <h2 class="booking-modal_title">Calendario</h2>
+          <div class="booking-modal_controls">
+            <label class="booking-modal_search-wrap"><input class="booking-modal_search" type="text" placeholder="Buscar" data-booking-search=""><span class="booking-modal_search-icon" aria-hidden="true"></span></label>
+          </div>
+        </div>
+        <div class="booking-modal_body">
+          <div class="booking-modal_side">
+            <img src="../assets/images/identity_main-isologo.svg" loading="lazy" alt="" class="booking-modal_brand">
+            <div class="booking-modal_heading">
+              <div class="is-accent">Talleres</div>
+              <div>Eventos</div>
+              <div>Restaurante</div>
+            </div>
+          </div>
+          <div class="booking-modal_main">
+            <div class="booking-modal_toolbar">
+              <div class="booking-modal_week-nav">
+                <button type="button" class="booking-modal_week-arrow" data-booking-week-prev="" aria-label="Semana anterior"><svg class="booking-modal_icon" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M11 2v12L3 8z" fill="currentColor"/></svg></button>
+                <span data-booking-week-label="">Semana 1</span>
+                <button type="button" class="booking-modal_week-arrow" data-booking-week-next="" aria-label="Semana siguiente"><svg class="booking-modal_icon" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M5 2v12l8-6z" fill="currentColor"/></svg></button>
+              </div>
+              <div class="booking-modal_view-toggle">
+                <button type="button" class="booking-modal_view-btn is-active" data-booking-view="week">Semanal</button>
+                <button type="button" class="booking-modal_view-btn" data-booking-view="month">Mensual</button>
+              </div>
+            </div>
+            <div class="booking-modal_list w-dyn-list">
+              <!-- Webflow: Collection List bound to the experiences collection (talleres; add
+                   a second list for cenas when the platform has dinners), sorted by
+                   next-session-at. One card per item. Bindings:
+                     card     data-booking-slug  = slug
+                              data-booking-date  = next-session-at (ISO date format)
+                     title    text = name, link = the item's template page
+                     type     static label per collection ("Taller" / "Cena")
+                     price    text = price-current
+                     seats    text = seats-left, data-item-id = entropical-id
+                     button   data-item-id = entropical-id
+                   No conditional visibility needed: the script below keeps the seats
+                   line and the cart button only when data-booking-date is in the future,
+                   and shows "Próximamente" otherwise. -->
+              <div role="list" class="booking-modal_grid w-dyn-items" data-booking-grid="">
+                <div role="listitem" class="booking-modal_card w-dyn-item" data-booking-card="" data-booking-slug="" data-booking-date="">
+                  <div class="booking-modal_card-date" data-booking-date-label="">Próximamente</div>
+                  <a href="#" class="booking-modal_card-title w-dyn-bind-empty" data-booking-name=""></a>
+                  <div class="booking-modal_card-meta"><span class="booking-modal_card-type w-dyn-bind-empty" data-booking-type=""></span><span class="booking-modal_card-price">€<span class="w-dyn-bind-empty" data-booking-price=""></span></span></div>
+                  <div class="booking-modal_card-seats" data-booking-when="future">Quedan <span class="w-dyn-bind-empty" data-item-seats-left="" data-item-id=""></span> plazas</div>
+                  <button type="button" class="booking-modal_card-add" data-booking-when="future" data-cart-add="" data-item-id="">Añadir al carrito</button>
+                  <div class="booking-modal_card-soon" data-booking-when="soon">Nuevas fechas próximamente</div>
+                </div>
+              </div>
+              <div class="booking-modal_empty w-dyn-empty">
+                <div>No hay experiencias con fechas abiertas. Vuelve pronto.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="auto-js-embed w-embed w-script">
+        <script>
+            /* Booking calendar modal: open/close, week/month view, search.
+               The grid is a CMS Collection List (see the binding notes above it).
+               - In Webflow the CMS renders one card per experience; this script
+                 leaves the cards as they are.
+               - In the local preview the card is still an unbound template
+                 (.w-dyn-bind-empty); it is cloned once per experience from
+                 window.PE_CMS (src/data/pe-experiencias.js, synced from the
+                 platform). No API calls either way.
+               Then, for every card: a future data-booking-date keeps the seats line
+               and the cart button (<button data-cart-add data-item-id>); otherwise
+               both are removed and the card reads "Próximamente". Future dates sort
+               first. All of this runs before webflow-cart.js binds its buttons at
+               DOMContentLoaded; paging and search only toggle .is-hidden, so no
+               button is ever re-created.
+               Openers: [data-modal-open="modal-1"]; add data-booking-item="<slug>"
+               to show only that experience's cards. */
+            (function() {
+              'use strict';
+              var modal = document.getElementById('modal-1');
+              if (!modal) return;
+              var grid = modal.querySelector('[data-booking-grid]');
+              var emptyEl = modal.querySelector('.booking-modal_empty');
+              var weekLabel = modal.querySelector('[data-booking-week-label]');
+              var searchInput = modal.querySelector('[data-booking-search]');
+              var PER_PAGE = 6;
+              var MESES = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+              var EMPTY_TEXT = 'No hay experiencias con fechas abiertas. Vuelve pronto.';
+              var NO_MATCH_TEXT = 'Ninguna experiencia coincide con tu búsqueda.';
+
+              function fill(el, txt) {
+                if (!el) return;
+                el.textContent = txt == null ? '' : String(txt);
+                el.classList.remove('w-dyn-bind-empty');
+              }
+
+              // Local preview only: build cards from the synced platform data.
+              var tpl = grid.querySelector('[data-booking-card]');
+              var db = window.PE_CMS;
+              if (tpl && tpl.querySelector('.w-dyn-bind-empty') && db && db.talleres) {
+                [['talleres', 'Taller'], ['cenas', 'Cena']].forEach(function(pair) {
+                  (db[pair[0]] || []).forEach(function(it) {
+                    var card = tpl.cloneNode(true);
+                    var id = it.entropicalId || '';
+                    card.setAttribute('data-booking-slug', it.slug);
+                    card.setAttribute('data-booking-date', it.nextSession || '');
+                    var title = card.querySelector('[data-booking-name]');
+                    fill(title, it.name);
+                    title.href = pair[0] === 'cenas' ? 'cenas-v2.html' : 'taller-item-v2.html?slug=' + encodeURIComponent(it.slug);
+                    fill(card.querySelector('[data-booking-type]'), it.tipo || pair[1]);
+                    fill(card.querySelector('[data-booking-price]'), it.precio);
+                    var seats = card.querySelector('[data-item-seats-left]');
+                    fill(seats, it.seatsLeft);
+                    seats.setAttribute('data-item-id', id);
+                    card.querySelector('[data-cart-add]').setAttribute('data-item-id', id);
+                    grid.appendChild(card);
+                  });
+                });
+                tpl.remove();
+              }
+
+              function parseDate(s) {
+                if (!s) return null;
+                var t = Date.parse(s);
+                if (!isNaN(t)) return new Date(t);
+                var m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(s.trim()); // dd/mm/yyyy
+                return m ? new Date(+m[3], +m[2] - 1, +m[1], 12) : null;
+              }
+
+              var now = Date.now();
+              var cardEls = Array.prototype.slice.call(grid.querySelectorAll('[data-booking-card]'));
+              cardEls.forEach(function(card) {
+                var d = parseDate(card.getAttribute('data-booking-date'));
+                var future = !!d && d.getTime() > now;
+                card.querySelectorAll('[data-booking-when="future"]').forEach(function(el) { if (!future) el.remove(); });
+                card.querySelectorAll('[data-booking-when="soon"]').forEach(function(el) { if (future) el.remove(); });
+                var label = card.querySelector('[data-booking-date-label]');
+                if (label) {
+                  label.textContent = future ? d.getDate() + ' ' + MESES[d.getMonth()] : 'Próximamente';
+                  label.classList.toggle('is-soon', !future);
+                }
+                card.setAttribute('data-booking-order', future ? d.getTime() : 9e15);
+              });
+              cardEls.sort(function(a, b) { return a.getAttribute('data-booking-order') - b.getAttribute('data-booking-order'); });
+              cardEls.forEach(function(card) { grid.appendChild(card); });
+
+              var page = 0;
+              var view = 'week';
+              var query = '';
+              var only = '';
+
+              function render() {
+                var pool = cardEls.filter(function(el) {
+                  if (only && el.getAttribute('data-booking-slug') !== only) return false;
+                  if (query && el.textContent.toLowerCase().indexOf(query) === -1) return false;
+                  return true;
+                });
+                var pages = Math.max(1, Math.ceil(pool.length / PER_PAGE));
+                if (page >= pages) page = 0;
+                var shown = view === 'month' ? pool : pool.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE);
+                cardEls.forEach(function(el) { el.classList.toggle('is-hidden', shown.indexOf(el) === -1); });
+                if (emptyEl) {
+                  emptyEl.classList.toggle('w-dyn-hide', shown.length > 0); // Webflow's own hide class (display:none !important)
+                  emptyEl.textContent = query && cardEls.length ? NO_MATCH_TEXT : EMPTY_TEXT;
+                }
+                weekLabel.textContent = view === 'month' ? 'Todas' : 'Semana ' + (page + 1) + (pages > 1 ? ' de ' + pages : '');
+                modal.setAttribute('data-booking-pages', pages);
+              }
+
+              function open(item) {
+                only = item || '';
+                page = 0;
+                modal.classList.add('is-open');
+                document.body.style.overflow = 'hidden';
+                var openMenu = document.querySelector('.w-nav-overlay[style*="block"], .navbar_menu-button.w--open');
+                if (openMenu) {
+                  var closeBtn = document.querySelector('.navbar_menu-close-button-wrapper');
+                  if (closeBtn) closeBtn.click();
+                }
+                render();
+              }
+
+              function close() {
+                modal.classList.remove('is-open');
+                document.body.style.overflow = '';
+              }
+
+              document.addEventListener('click', function(e) {
+                var opener = e.target.closest('[data-modal-open="modal-1"]');
+                if (opener) { e.preventDefault(); open(opener.getAttribute('data-booking-item')); return; }
+                var closer = e.target.closest('[data-modal-close="modal-1"]');
+                if (closer) { e.preventDefault(); close(); }
+              });
+              document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.classList.contains('is-open')) close();
+              });
+              modal.querySelector('[data-booking-week-prev]').addEventListener('click', function() {
+                var pages = +modal.getAttribute('data-booking-pages') || 1;
+                page = (page + pages - 1) % pages; render();
+              });
+              modal.querySelector('[data-booking-week-next]').addEventListener('click', function() {
+                var pages = +modal.getAttribute('data-booking-pages') || 1;
+                page = (page + 1) % pages; render();
+              });
+              modal.querySelectorAll('[data-booking-view]').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                  view = btn.getAttribute('data-booking-view');
+                  modal.classList.toggle('is-monthly', view === 'month');
+                  modal.querySelectorAll('[data-booking-view]').forEach(function(b) {
+                    b.classList.toggle('is-active', b === btn);
+                  });
+                  render();
+                });
+              });
+              if (searchInput) searchInput.addEventListener('input', function() {
+                query = searchInput.value.trim().toLowerCase(); page = 0; render();
+              });
+              render();
+            })();
+          </script>
+      </div>
+    </div>
