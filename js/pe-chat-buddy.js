@@ -107,7 +107,93 @@
     };
   }
 
+  /* ---------- Vanny open/closed state ----------
+     The widget's iframe (#vanny-widget-frame) stays click-through while the
+     chat is closed (CSS); this file owns html.vanny-open. */
+  var OPEN = 'vanny-open';
+  var root = document.documentElement;
+  var guardUntil = 0;
+  function isOpen() { return root.classList.contains(OPEN); }
+  function updateLift() {
+    // lift the open frame above the fixed buttons so the robot can close it
+    var top = Infinity;
+    ['.navbar_menu-button', '.cart-header_button', 'button.chat-buddy'].forEach(function (s) {
+      var e = document.querySelector(s); if (!e) return;
+      var r = e.getBoundingClientRect(); if (r.height > 0 && r.top < top) top = r.top;
+    });
+    if (top === Infinity || top <= 0) { root.style.removeProperty('--pe-vanny-lift'); return; }
+    root.style.setProperty('--pe-vanny-lift', Math.max(0, Math.round(window.innerHeight - top + 14)) + 'px');
+  }
+  function setOpen(v) {
+    v = !!v;
+    if (v) updateLift();
+    if (v !== isOpen()) root.classList.toggle(OPEN, v);
+  }
+  function wrapVanny() {
+    var V = window.Vanny;
+    if (!V || typeof V !== 'object' && typeof V !== 'function') return;
+    ['open', 'close', 'toggle'].forEach(function (name) {
+      var orig = V[name];
+      if (typeof orig !== 'function' || orig.__peWrapped) return;
+      var w = function () {
+        var res = orig.apply(this, arguments);
+        if (Date.now() > guardUntil) {
+          if (name === 'open') setOpen(true);
+          else if (name === 'close') setOpen(false);
+          else setOpen(!isOpen());
+        }
+        return res;
+      };
+      w.__peWrapped = true;
+      try { V[name] = w; } catch (e) {}
+    });
+  }
+  function closeChat() {
+    var V = window.Vanny;
+    if (V && typeof V.close === 'function') { try { V.close(); } catch (e) {} }
+    setOpen(false);
+  }
+  function watchFrame() {
+    var seen = [];
+    function check(f) {
+      var w = parseFloat(f.style.width), h = parseFloat(f.style.height);
+      if ((w > 0 && w < 200) || (h > 0 && h < 200)) setOpen(false);  // widget collapsed itself
+    }
+    function scan() {
+      var list = document.querySelectorAll('body > iframe#vanny-widget-frame');
+      for (var i = 0; i < list.length; i++) {
+        var f = list[i];
+        if (seen.indexOf(f) !== -1) continue;
+        seen.push(f);
+        new MutationObserver(function (m) { check(m[0].target); }).observe(f, { attributes: true, attributeFilter: ['style'] });
+        check(f);
+      }
+    }
+    scan();
+    // the frame is injected after load: watch <body> children until it shows up
+    new MutationObserver(scan).observe(document.body || root, { childList: true });
+  }
+  function initVanny() {
+    wrapVanny();
+    // the script is async and the console's CHAT swaps window.Vanny methods: re-check lazily
+    var n = 0, t = setInterval(function () { wrapVanny(); if (++n > 20) clearInterval(t); }, 500);
+    window.addEventListener('load', wrapVanny);
+    document.addEventListener('click', function (e) {
+      var t = e.target && e.target.closest && e.target.closest('[data-vanny-toggle]');
+      if (!t) return;
+      wrapVanny();
+      guardUntil = Date.now() + 60;   // the widget may call its own toggle(); do not flip twice
+      setOpen(!isOpen());
+    }, true);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && isOpen()) closeChat();
+    });
+    window.addEventListener('resize', function () { if (isOpen()) updateLift(); });
+    watchFrame();
+  }
+
   function init() {
+    initVanny();
     var inst = [];
     // fixed cluster: left of the cart, opens the site chat
     var cluster = document.querySelector('.navbar_fixed-button-container');

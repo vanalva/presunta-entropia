@@ -375,33 +375,33 @@
             }
           </style>
       </div>
-      <div class="booking-modal_inner">
+      <div class="booking-modal_inner pe-lc">
         <div class="booking-modal_topbar">
-          <a href="#" class="booking-modal_close" data-modal-close="modal-1"><span class="booking-modal_close-x"><svg class="booking-modal_icon" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="2.2" stroke-linecap="square" fill="none"/></svg></span><span>Cerrar</span></a>
-          <h2 class="booking-modal_title">Calendario</h2>
+          <a href="#" class="booking-modal_close button is-secondary f-text-label" data-modal-close="modal-1"><div class="navbar_menu-close-button-content"><div>Cerrar</div><div class="menu-icon"><div class="menu-close-icon_wrapper"><div class="menu-close_line-top"></div><div class="menu-close_line-bottom"></div></div></div></div></a>
+          <h2 class="booking-modal_title f-text-h1">Calendario</h2>
           <div class="booking-modal_controls">
-            <label class="booking-modal_search-wrap"><input class="booking-modal_search" type="text" placeholder="Buscar" data-booking-search=""><span class="booking-modal_search-icon" aria-hidden="true"></span></label>
+            <label class="booking-modal_search-wrap pe-lc_control pe-lc_search"><input class="booking-modal_search" type="text" placeholder="Buscar" data-booking-search=""><span class="booking-modal_search-icon" aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="7" cy="7" r="4.6"/><path d="M10.6 10.6L14 14"/></svg></span></label>
           </div>
         </div>
         <div class="booking-modal_body">
           <div class="booking-modal_side">
             <img src="../assets/images/identity_main-isologo.svg" loading="lazy" alt="" class="booking-modal_brand">
-            <div class="booking-modal_heading">
-              <div class="is-accent">Talleres</div>
-              <div>Eventos</div>
-              <div>Restaurante</div>
+            <div class="booking-modal_heading f-text-h2 f-text-uppercase">
+              <div class="booking-modal_cat is-accent">Talleres</div>
+              <div class="booking-modal_cat">Eventos</div>
+              <div class="booking-modal_cat">Restaurante</div>
             </div>
           </div>
           <div class="booking-modal_main">
             <div class="booking-modal_toolbar">
-              <div class="booking-modal_week-nav">
+              <div class="booking-modal_week-nav pe-lc_control is-seg f-text-small">
                 <button type="button" class="booking-modal_week-arrow" data-booking-week-prev="" aria-label="Semana anterior"><svg class="booking-modal_icon" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M11 2v12L3 8z" fill="currentColor"/></svg></button>
                 <span data-booking-week-label="">Semana 1</span>
                 <button type="button" class="booking-modal_week-arrow" data-booking-week-next="" aria-label="Semana siguiente"><svg class="booking-modal_icon" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M5 2v12l8-6z" fill="currentColor"/></svg></button>
               </div>
-              <div class="booking-modal_view-toggle">
-                <button type="button" class="booking-modal_view-btn is-active" data-booking-view="week">Semanal</button>
-                <button type="button" class="booking-modal_view-btn" data-booking-view="month">Mensual</button>
+              <div class="booking-modal_view-toggle pe-lc_control is-seg">
+                <button type="button" class="booking-modal_view-btn f-text-small is-active" data-booking-view="week">Semanal</button>
+                <button type="button" class="booking-modal_view-btn f-text-small" data-booking-view="month">Mensual</button>
               </div>
             </div>
             <div class="booking-modal_list w-dyn-list">
@@ -420,16 +420,24 @@
                    and shows "Próximamente" otherwise. -->
               <div role="list" class="booking-modal_grid w-dyn-items" data-booking-grid="">
                 <div role="listitem" class="booking-modal_card w-dyn-item" data-booking-card="" data-booking-slug="" data-booking-date="">
-                  <div class="booking-modal_card-date" data-booking-date-label="">Próximamente</div>
-                  <a href="#" class="booking-modal_card-title w-dyn-bind-empty" data-booking-name=""></a>
-                  <div class="booking-modal_card-meta"><span class="booking-modal_card-type w-dyn-bind-empty" data-booking-type=""></span><span class="booking-modal_card-price">€<span class="w-dyn-bind-empty" data-booking-price=""></span></span></div>
-                  <div class="booking-modal_card-seats" data-booking-when="future">Quedan <span class="w-dyn-bind-empty" data-item-seats-left="" data-item-id=""></span> plazas</div>
-                  <button type="button" class="booking-modal_card-add" data-booking-when="future" data-cart-add="" data-item-id="">Añadir al carrito</button>
-                  <div class="booking-modal_card-soon" data-booking-when="soon">Nuevas fechas próximamente</div>
+                  <div class="booking-modal_card-date f-text-h3" data-booking-date-label="">Próximamente</div>
+                  <a href="#" class="booking-modal_card-title f-text-h6 f-text-uppercase w-dyn-bind-empty" data-booking-name=""></a>
+                  <div class="booking-modal_card-meta"><span class="booking-modal_card-type f-text-small w-dyn-bind-empty" data-booking-type=""></span><span class="booking-modal_card-price f-text-stat">€<span class="w-dyn-bind-empty" data-booking-price=""></span></span></div>
+                  <div class="booking-modal_card-seats f-text-small" data-booking-when="future">Quedan <span class="w-dyn-bind-empty" data-item-seats-left="" data-item-id=""></span> plazas</div>
+                  <button type="button" class="booking-modal_card-add button f-text-label f-text-ui-sm" data-booking-when="future" data-cart-add="" data-item-id="">Añadir al carrito</button>
+                  <div class="booking-modal_card-soon f-text-small" data-booking-when="soon">Nuevas fechas próximamente</div>
                 </div>
               </div>
-              <div class="booking-modal_empty w-dyn-empty">
+              <div class="booking-modal_empty f-text-small w-dyn-empty">
                 <div>No hay experiencias con fechas abiertas. Vuelve pronto.</div>
+              </div>
+            </div>
+            <!-- Packs: pay now, pick the date later (webflow-packs.js handles the redeem button) -->
+            <div class="booking-modal_packs">
+              <p class="booking-modal_packs-text f-text-h6">¿Prefieres pagar ahora y elegir fecha después?</p>
+              <div class="booking-modal_packs-actions">
+                <a href="packs.html" class="booking-modal_packs-btn button f-text-label">Ver packs</a>
+                <a href="canjear-pack.html" class="booking-modal_packs-btn is-ghost button is-secondary f-text-label" data-entropical-pack-redeem-open="" data-auto-open="false">Ya tengo un pack</a>
               </div>
             </div>
           </div>
@@ -484,7 +492,7 @@
                     card.setAttribute('data-booking-date', it.nextSession || '');
                     var title = card.querySelector('[data-booking-name]');
                     fill(title, it.name);
-                    title.href = pair[0] === 'cenas' ? 'cenas-v2.html' : 'taller-item-v2.html?slug=' + encodeURIComponent(it.slug);
+                    title.href = pair[0] === 'cenas' ? 'cenas.html' : 'taller-item.html?slug=' + encodeURIComponent(it.slug);
                     fill(card.querySelector('[data-booking-type]'), it.tipo || pair[1]);
                     fill(card.querySelector('[data-booking-price]'), it.precio);
                     var seats = card.querySelector('[data-item-seats-left]');
@@ -517,6 +525,7 @@
                   label.textContent = future ? d.getDate() + ' ' + MESES[d.getMonth()] : 'Próximamente';
                   label.classList.toggle('is-soon', !future);
                 }
+                card.classList.toggle('is-soon', !future);
                 card.setAttribute('data-booking-order', future ? d.getTime() : 9e15);
               });
               cardEls.sort(function(a, b) { return a.getAttribute('data-booking-order') - b.getAttribute('data-booking-order'); });

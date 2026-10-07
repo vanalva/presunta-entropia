@@ -59,19 +59,7 @@
     --_typography---family--sans:    'Space Grotesk', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
     --_typography---family--display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
 
-    /* Font sizes — override with source site's original clamp() values.
-       Source uses viewport range 20–100rem (320px–1600px at 16px base).
-       These are the exact values from the original Webflow CSS, simplified
-       to standard clamp() expressions for flwr compatibility. */
-    --_typography---size--display:  clamp(6rem,   calc(6rem   + ((1vw - 0.2rem) * 5.0)),  10rem);  /* Display: 6–10rem */
-    --_typography---size--h1:       clamp(3rem,   calc(3rem   + ((1vw - 0.2rem) * 3.75)), 6rem);   /* H1: 3–6rem       */
-    --_typography---size--h2:       clamp(2.5rem, calc(2.5rem + ((1vw - 0.2rem) * 1.875)), 4rem);  /* H2: 2.5–4rem     */
-    --_typography---size--h3:       clamp(2.25rem,calc(2.25rem + ((1vw - 0.2rem) * 0.9375)), 3rem);/* H3: 2.25–3rem    */
-    --_typography---size--h4:       clamp(1.75rem,calc(1.75rem + ((1vw - 0.2rem) * 0.3125)), 2rem);/* H4: 1.75–2rem    */
-    --_typography---size--h5:       clamp(1.375rem,calc(1.375rem + ((1vw - 0.2rem) * 0.15625)), 1.5rem); /* H5: 1.375–1.5rem */
-    --_typography---size--h6:       clamp(1rem,   calc(1rem   + ((1vw - 0.2rem) * 0.15625)), 1.125rem); /* H6: 1–1.125rem  */
-    --_typography---size--lead:     clamp(1.125rem,calc(1.125rem + ((1vw - 0.2rem) * 0.15625)), 1.25rem); /* Lead: 1.125–1.25rem */
-    --_typography---size--body:     clamp(1rem,   calc(1rem   + ((1vw - 0.2rem) * 0.15625)), 1.125rem); /* Body: 1–1.125rem */
+    /* Font sizes display..body: derived by flwr 1.6 from the seeds (the 9 literal clamps were removed in bump P1, 2026-10-07). */
     --_typography---size--small:    0.875rem;
     --_typography---size--tiny:     0.75rem;
     --_typography---size--micro:    0.6875rem;
@@ -608,3 +596,29 @@
         --_radius---modal: var(--_radius---xl);
     }
 }
+
+/* ═══ PRESUNTA TYPE CELLS (approved trial 3, 2026-10-06) — do not change without Juan ═══ */
+/* =============================================================
+   PRESUNTA ENTROPIA, trial 3 (pages/index-flwr16b.html).
+   flwr 1.6 decides the hierarchy. Presunta contributes its font
+   families, nothing else. Variables only: no font-size, font-weight,
+   line-height, letter-spacing or text-transform property here.
+   ============================================================= */
+:root {
+  --_typography---family--sans:    'Space Grotesk', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --_typography---family--display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+}
+
+/* flwr 1.1+ baseline paints the wrapper from Section/Theme. Not type: pinned to the page's own colour scheme (as trial 2). */
+[data-flwr] {
+  --_theme---surface--main: transparent;
+  --_theme---text--main: var(--color-scheme-1--text);
+}
+
+/* leading cell: uppercase card titles (f-text-h3 + f-text-uppercase) read loose at snug 1.25; use flwr's tight token */
+[data-flwr] .f-text-h3 { --_text-style---leading: var(--_typography---leading--tight); }
+
+/* v2 (Juan): weight cells, label case, lead leading */
+[data-flwr] :is(.f-text-h2, .f-text-h3, .f-text-h4, .f-text-h5, .f-text-h6) { --_text-style---weight: var(--_typography---weight--medium); }
+[data-flwr] .f-text-label { --_text-style---transform: var(--_typography---transform--upper); }
+[data-flwr] .f-text-lead { --_text-style---leading: var(--_typography---leading--snug); }

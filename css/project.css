@@ -307,6 +307,9 @@ a {
     text-transform: var(--_typography---text-transform--uppercase);
 }
 
+/* form submit skin: the section's text colour (cream on dark, aztec on
+   cream). Size comes from .is-xlarge; hover/focus/press: FIX3 block at the
+   end of this file. */
 .button.is-form {
     border-top-color: var(--color-scheme-1--text);
     border-right-color: var(--color-scheme-1--text);
@@ -314,7 +317,6 @@ a {
     border-left-color: var(--color-scheme-1--text);
     box-shadow: 0 var(--pe---volume, 5px) 0 0 var(--color-scheme-1--text);
     color: var(--color-scheme-1--text);
-    font-size: 3rem;
 }
 
 .button-group {
@@ -2031,10 +2033,6 @@ a {
         font-size: 0.8rem;
     }
 
-    .button.is-form {
-        font-size: var(--_typography---font-size--h4);
-    }
-
     .button-group.max-width-full {
         column-gap: var(--_spacing-semantics---gap--gap-0);
         row-gap: var(--_spacing-semantics---gap--gap-0);
@@ -2953,11 +2951,9 @@ a {
     border-bottom-right-radius: var(--_radius---card);
 }
 
+/* type comes from the heading class (.u-text-style-h3 .u-all-caps), like the
+   other section sub-titles; this class carries spacing only (FIX3) */
 .cafeteria_title {
-    text-transform: var(--_typography---text-transform--uppercase);
-    font-size: clamp(2.4rem, 4vw, 3.6rem);
-    font-weight: var(--_typography---weight--bold);
-    line-height: 0.98;
     margin-top: var(--_spacing-semantics---gap--gap-sm);
     margin-bottom: var(--_spacing-semantics---gap--gap-md);
 }
@@ -4788,6 +4784,11 @@ iframe[src*="vanny.chat"] { color-scheme: light !important; }
     margin-top: 0;
     margin-bottom: var(--_spacing-semantics---gap--gap-md);
     line-height: 0.95;
+    /* FIX3: the size/weight the pillars inherited from .cafeteria_title
+       until 2026-10-01, kept here so Método does not change. Still a
+       hard-coded size off the type scale: for the typography audit. */
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    font-weight: var(--_typography---weight--bold);
 }
 
 .u-text-style-h4.metodo_pilar-subtitle {
@@ -6633,5 +6634,2335 @@ div.radio-button_filter {
         padding-right: var(--_spacing-semantics---padding--pad-section-md);
         padding-bottom: var(--_spacing-semantics---padding--pad-section-md);
         padding-left: var(--_spacing-semantics---padding--pad-section-md);
+    }
+}
+
+/* ═══ FIX3 (2026-10-01) ═══ */
+
+/* F1. .is-xlarge: the big call-to-action size of the button scale
+   (is-tiny < is-small < base < is-large < is-xlarge). One step above the
+   hero CTAs (.is-large, 24-32px): type on the h4 token (28-32px), padding
+   from spacing tokens, control radius role, the same --pe---volume offset
+   and press as every volume button. First use: the contact form ENVIAR. */
+.button.is-xlarge {
+    font-size: var(--_typography---font-size--h4);
+    padding-top: var(--_spacing-semantics---padding--pad-section-xs);
+    padding-right: var(--_spacing-semantics---padding--pad-section-lg);
+    padding-bottom: var(--_spacing-semantics---padding--pad-section-xs);
+    padding-left: var(--_spacing-semantics---padding--pad-section-lg);
+    border-top-left-radius: var(--_radius---control);
+    border-top-right-radius: var(--_radius---control);
+    border-bottom-right-radius: var(--_radius---control);
+    border-bottom-left-radius: var(--_radius---control);
+    white-space: nowrap;
+}
+
+@media (max-width: 478px) {
+    .button.is-xlarge {
+        padding-right: var(--_spacing-semantics---padding--pad-section-md);
+        padding-left: var(--_spacing-semantics---padding--pad-section-md);
+    }
+}
+
+/* The submit is an <input type="submit"> (Webflow's form button: webflow.js
+   finds it with :input[type="submit"] and swaps its value for data-wait),
+   so it cannot hold the label spans of the JS rise effect. It gets the
+   rise's END state in plain CSS instead: the text colour fills an inner
+   panel inset 6px from the frame (as .pe-rise, --pe-rise-inset), the
+   section's background becomes the ink. Same on dark and cream sections
+   through the scheme tokens. */
+.button.is-form {
+    transition-property: transform, box-shadow, background-color, color;
+    transition-duration: 0.2s, 0.2s, 0.2s, 0.2s;
+    transition-timing-function: ease, ease, ease, ease;
+    transition-delay: 0s, 0s, 0s, 0s;
+}
+
+.button.is-form:hover {
+    background-color: var(--color-scheme-1--text);
+    color: var(--color-scheme-1--background);
+    box-shadow: inset 0 0 0 6px var(--color-scheme-1--background), 0 var(--pe---volume, 5px) 0 0 var(--color-scheme-1--text);
+}
+
+.button.is-form:focus-visible {
+    background-color: var(--color-scheme-1--text);
+    color: var(--color-scheme-1--background);
+    box-shadow: inset 0 0 0 6px var(--color-scheme-1--background), 0 var(--pe---volume, 5px) 0 0 var(--color-scheme-1--text);
+}
+
+.button.is-form:active {
+    background-color: var(--color-scheme-1--text);
+    color: var(--color-scheme-1--background);
+    box-shadow: inset 0 0 0 6px var(--color-scheme-1--background), 0 0 0 0 var(--color-scheme-1--text);
+}
+
+/* =============================================================
+   FIXED CLUSTER SHELL — click-through
+   .navbar_fullscreen / .navbar_wrapper are a fixed 347x143 box that holds
+   the MENU / cart / chat cluster. Even with the cluster hidden over the
+   hero dock they kept catching the pointer and blocked the console's
+   bottom-right corner on wide screens. The shells never take the pointer;
+   the cluster and the fullscreen menu opt back in by their own class.
+   (html.hero-dock-in-view .navbar_fixed-button-container still wins.)
+   ============================================================= */
+.navbar_fullscreen {
+  pointer-events: none;
+}
+.navbar_wrapper {
+  pointer-events: none;
+}
+.navbar_fixed-button-container {
+  pointer-events: auto;
+}
+.navbar_menu {
+  pointer-events: auto;
+}
+
+/* =============================================================
+   NEWSLETTER
+   Footer row (every page), the /newsletter landing, and the state
+   blocks on /baja and /confirmar-suscripcion. Colour comes from the
+   surrounding .color-scheme-* wrapper through --color-scheme-1--*;
+   type comes from the markup (u-text-style-*, text-size-*, f-text-*).
+   The input is a .form_input and the submit is a .button, so they
+   follow the Contacto form. JS (webflow-newsletter.js on ntropical)
+   toggles [hidden] on the .pe-newsletter_msg paragraphs; nothing
+   here depends on it.
+   ============================================================= */
+/* Footer: middle column of the footer grid (left column | newsletter |
+   links). The grid template is set here, after the original rule, and
+   restated for the stacked breakpoint. */
+.footer15_top-wrapper {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 0.7fr);
+}
+.pe-newsletter {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--_spacing-semantics---gap--gap-md);
+    width: 100%;
+    max-width: var(--_layout-primitives---container-max-xs);
+    color: var(--color-scheme-1--text);
+}
+.pe-newsletter_head {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--_spacing-semantics---gap--gap-2xs);
+}
+.pe-newsletter_title {
+    margin-top: 0;
+    margin-bottom: var(--_spacing-semantics---padding--pad-section-xs);
+    text-transform: var(--_typography---text-transform--uppercase);
+    color: var(--color-scheme-1--text);
+}
+.pe-newsletter_text {
+    margin-top: 0;
+    margin-bottom: 0;
+    color: color-mix(in srgb, var(--color-scheme-1--text) 70%, transparent);
+}
+.pe-newsletter_form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: var(--_spacing-semantics---gap--gap-xs);
+    row-gap: var(--_spacing-semantics---gap--gap-xs);
+    align-items: stretch;
+    width: 100%;
+    max-width: var(--_layout-primitives---container-max-sm);
+    margin-top: 0;
+    margin-bottom: 0;
+    position: relative;
+}
+/* .form_input supplies border, radius, padding and focus; these only
+   place it in the grid and tie its colours to the scheme. */
+.pe-newsletter_input {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    min-width: 0;
+    color: var(--color-scheme-1--text);
+}
+.pe-newsletter_input::placeholder {
+    color: color-mix(in srgb, var(--color-scheme-1--text) 50%, transparent);
+}
+/* .button supplies the look; this only places it and drops the
+   bottom margin the button carries in free-standing use. */
+.pe-newsletter_button {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    margin-bottom: 0;
+    white-space: nowrap;
+}
+.pe-newsletter_button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.pe-newsletter_consent {
+    --pe-nl-check: 1.25rem;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    display: block;
+    padding-left: calc(var(--pe-nl-check) + var(--_spacing-semantics---gap--gap-xs));
+    text-indent: calc(-1 * (var(--pe-nl-check) + var(--_spacing-semantics---gap--gap-xs)));
+    color: color-mix(in srgb, var(--color-scheme-1--text) 70%, transparent);
+    cursor: pointer;
+}
+/* Custom box so it takes the control radius; checked = filled square
+   with a ring in the scheme background (no hard-coded colour). */
+.pe-newsletter_check {
+    appearance: none;
+    display: inline-block;
+    width: var(--pe-nl-check);
+    height: var(--pe-nl-check);
+    margin-top: 0;
+    margin-right: var(--_spacing-semantics---gap--gap-xs);
+    margin-bottom: 0;
+    margin-left: 0;
+    text-indent: 0;
+    vertical-align: top;
+    background-color: transparent;
+    border-top-width: var(--border-width--main);
+    border-right-width: var(--border-width--main);
+    border-bottom-width: var(--border-width--main);
+    border-left-width: var(--border-width--main);
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-color: var(--color-scheme-1--text);
+    border-right-color: var(--color-scheme-1--text);
+    border-bottom-color: var(--color-scheme-1--text);
+    border-left-color: var(--color-scheme-1--text);
+    border-top-left-radius: var(--_radius---control-sm);
+    border-top-right-radius: var(--_radius---control-sm);
+    border-bottom-right-radius: var(--_radius---control-sm);
+    border-bottom-left-radius: var(--_radius---control-sm);
+    cursor: pointer;
+}
+.pe-newsletter_check:checked {
+    background-color: var(--color-scheme-1--text);
+    box-shadow: inset 0 0 0 var(--_spacing-semantics---padding--pad-section-3xs) var(--color-scheme-1--background);
+}
+.pe-newsletter_check:focus-visible {
+    outline-width: 2px;
+    outline-style: solid;
+    outline-color: var(--color-scheme-1--text);
+    outline-offset: 3px;
+}
+.pe-newsletter_consent a {
+    color: var(--color-scheme-1--text);
+    text-decoration-line: underline;
+}
+/* Honeypot: off-screen but still in the DOM */
+.pe-newsletter_hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+.pe-newsletter_msg {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    margin-top: 0;
+    margin-bottom: 0;
+    color: var(--color-scheme-1--text);
+}
+.pe-newsletter_msg[hidden] {
+    display: none;
+}
+/* State block: one message + optional action (/baja, /confirmar-suscripcion) */
+.pe-newsletter_state {
+    width: 100%;
+    max-width: 36rem;
+    margin-right: auto;
+    margin-left: auto;
+    padding-top: var(--_spacing-semantics---padding--pad-section-md);
+    padding-right: var(--_spacing-semantics---padding--pad-section-md);
+    padding-bottom: var(--_spacing-semantics---padding--pad-section-md);
+    padding-left: var(--_spacing-semantics---padding--pad-section-md);
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-color: color-mix(in srgb, var(--color-scheme-1--text) 20%, transparent);
+    border-right-color: color-mix(in srgb, var(--color-scheme-1--text) 20%, transparent);
+    border-bottom-color: color-mix(in srgb, var(--color-scheme-1--text) 20%, transparent);
+    border-left-color: color-mix(in srgb, var(--color-scheme-1--text) 20%, transparent);
+    border-top-left-radius: var(--_radius---control);
+    border-top-right-radius: var(--_radius---control);
+    border-bottom-right-radius: var(--_radius---control);
+    border-bottom-left-radius: var(--_radius---control);
+    text-align: center;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--color-scheme-1--text);
+}
+/* Page wrapper: centred narrow column inside a section */
+.pe-newsletter_page {
+    width: 100%;
+    max-width: 36rem;
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: var(--_spacing-semantics---padding--pad-section-lg);
+    padding-left: var(--_spacing-semantics---padding--pad-section-lg);
+}
+
+/* AEPD first layer: basic data-protection info, after the consent label.
+   Type size is inherited from the .text-size-tiny / .f-text-tiny on the
+   <details>; colour is inherited (opacity only) so it stays readable on
+   the dark checkout as well as on any .color-scheme-* wrapper. */
+.pe-newsletter_info {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    margin-top: 0;
+    margin-bottom: 0;
+    color: inherit;
+    opacity: 0.8;
+}
+.pe-newsletter_info-table {
+    width: 100%;
+    margin-top: var(--_spacing-semantics---padding--pad-section-2xs);
+    margin-bottom: 0;
+    border-collapse: collapse;
+    color: inherit;
+}
+.pe-newsletter_info-table th {
+    width: 8rem;
+    padding-top: var(--_spacing-semantics---padding--pad-section-3xs);
+    padding-right: var(--_spacing-semantics---padding--pad-section-2xs);
+    padding-bottom: var(--_spacing-semantics---padding--pad-section-3xs);
+    padding-left: 0;
+    text-align: left;
+    font-weight: var(--_typography---weight--semibold);
+    vertical-align: top;
+    color: inherit;
+}
+.pe-newsletter_info-table td {
+    padding-top: var(--_spacing-semantics---padding--pad-section-3xs);
+    padding-right: 0;
+    padding-bottom: var(--_spacing-semantics---padding--pad-section-3xs);
+    padding-left: 0;
+    vertical-align: top;
+    color: inherit;
+}
+.pe-newsletter_info-table a {
+    color: inherit;
+    text-decoration-line: underline;
+}
+
+/* Landing (/newsletter): the form lives inside the hero card and the
+   FAQ rows are native <details> wearing the Preguntas accordion classes. */
+.pe-newsletter_hero-form {
+    width: 100%;
+    max-width: var(--_layout-primitives---container-max-sm);
+}
+.pe-newsletter_info-link {
+    display: block;
+    list-style-type: none;
+    text-decoration-line: underline;
+    cursor: pointer;
+}
+.pe-newsletter_info-link::-webkit-details-marker {
+    display: none;
+}
+.pe-newsletter_faq-q {
+    list-style-type: none;
+}
+.pe-newsletter_faq-q::-webkit-details-marker {
+    display: none;
+}
+.pe-newsletter_cta-note {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+@media (max-width: 991px) {
+    .footer15_top-wrapper {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+@media (max-width: 767px) {
+    .pe-newsletter_form {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .pe-newsletter_input,
+    .pe-newsletter_button,
+    .pe-newsletter_consent,
+    .pe-newsletter_msg,
+    .pe-newsletter_info {
+        grid-column-start: 1;
+        grid-column-end: 2;
+    }
+    .pe-newsletter_button {
+        grid-row-start: auto;
+        grid-row-end: auto;
+        width: 100%;
+    }
+    .pe-newsletter_page {
+        padding-right: var(--_spacing-semantics---padding--pad-section-sm);
+        padding-left: var(--_spacing-semantics---padding--pad-section-sm);
+    }
+}
+@media (max-width: 478px) {
+    .pe-newsletter_info-table th,
+    .pe-newsletter_info-table td {
+        display: block;
+        width: auto;
+    }
+    .pe-newsletter_info-table th {
+        padding-bottom: 0;
+    }
+    .pe-newsletter_info-table td {
+        padding-top: 0;
+        padding-bottom: var(--_spacing-semantics---padding--pad-section-2xs);
+    }
+}
+
+/* Checkout: cancellation terms line next to the pay button */
+.checkout_terms {
+    margin-top: var(--_spacing-semantics---padding--pad-section-md);
+    margin-bottom: 0;
+    text-align: center;
+    font-size: 0.8125rem;
+    color: color-mix(in srgb, var(--pe---color--stark-white) 70%, transparent);
+}
+.checkout_terms a {
+    text-decoration-line: underline;
+}
+
+/* Legal pages (aviso legal, privacidad, cookies, cancelación) */
+.pe-legal {
+    max-width: 48rem;
+    margin-right: auto;
+    margin-left: auto;
+    padding-top: var(--_spacing-semantics---padding--pad-section-lg);
+    padding-bottom: var(--_spacing-semantics---padding--pad-section-lg);
+    line-height: 1.6;
+}
+.pe-legal h2 {
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+    font-size: 1.375rem;
+    line-height: 1.25;
+}
+.pe-legal h2:first-child {
+    margin-top: 0;
+}
+.pe-legal p,
+.pe-legal ul {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+.pe-legal ul {
+    padding-left: 1.25rem;
+    list-style: disc;
+}
+.pe-legal li {
+    margin-bottom: 0.5rem;
+}
+.pe-legal a {
+    text-decoration-line: underline;
+}
+.pe-legal_table {
+    width: 100%;
+    margin-bottom: 1rem;
+    border-collapse: collapse;
+}
+.pe-legal_table th,
+.pe-legal_table td {
+    padding: 0.625rem 0.75rem;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+    text-align: left;
+    vertical-align: top;
+}
+.pe-legal_updated {
+    margin-top: 2.5rem;
+    font-size: 0.875rem;
+    opacity: 0.7;
+}
+
+
+/* ═══ ESPACIOS STACK — equal cards (2026-10-06) ═══
+   Before: a Webflow IX2 scroll interaction (js/webflow.js, bound by the data-w-id of .espacios_component)
+   scaled each earlier card to 0.8 as the next one covered it, so the cards differed in width and drifted
+   left/right. Now: the data-w-id is removed from .espacios_component in index.html (the hook that bound the
+   interaction; webflow.js untouched), so no scale is ever written. The cards keep the sticky top steps from N17
+   (1.5 / 5 / 8.5rem) and share one width and the same left and right edges; only the vertical offset stacks them.
+   Tab chips: each card's tab sits further right than the previous one (per-card modifier classes
+   .is-2 / .is-3, no attribute selector needed), offsets built from spacing tokens. */
+.espacios_tab {
+    left: var(--_spacing-semantics---gap--gap-lg);
+}
+
+.espacios_tab.is-2 {
+    left: calc(var(--_spacing-semantics---gap--gap-lg) + 3 * var(--_spacing-semantics---gap--gap-2xl));
+}
+
+.espacios_tab.is-3 {
+    left: calc(var(--_spacing-semantics---gap--gap-lg) + 6 * var(--_spacing-semantics---gap--gap-2xl));
+}
+
+/* Card CTA: the "Saber más" button is part of the text block (markup moved from the absolute .layer into
+   .espacios_card-content-top), so it follows the paragraph on the text's own left edge on every card. The old
+   dock-clearance padding is gone: nothing sits at the card bottom any more. */
+.espacios_card-cta {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: var(--_spacing-semantics---gap--gap-md);
+}
+
+@media (max-width: 767px) {
+    .espacios_tab,
+    .espacios_tab.is-2,
+    .espacios_tab.is-3 {
+        left: var(--_spacing-semantics---gap--gap-md);
+    }
+
+}
+
+/* ESPACIOS STACK — card width. The stack wrapper is a wrapping flex row and the
+   cards had no width, so each card sized to its own content. Below ~1920px the
+   content is wider than the row and the cards clamp to full width (looked equal);
+   on wider screens they shrank to content, so the three cards had three widths. */
+.espacios_card {
+    width: 100%;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: 100%;
+}
+
+/* ═══ MIGRATION P0b — utility pages (cs, baja, 404) ═══ */
+/* One centred message panel on the dark scheme (confirmar-suscripcion, baja) and the 404 hero
+   with the console on the page. Radius tokens only, no pill, no raw colour. */
+.pe-util_section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.pe-util_panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: var(--_spacing-semantics---gap--gap-md);
+    width: 100%;
+    max-width: 36rem;
+    margin-right: auto;
+    margin-left: auto;
+    padding-top: var(--_spacing-semantics---padding--pad-section-lg);
+    padding-right: var(--_spacing-semantics---padding--pad-section-lg);
+    padding-bottom: var(--_spacing-semantics---padding--pad-section-lg);
+    padding-left: var(--_spacing-semantics---padding--pad-section-lg);
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-color: color-mix(in srgb, var(--color-scheme-1--text) 20%, transparent);
+    border-right-color: color-mix(in srgb, var(--color-scheme-1--text) 20%, transparent);
+    border-bottom-color: color-mix(in srgb, var(--color-scheme-1--text) 20%, transparent);
+    border-left-color: color-mix(in srgb, var(--color-scheme-1--text) 20%, transparent);
+    border-top-left-radius: var(--_radius---panel);
+    border-top-right-radius: var(--_radius---panel);
+    border-bottom-right-radius: var(--_radius---panel);
+    border-bottom-left-radius: var(--_radius---panel);
+    background-color: color-mix(in srgb, var(--color-scheme-1--text) 4%, transparent);
+    color: var(--color-scheme-1--text);
+    text-align: center;
+}
+.pe-util_title {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.pe-util_states {
+    width: 100%;
+}
+.pe-newsletter_state.is-bare {
+    max-width: none;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: var(--_spacing-semantics---gap--gap-md);
+}
+.pe-newsletter_state.is-bare[hidden] {
+    display: none;
+}
+.pe-util_text {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.pe-util_action {
+    margin-bottom: 0;
+}
+.pe-util_actions {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    column-gap: var(--_spacing-semantics---gap--gap-sm);
+    row-gap: var(--_spacing-semantics---gap--gap-sm);
+}
+.pe-util_actions.is-start {
+    justify-content: flex-start;
+}
+.pe-util_hero-msg {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    row-gap: var(--_spacing-semantics---gap--gap-md);
+    max-width: 32rem;
+    margin-top: var(--_spacing-semantics---gap--gap-lg);
+}
+.pe-util_hint {
+    opacity: 0.7;
+}
+.pe-util_stage {
+    width: 100%;
+    max-width: 31.25rem;
+    margin-right: auto;
+    margin-left: auto;
+}
+@media (max-width: 767px) {
+    .pe-util_panel {
+        padding-top: var(--_spacing-semantics---padding--pad-section-md);
+        padding-right: var(--_spacing-semantics---padding--pad-section-md);
+        padding-bottom: var(--_spacing-semantics---padding--pad-section-md);
+        padding-left: var(--_spacing-semantics---padding--pad-section-md);
+    }
+    .pe-util_actions {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+    }
+    .pe-util_hint {
+        display: none;
+    }
+    /* phones: the on-page console is hidden by pe-console.css and only appears docked as the menu sheet.
+       The column must stay rendered (a display:none ancestor gives the dock a 0x0 box), so it collapses. */
+    .content-right.pe-util_hero-col {
+        position: absolute;
+        width: 0;
+        height: 0;
+        min-height: 0;
+        min-width: 0;
+        padding-top: 0;
+        padding-right: 0;
+        padding-bottom: 0;
+        padding-left: 0;
+        overflow-x: hidden;
+        overflow-y: hidden;
+    }
+}
+
+/* ═══ MIGRATION P1 — index ═══ */
+/* flwr 1.6 type migration (docs/handoff-tools/migrate_type.py). Layout that rode on the removed type classes,
+   restored on each element's own layout class (chained to the flwr class so it outranks the tag reset).
+   The hero CTA, ENVIAR, hero lede, right-aligned sub-label and struck-price rules below also serve talleres-v2. */
+.two-columns.text-reveal {
+    column-count: 2;
+}
+
+.hero_lede.f-text-lead {
+    margin-top: clamp(0.25rem, 1vh, 0.75rem);
+    margin-bottom: 0;
+    max-width: 34rem;
+}
+
+.button.hero_cta {
+    white-space: nowrap;
+}
+
+.button.is-form {
+    padding-top: var(--_spacing-semantics---padding--pad-section-xs);
+    padding-right: var(--_spacing-semantics---padding--pad-section-lg);
+    padding-bottom: var(--_spacing-semantics---padding--pad-section-xs);
+    padding-left: var(--_spacing-semantics---padding--pad-section-lg);
+    white-space: nowrap;
+}
+
+.precio-antes.f-text-h3 {
+    text-decoration-line: line-through;
+}
+
+@media (max-width: 991px) {
+    .two-columns.text-reveal {
+        column-count: 1;
+    }
+
+    .text-align-right.f-text-h6 {
+        text-align: left;
+    }
+}
+
+@media (max-width: 478px) {
+    .button.hero_cta {
+        flex-grow: 1;
+        flex-shrink: 1;
+        flex-basis: 0%;
+        min-width: 0;
+        padding-right: var(--_spacing-semantics---padding--pad-section-xs);
+        padding-left: var(--_spacing-semantics---padding--pad-section-xs);
+        text-align: center;
+    }
+
+    .button.max-width-full-mobile.hero_cta {
+        align-self: stretch;
+    }
+
+    .button.is-form {
+        padding-right: var(--_spacing-semantics---padding--pad-section-md);
+        padding-left: var(--_spacing-semantics---padding--pad-section-md);
+    }
+}
+
+/* ═══ MIGRATION P1 — talleres-v2 ═══ */
+/* flwr 1.6 type migration (docs/handoff-tools/migrate_type.py). The hero CTA, ENVIAR, hero lede, text-align-right and
+   struck-price rules live in the MIGRATION P1 — index block above (same classes). Only what talleres adds: */
+.similar-card_title.f-text-h3 {
+    margin-top: var(--_spacing-semantics---padding--pad-section-2xs);
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+
+/* ═══ MIGRATION P1 — fix: talleres price strike (overrides MIGRATION P1 — index) ═══ */
+/* The index block strikes .precio-antes.f-text-h3 for every page. Talleres' old price was never struck: restore it. */
+.precio-antes.f-text-h3.f-margin-top-5 {
+    text-decoration-line: none;
+}
+
+/* ═══ MIGRATION P1 — cenas-v2 ═══ */
+/* flwr 1.6 type migration. Hero CTA, ENVIAR, hero lede, struck price, text-align-right and similar-card_title rules live in
+   the index / talleres-v2 blocks above. Shared by cenas-v2, team-building-v2 and the other migrated pages: */
+.hero_title.f-text-hero {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.similar-card_sub.f-text-eyebrow {
+    display: inline-block;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/* ═══ MIGRATION P1 — team-building-v2 ═══ */
+/* flwr 1.6 type migration. Everything this page needs is in the index / talleres-v2 / cenas-v2 blocks above
+   (hero title + similar-card_sub rules are shared). Only the long-title phone fit is page-specific, and
+   f-text-hero already fits the title to the viewport, so nothing else is appended. */
+
+/* ═══ MIGRATION P1 — newsletter ═══ */
+/* flwr 1.6 type migration. The removed .button.is-large carried nowrap and a phone side padding; hero submit only
+   (the footer submit is .is-small and keeps its own padding). */
+.pe-newsletter_button.f-text-ui-lg {
+    white-space: nowrap;
+}
+
+@media (max-width: 478px) {
+    .pe-newsletter_button.f-text-ui-lg {
+        padding-right: var(--_spacing-semantics---padding--pad-section-sm);
+        padding-left: var(--_spacing-semantics---padding--pad-section-sm);
+    }
+}
+
+/* ═══ MIGRATION P1 — 404 ═══ */
+/* flwr 1.6 type migration. 404 needs no new rules: hero title margin rule lives in the cenas-v2 block above. */
+
+/* ═══ MIGRATION P1 — la-escuela-v2 ═══ */
+/* flwr 1.6 type migration. Layout that rode on removed type classes, restored on the element's own layout class.
+   Hero CTA, ENVIAR, hero lede and two-column manifesto rules live in the MIGRATION P1 — index block. */
+.metodo_fase-title.f-text-h1 {
+    margin-top: var(--_spacing-semantics---gap--gap-sm);
+    margin-bottom: var(--_spacing-semantics---gap--gap-md);
+    color: var(--color-scheme-1--accent);
+}
+
+.metodo_manifesto-title.f-text-poster {
+    margin-bottom: var(--_spacing-semantics---gap--gap-xl);
+}
+
+.metodo_manifesto-question.f-text-h2 {
+    margin-bottom: var(--_spacing-semantics---gap--gap-xl);
+    max-width: 22ch;
+}
+
+.metodo_manifesto-text.f-text-lead {
+    max-width: none;
+}
+
+.metodo_pilar-subtitle.f-text-h4 {
+    margin-bottom: var(--_spacing-semantics---gap--gap-xl);
+    max-width: 24ch;
+}
+
+.cafeteria_text.f-text-lead {
+    max-width: 44ch;
+}
+
+.metodo_card-title.f-text-h4 {
+    overflow-wrap: break-word;
+}
+
+/* ═══ MIGRATION P1 — nuestras-caras-v2 ═══ */
+/* flwr 1.6 type migration. Layout that rode on removed type classes, restored on the element's own layout class. */
+.caras_founders-text.f-text-lead {
+    max-width: 36rem;
+}
+
+.caras_bio-card-name.f-text-h3 {
+    margin-bottom: var(--_spacing-semantics---padding--pad-section-sm);
+    color: inherit;
+}
+
+.caras_contacto-line.f-text-lead {
+    margin-top: var(--_spacing-semantics---padding--pad-section-2xs);
+}
+
+/* ═══ MIGRATION P1 — todos-nuestros-talleres-v2 / taller-item-v2 / confirmar-suscripcion / baja ═══ */
+/* flwr 1.6 type migration. Hero CTA nowrap/phone padding, ENVIAR padding, hero lede and .similar-card_title rules live in
+   the index / talleres-v2 blocks above (same classes). cs and baja need no layout rules. Only what these pages add: */
+.similar-card_sub.f-text-eyebrow {
+    display: inline-block;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/* ═══ MIGRATION P1 — cleanup (overrides earlier blocks: see comments) ═══ */
+/* Older project rules (.chef-card_name.caras_perfil-name ~5039, .cafeteria_title.metodo_pilar-title ~4783) set a
+   hard-coded size/weight that outranked the f-text-* role. Re-point those properties at the role's own cell variables
+   (set by .f-text-h1 / .f-text-h3 on the same element) so the role values apply. Extra f-text class raises specificity. */
+.chef-card_name.caras_perfil-name.f-text-h1 {
+    font-size: var(--_text-style---size);
+}
+
+.cafeteria_title.metodo_pilar-title.f-text-h3 {
+    font-size: var(--_text-style---size);
+    font-weight: var(--_text-style---weight);
+}
+
+/* ═══ MIGRATION P1 — legal pages ═══ */
+/* aviso-legal, condiciones-de-cancelacion, politica-de-cookies, politica-de-privacidad share one article.
+   Type comes from flwr classes in the markup (f-text-h4 headings, f-text-body text). These rules only carry
+   measure and rhythm. The older .pe-legal block above is no longer referenced (container renamed).
+   Margins are chained to the flwr class so they outrank the [data-flwr] tag reset. */
+.pe-legal_article {
+    width: 100%;
+    max-width: 46rem;
+    margin-right: auto;
+    margin-left: auto;
+    padding-top: var(--_spacing-semantics---padding--pad-section-md);
+    padding-bottom: var(--_spacing-semantics---padding--pad-section-md);
+}
+.pe-legal_heading.f-text-h4 {
+    margin-top: var(--_spacing-semantics---gap--gap-xl);
+    margin-bottom: var(--_spacing-semantics---gap--gap-sm);
+}
+.pe-legal_heading.f-text-h4.is-first {
+    margin-top: 0;
+}
+.pe-legal_text.f-text-body {
+    margin-top: 0;
+    margin-bottom: var(--_spacing-semantics---gap--gap-sm);
+}
+.pe-legal_list.f-text-body {
+    margin-top: 0;
+    margin-bottom: var(--_spacing-semantics---gap--gap-sm);
+    padding-left: var(--_spacing-semantics---gap--gap-md);
+    list-style-type: disc;
+    list-style-position: outside;
+}
+.pe-legal_item {
+    margin-bottom: var(--_spacing-semantics---gap--gap-xs);
+}
+.pe-legal_link {
+    text-decoration-line: underline;
+    text-underline-offset: 0.2em;
+}
+.pe-legal_table.f-text-body {
+    width: 100%;
+    margin-top: var(--_spacing-semantics---gap--gap-xs);
+    margin-bottom: var(--_spacing-semantics---gap--gap-md);
+    border-collapse: collapse;
+}
+.pe-legal_updated.f-text-small {
+    margin-top: var(--_spacing-semantics---gap--gap-xl);
+    margin-bottom: 0;
+    opacity: 0.7;
+}
+@media (max-width: 767px) {
+    .pe-legal_article {
+        padding-top: var(--_spacing-semantics---padding--pad-section-sm);
+        padding-bottom: var(--_spacing-semantics---padding--pad-section-sm);
+    }
+    .pe-legal_heading.f-text-h4 {
+        margin-top: var(--_spacing-semantics---gap--gap-lg);
+    }
+    .pe-legal_table.f-text-body {
+        display: block;
+        overflow-x: auto;
+    }
+}
+
+/* ═══ MIGRATION P1 — checkout / pago-fallido / reserva-confirmada ═══ */
+/* Transactional pages on the utility-page chrome. pago-fallido and reserva-confirmada reuse the centred
+   .pe-util_panel (MIGRATION P0b) on the existing .booking-result_content; checkout keeps its layout and its
+   .checkout_container takes the same panel surface. Radius roles only; type comes from the f-text-* classes. */
+.pe-util_panel.is-result {
+    align-items: stretch;
+    row-gap: 0;
+    max-width: 40rem;
+}
+
+.booking-result_actions[hidden] {
+    display: none;
+}
+
+.checkout_container.is-panel {
+    max-width: 56.25rem;
+    padding-top: var(--_spacing-semantics---padding--pad-section-lg);
+    padding-right: var(--_spacing-semantics---padding--pad-section-lg);
+    padding-bottom: var(--_spacing-semantics---padding--pad-section-lg);
+    padding-left: var(--_spacing-semantics---padding--pad-section-lg);
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-color: color-mix(in srgb, var(--color-scheme-1--text) 20%, transparent);
+    border-right-color: color-mix(in srgb, var(--color-scheme-1--text) 20%, transparent);
+    border-bottom-color: color-mix(in srgb, var(--color-scheme-1--text) 20%, transparent);
+    border-left-color: color-mix(in srgb, var(--color-scheme-1--text) 20%, transparent);
+    border-top-left-radius: var(--_radius---panel);
+    border-top-right-radius: var(--_radius---panel);
+    border-bottom-right-radius: var(--_radius---panel);
+    border-bottom-left-radius: var(--_radius---panel);
+    background-color: color-mix(in srgb, var(--color-scheme-1--text) 4%, transparent);
+}
+
+.checkout_summary {
+    border-top-left-radius: var(--_radius---card);
+    border-top-right-radius: var(--_radius---card);
+    border-bottom-right-radius: var(--_radius---card);
+    border-bottom-left-radius: var(--_radius---card);
+}
+
+.checkout_input {
+    border-top-left-radius: var(--_radius---control);
+    border-top-right-radius: var(--_radius---control);
+    border-bottom-right-radius: var(--_radius---control);
+    border-bottom-left-radius: var(--_radius---control);
+}
+
+/* Margins that rode on the removed font rules, restored on each element's own class */
+.checkout_title.f-text-h3 {
+    margin-top: 0;
+    margin-bottom: var(--_spacing-semantics---gap--gap-sm);
+}
+
+.checkout_count.f-text-small,
+.checkout_subtitle.f-text-body {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.booking-result_text.f-text-lead {
+    margin-top: var(--_spacing-semantics---gap--gap-sm);
+    margin-bottom: 0;
+}
+
+.booking-result_note.f-text-small {
+    margin-top: var(--_spacing-semantics---gap--gap-sm);
+    margin-bottom: 0;
+}
+
+.booking-result_reference-label.f-text-eyebrow {
+    margin-bottom: var(--_spacing-semantics---padding--pad-section-2xs);
+}
+
+.booking-result_reference-hint.f-text-tiny {
+    margin-top: var(--_spacing-semantics---padding--pad-section-2xs);
+    margin-bottom: 0;
+}
+
+/* Non-happy states: empty cart, loading, error, return pages without a reference. All in normal flow. */
+.checkout_empty {
+    padding-top: var(--_spacing-semantics---padding--pad-section-md);
+    padding-right: 0;
+    padding-bottom: var(--_spacing-semantics---padding--pad-section-md);
+    padding-left: 0;
+}
+
+.checkout_empty-icon {
+    width: 3.5rem;
+    height: 3.5rem;
+}
+
+.checkout_empty-title.f-text-h3 {
+    margin-top: 0;
+    margin-bottom: var(--_spacing-semantics---gap--gap-sm);
+}
+
+.checkout_empty-text.f-text-body {
+    margin-top: 0;
+    margin-bottom: var(--_spacing-semantics---gap--gap-md);
+}
+
+.checkout_loading-text.f-text-body {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.checkout_summary-title.f-text-h5 {
+    margin-top: 0;
+    margin-bottom: var(--_spacing-semantics---gap--gap-sm);
+}
+
+.checkout_label.f-text-label {
+    margin-bottom: var(--_spacing-semantics---padding--pad-section-2xs);
+}
+
+.checkout_total-label.f-text-lead,
+.checkout_total-value.f-text-lead {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.checkout_error.f-text-small {
+    margin-top: var(--_spacing-semantics---gap--gap-md);
+    margin-bottom: var(--_spacing-semantics---gap--gap-md);
+}
+
+.checkout_terms.f-text-small {
+    margin-top: var(--_spacing-semantics---gap--gap-md);
+    margin-bottom: 0;
+    text-align: center;
+}
+
+.checkout_trust.f-text-small {
+    margin-top: var(--_spacing-semantics---gap--gap-sm);
+    margin-bottom: 0;
+}
+
+.checkout_container.is-panel {
+    width: 100%;
+}
+
+@media (max-width: 767px) {
+    .pe-util_panel.is-result {
+        max-width: none;
+    }
+
+    .checkout_container.is-panel {
+        padding-top: var(--_spacing-semantics---padding--pad-section-md);
+        padding-right: var(--_spacing-semantics---padding--pad-section-md);
+        padding-bottom: var(--_spacing-semantics---padding--pad-section-md);
+        padding-left: var(--_spacing-semantics---padding--pad-section-md);
+    }
+}
+
+/* ═══ MIGRATION P1 — packs / canjear-pack ═══ */
+/* flwr 1.6 type migration. Hero CTA, hero lede, struck price and text-align-right rules live in the index / talleres-v2 blocks above.
+   The removed type classes bundled nothing page-specific here; what follows fixes the packs status message and the redeem panel states. */
+.pe-redeem {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: auto;
+}
+/* pe-packs.js builds this paragraph (no type class). The site-wide LUMOS line-height trim gives every <p> negative ::before/::after
+   margins; the second one escapes the paragraph, so its box ended below its parent and the legal line drew on top of it. */
+html .pe-packs_status.pe-packs_status::before,
+html .pe-packs_status.pe-packs_status::after {
+    content: none;
+    display: none;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.pe-packs_status.pe-packs_status {
+    max-width: 32rem;
+    margin-top: auto;
+    margin-right: auto;
+    margin-bottom: auto;
+    margin-left: auto;
+    font-family: var(--_text-style---family, var(--_typography---family--sans));
+    font-size: var(--_typography---size--body);
+    font-weight: var(--_typography---weight--regular);
+    line-height: var(--_typography---leading--normal);
+    text-align: center;
+    text-wrap: balance;
+}
+.pe-redeem_links.pe-redeem_links {
+    margin-top: var(--_spacing-semantics---padding--pad-section-xs);
+    margin-bottom: 0;
+}
+/* packs list states (loading, empty, error) share the status look: body type, centred, in flow. The error line is built by
+   webflow-packs.js as p.ep-small.ep-scope (muted 14px by the script's own CSS). */
+.pe-packs_list[data-state="loading"]::before,
+.pe-packs_list[data-state="empty"]::before {
+    font-family: var(--_text-style---family, var(--_typography---family--sans));
+    font-size: var(--_typography---size--body);
+    line-height: var(--_typography---leading--normal);
+    text-align: center;
+}
+.ep-scope.ep-small {
+    max-width: 32rem;
+    margin-right: auto;
+    margin-left: auto;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    color: inherit;
+    font-size: var(--_typography---size--body);
+    font-weight: var(--_typography---weight--medium);
+    line-height: var(--_typography---leading--normal);
+    text-align: center;
+}
+/* without webflow-packs.js nobody hides the card template: keep it out of sight (the script removes this attribute from each clone) */
+.precios_card[data-pack-template] {
+    display: none;
+}
+
+/* ═══ STATES — site-wide sweep ═══ */
+/* Root cause of the overlaps: the legacy LUMOS line-height trim gives every <p> and heading outside .u-text-trim-off a negative
+   ::before/::after margin. On a short state message the box collapses (a one-line .pe-newsletter_msg measured 10px) and the text
+   draws over its neighbours. State paragraphs opt out of the trim here; every rule below is the shared state look. */
+html .pe-newsletter_msg.pe-newsletter_msg.pe-newsletter_msg::before,
+html .pe-newsletter_msg.pe-newsletter_msg.pe-newsletter_msg::after,
+html .pe-state_title.pe-state_title.pe-state_title::before,
+html .pe-state_title.pe-state_title.pe-state_title::after,
+html .cart-modal_empty-text.cart-modal_empty-text.cart-modal_empty-text::before,
+html .cart-modal_empty-text.cart-modal_empty-text.cart-modal_empty-text::after {
+    content: none;
+    display: none;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/* Newsletter forms (footer + /newsletter): inline message panel, same family as the /baja and /confirmar-suscripcion states */
+.pe-newsletter_msg {
+    padding-top: var(--_spacing-semantics---padding--pad-section-sm);
+    padding-right: var(--_spacing-semantics---padding--pad-section-sm);
+    padding-bottom: var(--_spacing-semantics---padding--pad-section-sm);
+    padding-left: var(--_spacing-semantics---padding--pad-section-sm);
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-color: color-mix(in srgb, currentColor 25%, transparent);
+    border-right-color: color-mix(in srgb, currentColor 25%, transparent);
+    border-bottom-color: color-mix(in srgb, currentColor 25%, transparent);
+    border-left-color: color-mix(in srgb, currentColor 25%, transparent);
+    border-top-left-radius: var(--_radius---control);
+    border-top-right-radius: var(--_radius---control);
+    border-bottom-right-radius: var(--_radius---control);
+    border-bottom-left-radius: var(--_radius---control);
+    background-color: color-mix(in srgb, currentColor 4%, transparent);
+}
+.pe-newsletter_msg[data-newsletter-success] {
+    border-top-color: color-mix(in srgb, var(--_theme---status--success) 60%, transparent);
+    border-right-color: color-mix(in srgb, var(--_theme---status--success) 60%, transparent);
+    border-bottom-color: color-mix(in srgb, var(--_theme---status--success) 60%, transparent);
+    border-left-color: color-mix(in srgb, var(--_theme---status--success) 60%, transparent);
+}
+.pe-newsletter_msg[data-newsletter-error] {
+    border-top-color: color-mix(in srgb, var(--_theme---status--alert) 70%, transparent);
+    border-right-color: color-mix(in srgb, var(--_theme---status--alert) 70%, transparent);
+    border-bottom-color: color-mix(in srgb, var(--_theme---status--alert) 70%, transparent);
+    border-left-color: color-mix(in srgb, var(--_theme---status--alert) 70%, transparent);
+}
+
+/* Webflow form result panels (contact + inscription forms). The base .w-form-done / .w-form-fail paint a grey / pink block with
+   its own text colour, which turned the success line unreadable on dark sections. Panels now follow the section colours. */
+.form_message-success-wrapper.w-form-done,
+.form_message-error-wrapper.w-form-fail {
+    margin-top: var(--_spacing-semantics---padding--pad-section-sm);
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    background-color: transparent;
+    color: inherit;
+    text-align: center;
+}
+.form_message-success,
+.form_message-error {
+    padding-top: var(--_spacing-semantics---padding--pad-section-md);
+    padding-right: var(--_spacing-semantics---padding--pad-section-md);
+    padding-bottom: var(--_spacing-semantics---padding--pad-section-md);
+    padding-left: var(--_spacing-semantics---padding--pad-section-md);
+    border-top-left-radius: var(--_radius---panel);
+    border-top-right-radius: var(--_radius---panel);
+    border-bottom-right-radius: var(--_radius---panel);
+    border-bottom-left-radius: var(--_radius---panel);
+    background-color: color-mix(in srgb, currentColor 4%, transparent);
+    color: inherit;
+}
+.form_message-success {
+    border-top-color: color-mix(in srgb, var(--_theme---status--success) 60%, transparent);
+    border-right-color: color-mix(in srgb, var(--_theme---status--success) 60%, transparent);
+    border-bottom-color: color-mix(in srgb, var(--_theme---status--success) 60%, transparent);
+    border-left-color: color-mix(in srgb, var(--_theme---status--success) 60%, transparent);
+}
+.form_message-error {
+    border-top-color: color-mix(in srgb, var(--_theme---status--alert) 70%, transparent);
+    border-right-color: color-mix(in srgb, var(--_theme---status--alert) 70%, transparent);
+    border-bottom-color: color-mix(in srgb, var(--_theme---status--alert) 70%, transparent);
+    border-left-color: color-mix(in srgb, var(--_theme---status--alert) 70%, transparent);
+}
+.success-text.success-text,
+.error-text.error-text {
+    margin-top: 0;
+    margin-bottom: 0;
+    color: inherit;
+    text-align: center;
+}
+
+/* Calendar "no results" panel: title, hint and reset button in flow with even spacing, button at its own width */
+.empty_state-wrap {
+    padding-top: var(--_spacing-semantics---padding--pad-section-xl);
+    padding-bottom: var(--_spacing-semantics---padding--pad-section-xl);
+}
+.pe-state_title {
+    margin-top: 0;
+    margin-bottom: 0;
+    text-wrap: balance;
+}
+.pe-state_text {
+    margin-top: 0;
+    margin-bottom: 0;
+    text-align: center;
+}
+.pe-state_action.pe-state_action {
+    width: auto;
+    max-width: 100%;
+    margin-top: 0;
+    margin-bottom: 0;
+    flex-grow: 0;
+    align-self: center;
+}
+
+@media (max-width: 767px) {
+    .form_message-success,
+    .form_message-error {
+        padding-top: var(--_spacing-semantics---padding--pad-section-sm);
+        padding-right: var(--_spacing-semantics---padding--pad-section-sm);
+        padding-bottom: var(--_spacing-semantics---padding--pad-section-sm);
+        padding-left: var(--_spacing-semantics---padding--pad-section-sm);
+    }
+    .empty_state-wrap {
+        padding-top: var(--_spacing-semantics---padding--pad-section-lg);
+        padding-bottom: var(--_spacing-semantics---padding--pad-section-lg);
+    }
+}
+
+
+/* ═══ MENU — Reservar/Cerrar pair ═══ */
+/* One matched pair in the open menu: same 40px box, same top edge, same cream
+   1px border + offset shadow as Reservar. The ✕ keeps its original drawing
+   (two 24×4px amber bars). Its shared 48px .menu-icon box overflows the 24px
+   row invisibly (transparent, centred), so it no longer pushes the height;
+   padding-right is short because that box already carries ~12px of air. */
+.navbar_menu-close-button-wrapper.button {
+    margin-top: 1px;    /* pe-console.css side layout puts Cerrar at top 32px, Reservar at 33px */
+    padding-top: 7px;
+    padding-right: 10px;
+    padding-bottom: 7px;
+    padding-left: 24px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-color: var(--color-scheme-1--text);
+    border-right-color: var(--color-scheme-1--text);
+    border-bottom-color: var(--color-scheme-1--text);
+    border-left-color: var(--color-scheme-1--text);
+    justify-content: center;
+    align-items: center;
+}
+
+.navbar_menu-close-button-content {
+    column-gap: 0rem;
+    height: 24px;
+    align-items: center;
+}
+
+.menu-close_line-top,
+.menu-close_line-bottom {
+    width: 24px;
+    height: 4px;
+}
+
+/* ═══ LIST CONTROLS — unified search/filter/sort/columns ═══
+   One controls bar (.pe-lc) and one grid (.pe-lc_list) for every event / workshop
+   list: Calendario on index, talleres, cenas, team-building and the legacy modal
+   copies, plus the Todos list. Everything reads flwr tokens: field padding, field
+   radius (radius role control), body/small type, accent, focus ring, spacing steps.
+   flwr gaps (logged in notes): no control-height token, and no range or segmented
+   control, so --pe-lc-h and the column slider are built here from flwr tokens.
+   js/pe-list-controls.js sets --pe-list-cols and the combo class is-cols-N. */
+
+/* ── Controls bar: one height, one border, one radius, one type role ───── */
+.pe-lc {
+    --pe-lc-bw: 1.5px;
+    --pe-lc-h: calc(var(--_component---field--padding-block) * 2 + var(--_typography---size--body) * var(--_typography---leading--snug) + var(--pe-lc-bw) * 2);
+    --pe-lc-pad-x: var(--_component---field--padding-inline);
+    --pe-lc-gap: var(--_spacing---step--3);
+}
+
+.pe-lc_bar.pe-lc_bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: flex-start;
+    column-gap: var(--pe-lc-gap);
+    row-gap: var(--pe-lc-gap);
+    width: 100%;
+}
+
+.pe-lc_control.pe-lc_control {
+    box-sizing: border-box;
+    height: var(--pe-lc-h);
+    min-height: var(--pe-lc-h);
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-right: var(--pe-lc-pad-x);
+    padding-left: var(--pe-lc-pad-x);
+    border-top-width: var(--pe-lc-bw);
+    border-right-width: var(--pe-lc-bw);
+    border-bottom-width: var(--pe-lc-bw);
+    border-left-width: var(--pe-lc-bw);
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-color: currentColor;
+    border-right-color: currentColor;
+    border-bottom-color: currentColor;
+    border-left-color: currentColor;
+    border-top-left-radius: var(--_radius---control);
+    border-top-right-radius: var(--_radius---control);
+    border-bottom-left-radius: var(--_radius---control);
+    border-bottom-right-radius: var(--_radius---control);
+    background-color: transparent;
+    color: inherit;
+    font-family: var(--_typography---family--sans);
+    font-size: var(--_typography---size--small);
+    font-weight: var(--_typography---weight--medium);
+    line-height: var(--_typography---leading--none);
+    letter-spacing: var(--_typography---tracking--normal);
+    text-transform: none;
+}
+
+.pe-lc_control.pe-lc_control:focus-visible,
+.pe-lc_control.pe-lc_control:focus-within {
+    outline-style: none;
+    border-top-color: var(--_component---field--border-focus);
+    border-right-color: var(--_component---field--border-focus);
+    border-bottom-color: var(--_component---field--border-focus);
+    border-left-color: var(--_component---field--border-focus);
+    box-shadow: var(--_component---field--ring-focus);
+}
+
+.pe-lc_search.pe-lc_search {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 12rem;
+    width: auto;
+    max-width: 18rem;
+}
+
+.pe-lc_select.pe-lc_select {
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: 10rem;
+    min-width: 9rem;
+}
+
+.pe-lc_field.pe-lc_field.select-custom_trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    column-gap: var(--_spacing---step--2);
+    width: 100%;
+}
+
+.pe-lc_chips.pe-lc_chips {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    column-gap: var(--_spacing---step--2);
+    row-gap: var(--_spacing---step--2);
+}
+
+.pe-lc_chip.pe-lc_chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: var(--_spacing---step--2);
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-right: var(--_spacing---step--3);
+    padding-left: var(--_spacing---step--3);
+    white-space: nowrap;
+    cursor: pointer;
+    transition-property: background-color, color, border-color;
+    transition-duration: var(--_flwr-rt---transition-fast);
+    transition-timing-function: var(--_flwr-rt---ease-standard);
+    transition-delay: 0s;
+}
+
+.pe-lc_chip.pe-lc_chip.is-list-active,
+.pe-lc_chip.pe-lc_chip.is-active {
+    background-color: var(--_theme---accent--main);
+    color: var(--_theme---accent--text);
+    border-top-color: var(--_theme---accent--main);
+    border-right-color: var(--_theme---accent--main);
+    border-bottom-color: var(--_theme---accent--main);
+    border-left-color: var(--_theme---accent--main);
+}
+
+/* Column slider: label + live count, then the range */
+.pe-lc_cols.pe-lc_cols {
+    display: flex;
+    align-items: center;
+    column-gap: var(--_spacing---step--3);
+    flex-grow: 0;
+    flex-shrink: 0;
+    min-width: 12rem;
+    cursor: pointer;
+}
+
+.pe-lc_cols-label {
+    white-space: nowrap;
+}
+
+.pe-lc_cols-out {
+    display: inline-block;
+    min-width: 1ch;
+    text-align: center;
+}
+
+.pe-lc_range {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 5rem;
+    min-width: 0;
+    height: auto;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-right: 0;
+    margin-left: 0;
+    accent-color: var(--_theme---accent--main);
+    cursor: pointer;
+}
+
+/* ── List grid: column count from --pe-list-cols, cap per breakpoint ───── */
+.pe-lc_list.pe-lc_list {
+    --pe-lc-cap: 3;
+    --pe-list-cols: 3;
+    --pe-lc-gap-card: var(--_spacing---step--5);
+    display: grid;
+    grid-template-columns: repeat(var(--pe-list-cols), minmax(0, 1fr));
+    grid-auto-flow: row;
+    column-gap: var(--pe-lc-gap-card);
+    row-gap: var(--pe-lc-gap-card);
+    align-items: start;
+    justify-items: stretch;
+    /* card shape, default = 3 columns (about square) */
+    --pe-lc-ratio: 1 / 1;
+    --pe-lc-tpl: minmax(0, 1fr) auto;
+    --pe-lc-clamp: 2;
+    --pe-lc-cta-dir: row;
+    --pe-lc-side-align: start;
+    --pe-lc-date-c: 1; --pe-lc-date-cs: 1; --pe-lc-date-r: 1; --pe-lc-date-rs: 1;
+    --pe-lc-price-c: 2; --pe-lc-price-cs: 1; --pe-lc-price-r: 1; --pe-lc-price-rs: 1;
+    --pe-lc-body-c: 1; --pe-lc-body-cs: 2; --pe-lc-body-r: 2; --pe-lc-body-rs: 1;
+    --pe-lc-tags-c: 1; --pe-lc-tags-cs: 2; --pe-lc-tags-r: 3; --pe-lc-tags-rs: 1;
+    --pe-lc-cta-c: 1; --pe-lc-cta-cs: 2; --pe-lc-cta-r: 4; --pe-lc-cta-rs: 1;
+}
+
+/* 2 columns: shorter rectangle, date | text | price over tags | buttons */
+.pe-lc_list.is-cols-2 {
+    --pe-lc-ratio: 2 / 1;
+    --pe-lc-tpl: max-content minmax(0, 1fr) max-content;
+    --pe-lc-clamp: 2;
+    --pe-lc-cta-dir: column;
+    --pe-lc-date-c: 1; --pe-lc-date-cs: 1; --pe-lc-date-r: 1; --pe-lc-date-rs: 2;
+    --pe-lc-body-c: 2; --pe-lc-body-cs: 1; --pe-lc-body-r: 1; --pe-lc-body-rs: 1;
+    --pe-lc-price-c: 3; --pe-lc-price-cs: 1; --pe-lc-price-r: 1; --pe-lc-price-rs: 1;
+    --pe-lc-tags-c: 2; --pe-lc-tags-cs: 1; --pe-lc-tags-r: 2; --pe-lc-tags-rs: 1;
+    --pe-lc-cta-c: 3; --pe-lc-cta-cs: 1; --pe-lc-cta-r: 2; --pe-lc-cta-rs: 1;
+}
+
+/* 1 column: full-width horizontal strip, one row of date | text | price | buttons */
+.pe-lc_list.is-cols-1 {
+    --pe-lc-ratio: auto;
+    --pe-lc-tpl: max-content minmax(0, 1fr) max-content max-content;
+    --pe-lc-clamp: 2;
+    --pe-lc-cta-dir: column;
+    --pe-lc-side-align: center;
+    --pe-lc-date-c: 1; --pe-lc-date-cs: 1; --pe-lc-date-r: 1; --pe-lc-date-rs: 2;
+    --pe-lc-body-c: 2; --pe-lc-body-cs: 1; --pe-lc-body-r: 1; --pe-lc-body-rs: 1;
+    --pe-lc-tags-c: 2; --pe-lc-tags-cs: 1; --pe-lc-tags-r: 2; --pe-lc-tags-rs: 1;
+    --pe-lc-price-c: 3; --pe-lc-price-cs: 1; --pe-lc-price-r: 1; --pe-lc-price-rs: 2;
+    --pe-lc-cta-c: 4; --pe-lc-cta-cs: 1; --pe-lc-cta-r: 1; --pe-lc-cta-rs: 2;
+}
+
+.collection-item.pe-lc_item {
+    display: block;
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: auto;
+    width: auto;
+    min-width: 0;
+}
+
+.eventos_item.pe-lc_card {
+    display: grid;
+    grid-template-columns: var(--pe-lc-tpl);
+    grid-auto-rows: auto;
+    align-items: start;
+    align-content: space-between;
+    column-gap: var(--_spacing---step--4);
+    row-gap: var(--_spacing---step--3);
+    box-sizing: border-box;
+    width: 100%;
+    height: auto;
+    aspect-ratio: var(--pe-lc-ratio);
+    /* clip, not hidden: hidden makes a scroll container and lets the ratio crush the content */
+    overflow-x: clip;
+    overflow-y: clip;
+}
+
+.pe-lc_top.pe-lc_top {
+    display: contents;
+}
+
+.pe-lc_divider.pe-lc_divider {
+    display: none;
+}
+
+.pe-lc_date {
+    grid-column-start: var(--pe-lc-date-c);
+    grid-column-end: span var(--pe-lc-date-cs);
+    grid-row-start: var(--pe-lc-date-r);
+    grid-row-end: span var(--pe-lc-date-rs);
+    align-self: start;
+}
+
+.pe-lc_price {
+    grid-column-start: var(--pe-lc-price-c);
+    grid-column-end: span var(--pe-lc-price-cs);
+    grid-row-start: var(--pe-lc-price-r);
+    grid-row-end: span var(--pe-lc-price-rs);
+    align-self: var(--pe-lc-side-align);
+}
+
+.pe-lc_body.pe-lc_body {
+    grid-column-start: var(--pe-lc-body-c);
+    grid-column-end: span var(--pe-lc-body-cs);
+    grid-row-start: var(--pe-lc-body-r);
+    grid-row-end: span var(--pe-lc-body-rs);
+    min-width: 0;
+    flex-grow: 0;
+}
+
+.pe-lc_tags.pe-lc_tags {
+    grid-column-start: var(--pe-lc-tags-c);
+    grid-column-end: span var(--pe-lc-tags-cs);
+    grid-row-start: var(--pe-lc-tags-r);
+    grid-row-end: span var(--pe-lc-tags-rs);
+    align-self: end;
+    width: auto;
+    max-width: 100%;
+}
+
+.pe-lc_cta.pe-lc_cta {
+    grid-column-start: var(--pe-lc-cta-c);
+    grid-column-end: span var(--pe-lc-cta-cs);
+    grid-row-start: var(--pe-lc-cta-r);
+    grid-row-end: span var(--pe-lc-cta-rs);
+    flex-direction: var(--pe-lc-cta-dir);
+    flex-wrap: nowrap;
+    align-self: var(--pe-lc-side-align);
+    width: auto;
+    max-width: 100%;
+}
+
+.pe-lc_text {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--pe-lc-clamp);
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+/* Todos: the search input fills its own wrapper (the wrapper carries the flex) */
+.pe-lc_search.todos_search-input {
+    width: 100%;
+    flex-basis: auto;
+    max-width: none;
+    padding-right: calc(var(--pe-lc-pad-x) * 2 + 1.25rem);
+}
+
+/* ── Tablet: 2 columns at most. Phone: 1 column, slider hidden ─────────── */
+@media (max-width: 991px) {
+    .pe-lc_list.pe-lc_list {
+        --pe-lc-cap: 2;
+        --pe-list-cols: 2;
+    }
+}
+
+@media (max-width: 767px) {
+    .pe-lc_list.pe-lc_list {
+        --pe-lc-cap: 1;
+        --pe-list-cols: 1;
+    }
+
+    /* phone: the single column is the stacked card, not the desktop strip */
+    .pe-lc_list.is-cols-1 {
+        --pe-lc-ratio: auto;
+        --pe-lc-tpl: minmax(0, 1fr) auto;
+        --pe-lc-clamp: 3;
+        --pe-lc-cta-dir: row;
+        --pe-lc-side-align: start;
+        --pe-lc-date-c: 1; --pe-lc-date-cs: 1; --pe-lc-date-r: 1; --pe-lc-date-rs: 1;
+        --pe-lc-price-c: 2; --pe-lc-price-cs: 1; --pe-lc-price-r: 1; --pe-lc-price-rs: 1;
+        --pe-lc-body-c: 1; --pe-lc-body-cs: 2; --pe-lc-body-r: 2; --pe-lc-body-rs: 1;
+        --pe-lc-tags-c: 1; --pe-lc-tags-cs: 2; --pe-lc-tags-r: 3; --pe-lc-tags-rs: 1;
+        --pe-lc-cta-c: 1; --pe-lc-cta-cs: 2; --pe-lc-cta-r: 4; --pe-lc-cta-rs: 1;
+    }
+
+    .pe-lc_cols.pe-lc_cols {
+        display: none;
+    }
+
+    .pe-lc_bar.pe-lc_bar {
+        flex-direction: row;
+    }
+
+    .pe-lc_search.pe-lc_search {
+        flex-basis: 100%;
+        max-width: none;
+    }
+
+    .pe-lc_select.pe-lc_select {
+        flex-grow: 1;
+        flex-basis: 8rem;
+    }
+}
+
+.pe-lc_list.is-media {
+    align-items: stretch;
+}
+
+@media (max-width: 478px) {
+    .pe-lc_bar.pe-lc_bar {
+        flex-direction: row;
+    }
+
+    .pe-lc_select.pe-lc_select {
+        flex-basis: 100%;
+    }
+}
+
+/* ═══ LIST CONTROLS — round 2 (Juan, 2026-10-07 10:35) ═══
+   1. the controls bar fills the row (every control grows; still wraps)
+   2. cards rest cream with dark accents; yellow (scheme 4) is hover / keyboard focus only
+   3. card buttons at the site's normal size (44 px target)
+   4. shape: 3 columns = landscape, not square; the ratio is a minimum, content never clips
+   5. soft entrances: tags, the "no results" block and the custom selects fade + scale in
+      (cards and reflow are animated by js/pe-list-controls.js, section 4) */
+.pe-lc_bar.pe-lc_bar > * {
+    flex-grow: 1;
+}
+.pe-lc_search.pe-lc_search {
+    flex-grow: 3;
+    flex-basis: 14rem;
+    max-width: none;
+}
+.pe-lc_select.pe-lc_select {
+    flex-grow: 1;
+    flex-basis: 9rem;
+}
+.pe-lc_chips.pe-lc_chips {
+    flex-grow: 3;
+}
+.pe-lc_chips.pe-lc_chips > * {
+    flex-grow: 1;
+}
+.pe-lc_cols.pe-lc_cols {
+    flex-grow: 1;
+}
+
+.eventos_item.pe-lc_card {
+    background-color: var(--color-scheme-1--background);
+    color: var(--color-scheme-1--text);
+    overflow-x: visible;
+    overflow-y: visible;
+    transition-property: background-color, color, border-color, transform;
+    transition-duration: 0.28s;
+    transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition-delay: 0s;
+}
+.eventos_item.pe-lc_card:hover,
+.eventos_item.pe-lc_card:focus-within {
+    --color-scheme-1--text: var(--color-scheme-4--text);
+    --color-scheme-1--background: var(--color-scheme-4--background);
+    --color-scheme-1--foreground: var(--color-scheme-4--foreground);
+    --color-scheme-1--border: var(--color-scheme-4--border);
+    --color-scheme-1--accent: var(--color-scheme-4--accent);
+    background-color: var(--color-scheme-4--background);
+    color: var(--color-scheme-4--text);
+}
+
+.pe-lc_cta.pe-lc_cta .button {
+    min-height: 44px;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+/* normal-size buttons can't always share a row: they wrap and share the width */
+.pe-lc_cta.pe-lc_cta {
+    flex-wrap: wrap;
+    row-gap: var(--_spacing---step--2);
+}
+.pe-lc_cta.pe-lc_cta .button {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+}
+
+.pe-lc_list.pe-lc_list {
+    --pe-lc-ratio: 4 / 3;
+}
+.pe-lc_list.is-cols-2 {
+    --pe-lc-ratio: 2 / 1;
+}
+.pe-lc_list.is-cols-1 {
+    --pe-lc-ratio: auto;
+}
+
+@keyframes pe-lc-in {
+    from { opacity: 0; transform: scale(0.96) translateY(6px); }
+    to { opacity: 1; transform: none; }
+}
+.tag.is-filter-tag,
+[data-pe-list-root] .empty_state-wrap,
+[data-pe-list-root] .select-custom_list {
+    animation-name: pe-lc-in;
+    animation-duration: 0.26s;
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+    animation-fill-mode: both;
+}
+.pe-lc_chip.pe-lc_chip {
+    transition-duration: 0.22s;
+}
+@media (prefers-reduced-motion: reduce) {
+    .tag.is-filter-tag,
+    [data-pe-list-root] .empty_state-wrap,
+    [data-pe-list-root] .select-custom_list {
+        animation-name: none;
+    }
+    .eventos_item.pe-lc_card {
+        transition-duration: 0s;
+    }
+}
+
+/* ── round 2: compact card so 3 columns read landscape ──
+   date on one line (Jue 15 Oct), availability on one line, tighter rhythm */
+.pe-lc_date.pe-lc_date {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: var(--_spacing---step--2);
+    row-gap: 0;
+}
+.eventos_item.pe-lc_card {
+    row-gap: var(--_spacing---step--2);
+}
+.pe-lc_body.pe-lc_body {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: var(--_spacing---step--2);
+    row-gap: var(--_spacing---step--2);
+}
+.pe-lc_head.pe-lc_head {
+    flex-basis: 100%;
+}
+.pe-lc_avail-label.pe-lc_avail-label {
+    margin-top: 0;
+}
+
+/* ── round 2: every card in a list is the same height ──
+   all rows as tall as the tallest card (grid-auto-rows 1fr), each card fills its
+   cell; the card's own space-between keeps buttons on the bottom edge */
+.pe-lc_list.pe-lc_list {
+    align-items: stretch;
+    /* --pe-lc-row-h = tallest card, set by js/pe-list-controls.js (section 5) */
+    grid-template-rows: none;
+    grid-auto-rows: minmax(var(--pe-lc-row-h, auto), auto);
+}
+.collection-item.pe-lc_item {
+    display: flex;
+    flex-direction: column;
+}
+.eventos_item.pe-lc_card {
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: auto;
+}
+
+/* ── booking modal (#modal-1): every card the same height, actions on the bottom edge ── */
+.booking-modal_grid.booking-modal_grid.booking-modal_grid {
+    align-items: stretch;
+    grid-template-rows: none;
+    grid-auto-rows: minmax(var(--pe-lc-row-h, auto), auto);
+}
+.booking-modal_card-add.booking-modal_card-add,
+.booking-modal_card-soon.booking-modal_card-soon {
+    margin-top: auto;
+}
+
+/* ═══ BOOKING MODAL — skin ═══
+   The full-screen Calendario (#modal-1). Layout is unchanged; this block only
+   re-skins it. The modal ships its own page-embedded <style> AFTER this file,
+   so every rule here chains its class (or sits one class above) to outrank it.
+   Buttons: the site's three families, picked up by pe-motion.js from the
+   .button classes in the markup (volume = RISE, flat = POWER, small = TICK).
+   Controls: search, pager and Semanal/Mensual reuse the LIST CONTROLS tokens
+   (.pe-lc on the panel, .pe-lc_control on each field). Cards read parent
+   custom properties (--pe-bk-*), like the home product card. Type is carried
+   by f-text-* roles in the markup; only the price size is re-pointed at a
+   smaller role below. */
+
+/* the modal always reads the dark scheme, whatever the page behind it is */
+.booking-modal_component.booking-modal_component {
+    --color-scheme-1--text: var(--pe---scheme-dark--text);
+    --color-scheme-1--background: var(--pe---scheme-dark--background);
+    --color-scheme-1--border: var(--pe---scheme-dark--border);
+    --color-scheme-1--accent: var(--pe---scheme-dark--accent);
+    --color-scheme-1--foreground: var(--pe---scheme-dark--foreground);
+}
+
+/* ── Panel ─────────────────────────────────────────────────────────────── */
+.booking-modal_inner.booking-modal_inner {
+    --pe-bk-ink: var(--pe---scheme-dark--text);
+    --pe-bk-accent: var(--pe---scheme-dark--accent);
+    --pe-bk-line: color-mix(in oklab, var(--pe-bk-ink) 28%, transparent);
+    --pe-bk-surface: color-mix(in oklab, var(--pe-bk-ink) 5%, transparent);
+    --pe-bk-surface-lift: color-mix(in oklab, var(--pe-bk-accent) 9%, transparent);
+    --pe-bk-muted: color-mix(in oklab, var(--pe-bk-ink) 62%, transparent);
+    --pe-bk-seg-h: calc(var(--pe-lc-h) - var(--pe-lc-bw) * 2 - var(--_spacing---step--1) * 2);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-color: var(--pe-bk-line);
+    border-right-color: var(--pe-bk-line);
+    border-bottom-color: var(--pe-bk-line);
+    border-left-color: var(--pe-bk-line);
+    padding-top: var(--_spacing---step--6);
+    padding-right: var(--_spacing---step--6);
+    padding-bottom: var(--_spacing---step--6);
+    padding-left: var(--_spacing---step--6);
+    row-gap: var(--_spacing---step--5);
+}
+
+.booking-modal_topbar.booking-modal_topbar {
+    column-gap: var(--_spacing---step--5);
+    row-gap: var(--_spacing---step--3);
+}
+
+.booking-modal_title.booking-modal_title {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/* ── CERRAR: the menu's Cerrar (40px, cream 1px border + offset shadow, two amber 24x4 bars) ── */
+.booking-modal_close.booking-modal_close.button {
+    flex-grow: 0;
+    flex-shrink: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 7px;
+    padding-right: 10px;
+    padding-bottom: 7px;
+    padding-left: 24px;
+    column-gap: 0rem;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    background-color: var(--pe---scheme-dark--background);
+    color: var(--pe-bk-ink);
+    text-decoration-line: none;
+    transition-property: transform, box-shadow;
+    transition-duration: 0.2s, 0.2s;
+    transition-timing-function: ease, ease;
+    transition-delay: 0s, 0s;
+}
+
+/* ── Search, pager, view toggle: one control height, border, radius, type ── */
+.booking-modal_controls.booking-modal_controls {
+    flex-grow: 0;
+    flex-shrink: 1;
+    min-width: 0;
+}
+
+.booking-modal_search.booking-modal_search {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0%;
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+}
+
+.booking-modal_search-wrap.booking-modal_search-wrap {
+    column-gap: var(--_spacing---step--2);
+    row-gap: var(--_spacing---step--2);
+    flex-direction: row-reverse;
+    cursor: text;
+}
+
+.booking-modal_search-icon.booking-modal_search-icon {
+    display: inline-flex;
+    flex-grow: 0;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 1.25em;
+    height: 1.25em;
+    border-top-style: none;
+    border-right-style: none;
+    border-bottom-style: none;
+    border-left-style: none;
+    border-top-width: 0px;
+    border-right-width: 0px;
+    border-bottom-width: 0px;
+    border-left-width: 0px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    color: var(--pe-bk-muted);
+}
+
+.booking-modal_search-icon.booking-modal_search-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.booking-modal_search-wrap.booking-modal_search-wrap:focus-within {
+    border-top-color: var(--pe-bk-accent);
+    border-right-color: var(--pe-bk-accent);
+    border-bottom-color: var(--pe-bk-accent);
+    border-left-color: var(--pe-bk-accent);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--pe-bk-accent) 35%, transparent);
+}
+
+.booking-modal_toolbar.booking-modal_toolbar {
+    column-gap: var(--_spacing---step--3);
+    row-gap: var(--_spacing---step--3);
+}
+
+/* segmented controls: a bordered control that holds its own buttons */
+.pe-lc_control.pe-lc_control.is-seg {
+    display: inline-flex;
+    align-items: center;
+    flex-grow: 0;
+    flex-shrink: 0;
+    column-gap: var(--_spacing---step--1);
+    padding-top: var(--_spacing---step--1);
+    padding-right: var(--_spacing---step--1);
+    padding-bottom: var(--_spacing---step--1);
+    padding-left: var(--_spacing---step--1);
+}
+
+.booking-modal_week-nav.booking-modal_week-nav.is-seg {
+    column-gap: var(--_spacing---step--2);
+}
+
+.booking-modal_week-arrow.booking-modal_week-arrow,
+.booking-modal_view-btn.booking-modal_view-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--pe-bk-seg-h);
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-top-left-radius: var(--_radius---control-sm);
+    border-top-right-radius: var(--_radius---control-sm);
+    border-bottom-left-radius: var(--_radius---control-sm);
+    border-bottom-right-radius: var(--_radius---control-sm);
+    background-color: transparent;
+    opacity: 1;
+    cursor: pointer;
+    transition-property: background-color, color;
+    transition-duration: var(--_flwr-rt---transition-fast), var(--_flwr-rt---transition-fast);
+    transition-timing-function: var(--_flwr-rt---ease-standard), var(--_flwr-rt---ease-standard);
+    transition-delay: 0s, 0s;
+}
+
+.booking-modal_week-arrow.booking-modal_week-arrow {
+    width: var(--pe-bk-seg-h);
+    padding-right: 0;
+    padding-left: 0;
+    color: var(--pe-bk-ink);
+}
+
+.booking-modal_view-btn.booking-modal_view-btn {
+    padding-right: var(--_spacing---step--3);
+    padding-left: var(--_spacing---step--3);
+    color: var(--pe-bk-muted);
+    font-weight: var(--_typography---weight--medium);
+}
+
+.booking-modal_week-arrow.booking-modal_week-arrow:hover,
+.booking-modal_view-btn.booking-modal_view-btn:hover {
+    background-color: var(--pe-bk-surface-lift);
+    color: var(--pe-bk-accent);
+}
+
+.booking-modal_view-btn.booking-modal_view-btn.is-active,
+.booking-modal_view-btn.booking-modal_view-btn.is-active:hover {
+    background-color: var(--_theme---accent--main);
+    color: var(--_theme---accent--text);
+}
+
+.booking-modal_week-arrow.booking-modal_week-arrow:focus-visible,
+.booking-modal_view-btn.booking-modal_view-btn:focus-visible {
+    outline-width: 2px;
+    outline-style: solid;
+    outline-color: var(--pe-bk-accent);
+    outline-offset: 1px;
+}
+
+/* ── Category nav: active = accent, hover lifts the rest ───────────────── */
+.booking-modal_heading.booking-modal_heading {
+    row-gap: var(--_spacing---step--1);
+}
+
+.booking-modal_cat.booking-modal_cat {
+    color: var(--pe-bk-muted);
+    cursor: default;
+    transform: translate(0, 0);
+    transition-property: color, transform;
+    transition-duration: var(--_flwr-rt---transition-fast), 0.32s;
+    transition-timing-function: var(--_flwr-rt---ease-standard), cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition-delay: 0s, 0s;
+}
+
+.booking-modal_cat.booking-modal_cat:hover {
+    color: var(--pe-bk-ink);
+    transform: translate(var(--_spacing---step--3), 0);
+}
+
+.booking-modal_cat.booking-modal_cat.is-accent,
+.booking-modal_cat.booking-modal_cat.is-accent:hover {
+    color: var(--pe-bk-accent);
+}
+
+/* ── Cards: the parent sets --pe-bk-*, the children read them ──────────── */
+.booking-modal_grid.booking-modal_grid {
+    column-gap: var(--_spacing---step--5);
+    row-gap: var(--_spacing---step--5);
+}
+
+.booking-modal_card.booking-modal_card {
+    --pe-bk-card-bg: var(--pe-bk-surface);
+    --pe-bk-card-line: var(--pe-bk-line);
+    --pe-bk-date-ink: var(--pe-bk-ink);
+    --pe-bk-title-ink: var(--pe-bk-ink);
+    --pe-bk-meta-ink: var(--pe-bk-muted);
+    --pe-bk-lift: 0rem;
+    align-self: stretch;
+    justify-content: flex-start;
+    row-gap: var(--_spacing---step--3);
+    min-height: 0rem;
+    padding-top: var(--_spacing---step--5);
+    padding-right: var(--_spacing---step--5);
+    padding-bottom: var(--_spacing---step--5);
+    padding-left: var(--_spacing---step--5);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-color: var(--pe-bk-card-line);
+    border-right-color: var(--pe-bk-card-line);
+    border-bottom-color: var(--pe-bk-card-line);
+    border-left-color: var(--pe-bk-card-line);
+    background-color: var(--pe-bk-card-bg);
+    transform: translate(0, var(--pe-bk-lift));
+    transition-property: transform, background-color, border-top-color, border-right-color, border-bottom-color, border-left-color;
+    transition-duration: 0.32s, 0.32s, 0.32s, 0.32s, 0.32s, 0.32s;
+    transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1), ease, ease, ease, ease, ease;
+    transition-delay: 0s, 0s, 0s, 0s, 0s, 0s;
+}
+
+.booking-modal_card.booking-modal_card:hover,
+.booking-modal_card.booking-modal_card:focus-within {
+    --pe-bk-card-bg: var(--pe-bk-surface-lift);
+    --pe-bk-card-line: var(--pe-bk-accent);
+    --pe-bk-date-ink: var(--pe-bk-accent);
+    --pe-bk-lift: -0.25rem;
+}
+
+/* Próximamente: same box, visibly secondary, no lift */
+.booking-modal_card.booking-modal_card.is-soon {
+    --pe-bk-card-bg: transparent;
+    --pe-bk-card-line: color-mix(in oklab, var(--pe-bk-ink) 16%, transparent);
+    --pe-bk-date-ink: var(--pe-bk-muted);
+    --pe-bk-title-ink: var(--pe-bk-muted);
+    border-top-style: dashed;
+    border-right-style: dashed;
+    border-bottom-style: dashed;
+    border-left-style: dashed;
+}
+
+.booking-modal_card.booking-modal_card.is-soon:hover,
+.booking-modal_card.booking-modal_card.is-soon:focus-within {
+    --pe-bk-card-bg: transparent;
+    --pe-bk-card-line: color-mix(in oklab, var(--pe-bk-ink) 30%, transparent);
+    --pe-bk-date-ink: var(--pe-bk-muted);
+    --pe-bk-lift: 0rem;
+}
+
+.booking-modal_card-date.booking-modal_card-date {
+    margin-top: 0;
+    margin-bottom: 0;
+    color: var(--pe-bk-date-ink);
+    transition-property: color;
+    transition-duration: 0.32s;
+    transition-timing-function: ease;
+    transition-delay: 0s;
+}
+
+.booking-modal_card-date.booking-modal_card-date.is-soon {
+    font-size: var(--_typography---size--h5);
+    text-transform: uppercase;
+    opacity: 1;
+}
+
+.booking-modal_card-title.booking-modal_card-title {
+    flex-grow: 1;
+    margin-top: 0;
+    margin-bottom: 0;
+    color: var(--pe-bk-title-ink);
+}
+
+.booking-modal_card-title.booking-modal_card-title:hover {
+    color: var(--pe-bk-accent);
+}
+
+.booking-modal_card-meta.booking-modal_card-meta {
+    column-gap: var(--_spacing---step--3);
+}
+
+.booking-modal_card-type.booking-modal_card-type,
+.booking-modal_card-seats.booking-modal_card-seats {
+    color: var(--pe-bk-meta-ink);
+    opacity: 1;
+}
+
+.booking-modal_card-price.booking-modal_card-price.f-text-stat {
+    --_text-style---size: var(--_typography---size--h4);
+    color: var(--pe-bk-title-ink);
+}
+
+/* the dated card's action row (seats line + button) and the Próximamente note take the same height */
+.booking-modal_card-soon.booking-modal_card-soon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    min-height: calc(var(--pe---button-size--medium) + var(--_typography---size--small) * var(--_typography---leading--normal) + var(--_spacing---step--3));
+    padding-top: var(--_spacing---step--2);
+    padding-right: var(--_spacing---step--3);
+    padding-bottom: var(--_spacing---step--2);
+    padding-left: var(--_spacing---step--3);
+    border-top-left-radius: var(--_radius---control);
+    border-top-right-radius: var(--_radius---control);
+    border-bottom-left-radius: var(--_radius---control);
+    border-bottom-right-radius: var(--_radius---control);
+    background-color: var(--pe-bk-surface);
+    color: var(--pe-bk-meta-ink);
+    text-align: center;
+    opacity: 1;
+}
+
+/* AÑADIR AL CARRITO: volume family (yellow, RISE hover), one real height on every card */
+.booking-modal_card-add.booking-modal_card-add.button {
+    width: 100%;
+    min-height: var(--pe---button-size--medium);
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: var(--_spacing---step--2);
+    padding-right: var(--_spacing---step--4);
+    padding-bottom: var(--_spacing---step--2);
+    padding-left: var(--_spacing---step--4);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    justify-content: center;
+    transition-property: transform, box-shadow;
+    transition-duration: 0.2s, 0.2s;
+    transition-timing-function: ease, ease;
+    transition-delay: 0s, 0s;
+}
+
+/* its page-embedded hover filled the button yellow; the RISE panel does that now */
+.booking-modal_card-add.booking-modal_card-add.button:hover {
+    background-color: transparent;
+    color: var(--pe---color--fuel-yellow);
+}
+
+.booking-modal_card-add.booking-modal_card-add.button:disabled {
+    opacity: 0.6;
+}
+
+/* ── Packs strip: primary + secondary, same family, same height ────────── */
+.booking-modal_packs.booking-modal_packs {
+    margin-top: var(--_spacing---step--5);
+    padding-top: var(--_spacing---step--5);
+    border-top-width: 1px;
+    border-top-color: var(--pe-bk-line);
+    column-gap: var(--_spacing---step--5);
+    row-gap: var(--_spacing---step--3);
+}
+
+.booking-modal_packs-text.booking-modal_packs-text {
+    color: var(--pe-bk-ink);
+}
+
+.booking-modal_packs-actions.booking-modal_packs-actions {
+    column-gap: var(--_spacing---step--3);
+    row-gap: var(--_spacing---step--3);
+}
+
+.booking-modal_packs-btn.booking-modal_packs-btn.button {
+    --pe-bk-btn-line: var(--pe---color--fuel-yellow-dark);
+    --pe-bk-btn-ink: var(--pe---color--fuel-yellow);
+    min-height: var(--pe---button-size--medium);
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: var(--_spacing---step--2);
+    padding-right: var(--_spacing---step--5);
+    padding-bottom: var(--_spacing---step--2);
+    padding-left: var(--_spacing---step--5);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-color: var(--pe-bk-btn-line);
+    border-right-color: var(--pe-bk-btn-line);
+    border-bottom-color: var(--pe-bk-btn-line);
+    border-left-color: var(--pe-bk-btn-line);
+    border-top-left-radius: var(--_radius---control);
+    border-top-right-radius: var(--_radius---control);
+    border-bottom-left-radius: var(--_radius---control);
+    border-bottom-right-radius: var(--_radius---control);
+    background-color: transparent;
+    box-shadow: 0 var(--pe---volume, 5px) 0 0 var(--pe-bk-btn-line);
+    color: var(--pe-bk-btn-ink);
+    transition-property: transform, box-shadow;
+    transition-duration: 0.2s, 0.2s;
+    transition-timing-function: ease, ease;
+    transition-delay: 0s, 0s;
+}
+
+.booking-modal_packs-btn.booking-modal_packs-btn.button.is-secondary {
+    --pe-bk-btn-line: var(--pe-bk-ink);
+    --pe-bk-btn-ink: var(--pe-bk-ink);
+}
+
+/* pe-packs.css repaints both buttons on hover; hold the resting colours so only the RISE panel changes */
+.booking-modal_packs-btn.booking-modal_packs-btn.button:hover,
+.booking-modal_packs-btn.booking-modal_packs-btn.button.is-ghost:hover {
+    background-color: transparent;
+    border-top-color: var(--pe-bk-btn-line);
+    border-right-color: var(--pe-bk-btn-line);
+    border-bottom-color: var(--pe-bk-btn-line);
+    border-left-color: var(--pe-bk-btn-line);
+    color: var(--pe-bk-btn-ink);
+}
+
+.booking-modal_packs-btn.booking-modal_packs-btn.button:active {
+    box-shadow: 0 0 0 0 var(--pe-bk-btn-line);
+    transform: translate(0, var(--pe---volume, 5px));
+}
+
+/* ── Responsive ────────────────────────────────────────────────────────── */
+@media (max-width: 991px) {
+    .booking-modal_side.booking-modal_side {
+        row-gap: var(--_spacing---step--3);
+    }
+}
+
+@media (max-width: 767px) {
+    .booking-modal_inner.booking-modal_inner {
+        padding-top: var(--_spacing---step--4);
+        padding-right: var(--_spacing---step--4);
+        padding-bottom: var(--_spacing---step--4);
+        padding-left: var(--_spacing---step--4);
+    }
+
+    .booking-modal_controls.booking-modal_controls {
+        flex-grow: 1;
+    }
+
+    .booking-modal_card.booking-modal_card {
+        padding-top: var(--_spacing---step--4);
+        padding-right: var(--_spacing---step--4);
+        padding-bottom: var(--_spacing---step--4);
+        padding-left: var(--_spacing---step--4);
+    }
+}
+
+@media (max-width: 478px) {
+    .pe-lc_control.pe-lc_control.is-seg {
+        flex-grow: 1;
+        justify-content: space-between;
+    }
+
+    .booking-modal_view-btn.booking-modal_view-btn {
+        flex-grow: 1;
+        padding-right: var(--_spacing---step--2);
+        padding-left: var(--_spacing---step--2);
     }
 }

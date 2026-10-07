@@ -1,0 +1,7 @@
+/* layout-fixes.css (trial 3 v3). Layout only, no type properties. Each rule names its cause. */
+
+/* CAUSE (b): original.css `.text-size-huge.two-columns { column-count: 2 }` carried the manifesto's two-column layout on the
+   type class. Trial 3 removed text-size-huge (type class), so the paragraph went single-column (+199px at 1440).
+   flwr 1.6 has no column-count utility (only .f-grid-N), so the layout is restored on the layout class. */
+.two-columns.text-reveal { column-count: 2; }
+@media (max-width: 991px) { .two-columns.text-reveal { column-count: 1; } }

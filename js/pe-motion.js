@@ -102,9 +102,9 @@
     { role: 'card',    move: 'card',  sel: '[class*="_card"], [class*="_item"]', filter: cardFilter },
     { role: 'row',     move: 'item',  sel: '[class*="_accordion"], .talleres-list_linea-de-tiempo_timeline-step, .form_field-wrapper, .footer15_link-list, .footer15_social-link, .footer15_legal-link, .footer15_credit-text' },
     { role: 'frame',   move: 'frame', sel: '[class*="_image-wrapper"]', filter: frameFilter },
-    { role: 'title',   move: 'lines', sel: 'h1, h2, .u-text-style-h1, .u-text-style-h2' },
-    { role: 'eyebrow', move: 'draw',  sel: '.text-style-tagline' },
-    { role: 'lead',    move: 'lines', sel: 'p.text-size-huge, p.text-size-large, p.text-size-medium' }
+    { role: 'title',   move: 'lines', sel: 'h1, h2, .u-text-style-h1, .u-text-style-h2, .f-text-hero, .f-text-giant, .f-text-h1, .f-text-h2' },
+    { role: 'eyebrow', move: 'draw',  sel: '.text-style-tagline, .f-text-eyebrow' },
+    { role: 'lead',    move: 'lines', sel: 'p.text-size-huge, p.text-size-large, p.text-size-medium, p.f-text-lead' }
   ];
   var PARALLAX = '.hero_wrapper-right .hero_image-wrapper img, .talleres_caracteristicas-2_image, ' +
     '.contacto_ubicaciones_image-wrapper img, img[data-pe-motion="parallax"]';
@@ -366,6 +366,11 @@
       return visible(el) && !el.closest(SKIP);
     });
   }
+  // hero CTA = legacy .is-large/.is-xlarge, or migrated (.hero_cta / f-text-ui-lg|xl size class)
+  function isHeroCta(b) {
+    var c = b.classList;
+    return c.contains('is-large') || c.contains('hero_cta') || c.contains('f-text-ui-lg') || c.contains('f-text-ui-xl');
+  }
   function collectHero() {
     var left = heroRoot.querySelector('.hero_wrapper-left') || heroRoot;
     var top = left.querySelector('.hero_content-top');
@@ -373,11 +378,11 @@
     var p = {
       logo: heroQuery('.navbar18_logo-link', left),
       dock: heroQuery('.hero-dock > *', left),
-      pills: heroQuery('.button', left).filter(function (b) { return notTop(b) && !b.classList.contains('is-large'); }),
-      eyebrow: heroQuery('.text-style-tagline', left).filter(notTop),
+      pills: heroQuery('.button', left).filter(function (b) { return notTop(b) && !isHeroCta(b); }),
+      eyebrow: heroQuery('.text-style-tagline, .f-text-eyebrow', left).filter(notTop),
       title: heroQuery('h1', left).slice(0, 1),
       lead: heroQuery('p', left).filter(notTop).slice(0, 1),
-      ctas: heroQuery('.button.is-large, .entropy-switch_wrap', left).filter(notTop),
+      ctas: heroQuery('.button.is-large, .button.hero_cta, .button.f-text-ui-lg, .button.f-text-ui-xl, .entropy-switch_wrap', left).filter(notTop),
       column: heroQuery('.hero_content-middle'),
       right: heroQuery('.hero_wrapper-right'),
       rightImg: heroQuery('.hero_wrapper-right .hero_image-wrapper img')

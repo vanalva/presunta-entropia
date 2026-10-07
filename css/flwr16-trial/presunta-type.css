@@ -1,0 +1,97 @@
+/* =============================================================
+   PRESUNTA ENTROPIA: values for the flwr 1.6 type system.
+   Trial 2 (pages/index-flwr16.html). Variables only: seeds on :root,
+   Text Style cell values on the Base scope ([data-flwr]) and on the
+   style classes. No font-size / font-weight / line-height /
+   letter-spacing / text-transform property is declared in this file.
+   ============================================================= */
+:root {
+  /* fluid basis: Presunta scale runs on plain 1vw (flwr default is min(1vw, 1cqi)) */
+  --_typography---fluid-unit: 1vw;
+
+  /* leading: Presunta "medium" 1.1 is flwr tight; none (1) and ui (1.2) are flwr own */
+  --_typography---leading--tight: 1.1;
+
+  /* step seeds: rem at 320px (from), rem at 1440px (to), floor, ceil. Same numbers presunta_dry.py measured at 0.000 on 1.4. */
+  --_typography---size--display-from: 6;     --_typography---size--display-to: 9.5;       --_typography---size--display-floor: 6;     --_typography---size--display-ceil: 10;
+  --_typography---size--h1-from: 3;          --_typography---size--h1-to: 5.625;          --_typography---size--h1-floor: 3;          --_typography---size--h1-ceil: 6;
+  --_typography---size--h2-from: 2.5;        --_typography---size--h2-to: 3.8125;         --_typography---size--h2-floor: 2.5;        --_typography---size--h2-ceil: 4;
+  --_typography---size--h3-from: 2.25;       --_typography---size--h3-to: 2.90625;        --_typography---size--h3-floor: 2.25;       --_typography---size--h3-ceil: 3;
+  --_typography---size--h4-from: 1.75;       --_typography---size--h4-to: 1.96875;        --_typography---size--h4-floor: 1.75;       --_typography---size--h4-ceil: 2;
+  --_typography---size--h5-from: 1.375;      --_typography---size--h5-to: 1.484375;       --_typography---size--h5-floor: 1.375;      --_typography---size--h5-ceil: 1.5;
+  --_typography---size--h6-from: 1;          --_typography---size--h6-to: 1.109375;       --_typography---size--h6-floor: 1;          --_typography---size--h6-ceil: 1.125;
+  --_typography---size--lead-from: 1.125;    --_typography---size--lead-to: 1.234375;     --_typography---size--lead-floor: 1.125;    --_typography---size--lead-ceil: 1.25;
+  --_typography---size--body-from: 1;        --_typography---size--body-to: 1.109375;     --_typography---size--body-floor: 1;        --_typography---size--body-ceil: 1.125;
+
+  /* hero: live is clamp(2.75rem, 8.2vh, 4.65rem) from 768px up, and the h1 width curve (3 to 6rem) at 767px and below (see @media below) */
+  --_typography---size--hero-from: 4.65;     --_typography---size--hero-to: 4.65;         --_typography---size--hero-floor: 2.75;     --_typography---size--hero-ceil: 4.65;
+  --_typography---size--hero-fit: 8.2;
+
+  /* poster (giant banner): a staircase on the live page, 8rem / 4rem at 991px and below / 3rem at 479px and below (see @media below) */
+  --_typography---size--poster-from: 8;      --_typography---size--poster-to: 8;          --_typography---size--poster-floor: 8;      --_typography---size--poster-ceil: 8;
+
+  /* UI hooks: ui-md is the page own text size (live text-main-2: 1rem to 1.375rem over 20 to 100rem); ui-xl is the xlarge button (h4) */
+  --_typography---size--ui-md: clamp(1rem, calc(1rem + ((1vw - 0.2rem) * 0.46875)), 1.375rem);
+  --_typography---size--ui-xl: var(--_typography---size--h4);
+}
+
+/* seed overrides per breakpoint: variables only, so the derived sizes re-substitute on :root */
+@media (max-width: 991px) {
+  :root { --_typography---size--poster-from: 4; --_typography---size--poster-to: 4; --_typography---size--poster-floor: 4; --_typography---size--poster-ceil: 4; }
+}
+@media (max-width: 767px) {
+  :root {
+    --_typography---size--hero-from: 3; --_typography---size--hero-to: 5.625; --_typography---size--hero-floor: 3; --_typography---size--hero-ceil: 6;
+    --_typography---size--hero-fit: 100;
+  }
+}
+@media (max-width: 479px) {
+  :root { --_typography---size--poster-from: 3; --_typography---size--poster-to: 3; --_typography---size--poster-floor: 3; --_typography---size--poster-ceil: 3; }
+}
+
+/* Base column: unclassed text on the page */
+[data-flwr] {
+  /* 1.1 baseline + 1.5.1/1.6 paint: the wrapper now paints Section surface/text from Theme. Pin them to the page's own colour scheme. */
+  --_theme---surface--main: transparent;
+  --_theme---text--main: var(--color-scheme-1--text);
+  --_text-style---size: var(--_typography---size--ui-md);
+  --_text-style---leading: var(--_typography---leading--ui);
+  --_text-style---weight: var(--_typography---weight--light);
+}
+
+/* headings */
+[data-flwr] .f-text-display, [data-flwr] .f-text-h1, [data-flwr] .f-text-h2, [data-flwr] .f-text-h3, [data-flwr] .f-text-hero {
+  --_text-style---weight: var(--_typography---weight--medium);
+  --_text-style---tracking: var(--_typography---tracking--tighter);
+}
+[data-flwr] .f-text-display, [data-flwr] .f-text-h1, [data-flwr] .f-text-h2, [data-flwr] .f-text-hero { --_text-style---leading: var(--_typography---leading--none); }
+[data-flwr] .f-text-h3, [data-flwr] .f-text-h4, [data-flwr] .f-text-h5, [data-flwr] .f-text-h6 { --_text-style---leading: var(--_typography---leading--tight); }
+[data-flwr] .f-text-h4 { --_text-style---weight: var(--_typography---weight--regular); --_text-style---tracking: var(--_typography---tracking--normal); }
+[data-flwr] .f-text-h5, [data-flwr] .f-text-h6 { --_text-style---weight: var(--_typography---weight--light); --_text-style---tracking: var(--_typography---tracking--normal); }
+
+/* body styles */
+[data-flwr] .f-text-lead { --_text-style---leading: var(--_typography---leading--normal); }
+
+/* poster */
+[data-flwr] .f-text-poster {
+  --_text-style---weight: var(--_typography---weight--medium);
+  --_text-style---leading: var(--_typography---leading--ui);
+  --_text-style---tracking: var(--_typography---tracking--normal);
+}
+
+/* eyebrow (project tagline) and label (project button) */
+[data-flwr] .f-text-eyebrow {
+  --_text-style---size: var(--_typography---size--ui-md);
+  --_text-style---weight: var(--_typography---weight--regular);
+  --_text-style---leading: var(--_typography---leading--ui);
+  --_text-style---tracking: var(--_typography---tracking--normal);
+  --_text-style---transform: var(--_typography---transform--none);
+}
+[data-flwr] .f-text-label {
+  --_text-style---family: var(--_typography-primitives---font-styles--body);
+  --_text-style---weight: var(--_typography---weight--regular);
+  --_text-style---leading: var(--_typography---leading--ui);
+}
+
+/* tiny: Presunta sets this role in the primitives body family (short stack) */
+[data-flwr] .f-text-tiny { --_text-style---family: var(--_typography-primitives---font-styles--body); }

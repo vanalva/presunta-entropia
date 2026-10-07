@@ -79,7 +79,7 @@
                 if (promo) promo.style.display = 'none';
                 if (sold) sold.style.display = it.seatsLeft === 0 ? '' : 'none';
                 // links
-                var href = 'taller-item-v2.html?slug=' + it.slug;
+                var href = 'taller-item.html?slug=' + it.slug;
                 card.querySelectorAll('a').forEach(function (a) { a.href = href; });
                 card.style.cursor = 'pointer';
                 card.addEventListener('click', function (e) {
@@ -142,7 +142,7 @@
                 // any remaining unfilled binds: hide
                 card.querySelectorAll('.w-dyn-bind-empty').forEach(function (e) { e.style.display = 'none'; });
                 // link buttons to the item page / booking modal
-                var href = ses.coleccion === 'cenas' ? 'cenas-v2.html' : 'taller-item-v2.html?slug=' + it.slug;
+                var href = ses.coleccion === 'cenas' ? 'cenas.html' : 'taller-item.html?slug=' + it.slug;
                 card.querySelectorAll('a').forEach(function (a) {
                     if (/SABER|VER/i.test(a.textContent)) a.href = href;
                 });
@@ -181,7 +181,7 @@
                 }
             }
             var link = card.querySelector('a.talleres_event_item-link') || card.querySelector('a');
-            if (link) link.href = 'taller-item-v2.html?slug=' + it.slug;
+            if (link) link.href = 'taller-item.html?slug=' + it.slug;
         });
     }
 
@@ -203,8 +203,8 @@
                 if (tag) { if (it.subtitle) fillText(tag, it.subtitle); else tag.style.display = 'none'; }
                 fillText(item.querySelector('p.w-dyn-bind-empty'), it.summary);
                 var href = (db.talleres.indexOf(it) !== -1)
-                    ? 'taller-item-v2.html?slug=' + it.slug
-                    : 'cenas-v2.html';
+                    ? 'taller-item.html?slug=' + it.slug
+                    : 'cenas.html';
                 item.querySelectorAll('a').forEach(function (a) { a.href = href; });
                 // flatten: each item becomes a direct swiper child (a real slide)
                 sliderList.appendChild(item);

@@ -1,0 +1,24 @@
+/* =============================================================
+   PRESUNTA ENTROPIA, trial 3 (pages/index-flwr16b.html).
+   flwr 1.6 decides the hierarchy. Presunta contributes its font
+   families, nothing else. Variables only: no font-size, font-weight,
+   line-height, letter-spacing or text-transform property here.
+   ============================================================= */
+:root {
+  --_typography---family--sans:    'Space Grotesk', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --_typography---family--display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+}
+
+/* flwr 1.1+ baseline paints the wrapper from Section/Theme. Not type: pinned to the page's own colour scheme (as trial 2). */
+[data-flwr] {
+  --_theme---surface--main: transparent;
+  --_theme---text--main: var(--color-scheme-1--text);
+}
+
+/* leading cell: uppercase card titles (f-text-h3 + f-text-uppercase) read loose at snug 1.25; use flwr's tight token */
+[data-flwr] .f-text-h3 { --_text-style---leading: var(--_typography---leading--tight); }
+
+/* v2 (Juan): weight cells, label case, lead leading */
+[data-flwr] :is(.f-text-h2, .f-text-h3, .f-text-h4, .f-text-h5, .f-text-h6) { --_text-style---weight: var(--_typography---weight--medium); }
+[data-flwr] .f-text-label { --_text-style---transform: var(--_typography---transform--upper); }
+[data-flwr] .f-text-lead { --_text-style---leading: var(--_typography---leading--snug); }

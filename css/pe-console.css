@@ -1587,7 +1587,7 @@
 @keyframes peCount { from { transform: scale(1.8); opacity: 0; } 30% { opacity: 1; } to { transform: scale(1); opacity: 1; } }
 
 /* ---------- toast: the console's one transient message (pe-console.js toast()):
-   label + meter (volume, brillo), label + value (carrito, modo), label + icon ---------- */
+   label + meter (volume, brillo), plain text, label + value (carrito), label + icon ---------- */
 .pe-os_toast {
   position: absolute;
   left: 50%;

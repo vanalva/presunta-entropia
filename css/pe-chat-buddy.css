@@ -124,3 +124,24 @@ html.has-chat-buddy .vanny-launch { display: none; }
   .chat-buddy_bubble::before,
   .chat-buddy_bubble::after { right: auto; left: 1.1rem; }
 }
+
+/* =============================================================
+   VANNY WIDGET FRAME (floating one only: direct child of <body>; the console's
+   inline CHAT frame lives inside its slot and stays untouched) — the third-party widget injects a fixed, transparent
+   iframe (472x688, bottom-right) that on some hosts keeps that size while
+   the chat is closed, swallowing the pointer over MENU / cart / buddy and
+   the hero console's corner. Closed = click-through; js/pe-chat-buddy.js
+   sets html.vanny-open while the chat is open.
+   ============================================================= */
+body > #vanny-widget-frame { pointer-events: none; }
+html.vanny-open > body > #vanny-widget-frame { pointer-events: auto; }
+
+/* Open chat: lift the frame so its bottom edge clears MENU / cart / buddy
+   (--pe-vanny-lift is measured in pe-chat-buddy.js) and cap its height to
+   the viewport, on phones too (the widget is not full-screen there, it sits
+   at the bottom and would cover the buttons). !important is needed: the
+   widget positions the frame with an inline style. */
+html.vanny-open > body > #vanny-widget-frame {
+  bottom: var(--pe-vanny-lift, 6.5rem) !important;
+  max-height: calc(100vh - var(--pe-vanny-lift, 6.5rem) - 1rem) !important;
+}

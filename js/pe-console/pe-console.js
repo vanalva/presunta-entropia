@@ -28,11 +28,15 @@
   };
   var FONT = "'Space Grotesk', sans-serif";
   var GALLERY = [
-    { src: 'assets/images/foto-trasera-delantal-curso_2560w-p-800.jpg', cap: 'Taller en marcha' },
-    { src: 'assets/images/ninos-curso-cocina_2560w-p-800.webp', cap: 'Pequeños chefs' },
-    { src: 'assets/images/pareja-curso-cocina-madrid_2560w-p-800.jpg', cap: 'Cocinar en pareja' },
-    { src: 'assets/images/muestra-plato-mano_2560w-p-800.webp', cap: 'El emplatado' },
-    { src: 'assets/images/riendo-retrato_2560w-p-800.webp', cap: 'Lo memorable' }
+    { src: 'assets/images/home-2026-10/grupo-amigos-cocina-800.webp', cap: 'Cocinar juntos' },
+    { src: 'assets/images/home-2026-10/pareja-curso-cocina-madrid-800.webp', cap: 'Cocinar en pareja' },
+    { src: 'assets/images/home-2026-10/ninos-curso-cocina-800.webp', cap: 'Pequeños chefs' },
+    { src: 'assets/images/home-2026-10/foto-trasera-delantal-curso-800.webp', cap: 'Taller en marcha' },
+    { src: 'assets/images/home-2026-10/muestra-plato-mano-800.webp', cap: 'El emplatado' },
+    { src: 'assets/images/home-2026-10/riendo-retrato-800.webp', cap: 'Lo memorable' },
+    { src: 'assets/images/home-2026-10/riendo-comida-800.webp', cap: 'La sobremesa' },
+    { src: 'assets/images/home-2026-10/local-sala-principal-800.webp', cap: 'Zurbano 83' },
+    { src: 'assets/images/home-2026-10/local-cocina-800.webp', cap: 'La cocina' }
   ];
   var VIDEO_SRC = 'https://res.cloudinary.com/dn53emznt/video/upload/v1763080295/presunta-entropia_bgg2ln.mp4';
   var MESES = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC'];
@@ -346,10 +350,11 @@
   }
   /* ONE TOAST: the cream bubble the volume and brightness feedback made
      (mono label + something), top centre of the screen, 1.1 s. Every
-     transient console message uses it, in one of three shapes:
+     transient console message uses it:
        toast('Vol', { meter: [6, 10] })            label + segmented meter
-       toast('Carrito', { value: '+1' })           label + short value
-       toast('Sonido', { icon: 'mute' })           label + SVG icon
+       toast('Silencio')                           plain text (Silencio, Modo caos, ...)
+       toast('Carrito', { value: '+1' })           label + short value (cart feedback)
+       toast('Sonido', { icon: 'mute' })           label + SVG icon (available, unused)
      { warn: true } colours the value/icon rust (sold out, failed);
      { ms } changes how long it stays. toast(html, ms) still takes raw HTML. */
   var toastT = 0;
@@ -1131,10 +1136,14 @@
       var s = list[idx];
       if (!s) return;
       if (s.itemId) {
+        // an add is already on its way: no second click, just show where it stands again
+        if (cartBusy) { toast('Carrito', { value: cartPending, ms: cartPending === 'En camino' ? 2400 : 9000 }); return; }
         var btn = null;
         try { btn = document.querySelector('#modal-1 [data-cart-add][data-item-id="' + (window.CSS && CSS.escape ? CSS.escape(s.itemId) : s.itemId) + '"]'); } catch (e) {}
         if (btn) {
-          if (btn.disabled || (s.it.seatsLeft != null && s.it.seatsLeft <= 0)) {
+          // sold out only when the page's live seat count for this session says 0
+          // (the cart itself disables its button during every add, so that is no signal)
+          if (liveSeats(s.itemId) === 0) {
             sfx('back');
             toast('Carrito', { value: 'Agotado', warn: true });
             assist('cartSoldOut');
@@ -1146,35 +1155,83 @@
       }
       sfx('open');
       if (!openBookingModal(s.it.slug)) {
-        location.href = s.col === 'cenas' ? 'cenas-v2.html' : 'taller-item-v2.html?slug=' + encodeURIComponent(s.it.slug);
+        location.href = s.col === 'cenas' ? 'cenas.html' : 'taller-item.html?slug=' + encodeURIComponent(s.it.slug);
       }
+    }
+    function liveSeats(id) {
+      var el = null;
+      try { el = document.querySelector('#modal-1 [data-item-seats-left][data-item-id="' + (window.CSS && CSS.escape ? CSS.escape(id) : id) + '"]'); } catch (e) {}
+      var n = el ? parseInt(el.textContent, 10) : NaN;
+      return isNaN(n) ? null : n;
     }
     /* The cart (webflow-cart.js) adds asynchronously: it fires
        'cart:updated' {action:'add'} on success and shows its own
-       .cart-notification-error on failure. The toast and the assistant
-       wait for the real outcome instead of claiming success up front. */
-    var cartBusy = false;
+       .cart-notification-error when it fails. The console says "added" or
+       "failed" only on those two real signals. A slow cart gets a neutral
+       "still on its way" after 8 s and the console keeps listening (up to
+       a minute) so a late success still lands as a success. */
+    var cartBusy = false, cartPending = 'Añadiendo';
     function cartAdd(btn, id) {
-      if (cartBusy) return;
-      cartBusy = true;
-      var t0 = Date.now(), stale = document.getElementById('cart-notification');
-      function finish(ok) {
-        if (!cartBusy) return;
+      cartBusy = true; cartPending = 'Añadiendo';
+      var t0 = Date.now(), stale = document.getElementById('cart-notification'), slowSaid = false, pollT = 0, watch = null;
+      function stop() {
         cartBusy = false;
+        clearTimeout(pollT);
         window.removeEventListener('cart:updated', onAdd);
-        if (ok) { sfx('coin'); toast('Carrito', { value: '+1' }); assist('cartOk'); }
-        else { sfx('back'); toast('Carrito', { value: 'No se pudo', warn: true }); assist('cartError'); }
+        if (watch) { watch.disconnect(); watch = null; }
       }
-      function onAdd(e) { var d = e.detail || {}; if (d.action === 'add' && (!d.itemId || d.itemId === id)) finish(true); }
+      function ok() {
+        if (!cartBusy) return;
+        stop();
+        // the coin follows the stamp by 160 ms, as before, or lands with the real result
+        setTimeout(function () {
+          sfx('coin');
+          toast('Carrito', { value: '+1' });
+          shake(5, 260);
+          assist('cartOk');
+        }, Math.max(0, 160 - (Date.now() - t0)));
+      }
+      function failed() {
+        if (!cartBusy) return;
+        stop();
+        sfx('back');
+        toast('Carrito', { value: 'No se pudo', warn: true });
+        assist('cartError');
+      }
+      function onAdd(e) { var d = e.detail || {}; if (d.action === 'add' && (!d.itemId || d.itemId === id)) ok(); }
       window.addEventListener('cart:updated', onAdd);
+      /* The cart can insert its error notification and replace it with
+         another one in the same tick (when the session is already in the
+         cart), so the error is caught as it is inserted, not polled. Lives
+         only for this add: stop() disconnects it. */
+      if (window.MutationObserver) {
+        watch = new MutationObserver(function (recs) {
+          for (var i = 0; i < recs.length; i++) {
+            var add = recs[i].addedNodes;
+            for (var j = 0; j < add.length; j++) {
+              var n = add[j];
+              if (n.nodeType === 1 && n.id === 'cart-notification' && /cart-notification-error/.test(n.className)) { failed(); return; }
+            }
+          }
+        });
+        watch.observe(document.body, { childList: true });
+      }
       sfx('stamp');
-      try { btn.click(); } catch (x) { finish(false); return; }
+      // pending, replaced in place by the outcome (or by "En camino" at 8 s, without blinking off)
+      toast('Carrito', { value: 'Añadiendo', ms: 9000 });
+      try { btn.click(); } catch (x) { failed(); return; }
       (function poll() {
         if (!cartBusy) return;
         var n = document.getElementById('cart-notification');
-        if (n && n !== stale && /cart-notification-error/.test(n.className)) { finish(false); return; }
-        if (Date.now() - t0 > 8000) { finish(false); return; }
-        setTimeout(poll, 200);
+        if (n && n !== stale && /cart-notification-error/.test(n.className)) { failed(); return; }
+        var waited = Date.now() - t0;
+        if (waited > 8000 && !slowSaid) {
+          slowSaid = true; cartPending = 'En camino';
+          toast('Carrito', { value: 'En camino', ms: 2400 });
+          assist('cartSlow');
+        }
+        if (waited > 60000) { stop(); return; }   // stop listening quietly; never claim a failure we did not see
+        pollT = setTimeout(poll, 200);
       })();
     }
     drag(rail, {
@@ -1229,6 +1286,211 @@
   }
 
   /* =============================================================
+     PACKS app — prepaid packs sold by Entropical (webflow-packs.js).
+     Tickets come from EntropicalPacks.listTypes(); A opens the buy
+     modal (or the redeem modal on the last row), B goes back. The
+     modals are page-level dialogs drawn over the console: while one
+     is open the console ignores its own keys (see bindHardware) and
+     when it closes the console takes focus back. Server data only
+     ever goes in through textContent.
+     ============================================================= */
+  var packsCache = null;   // last list, for the launcher preview + ticker
+  function packsApi() { var E = window.EntropicalPacks; return E && typeof E.listTypes === 'function' ? E : null; }
+  function packModalOpen() { return !!document.querySelector('.ep-backdrop'); }
+  function plural(n, one, many) { return n === 1 ? '1 ' + one : n + ' ' + many; }
+  function packPrice(ty) {
+    if (typeof ty.priceCents !== 'number') return 'Consultar';
+    return (ty.priceCents / 100).toLocaleString('es-ES', { minimumFractionDigits: ty.priceCents % 100 === 0 ? 0 : 2, maximumFractionDigits: 2 }) + ' €';
+  }
+  function packValidity(ty) {
+    var exp = ty.expiresAt ? new Date(ty.expiresAt) : null;
+    if (exp && isNaN(exp.getTime())) exp = null;
+    if (ty.expiryMode === 'FIXED_DATE' && exp) return 'Hasta el ' + exp.getDate() + ' ' + MESES[exp.getMonth()] + ' ' + exp.getFullYear();
+    if (ty.validityDays) return 'Válido ' + ty.validityDays + ' días';
+    return '';
+  }
+  function makePacks() {
+    var el = makeView('pe-os_fechas pe-os_packs');
+    el.innerHTML =
+      '<div class="pe-os_cal-head"><span class="pe-os_cal-month">Packs</span><span class="pe-os_kicker" data-count></span></div>' +
+      '<div class="pe-os_ticket-rail" data-rail aria-live="polite"></div>' +
+      '<div class="pe-os_fechas-foot"><span class="pe-os_hint"><span><span class="pe-os_chip">' + ico('up') + ico('down') + '</span>Pack</span></span><span class="pe-os_hint"><span data-a-label><span class="pe-os_chip is-a">A</span>Comprar</span><span><span class="pe-os_chip is-b">B</span>Salir</span></span></div>';
+    var rail = $('[data-rail]', el), countEl = $('[data-count]', el), aLabel = $('[data-a-label]', el);
+    var rows = [], tickets = [], idx = 0, reqN = 0;
+
+    function node(tag, cls, txt) { var n = document.createElement(tag); if (cls) n.className = cls; if (txt != null) n.textContent = txt; return n; }
+    function ticket(r) {
+      var t = node('div', 'pe-os_ticket');
+      var stub = node('div', 'pe-os_ticket-date' + (r.kind === 'pack' ? '' : ' is-soon'));
+      var body = node('div', 'pe-os_ticket-body'), foot = node('div', 'pe-os_ticket-foot');
+      if (r.kind === 'pack') {
+        var ty = r.type, cr = typeof ty.credits === 'number' ? ty.credits : null, seats = ty.seatsPerCredit || 1;
+        stub.appendChild(node('span', 'pe-os_ticket-mon', 'PACK'));
+        stub.appendChild(node('span', 'pe-os_ticket-day', cr != null ? String(cr) : '·'));
+        stub.appendChild(node('span', 'pe-os_ticket-mon', cr === 1 ? 'RESERVA' : 'RESERVAS'));
+        body.appendChild(node('span', 'pe-os_ticket-type', seats > 1 ? 'Para ' + seats + ' personas' : 'Individual'));
+        body.appendChild(node('span', 'pe-os_ticket-name', ty.name || 'Pack'));
+        if (cr != null) body.appendChild(node('span', 'pe-os_ticket-meta', plural(cr, 'reserva', 'reservas') + ' de ' + plural(seats, 'plaza', 'plazas')));
+        var v = packValidity(ty);
+        if (v) body.appendChild(node('span', 'pe-os_ticket-meta', v));
+        if (ty.description) body.appendChild(node('span', 'pe-os_ticket-lead', String(ty.description)));
+        foot.appendChild(node('span', 'pe-os_ticket-price', packPrice(ty)));
+        foot.appendChild(node('span', 'pe-os_ticket-meta', typeof ty.priceCents === 'number' ? 'También para regalar' : 'Te lo preparamos'));
+      } else if (r.kind === 'redeem') {
+        stub.appendChild(node('span', 'pe-os_ticket-mon', 'TENGO'));
+        stub.appendChild(node('span', 'pe-os_ticket-day', 'ENT'));
+        stub.appendChild(node('span', 'pe-os_ticket-mon', 'CÓDIGO'));
+        body.appendChild(node('span', 'pe-os_ticket-type', 'Canjear'));
+        body.appendChild(node('span', 'pe-os_ticket-name', 'Canjear código'));
+        body.appendChild(node('span', 'pe-os_ticket-meta', 'Reserva con tu pack y elige fecha.'));
+      } else {
+        stub.appendChild(node('span', 'pe-os_ticket-day', '—'));
+        body.appendChild(node('span', 'pe-os_ticket-name', r.title));
+        if (r.meta) body.appendChild(node('span', 'pe-os_ticket-meta', r.meta));
+      }
+      t.appendChild(stub); t.appendChild(body); t.appendChild(foot);
+      t.addEventListener('click', function () {
+        var i = tickets.indexOf(t);
+        if (i === idx) act(); else { idx = i; sfx('nav'); layout(); }
+      });
+      return t;
+    }
+    function render() {
+      rail.textContent = '';
+      tickets = rows.map(function (r) { var t = ticket(r); rail.appendChild(t); return t; });
+      idx = clamp(idx, 0, Math.max(0, rows.length - 1));
+      layout();
+    }
+    function layout(dragPx) {
+      tickets.forEach(function (t, i) {
+        var o = i - idx;
+        t.style.transform = 'translateY(calc(' + (o * 108) + '% + ' + (dragPx || 0) + 'px)) scale(' + (o === 0 ? 1 : 0.94) + ')';
+        t.style.opacity = Math.abs(o) > 1 ? '0' : (o === 0 ? '1' : '0.4');
+      });
+      var packsN = rows.filter(function (r) { return r.kind === 'pack'; }).length;
+      countEl.textContent = packsN ? ((Math.min(idx, packsN - 1) + 1) + ' / ' + packsN) : '';
+      var r = rows[idx], label = 'Comprar';
+      if (!r || r.kind === 'msg') label = r && r.action === 'retry' ? 'Reintentar' : (r && r.action === 'web' ? 'Ver web' : '');
+      else if (r.kind === 'redeem') label = 'Canjear';
+      else if (typeof r.type.priceCents !== 'number') label = 'Consultar';
+      aLabel.style.visibility = label ? '' : 'hidden';
+      aLabel.innerHTML = '<span class="pe-os_chip is-a">A</span>' + esc(label);
+    }
+    function load() {
+      var E = packsApi();
+      if (!E) {
+        rows = [{ kind: 'msg', title: 'Packs no disponibles', meta: 'Míralos en la web. Pulsa A.', action: 'web' }];
+        render(); return;
+      }
+      rows = [{ kind: 'msg', title: 'Cargando packs…', meta: 'Un momento.' }];
+      render();
+      var my = ++reqN;
+      function fail() {
+        if (my !== reqN) return;
+        rows = [{ kind: 'msg', title: 'No hemos podido cargar los packs', meta: 'Pulsa A para reintentar.', action: 'retry' }, { kind: 'redeem' }];
+        render();
+      }
+      E.listTypes().then(function (list) {
+        if (my !== reqN) return;
+        if (!list) { fail(); return; }
+        packsCache = list;
+        rows = list.map(function (ty) { return { kind: 'pack', type: ty }; });
+        if (!rows.length) rows.push({ kind: 'msg', title: 'Nuevos packs muy pronto', meta: 'Mientras, puedes canjear el tuyo.' });
+        rows.push({ kind: 'redeem' });
+        render();
+      }, fail);
+    }
+    function move(d) {
+      if (!rows.length) return;
+      var n = clamp(idx + d, 0, rows.length - 1);
+      if (n === idx) { shake(3, 180); sfx('click'); return; }
+      idx = n; sfx('nav'); layout();
+    }
+    // the modal is the page's: when it goes away the console takes focus back
+    function watchClose() {
+      if (!window.MutationObserver) return;
+      var mo = new MutationObserver(function () {
+        if (packModalOpen()) return;
+        mo.disconnect();
+        var a = $('[data-pe-key="a"]', root);
+        if (a) { try { a.focus({ preventScroll: true }); } catch (e) {} }
+      });
+      mo.observe(document.body, { childList: true });
+    }
+    function openWith(fn, evt) {
+      sfx('open');
+      try { fn(); } catch (e) {}
+      if (!packModalOpen()) { sfx('back'); toast('Packs', { value: 'No se pudo', warn: true }); return; }
+      assist(evt);
+      watchClose();
+    }
+    function act() {
+      var r = rows[idx];
+      if (!r) return;
+      if (r.kind === 'msg') {
+        if (r.action === 'retry') { sfx('ok'); load(); }
+        else if (r.action === 'web') { sampleSoon('gamestart'); playWake(function () { location.href = 'packs.html'; }); }
+        else { shake(3, 180); sfx('click'); }
+        return;
+      }
+      var E = packsApi();
+      if (!E) { load(); return; }
+      if (r.kind === 'redeem') openWith(function () { E.openRedeem({}); }, 'packRedeem');
+      else openWith(function () { E.openBuy(r.type.slug); }, 'packBuy');
+    }
+    drag(rail, {
+      axis: 'y',
+      begin: function () { rail.classList.add('is-dragging'); },
+      move: function (d) { layout(d * 0.9); },
+      end: function (d, v) {
+        rail.classList.remove('is-dragging');
+        if (flung(d, v, rail.clientHeight)) move(d < 0 ? 1 : -1); else layout();
+      }
+    });
+    var ro = new ResizeObserver(function () { el.classList.toggle('is-compact', el.clientHeight < 300); });
+    ro.observe(el);
+    // a credit spent anywhere on the page (this view's redeem modal, the cart)
+    window.addEventListener('entropical:pack-redeemed', function () {
+      if (current !== view) return;
+      sfx('coin');
+      toast('Pack', { value: 'Reservado' });
+      assist('packRedeemed');
+    });
+    var view = {
+      el: el, title: 'PACKS',
+      enter: function () { load(); },
+      input: function (key, type) {
+        if (type !== 'down') return;
+        if (key === 'up' || key === 'left') move(-1);
+        else if (key === 'down' || key === 'right') move(1);
+        else if (key === 'a') act();
+        else if (key === 'b') { sfx('back'); go(launcher); }
+      },
+      preview: function (ctx, w, h, t) {
+        // three flat tickets in a stack, the front one breathing
+        var m = Math.min(w, h), tw = Math.min(w * 0.66, m * 1.2), th = Math.min(h * 0.3, tw * 0.42);
+        var top = Math.max(44, h * 0.22), x0 = (w - tw) / 2;
+        for (var i = 2; i >= 0; i--) {
+          var lift = i === 0 ? (Math.sin(t * 2) * 0.5 + 0.5) * 3 : 0;
+          var x = x0 + i * m * 0.035, y = top + (2 - i) * th * 0.3 - lift;
+          rr(ctx, x, y + 3, tw, th, 8); ctx.fillStyle = P.aztec; ctx.fill();
+          rr(ctx, x, y, tw, th, 8); ctx.fillStyle = i === 0 ? P.aztec2 : P.walnut; ctx.fill();
+          var sw = tw * 0.32;
+          rr(ctx, x, y, sw, th, 8); ctx.fillStyle = i === 0 ? P.yellow : P.fawn; ctx.fill();
+          ctx.fillRect(x + sw - 8, y, 8, th);
+          ctx.fillStyle = P.aztec;
+          for (var k = 0; k < 6; k++) ctx.fillRect(x + sw - 1, y + th * (k + 0.25) / 6, 2, th / 12);
+          if (i === 0) {
+            text(ctx, '×3', x + sw / 2, y + th / 2, { size: Math.max(10, th * 0.34), weight: 700, align: 'center', baseline: 'middle', color: P.aztec });
+            text(ctx, 'PACK', x + sw + (tw - sw) / 2, y + th / 2, { size: Math.max(9, th * 0.24), weight: 700, align: 'center', baseline: 'middle', color: P.white, spacing: 2 });
+          }
+        }
+      }
+    };
+    return view;
+  }
+
+  /* =============================================================
      AJUSTES — grouped settings, scrolls with the selection
      ============================================================= */
   var clicksOn = store('pe-con-clicks') !== '0';
@@ -1279,7 +1541,7 @@
         run: function () {
           if (!confirmReset) { confirmReset = true; sfx('nav'); return; }
           GAMES.forEach(function (g) { try { localStorage.removeItem('pe-con-best-' + g.id); } catch (e) {} });
-          confirmReset = false; sfx('stamp'); toast('Récords', { value: 'Borrados' }); assist('recordsReset');
+          confirmReset = false; sfx('stamp'); toast('Récords borrados'); assist('recordsReset');
         } },
       { id: 'about', label: 'Acerca de PE—83', type: 'action', desc: 'Qué es esta consola.',
         run: function () { sfx('open'); go(aboutView); } }
@@ -1476,10 +1738,11 @@
      ============================================================= */
   var navView = null, navMode = null, navPrev = null;
   function navLinks() {
-    return $$('.navbar_menu .navbar18_link').map(function (a) {
+    // [data-pe-nav]: extra menu entries outside the big link list (Canjear pack)
+    return $$('.navbar_menu .navbar18_link, .navbar_menu [data-pe-nav]').map(function (a) {
       var href = a.getAttribute('href') || '#';
       var here = href !== '#' && location.pathname.split('/').pop() === href.split('?')[0];
-      return { label: a.textContent.trim(), el: a, href: href, modal: a.hasAttribute('data-modal-open'), here: here };
+      return { label: (a.getAttribute('data-pe-nav') || a.textContent).trim(), el: a, href: href, modal: a.hasAttribute('data-modal-open') || a.hasAttribute('data-entropical-pack-redeem-open'), here: here };
     });
   }
   function makeNav() {
@@ -1694,7 +1957,6 @@
     ledEl.classList.add('is-on');
     offEl.classList.add('is-gone');
     booted = true;
-    assist('boot');
   }
   function openNav(mode) {
     navMode = mode;
@@ -1774,7 +2036,18 @@
     var cv = $('canvas', el);
     var introP = $('[data-intro]', el), countP = $('[data-count]', el), pauseP = $('[data-pause]', el), resultP = $('[data-result]', el);
     var state = 'intro', inst = null, api = null, pauseSel = 0, parts = [], floats = [], t = 0, down = {};
-    var introCv = null, countT = 0, countN = 0, resultLock = 0, resultWait = -1, resultSfx = '', resultRecord = false;
+    var introCv = null, countT = 0, countN = 0, resultLock = 0, resultWait = -1, resultSfx = '', resultRecord = false, resultScore = 0, resultPrev = 0, resultFail = false;
+    /* Which line the assistant gives a finished run. Four games always end
+       with fail:false, so the outcome is read from the score too: a record
+       is a record, an empty run or a loss gets consolation, praise only
+       for a run near your own best, anything else a neutral line. */
+    function resultLine() {
+      if (resultRecord) return 'record';
+      var near = resultPrev > 0 && resultScore >= resultPrev * 0.75;
+      if (resultScore <= 0) return 'lose';
+      if (resultFail) return near ? 'done' : 'lose';
+      return near ? 'win' : 'done';
+    }
     var paused = false;   // a layer over any state: intro, count, run, result
 
     function best() { return parseInt(store('pe-con-best-' + def.id) || '0', 10) || 0; }
@@ -1856,6 +2129,7 @@
       resultWait = (res.delay != null ? res.delay : 500) / 1000;
       resultSfx = res.fail ? 'lose' : (record ? 'win' : 'result');
       resultRecord = record;
+      resultScore = score; resultPrev = prev; resultFail = !!res.fail;
     }
 
     function makeApi() {
@@ -1962,8 +2236,7 @@
           if (resultWait < 0) {
             panel(resultP);
             if (resultSfx === 'win') { sfx('win'); sample('result', 0.12); } else sample(resultSfx) || sfx(resultSfx === 'lose' ? 'fail' : 'ok');
-            // a record outranks the loss (SAY.record / SAY.lose / SAY.win, per game when there is a line)
-            assist(resultRecord ? 'record' : resultSfx === 'lose' ? 'lose' : 'win', { sub: def.id });
+            assist(resultLine(), { sub: def.id });
           }
         }
         if (resultLock > 0 && resultWait < 0) resultLock -= dt;
@@ -2110,99 +2383,110 @@
               Two short lines on the mini LCD at most (about 30 characters
               on a phone): longer lines get cut with "…". No marquee.
        p      priority 0-5. A line never interrupts a higher one still
-              on screen; same priority waits 1.2 s before replacing.
+              on screen; a different line of the same priority waits 1.2 s.
        cd     seconds before the same event may speak again.
        t      seconds on screen (default: by length, 2.4-4.2 s).
        mood   the chef's face: happy, sad, talk, music, sleep, dizzy.
        direct true = answers something the visitor just did, so it skips
               the global rate limit (one unprompted line per 6 s).
        chance 0-1 = speaks only sometimes (galería).
+       g      a shared slot: events in the same g replace each other at once
+              (on/off, pause/resume, brillo up/off) instead of waiting.
      Per-game or per-app variants live under 'event.id' (e.g. 'lose.punto')
      and are mixed with the event's general lines.
      ============================================================= */
   var SAY = {
     // waking up
-    boot: { p: 2, cd: 0, mood: 'happy', lines: ['Hoy se cocina en Zurbano 83.', 'Fuego encendido. Pasa.', 'Delantal puesto. Empezamos.'] },
-    screenOn: { p: 3, cd: 0, direct: true, mood: 'happy', lines: ['Luz otra vez. Seguimos.', 'Ya te veo. Y tú a mí.'] },
+    boot: { p: 0, cd: 0, mood: 'happy', lines: ['Hoy se cocina en Zurbano 83.', 'Fuego encendido. Pasa.', 'Delantal puesto. Empezamos.'] },
+    screenOn: { p: 3, cd: 0, direct: true, g: 'bright', mood: 'happy', lines: ['Luz otra vez. Seguimos.', 'Ya te veo. Y tú a mí.'] },
     saverWake: { p: 2, cd: 0, direct: true, mood: 'happy', lines: ['Me había quedado frito.', 'Reposaba la masa.'] },
     // nothing happening for a while (rare, at most three in a row)
-    rest: { p: 0, cd: 60, mood: 'talk', lines: ['Aquí nadie sigue la receta.', 'Huele a sofrito, ¿no?', 'Pruébalo antes de salar.', 'Sigo aquí, removiendo.', 'Una pizca de caos y listo.', 'Si te aburres, hay juegos.', 'Nada memorable es perfecto.', 'Sin prisa, que se pega.'] },
+    rest: { p: 0, cd: 60, mood: 'talk', lines: ['Aquí nadie sigue la receta.', 'Huele a sofrito, ¿no?', 'Pruébalo antes de salar.', 'Sigo aquí, removiendo.', 'Una pizca de caos y listo.', 'Si te aburres, hay juegos.', 'Nada memorable es perfecto.', 'Fuego lento. Sin prisa.'] },
     // apps: first visit, every later visit, first time back out
-    open: { p: 1, cd: 0, direct: true, mood: 'talk', t: 1.6, lines: ['Abriendo {name}…'] },
-    'enter.fechas': { p: 1, cd: 0, direct: true, mood: 'talk', lines: ['Elige fecha. Yo guardo sitio.'] },
-    'enter.galeria': { p: 1, cd: 0, direct: true, mood: 'talk', lines: ['Así se ve un taller por dentro.'] },
-    'enter.ajustes': { p: 1, cd: 0, direct: true, mood: 'talk', lines: ['Ajusta el punto de sal.'] },
-    'enter.records': { p: 1, cd: 0, direct: true, mood: 'talk', lines: ['Tus marcas. Sin trampas.'] },
-    'enter.about': { p: 1, cd: 0, direct: true, mood: 'talk', lines: ['Sí, soy yo el que no se calla.'] },
-    'enter.slicer': { p: 1, cd: 0, direct: true, mood: 'talk', lines: ['Cuchillo afilado, dedos fuera.'] },
-    'enter.servicio': { p: 1, cd: 0, direct: true, mood: 'talk', lines: ['Del pase a la mesa. Sin tirar.'] },
-    'enter.comanda': { p: 1, cd: 0, direct: true, mood: 'talk', lines: ['Lee bien la comanda.'] },
-    'enter.emplatado': { p: 1, cd: 0, direct: true, mood: 'talk', lines: ['Que entre por los ojos.'] },
-    'enter.equilibrio': { p: 1, cd: 0, direct: true, mood: 'talk', lines: ['Pulso firme, bandeja recta.'] },
-    'enter.punto': { p: 1, cd: 0, direct: true, mood: 'talk', lines: ['Ni crudo ni pasado.'] },
-    leave: { p: 1, cd: 0, direct: true, mood: 'talk', lines: ['Vuelve cuando quieras.', 'Te lo dejo como estaba.', 'Eso queda apuntado.'] },
+    open: { p: 1, cd: 0, direct: true, g: 'app', mood: 'talk', t: 1.6, lines: ['Abriendo {name}…'] },
+    enter: { p: 1, cd: 0, direct: true, g: 'app', mood: 'talk', lines: [] },
+    'enter.fechas': { lines: ['Elige fecha y pulsa A.'] },
+    'enter.packs': { lines: ['Paga hoy, elige fecha luego.', 'Un pack también se regala.'] },
+    'enter.galeria': { lines: ['Así se ve un taller por dentro.'] },
+    'enter.ajustes': { lines: ['Ajusta el punto de sal.'] },
+    'enter.records': { lines: ['Tus marcas. Sin trampas.'] },
+    'enter.about': { lines: ['Sí, soy yo el que no se calla.'] },
+    'enter.slicer': { lines: ['Cuchillo afilado, dedos fuera.'] },
+    'enter.servicio': { lines: ['Del pase a la mesa. Sin tirar.'] },
+    'enter.comanda': { lines: ['Lee bien la comanda.'] },
+    'enter.emplatado': { lines: ['Que entre por los ojos.'] },
+    'enter.equilibrio': { lines: ['Pulso firme, bandeja recta.'] },
+    'enter.punto': { lines: ['Ni crudo ni pasado.'] },
+    leave: { p: 1, cd: 0, direct: true, g: 'app', mood: 'talk', lines: ['Vuelve cuando quieras.', 'Te lo dejo como estaba.', 'Aquí te espero.'] },
     chat: { p: 2, cd: 0, direct: true, mood: 'happy', t: 2.6, lines: ['Te escucho. Escribe abajo.'] },
-    toFechas: { p: 2, cd: 0, direct: true, mood: 'happy', lines: ['¡Vamos a las fechas!'] },
-    toRecord: { p: 2, cd: 0, direct: true, mood: 'happy', lines: ['¡A por el récord!'] },
+    toFechas: { p: 2, cd: 0, direct: true, mood: 'jump', lines: ['¡Vamos a las fechas!'] },
+    toRecord: { p: 2, cd: 0, direct: true, mood: 'jump', lines: ['¡A por el récord!'] },
     // games
-    lose: { p: 4, cd: 0, direct: true, mood: 'sad', t: 3, lines: ['¡Uy! Otra vez.', 'Se quemó. Pasa en las mejores.', 'Eso no sale a sala.', 'Respira. Otra tanda.'] },
+    lose: { p: 4, cd: 0, direct: true, g: 'result', mood: 'sad', t: 3, lines: ['¡Uy! Otra vez.', 'Se quemó. Hasta a los mejores.', 'Eso no sale a sala.', 'Respira. Otra tanda.'] },
     'lose.slicer': { lines: ['Corte torcido. Nadie mira.', 'Juliana creativa, digamos.'] },
     'lose.servicio': { lines: ['La mesa 4 sigue esperando.', 'Ese pase se ha enfriado.'] },
     'lose.comanda': { lines: ['La comanda decía otra cosa.', 'Ese plato vuelve a cocina.'] },
     'lose.emplatado': { lines: ['Sabe bien. Se ve regular.', 'El plato pide otra mano.'] },
     'lose.equilibrio': { lines: ['La gravedad gana hoy.', 'Bandeja y orgullo, al suelo.'] },
     'lose.punto': { lines: ['Pasado. Al menos huele bien.', 'Eso ya es carbón.'] },
-    win: { p: 4, cd: 0, direct: true, mood: 'happy', t: 2.6, lines: ['¡Bien servido!', 'Limpio. Sale a sala.', 'Eso tiene buena pinta.'] },
+    win: { p: 4, cd: 0, direct: true, g: 'result', mood: 'happy', t: 2.6, lines: ['¡Bien servido!', 'Limpio. Sale a sala.', 'Eso tiene buena pinta.'] },
     'win.slicer': { lines: ['Cortes de escuela.', 'Ni un milímetro de más.'] },
     'win.servicio': { lines: ['Mesa servida, cliente feliz.', 'Pase limpio.'] },
     'win.comanda': { lines: ['Comanda clavada.', 'Justo lo que pidieron.'] },
-    'win.emplatado': { lines: ['Plato de foto.', 'Eso entra por los ojos.'] },
+    'win.emplatado': { lines: ['Plato de foto.', 'Plato servido.'] },
     'win.equilibrio': { lines: ['Ni una gota fuera.', 'Pulso de cirujano.'] },
     'win.punto': { lines: ['En su punto. Literal.', 'Dorado perfecto.'] },
-    record: { p: 5, cd: 0, direct: true, mood: 'happy', t: 3, lines: ['¡Nuevo récord!', 'Récord nuevo. Lo apunto.', 'Eso va a la pizarra.'] },
+    record: { p: 5, cd: 0, direct: true, g: 'result', mood: 'happy', t: 3, lines: ['¡Nuevo récord!', 'Récord nuevo. Lo apunto.', 'Eso va a la pizarra.'] },
     'record.slicer': { lines: ['Récord a cuchillo.'] },
     'record.servicio': { lines: ['Récord de servicio.'] },
     'record.comanda': { lines: ['Récord de comandas.'] },
     'record.emplatado': { lines: ['Récord de emplatado.'] },
     'record.equilibrio': { lines: ['Récord sin derramar.'] },
     'record.punto': { lines: ['Récord en su punto.'] },
-    pause: { p: 3, cd: 6, direct: true, mood: 'talk', lines: ['Tapo la olla y espero.', 'Pausa. El fuego no se va.', 'Me quedo vigilando.'] },
-    resume: { p: 3, cd: 6, direct: true, mood: 'happy', t: 1.8, lines: ['Seguimos.', 'Fuego otra vez.', 'A lo tuyo.'] },
+    // a run that is neither a loss nor near your best: no praise, no pity
+    done: { p: 4, cd: 0, direct: true, g: 'result', mood: 'talk', t: 2.8, lines: ['Servicio cerrado. A ver la nota.', 'Hecho. Siempre se puede afinar.', 'Apuntado. La próxima, mejor.'] },
+    pause: { p: 3, cd: 6, direct: true, g: 'pause', mood: 'talk', lines: ['Tapo la olla y espero.', 'Pausa. El fuego no se va.', 'Me quedo vigilando.'] },
+    resume: { p: 3, cd: 6, direct: true, g: 'pause', mood: 'happy', t: 1.8, lines: ['Seguimos.', 'Fuego otra vez.', 'A lo tuyo.'] },
     // vídeo
-    videoPlay: { p: 3, cd: 20, direct: true, mood: 'happy', lines: ['Un minuto en Zurbano 83.', 'Palomitas no, croquetas.'] },
-    videoPause: { p: 3, cd: 4, direct: true, mood: 'talk', lines: ['Pausa. Nadie se mueve.', 'Congelado, como el helado.'] },
-    videoMute: { p: 3, cd: 0, direct: true, mood: 'sleep', lines: ['Sin sonido. Se lee igual.', 'Mudo, como un buen camarero.'] },
-    videoUnmute: { p: 3, cd: 0, direct: true, mood: 'music', lines: ['Vuelve el ruido de cocina.', 'Ahora sí suena la sartén.'] },
+    videoPlay: { p: 3, cd: 20, direct: true, g: 'vplay', mood: 'happy', lines: ['Un minuto en Zurbano 83.', 'Palomitas no, croquetas.'] },
+    videoPause: { p: 3, cd: 4, direct: true, g: 'vplay', mood: 'talk', lines: ['Pausa. Nadie se mueve.', 'Pausa. Que no se enfríe.'] },
+    videoMute: { p: 3, cd: 0, direct: true, g: 'vmute', mood: 'sleep', lines: ['Sin sonido. Se lee igual.', 'Mudo, como un buen camarero.'] },
+    videoUnmute: { p: 3, cd: 0, direct: true, g: 'vmute', mood: 'music', lines: ['Vuelve el ruido de cocina.', 'Ahora sí suena la sartén.'] },
     videoFull: { p: 3, cd: 10, direct: true, mood: 'happy', lines: ['A lo grande.', 'Pantalla entera para ti.'] },
     // galería: now and then, never on every photo
-    gallery: { p: 1, cd: 25, chance: 0.35, mood: 'talk', lines: ['Esa luz no se finge.', 'Mira esas manos.', 'Ese plato no duró mucho.', 'Ahí se rió todo el mundo.', 'Un martes cualquiera.'] },
+    gallery: { p: 1, cd: 25, chance: 0.35, mood: 'talk', lines: ['Esa luz no se finge.', 'Así se trabaja aquí.', 'Esto pasó en Zurbano 83.', 'Un martes cualquiera.'] },
     // ajustes and hardware
-    volume: { p: 3, cd: 0, direct: true, mood: 'music', t: 1.6, lines: ['Volumen {n} de 10'] },
-    volumeZero: { p: 3, cd: 0, direct: true, mood: 'music', t: 1.6, lines: ['Sin volumen'] },
-    soundOn: { p: 3, cd: 0, direct: true, mood: 'happy', t: 1.8, lines: ['¡Ya te oigo!'] },
-    soundOff: { p: 3, cd: 0, direct: true, mood: 'sleep', lines: ['Silencio. Me echo una siesta.'] },
-    bright: { p: 3, cd: 0, direct: true, mood: 'happy', t: 1.6, lines: ['Brillo {n} de 5'] },
-    brightOff: { p: 3, cd: 0, direct: true, mood: 'sleep', lines: ['Pantalla fuera. Yo sigo.'] },
-    clicksOn: { p: 3, cd: 0, direct: true, mood: 'happy', lines: ['Clic, clic. Así me gusta.'] },
-    clicksOff: { p: 3, cd: 0, direct: true, mood: 'talk', lines: ['Teclas mudas. Discreto.'] },
-    hapticsOn: { p: 3, cd: 0, direct: true, mood: 'happy', lines: ['Vibración puesta. Bzz.'] },
-    hapticsOff: { p: 3, cd: 0, direct: true, mood: 'talk', lines: ['Sin vibrar. Tranquilo.'] },
-    lcdOn: { p: 3, cd: 0, direct: true, mood: 'talk', lines: ['Rayas de pantalla vieja.'] },
-    lcdOff: { p: 3, cd: 0, direct: true, mood: 'talk', lines: ['Pantalla limpia, sin rayas.'] },
-    pixelOn: { p: 3, cd: 0, direct: true, mood: 'happy', lines: ['Píxeles gordos. Como antes.'] },
-    pixelOff: { p: 3, cd: 0, direct: true, mood: 'talk', lines: ['Píxeles finos. Qué fino.'] },
+    volume: { g: 'volume', p: 3, cd: 0, direct: true, mood: 'music', t: 1.6, lines: ['Volumen {n} de 10'] },
+    volumeZero: { g: 'volume', p: 3, cd: 0, direct: true, mood: 'music', t: 1.6, lines: ['Sin volumen'] },
+    soundOn: { g: 'sound', p: 3, cd: 0, direct: true, mood: 'happy', t: 1.8, lines: ['¡Ya te oigo!'] },
+    soundOff: { g: 'sound', p: 3, cd: 0, direct: true, mood: 'sleep', lines: ['Silencio. Me echo una siesta.'] },
+    bright: { g: 'bright', p: 3, cd: 0, direct: true, mood: 'happy', t: 1.6, lines: ['Brillo {n} de 5'] },
+    brightOff: { g: 'bright', p: 3, cd: 0, direct: true, mood: 'sleep', lines: ['Pantalla fuera. Yo sigo.'] },
+    clicksOn: { g: 'clicks', p: 3, cd: 0, direct: true, mood: 'happy', lines: ['Clic, clic. Así me gusta.'] },
+    clicksOff: { g: 'clicks', p: 3, cd: 0, direct: true, mood: 'talk', lines: ['Teclas mudas. Discreto.'] },
+    hapticsOn: { g: 'haptics', p: 3, cd: 0, direct: true, mood: 'happy', lines: ['Vibración puesta. Bzz.'] },
+    hapticsOff: { g: 'haptics', p: 3, cd: 0, direct: true, mood: 'talk', lines: ['Sin vibrar. Tranquilo.'] },
+    lcdOn: { g: 'lcd', p: 3, cd: 0, direct: true, mood: 'talk', lines: ['Rayas de pantalla vieja.'] },
+    lcdOff: { g: 'lcd', p: 3, cd: 0, direct: true, mood: 'talk', lines: ['Pantalla limpia, sin rayas.'] },
+    pixelOn: { g: 'pixel', p: 3, cd: 0, direct: true, mood: 'happy', lines: ['Píxeles gordos. Como antes.'] },
+    pixelOff: { g: 'pixel', p: 3, cd: 0, direct: true, mood: 'talk', lines: ['Píxeles finos. Alta cocina.'] },
     buddyOn: { p: 3, cd: 0, direct: true, mood: 'happy', lines: ['He vuelto a mi puesto.'] },
-    musicOn: { p: 3, cd: 0, direct: true, mood: 'music', lines: ['Música. Se cocina mejor.'] },
-    musicOff: { p: 3, cd: 0, direct: true, mood: 'talk', lines: ['Sin música. Se oye el fuego.'] },
-    track: { p: 2, cd: 0, mood: 'music', lines: ['Suena {track}.'] },
+    musicOn: { g: 'music', p: 3, cd: 0, direct: true, mood: 'music', lines: ['Música. Se cocina mejor.'] },
+    musicOff: { g: 'music', p: 3, cd: 0, direct: true, mood: 'talk', lines: ['Sin música. Se oye el fuego.'] },
+    track: { g: 'music', p: 3, cd: 0, direct: true, mood: 'music', lines: ['Suena {track}.'] },
     recordsReset: { p: 3, cd: 0, direct: true, mood: 'talk', lines: ['Pizarra limpia. A empezar.', 'Borrados. Sin rencor.'] },
     // Modo Entropía
-    entropyOn: { p: 3, cd: 0, direct: true, mood: 'dizzy', lines: ['¡Todo se mueve!', 'Caos servido.', 'Que se mueva todo.'] },
-    entropyOff: { p: 3, cd: 0, direct: true, mood: 'happy', lines: ['Orden. Cada cosa en su sitio.', 'Recogido. Como debe ser.'] },
+    entropyOn: { g: 'entropy', p: 3, cd: 0, direct: true, mood: 'dizzy', lines: ['¡Todo se mueve!', 'Caos servido.', 'Hoy no se recoge nada.'] },
+    entropyOff: { g: 'entropy', p: 3, cd: 0, direct: true, mood: 'happy', lines: ['Orden. Cada cosa en su sitio.', 'Recogido. Como debe ser.'] },
     // carrito desde FECHAS
-    cartOk: { p: 5, cd: 0, direct: true, mood: 'happy', t: 3, lines: ['¡Al carrito! Nos vemos.', 'En el carrito. Nos vemos.'] },
-    cartSoldOut: { p: 5, cd: 0, direct: true, mood: 'sad', t: 3, lines: ['Agotado. Mira otra fecha.', 'Esta se llenó. Hay más.'] },
-    cartError: { p: 5, cd: 0, direct: true, mood: 'sad', t: 3, lines: ['No ha entrado. Prueba otra vez.', 'El carrito no responde.'] }
+    cartOk: { g: 'cart', p: 5, cd: 0, direct: true, mood: 'happy', t: 3, lines: ['¡Al carrito! Nos vemos.', 'En el carrito. Nos vemos.'] },
+    cartSoldOut: { g: 'cart', p: 5, cd: 0, direct: true, mood: 'sad', t: 3, lines: ['Agotado. Mira otra fecha.', 'Esta se llenó. Hay más.'] },
+    cartSlow: { g: 'cart', p: 5, cd: 0, direct: true, mood: 'talk', t: 3, lines: ['Va lento. Sigue en camino.', 'Un momento, que ya llega.'] },
+    cartError: { g: 'cart', p: 5, cd: 0, direct: true, mood: 'sad', t: 3, lines: ['No ha entrado. Prueba otra vez.', 'El carrito no responde.'] },
+    // packs (the buy / redeem modals open over the console)
+    packBuy: { g: 'pack', p: 4, cd: 0, direct: true, mood: 'happy', t: 2.6, lines: ['Rellena y es tuyo.', 'Buena elección.'] },
+    packRedeem: { g: 'pack', p: 4, cd: 0, direct: true, mood: 'talk', t: 2.6, lines: ['Escribe tu código.', 'A ver ese código.'] },
+    packRedeemed: { g: 'pack', p: 5, cd: 0, direct: true, mood: 'happy', t: 3, lines: ['¡Reservado con tu pack!', 'Plaza guardada. Nos vemos.'] }
   };
 
   /* assist(event, ctx) — the one way the console makes the assistant talk.
@@ -2223,6 +2507,7 @@
     var pool = (sub && sub.lines ? sub.lines : []).concat(base && base.lines ? base.lines : []);
     if (!pool.length) return false;
     var now = sayNow(), key = evt + (sub ? '.' + ctx.sub : '');
+    var slot = spec.g || evt;                 // paired events (on/off, pause/resume) replace each other
     var direct = ctx.direct != null ? ctx.direct : !!spec.direct;
     if (spec.cd && sayAt[evt] != null && now - sayAt[evt] < spec.cd) return false;
     if (!direct && now - sayAny < SAY_GAP) return false;
@@ -2232,7 +2517,7 @@
     if (pool.length > 1) while (line === sayLast[key]) line = pool[Math.floor(Math.random() * pool.length)];
     var text = line.replace(/\{(\w+)\}/g, function (m, k) { return ctx[k] != null ? ctx[k] : ''; });
     var dur = spec.t || clamp(1.6 + text.length * 0.06, 2.4, 4.2);
-    if (!buddy.speak(spec.p || 0, evt, spec.mood || 'talk', text, dur)) return false;
+    if (!buddy.speak(spec.p || 0, slot, spec.mood || 'talk', text, dur)) return false;
     sayAt[evt] = now; sayAny = now; sayLast[key] = line;
     return true;
   }
@@ -2261,8 +2546,8 @@
       if (i !== ti) {
         ti = i;
         if (!o) return;                       // skipping songs with the music off says nothing
-        var asked = Date.now() - musicAskedAt < 2500;
-        assist('track', { track: (M.track() || {}).title || '', direct: asked });
+        // only songs the visitor skipped to; the playlist moving on by itself says nothing
+        if (Date.now() - musicAskedAt < 2500) assist('track', { track: (M.track() || {}).title || '' });
       }
     });
   }
@@ -2444,7 +2729,7 @@
         cv = $('canvas', el);
         chatBtn = document.querySelector('[data-vanny-toggle]');
         el.addEventListener('mouseenter', function () { hover = true; if (!react && mode === 0 && enabled) say('Asistente', '¡Pulsa aquí!'); });
-        el.addEventListener('mouseleave', function () { hover = false; if (!react) showChannel(); });
+        el.addEventListener('mouseleave', function () { hover = false; showChannel(); });
         showChannel();
       },
       /* speak(p, key, mood, text, dur): the only door for a reaction line
@@ -2462,7 +2747,7 @@
         say(kind === 'music' ? 'Volumen' : CHANNELS[mode], text);
         var still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (still) msg.shown = msg.body.length;            // no typing, no hop
-        else if (kind === 'happy') jumpT = 0;
+        else if (kind === 'happy' || kind === 'jump') jumpT = 0;
         return true;
       },
       heard: function () { return msg.body; },
@@ -2481,8 +2766,7 @@
       },
       jump: function () { if (jumpT < 0) jumpT = 0; },
       setEnabled: function (on) { enabled = on; react = null; showChannel(); },
-      // the line for the switch itself comes from SAY.entropyOn / entropyOff (bindEntropy)
-      setChaos: function (on) { chaos = on; },
+      setChaos: function (on) { chaos = on; if (on) { react = null; say('Modo caos', '¡Todo se mueve!'); } else showChannel(); },
       cycle: function (d) {
         mode = (mode + d + 3) % 3;
         slide = 1; slideDir = d < 0 ? -1 : 1;
@@ -2699,6 +2983,18 @@
         ctx.restore();
         return;
       }
+      if (id === 'packs') {
+        // tickets sliding past: yellow stub, cream body
+        var pw = u * 7, pg = u * 2, span = pw + pg, poff = (t * 16) % span;
+        ctx.save(); ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip();
+        for (var pk = -1; pk * span < w + span; pk++) {
+          var px = x + pk * span + poff;
+          ctx.fillStyle = P.yellow; ctx.fillRect(px, mid - u, pw * 0.34, u * 2);
+          ctx.fillStyle = P.white; ctx.fillRect(px + pw * 0.34 + 1, mid - u, pw * 0.66 - 1, u * 2);
+        }
+        ctx.restore();
+        return;
+      }
       if (id === 'chat') {
         for (var dI = 0; dI < 3; dI++) { var hop = Math.max(0, Math.sin(t * 6 - dI * 0.8)) * u; ctx.fillStyle = P.white; ctx.fillRect(x + w / 2 - 10 + dI * 8, mid - u / 2 - hop, u, u); }
         return;
@@ -2893,6 +3189,8 @@
       if (tgt && (tgt.isContentEditable || /INPUT|TEXTAREA|SELECT|IFRAME/.test(tgt.tagName))) return;
       var m = document.getElementById('modal-1');
       if (m && m.classList.contains('is-open')) return;
+      // a packs buy/redeem dialog is open over the page: its keys are its own
+      if (packModalOpen()) return;
       if (tgt === wheelEl || (tgt.closest && tgt.closest('[data-pe-rocker], [data-pe-mini]'))) return;
       var key = KEYMAP[e.key];
       if (!key) return;
@@ -2929,7 +3227,7 @@
       else if (bright === 0 && nb > 0) sampleSoon('boot');   // back on: the start-up sound
       else sfx('tick', nb * 2);
       if (nb !== bright) { bright = nb; store('pe-con-bright', bright); applyBright(); }
-      if (bright === 0) { toast('Pantalla', { value: 'Apagada' }); assist('brightOff'); }
+      if (bright === 0) { toast('Pantalla apagada'); assist('brightOff'); }
       else { toast('Brillo', { meter: [bright, 5] }); assist('bright', { n: bright }); }
       if (current && current.refresh) current.refresh();
     }
@@ -3229,7 +3527,7 @@
     renderVolBars();
     syncSoundKey();
     if (on) sfx('ok');
-    if (on) toast('Sonido', { meter: [volume, 10] }); else toast('Sonido', { icon: 'mute' });
+    if (on) toast('Sonido', { meter: [volume, 10] }); else toast('Silencio');
     assist(on ? 'soundOn' : 'soundOff');
     if (current && current.refresh) current.refresh();
   }
@@ -3280,7 +3578,7 @@
       blinkLed();
       if (toggleEl) toggleEl.classList.toggle('is-on', on);
       buddy.setChaos(on);
-      if (booted) { toast('Modo', { value: on ? 'Caos' : 'Orden', ms: 1300 }); assist(on ? 'entropyOn' : 'entropyOff'); }
+      if (booted) { toast(on ? 'Modo caos' : 'Modo orden', 1300); assist(on ? 'entropyOn' : 'entropyOff'); }
       if (current && current.refresh) current.refresh();
     }).observe(sw, { attributes: true, attributeFilter: ['class'] });
   }
@@ -3452,7 +3750,7 @@
     chatSlot.setAttribute('data-pe-chat-slot', '');
     chatSlot.style.cssText = 'position:absolute;inset:0;';
     hostEl.appendChild(chatSlot);
-    var fechas = makeFechas(), chat = makeChat(), galeria = makeGaleria(), video = makeVideo(), ajustes = makeAjustes();
+    var fechas = makeFechas(), packs = makePacks(), chat = makeChat(), galeria = makeGaleria(), video = makeVideo(), ajustes = makeAjustes();
     videoView = video;
     ajustesView = ajustes; recordsView = makeRecords(); aboutView = makeAbout();
     navView = makeNav();
@@ -3468,6 +3766,7 @@
 
     GAMES = (window.PE_CONSOLE_GAMES || []).slice().sort(function (a, b) { return (a.order || 50) - (b.order || 50); });
     apps = [{ id: 'fechas', title: 'Fechas', sub: 'Próximos talleres. Reserva desde aquí.', tag: 'RESERVAS', view: fechas, cardBg: P.yellow, cardFg: P.aztec },
+      { id: 'packs', title: 'Packs', sub: 'Paga ahora, elige fecha después. O regálalo.', tag: 'PACKS', view: packs, cardBg: P.cream2, cardFg: P.aztec },
       { id: 'galeria', title: 'Galería', sub: 'El vídeo y un taller por dentro.', tag: 'VÍDEO', view: galeria, cardBg: P.walnut },
       { id: 'chat', title: 'Chat', sub: '¿Hablamos? Pregunta lo que quieras.', tag: 'EN DIRECTO', view: chat, cardBg: P.fawn, cardFg: P.white }];
     GAMES.forEach(function (g) {

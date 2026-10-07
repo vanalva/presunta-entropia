@@ -138,10 +138,10 @@
   <script async="" type="module" src="https://cdn.jsdelivr.net/npm/@finsweet/attributes@2/attributes.js" fs-list=""></script>
   <!--  Finsweet Attributes  -->
   <script async="" type="module" src="https://cdn.jsdelivr.net/npm/@finsweet/attributes@2/attributes.js" fs-list=""></script>
-  <!--  PE-83 console (hero). Replaced the gameboy-embed.js fork on 2026-09-25;
-        that file stays in src/js as a backup. Do not load both. -->
-  <link rel="stylesheet" href="css/pe-console.css?v=1576f310">
-  <link rel="stylesheet" href="css/pe-chat-buddy.css?v=dd73e1be">
+  <!--  PE-83 console (hero). Replaced the old gameboy (gameboy-embed.js fork) on
+        2026-09-25; its leftover embed, audio tags and backup file were removed on 2026-10-01. -->
+  <link rel="stylesheet" href="css/pe-console.css?v=d3064f7d">
+  <link rel="stylesheet" href="css/pe-chat-buddy.css?v=338f24f9">
   <link rel="stylesheet" href="css/hero-swiper.css?v=fe77502f">
   <!--  Site music (11 tracks, on by default, starts on the first tap). js/pe-music.js loads
         before the console so the console's top screen can drive it.  -->
@@ -153,11 +153,11 @@
   <script src="js/pe-console/games/emplatado.js?v=479f3168" defer></script>
   <script src="js/pe-console/games/equilibrio.js?v=4e7bd236" defer></script>
   <script src="js/pe-console/games/punto.js?v=d644dd06" defer></script>
-  <script src="js/pe-console/pe-console.js?v=aa970731" defer></script>
+  <script src="js/pe-console/pe-console.js?v=4b367c2c" defer></script>
   <script src="js/hero-dock.js?v=8cdf4df5" defer></script>
   <script src="js/hero-swiper.js?v=7c39220e" defer></script>
-  <script src="js/pe-motion.js?v=5bf7ae92" defer></script>
-  <script src="js/pe-chat-buddy.js?v=7231a1ca" defer></script>
+  <script src="js/pe-motion.js?v=b523ee5c" defer></script>
+  <script src="js/pe-chat-buddy.js?v=c1cc8f5f" defer></script>
   <!--  MODO ENTROPÍA: pre-paint state (no flash) + GSAP (Magneto return) + chaos engine  -->
   <script>try{if(localStorage.getItem('pe-entropy')==='1'){document.documentElement.classList.add('modo-entropia');}}catch(e){}</script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
@@ -174,14 +174,16 @@
 
 <!-- Original site CSS — 1:1 fidelity baseline -->
 <link rel="stylesheet" href="css/original.css?v=5502636d">
-<link rel="stylesheet" href="css/framework.css?v=48e7fd28">
-<link rel="stylesheet" href="css/variables.css?v=caf20025">
-<link rel="stylesheet" href="css/project.css?v=7c09f724">
+<link rel="stylesheet" href="css/framework.css?v=9e6b5644">
+<link rel="stylesheet" href="css/variables.css?v=b9782eaf">
+<link rel="stylesheet" href="css/project.css?v=ba01a3d7">
+  <link rel="stylesheet" href="css/pe-packs.css?v=ae3c4693">
 <link rel="stylesheet" href="css/pe-motion.css?v=71450f25">
 <script>(function(h){try{if(!h.classList.contains('modo-entropia')&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){h.classList.add('pe-m-boot');setTimeout(function(){h.classList.remove('pe-m-boot')},3000)}}catch(e){}})(document.documentElement);</script>
   <script src="data/pe-experiencias.js"></script>
   <script src="data/pe-cms.js"></script>
   <script src="data/pe-cms-lists.js" defer></script>
+  <script src="js/pe-list-controls.js?v=3d12fa90" defer></script>
 </head>
 <body>
   <div class="page-wrapper" data-flwr>
@@ -1478,12 +1480,6 @@
                       if (preloader && preloader.classList.contains('pe-preloader-visible')) {
                         preloaderSound.play().catch(function() {});
                       }
-                      // Same rescue for the gameboy console boot sound (script is CDN-hosted)
-                      var gbSound = document.getElementById('startup-sound');
-                      var gbScreen = document.getElementById('dark-screen');
-                      if (gbSound && gbScreen && getComputedStyle(gbScreen).display !== 'none' && gbSound.paused) {
-                        gbSound.play().catch(function() {});
-                      }
                     };
                     document.addEventListener('pointerdown', retryOnGesture);
                     document.addEventListener('keydown', retryOnGesture);
@@ -1607,7 +1603,7 @@
       <div data-collapse="all" data-animation="default" data-duration="0" data-easing2="ease" fs-scrolldisable-element="smart-nav" data-easing="ease" role="banner" class="navbar_fullscreen color-scheme-1 w-nav">
         <div class="navbar_wrapper">
           <div class="navbar_fixed-button-container">
-            <div class="navbar_menu-button button w-nav-button">
+            <div class="navbar_menu-button button w-nav-button f-text-label">
               <div class="navbar_menu-button-wrapper">
                 <div>Menu</div>
                 <div class="menu-icon">
@@ -1621,11 +1617,11 @@
                 <path d="M9 22C9.55228 22 10 21.5523 10 21C10 20.4477 9.55228 20 9 20C8.44772 20 8 20.4477 8 21C8 21.5523 8.44772 22 9 22Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                 <path d="M20 22C20.5523 22 21 21.5523 21 21C21 20.4477 20.5523 20 20 20C19.4477 20 19 20.4477 19 21C19 21.5523 19.4477 22 20 22Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                 <path d="M1 1H5L7.68 14.39C7.77144 14.8504 8.02191 15.264 8.38755 15.5583C8.75318 15.8526 9.2107 16.009 9.68 16H19.4C19.8693 16.009 20.3268 15.8526 20.6925 15.5583C21.0581 15.264 21.3086 14.8504 21.4 14.39L23 6H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-              </svg><span class="cart-header_badge cart-header_badge" data-cart-count="">0</span></button>
+              </svg><span class="cart-header_badge cart-header_badge f-text-tiny f-text-medium f-leading-none" data-cart-count="">0</span></button>
           </div>
           <nav role="navigation" class="navbar_menu padding-global w-nav-menu">
             <div class="navbar_menu-wrapper padding-global">
-              <a data-w-id="c75c1f82-4aeb-6a14-464e-23be1eabfba7" href="#" class="navbar_menu-close-button-wrapper button is-secondary w-inline-block">
+              <a data-w-id="c75c1f82-4aeb-6a14-464e-23be1eabfba7" href="#" class="navbar_menu-close-button-wrapper button is-secondary w-inline-block f-text-label">
                 <div class="navbar_menu-close-button-content">
                   <div>Cerrar</div>
                   <div class="menu-icon">
@@ -1636,20 +1632,24 @@
                   </div>
                 </div>
               </a>
-              <a href="#" data-modal-open="modal-1" class="menu_reservar-cta button is-secondary w-button">Reservar ahora</a>
+              <a href="#" data-modal-open="modal-1" class="menu_reservar-cta button is-secondary w-button f-text-label">Reservar ahora</a>
               <div class="navbar18_links-wrapper">
                 <a href="index.html" aria-current="page" class="w-inline-block w--current"><img src="assets/images/identity_main-isologo.svg" loading="lazy" alt="Presunta Entropía" class="menu_fullscreen-icon"></a>
-                <a href="index.html" class="navbar18_link heading-style-h1 w-nav-link">Inicio</a>
-                <a href="#" data-modal-open="modal-1" class="navbar18_link heading-style-h1 w-nav-link">Reservas</a>
-                <a href="talleres-v2.html" class="navbar18_link heading-style-h1 w-nav-link">Talleres</a>
-                <a href="team-building-v2.html" class="navbar18_link heading-style-h1 w-nav-link">Team Building</a>
-                <a href="cenas-v2.html" class="navbar18_link heading-style-h1 w-nav-link">Chef&#x27;s Table</a>
-                <a href="la-escuela-v2.html" class="navbar18_link heading-style-h1 w-nav-link">Método</a>
-                <a href="nuestras-caras-v2.html" class="navbar18_link heading-style-h1 w-nav-link">El Equipo</a>
-                <a href="contacto-v2.html" class="navbar18_link heading-style-h1 w-nav-link">Contacto</a>
+                <a href="index.html" class="navbar18_link w-nav-link f-text-h1 f-text-semibold f-leading-tight f-text-uppercase">Inicio</a>
+                <a href="#" data-modal-open="modal-1" class="navbar18_link w-nav-link f-text-h1 f-text-semibold f-leading-tight f-text-uppercase">Reservas</a>
+                <a href="packs.html" class="navbar18_link w-nav-link f-text-h1 f-text-semibold f-leading-tight f-text-uppercase">Packs</a>
+                <a href="talleres.html" class="navbar18_link w-nav-link f-text-h1 f-text-semibold f-leading-tight f-text-uppercase">Talleres</a>
+                <a href="team-building.html" class="navbar18_link w-nav-link f-text-h1 f-text-semibold f-leading-tight f-text-uppercase">Team Building</a>
+                <a href="cenas.html" class="navbar18_link w-nav-link f-text-h1 f-text-semibold f-leading-tight f-text-uppercase">Chef&#x27;s Table</a>
+                <a href="la-escuela.html" class="navbar18_link w-nav-link f-text-h1 f-text-semibold f-leading-tight f-text-uppercase">Método</a>
+                <a href="nuestras-caras.html" class="navbar18_link w-nav-link f-text-h1 f-text-semibold f-leading-tight f-text-uppercase">El Equipo</a>
+                <a href="contacto.html" class="navbar18_link w-nav-link f-text-h1 f-text-semibold f-leading-tight f-text-uppercase">Contacto</a>
               </div>
               <div class="navbar18_bottom">
-                <a href="contacto-v2.html" class="text-size-large">Calle Zurbano 83, Madrid · info@presuntaentropia.com</a>
+                <div class="menu_bottom-info">
+                  <a href="canjear-pack.html" data-entropical-pack-redeem-open="" data-auto-open="false" data-pe-nav="Canjear pack" class="menu_canjear-link f-text-small">Canjear pack</a>
+                  <a href="contacto.html" class="f-text-small">Calle Zurbano 83, Madrid · info@presuntaentropia.com</a>
+                </div>
                 <div class="w-layout-grid navbar18_social-list">
                   <a href="#" class="navbar18_social-link w-inline-block">
                     <div class="icon-embed-xsmall w-embed"><svg width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1682,7 +1682,7 @@
           </nav>
         </div>
       </div>
-      <header data-w-id="8fcd704c-a671-28b6-ceb1-8f27256ca233" class="section_hero is-viewport">
+      <header data-w-id="8fcd704c-a671-28b6-ceb1-8f27256ca233" class="section_hero is-viewport f-text-body">
         <div class="w-layout-grid hero_component">
           <div id="w-node-_8fcd704c-a671-28b6-ceb1-8f27256ca235-b75f0699" class="padding-global mobile-padding-rule">
             <div id="w-node-_8fcd704c-a671-28b6-ceb1-8f27256ca236-b75f0699" class="hero_wrapper-left">
@@ -1701,8 +1701,8 @@
                                 <path d="M9 22C9.55228 22 10 21.5523 10 21C10 20.4477 9.55228 20 9 20C8.44772 20 8 20.4477 8 21C8 21.5523 8.44772 22 9 22Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                                 <path d="M20 22C20.5523 22 21 21.5523 21 21C21 20.4477 20.5523 20 20 20C19.4477 20 19 20.4477 19 21C19 21.5523 19.4477 22 20 22Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                                 <path d="M1 1H5L7.68 14.39C7.77144 14.8504 8.02191 15.264 8.38755 15.5583C8.75318 15.8526 9.2107 16.009 9.68 16H19.4C19.8693 16.009 20.3268 15.8526 20.6925 15.5583C21.0581 15.264 21.3086 14.8504 21.4 14.39L23 6H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                              </svg><span class="cart-header_badge" data-hero-cart-count>0</span></button>
-                            <button type="button" class="navbar_menu-button button" data-hero-proxy="menu" aria-label="Abrir menú">
+                              </svg><span class="cart-header_badge cart-header_badge f-text-tiny f-text-medium f-leading-none" data-hero-cart-count>0</span></button>
+                            <button type="button" class="navbar_menu-button button f-text-label" data-hero-proxy="menu" aria-label="Abrir menú">
                               <div class="navbar_menu-button-wrapper">
                                 <div>Menu</div>
                                 <div class="menu-icon"><div class="menu-icon_wrapper"><div class="menu-icon4_line-top"></div><div class="menu-icon4_line-bottom"></div></div></div>
@@ -1795,20 +1795,20 @@
                     <div class="padding-section-xl grow hero_stack">
                       <div class="hero_content-wrapper hero_cluster">
                         <div class="button-group gap-0 is-chips hero_pills">
-                          <a href="talleres-v2.html" class="button is-secondary is-simple is-tiny hero_pill w-button"><strong class="hero_pill-kicker">Energía /</strong> Talleres</a>
-                          <a href="team-building-v2.html" class="button is-secondary is-simple is-tiny hero_pill w-button"><strong class="hero_pill-kicker">Fusión /</strong> Team Building</a>
-                          <a href="cenas-v2.html" class="button is-secondary is-simple is-tiny hero_pill w-button"><strong class="hero_pill-kicker">Materia /</strong> Chef&#x27;s Table</a>
+                          <a href="talleres.html" class="button is-secondary is-simple is-tiny hero_pill w-button f-text-label f-text-ui-xs"><strong class="hero_pill-kicker">Energía /</strong> Talleres</a>
+                          <a href="team-building.html" class="button is-secondary is-simple is-tiny hero_pill w-button f-text-label f-text-ui-xs"><strong class="hero_pill-kicker">Fusión /</strong> Team Building</a>
+                          <a href="cenas.html" class="button is-secondary is-simple is-tiny hero_pill w-button f-text-label f-text-ui-xs"><strong class="hero_pill-kicker">Materia /</strong> Chef&#x27;s Table</a>
                         </div>
-                        <div class="text-style-tagline">Aprender haciendo</div>
-                        <h1 class="u-text-style-h1 u-all-caps hero_title">Talleres<br>culinarios<br>en madrid</h1>
-                        <p class="text-size-huge max-width-large hero_lede">En Presunta Entropía el desorden es un ingrediente más: cocinamos experiencias donde el error se vuelve hallazgo y el caos se organiza solo. Porque lo memorable nunca es perfecto.</p>
+                        <div class="text-style-tagline f-text-eyebrow">Aprender haciendo</div>
+                        <h1 class="hero_title f-text-hero f-text-uppercase">Talleres<br>culinarios<br>en madrid</h1>
+                        <p class="max-width-large hero_lede f-text-lead f-margin-top-3">En Presunta Entropía el desorden es un ingrediente más: cocinamos experiencias donde el error se vuelve hallazgo y el caos se organiza solo. Porque lo memorable nunca es perfecto.</p>
                       </div>
                     </div>
                   </div>
                   <div class="hero_cta-row hero_cta-stack">
                     <div class="button-group gap-0 mobile-rule">
-                      <a href="talleres-v2.html" class="button is-large max-width-full-mobile hero_cta w-button">Talleres</a>
-                      <a href="#calendario" data-modal-open="modal-1" class="button is-secondary is-large hero_cta w-button">Reserva Ya</a>
+                      <a href="talleres.html" class="button max-width-full-mobile hero_cta w-button f-text-label f-text-ui-lg">Talleres</a>
+                      <a href="#calendario" data-modal-open="modal-1" class="button is-secondary hero_cta w-button f-text-label f-text-ui-lg">Reserva Ya</a>
                     </div>
                   </div>
                 </div>
@@ -1902,12 +1902,12 @@
               </div>
               <div class="hero_image-marquee_track">
                 <div class="hero_image-marquee_list">
-                  <div class="hero_image-marquee_item"><img src="assets/images/riendo-comida_2560w-p-800.webp" loading="lazy" alt="Personas riendo durante una comida" class="hero_image-marquee_img"></div>
-                  <div class="hero_image-marquee_item"><img src="assets/images/plato-gambas_2560w-p-800.jpg" loading="lazy" alt="Plato de gambas" class="hero_image-marquee_img"></div>
-                  <div class="hero_image-marquee_item"><img src="assets/images/pasta-close-up_2560w-p-800.webp" loading="lazy" alt="Pasta fresca en primer plano" class="hero_image-marquee_img"></div>
-                  <div class="hero_image-marquee_item"><img src="assets/images/grupo-amigos-cocina_2560w-p-800.webp" loading="lazy" alt="Grupo de amigos cocinando" class="hero_image-marquee_img"></div>
-                  <div class="hero_image-marquee_item"><img src="assets/images/muestra-plato-salmon_2560w-p-800.webp" loading="lazy" alt="Plato de salmón emplatado" class="hero_image-marquee_img"></div>
-                  <div class="hero_image-marquee_item"><img src="assets/images/instructor-clase-cocina_2560w-p-800.jpg" loading="lazy" alt="Instructor en clase de cocina" class="hero_image-marquee_img"></div>
+                  <div class="hero_image-marquee_item"><img src="assets/images/home-2026-10/riendo-comida-800.webp" loading="lazy" alt="Personas riendo durante una comida" class="hero_image-marquee_img"></div>
+                  <div class="hero_image-marquee_item"><img src="assets/images/home-2026-10/plato-gambas-800.webp" loading="lazy" alt="Plato de gambas" class="hero_image-marquee_img"></div>
+                  <div class="hero_image-marquee_item"><img src="assets/images/home-2026-10/pasta-close-up-800.webp" loading="lazy" alt="Pasta fresca en primer plano" class="hero_image-marquee_img"></div>
+                  <div class="hero_image-marquee_item"><img src="assets/images/home-2026-10/grupo-amigos-cocina-800.webp" loading="lazy" alt="Grupo de amigos cocinando" class="hero_image-marquee_img"></div>
+                  <div class="hero_image-marquee_item"><img src="assets/images/home-2026-10/muestra-plato-salmon-800.webp" loading="lazy" alt="Plato de salmón emplatado" class="hero_image-marquee_img"></div>
+                  <div class="hero_image-marquee_item"><img src="assets/images/home-2026-10/instructor-clase-cocina-800.webp" loading="lazy" alt="Instructor en clase de cocina" class="hero_image-marquee_img"></div>
                 </div>
               </div>
               <div class="auto-js-embed w-embed w-script">
@@ -2135,11 +2135,11 @@
               <div class="hero-swiper" data-hero-swiper>
                 <div class="hero-swiper_element swiper">
                   <div class="hero-swiper_list swiper-wrapper">
-                    <div class="hero-swiper_slide swiper-slide"><img class="hero-swiper_img" src="assets/images/foto-trasera-delantal-curso_2560w-p-800.jpg" srcset="assets/images/foto-trasera-delantal-curso_2560w-p-500.jpg 500w, assets/images/foto-trasera-delantal-curso_2560w-p-800.jpg 800w, assets/images/foto-trasera-delantal-curso_2560w-p-1080.jpg 1080w" sizes="86vw" alt="Participante con delantal durante un taller de cocina"></div>
-                    <div class="hero-swiper_slide swiper-slide"><img class="hero-swiper_img" src="assets/images/ninos-curso-cocina_2560w-p-800.webp" srcset="assets/images/ninos-curso-cocina_2560w-p-500.webp 500w, assets/images/ninos-curso-cocina_2560w-p-800.webp 800w, assets/images/ninos-curso-cocina_2560w-p-1080.webp 1080w" sizes="86vw" alt="Niños cocinando en un taller" loading="lazy"></div>
-                    <div class="hero-swiper_slide swiper-slide"><img class="hero-swiper_img" src="assets/images/pareja-curso-cocina-madrid_2560w-p-800.jpg" srcset="assets/images/pareja-curso-cocina-madrid_2560w-p-500.jpg 500w, assets/images/pareja-curso-cocina-madrid_2560w-p-800.jpg 800w, assets/images/pareja-curso-cocina-madrid_2560w-p-1080.jpg 1080w" sizes="86vw" alt="Pareja cocinando junta en Madrid" loading="lazy"></div>
-                    <div class="hero-swiper_slide swiper-slide"><img class="hero-swiper_img" src="assets/images/muestra-plato-mano_2560w-p-800.webp" srcset="assets/images/muestra-plato-mano_2560w-p-500.webp 500w, assets/images/muestra-plato-mano_2560w-p-800.webp 800w, assets/images/muestra-plato-mano_2560w-p-1080.webp 1080w" sizes="86vw" alt="Una mano muestra un plato emplatado" loading="lazy"></div>
-                    <div class="hero-swiper_slide swiper-slide"><img class="hero-swiper_img" src="assets/images/riendo-retrato_2560w-p-800.webp" srcset="assets/images/riendo-retrato_2560w-p-500.webp 500w, assets/images/riendo-retrato_2560w-p-800.webp 800w, assets/images/riendo-retrato_2560w-p-1080.webp 1080w" sizes="86vw" alt="Retrato de una participante riendo" loading="lazy"></div>
+                    <div class="hero-swiper_slide swiper-slide"><img class="hero-swiper_img" src="assets/images/home-2026-10/foto-trasera-delantal-curso-800.webp" srcset="assets/images/home-2026-10/foto-trasera-delantal-curso-800.webp 500w, assets/images/home-2026-10/foto-trasera-delantal-curso-800.webp 800w, assets/images/home-2026-10/foto-trasera-delantal-curso.webp 1080w" sizes="86vw" alt="Participante con delantal durante un taller de cocina"></div>
+                    <div class="hero-swiper_slide swiper-slide"><img class="hero-swiper_img" src="assets/images/home-2026-10/ninos-curso-cocina-800.webp" srcset="assets/images/home-2026-10/ninos-curso-cocina-800.webp 500w, assets/images/home-2026-10/ninos-curso-cocina-800.webp 800w, assets/images/home-2026-10/ninos-curso-cocina.webp 1080w" sizes="86vw" alt="Niños cocinando en un taller" loading="lazy"></div>
+                    <div class="hero-swiper_slide swiper-slide"><img class="hero-swiper_img" src="assets/images/home-2026-10/pareja-curso-cocina-madrid-800.webp" srcset="assets/images/home-2026-10/pareja-curso-cocina-madrid-800.webp 500w, assets/images/home-2026-10/pareja-curso-cocina-madrid-800.webp 800w, assets/images/home-2026-10/pareja-curso-cocina-madrid.webp 1080w" sizes="86vw" alt="Pareja cocinando junta en Madrid" loading="lazy"></div>
+                    <div class="hero-swiper_slide swiper-slide"><img class="hero-swiper_img" src="assets/images/home-2026-10/muestra-plato-mano-800.webp" srcset="assets/images/home-2026-10/muestra-plato-mano-800.webp 500w, assets/images/home-2026-10/muestra-plato-mano-800.webp 800w, assets/images/home-2026-10/muestra-plato-mano.webp 1080w" sizes="86vw" alt="Una mano muestra un plato emplatado" loading="lazy"></div>
+                    <div class="hero-swiper_slide swiper-slide"><img class="hero-swiper_img" src="assets/images/home-2026-10/riendo-retrato-800.webp" srcset="assets/images/home-2026-10/riendo-retrato-800.webp 500w, assets/images/home-2026-10/riendo-retrato-800.webp 800w, assets/images/home-2026-10/riendo-retrato.webp 1080w" sizes="86vw" alt="Retrato de una participante riendo" loading="lazy"></div>
                   </div>
                 </div>
                 <div class="hero-swiper_bullets"></div>
@@ -2147,14 +2147,11 @@
               <div class="flowriter-import-2">
                 <div class="auto-css-embed w-embed">
                   <style>
-                      /* Auto-extracted from HTML */
-                      /* =============================================
-           LUMOS FLUID VARIABLES (Container-based)
-           Using cqi (container query inline) for true
-           container-responsive sizing
-           ============================================= */
+                      /* PE colour variables (page :root). The old gameboy embed that
+                         used to live here was removed on 2026-10-01 (PE-83 console
+                         replaced it on 2026-09-25); these eight are still read by
+                         original.css (.auto-style-* rules) and pe-console.css. */
                       :root {
-                        /* Presunta Entropía Color Variables */
                         --pe-mule-fawn: #9b4933;
                         --pe-english-walnut-dark: #36221e;
                         --pe-english-walnut: #442b26;
@@ -2163,993 +2160,9 @@
                         --pe-fuel-yellow: #efa02e;
                         --pe-fuel-yellow-dark: #bf8024;
                         --pe-fuel-yellow-light: #f3bc6c;
-                        --pe-game-gold: #d4a017;
-                        --pe-game-gold-dark: #8b6914;
-                        --pe-game-gold-light: #f3bc6c;
-                        /* Lumos Fluid Spacing Variables - viewport fallback */
-                        --lumos-space-xs: clamp(0.5rem, 0.429rem + 0.357vw, 0.75rem);
-                        --lumos-space-sm: clamp(0.75rem, 0.679rem + 0.357vw, 1rem);
-                        --lumos-space-md: clamp(1rem, 0.857rem + 0.714vw, 1.5rem);
-                        --lumos-space-lg: clamp(1.25rem, 1.036rem + 1.071vw, 2rem);
-                        --lumos-space-xl: clamp(1.5rem, 1.071rem + 2.143vw, 3rem);
-                        /* Lumos Fluid Typography Variables */
-                        --lumos-text-xs: clamp(0.5rem, 0.464rem + 0.179vw, 0.625rem);
-                        --lumos-text-sm: clamp(0.625rem, 0.571rem + 0.268vw, 0.8125rem);
-                        --lumos-text-base: clamp(0.6875rem, 0.616rem + 0.357vw, 0.9375rem);
-                        --lumos-text-md: clamp(0.875rem, 0.768rem + 0.536vw, 1.25rem);
-                        --lumos-text-lg: clamp(1rem, 0.857rem + 0.714vw, 1.5rem);
-                        --lumos-text-xl: clamp(1.25rem, 1.036rem + 1.071vw, 2rem);
-                        --lumos-text-2xl: clamp(2rem, 1.571rem + 2.143vw, 3.5rem);
-                        /* Lumos Fluid Component Sizing - viewport fallback */
-                        --lumos-btn-sm: clamp(3.125rem, 2.768rem + 1.786vw, 4.375rem);
-                        --lumos-btn-md: clamp(4.375rem, 3.839rem + 2.679vw, 6.25rem);
-                        --lumos-btn-lg: clamp(5rem, 4.286rem + 3.571vw, 7.5rem);
-                        --lumos-nav-switch: clamp(3.125rem, 2.589rem + 2.679vw, 5rem);
-                        --lumos-logo-sm: clamp(3.75rem, 3.214rem + 2.679vw, 5.625rem);
-                        /* Lumos Fluid Border Radius */
-                        --lumos-radius-lg: clamp(1.5rem, 1.357rem + 0.714vw, 2rem);
-                        --lumos-radius-xl: clamp(1.875rem, 1.696rem + 0.893vw, 2.5rem);
                       }
-                      /* Reset and base styles for embed */
-                      * {
-                        margin: 0;
-                        padding: 0;
-                        box-sizing: border-box;
-                      }
-                      html,
-                      body {
-                        width: 100%;
-                        height: 100%;
-                        font-family: 'Space Grotesk', sans-serif;
-                      }
-                      .presunta-game-wrapper {
-                        width: 100%;
-                        height: 100%;
-                        display: flex;
-                        align-items: stretch;
-                        font-family: 'Space Grotesk', sans-serif;
-                        color: var(--pe-aztec);
-                        user-select: none;
-                        -webkit-user-select: none;
-                        -moz-user-select: none;
-                        -ms-user-select: none;
-                        /* Enable container queries */
-                        container-type: inline-size;
-                        container-name: gameboy;
-                      }
-                      .console {
-                        width: 100%;
-                        height: 100%;
-                        display: flex;
-                        flex-direction: column;
-                      }
-                      .console-body {
-                        background-color: var(--pe-mule-fawn);
-                        border-radius: clamp(1rem, 4cqi, 2.5rem);
-                        padding: clamp(0.75rem, 3cqi, 2rem);
-                        box-shadow: none;
-                        display: flex;
-                        flex-direction: column;
-                        gap: clamp(0.5rem, 2cqi, 1rem);
-                        height: 100%;
-                        width: 100%;
-                      }
-                      /* (3D volume/tilt CSS removed 2026-07-17 at Juan's request) */
-                      .screen-area {
-                        background-color: transparent;
-                        border-radius: clamp(1rem, 4cqi, 2.5rem);
-                        padding: 0;
-                        box-shadow: none;
-                        overflow: hidden;
-                        position: relative;
-                        width: 100%;
-                        /* KEY FIX: Flex grow to fill available space */
-                        flex: 1;
-                        min-height: 0;
-                      }
-                      .game-container {
-                        /* KEY FIX: Absolute position to fill screen area */
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                        height: 100%;
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        justify-content: center;
-                        /* CENTER content vertically */
-                        padding: clamp(0.5rem, 2cqi, 1.5rem);
-                        box-sizing: border-box;
-                        background-color: var(--pe-aztec);
-                        border-radius: clamp(0.75rem, 3cqi, 2rem);
-                        overflow: hidden;
-                      }
-                      .ingredient-display {
-                        position: relative;
-                        width: 90%;
-                        flex: 1;
-                        background-color: transparent;
-                        border-radius: 5px;
-                        display: none;
-                        justify-content: flex-start;
-                        align-items: center;
-                        margin-bottom: 5px;
-                        overflow: hidden;
-                      }
-                      .ingredient-display>svg {
-                        width: auto;
-                        height: 90%;
-                        max-width: 90%;
-                        display: block;
-                        margin: auto;
-                      }
-                      .ingredient-display>svg.hidden {
-                        display: none;
-                      }
-                      .knife {
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        width: 4px;
-                        height: 100%;
-                        background-color: var(--pe-fuel-yellow);
-                        border-radius: 2px;
-                        z-index: 10;
-                        transition: background-color 0.1s ease;
-                      }
-                      .knife.cutting {
-                        background-color: var(--pe-mule-fawn);
-                      }
-                      .cuts-container {
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                        height: 100%;
-                        pointer-events: none;
-                        z-index: 5;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        align-items: center;
-                        justify-content: center;
-                      }
-                      .cut-line {
-                        position: absolute;
-                        top: 0;
-                        width: 3px;
-                        height: 100%;
-                        background-color: var(--pe-mule-fawn);
-                        border-radius: 1px;
-                      }
-                      .slice-piece-wrapper {
-                        overflow: hidden;
-                        position: relative;
-                        display: inline-block;
-                        margin-right: 8px;
-                        opacity: 0;
-                        border: 3px solid var(--pe-fuel-yellow);
-                        border-radius: 6px;
-                      }
-                      .slice-piece-wrapper:last-child {
-                        margin-right: 0;
-                      }
-                      .slice-piece-wrapper.animate {
-                        animation: sliceAppear 0.4s ease-out forwards;
-                      }
-                      .slice-piece-wrapper.perfect {
-                        border-color: var(--pe-fuel-yellow-light);
-                      }
-                      .slice-piece-wrapper svg {
-                        display: block;
-                        height: 100%;
-                      }
-                      @keyframes sliceAppear {
-                        from {
-                          opacity: 0;
-                          transform: translateY(10px) scale(0.95);
-                        }
-                        to {
-                          opacity: 1;
-                          transform: translateY(0) scale(1);
-                        }
-                      }
-                      .measurement-text {
-                        position: absolute;
-                        bottom: 0.375rem;
-                        left: 50%;
-                        transform: translateX(-50%);
-                        background-color: var(--pe-aztec);
-                        color: var(--pe-fuel-yellow);
-                        font-size: clamp(0.5rem, 2cqi, 0.75rem);
-                        padding: 0.1875rem 0.5rem;
-                        border-radius: 0.25rem;
-                        white-space: nowrap;
-                        z-index: 15;
-                        font-family: 'Space Grotesk', sans-serif;
-                        font-weight: 600;
-                      }
-                      .measurement-text.perfect {
-                        color: var(--pe-fuel-yellow-light);
-                      }
-                      .game-info {
-                        width: 90%;
-                        max-width: 100%;
-                        background-color: transparent;
-                        padding: clamp(0.5rem, 2cqi, 1rem);
-                        color: var(--pe-fuel-yellow);
-                        font-size: clamp(0.625rem, 2.5cqi, 1rem);
-                        text-align: center;
-                        line-height: 1.4;
-                        font-family: 'Space Grotesk', sans-serif;
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: center;
-                        align-items: center;
-                        gap: clamp(0.25rem, 1cqi, 0.5rem);
-                        transition: all 0.3s ease;
-                      }
-                      .game-info.active {
-                        position: relative;
-                        top: auto;
-                        left: auto;
-                        transform: none;
-                        min-height: auto;
-                        gap: 0.25rem;
-                        padding-top: clamp(0.375rem, 1.5cqi, 0.75rem);
-                        border-top: 2px solid var(--pe-fuel-yellow-dark);
-                        margin-top: clamp(0.25rem, 1cqi, 0.5rem);
-                      }
-                      #context-text {
-                        color: var(--pe-fuel-yellow);
-                        margin-bottom: 0.125rem;
-                        font-size: clamp(0.5rem, 2cqi, 0.75rem);
-                        font-weight: 500;
-                      }
-                      #score-text {
-                        font-size: clamp(0.625rem, 2.5cqi, 1rem);
-                        margin: 0.125rem 0;
-                        color: var(--pe-fuel-yellow);
-                        font-weight: 600;
-                      }
-                      #message-text {
-                        font-size: clamp(0.5rem, 2cqi, 0.75rem);
-                        color: var(--pe-fuel-yellow-light);
-                        min-height: 2em;
-                        margin-top: 0.125rem;
-                        line-height: 1.4;
-                        font-weight: 400;
-                      }
-                      .lower-panel {
-                        display: flex;
-                        justify-content: space-between;
-                        gap: clamp(0.5rem, 2cqi, 1.5rem);
-                        /* Don't shrink, but don't restrict height */
-                        flex-shrink: 0;
-                      }
-                      .left-column {
-                        display: flex;
-                        flex-direction: column;
-                        gap: clamp(0.5rem, 2cqi, 1rem);
-                        flex: 1;
-                        justify-content: space-between;
-                        min-height: 0;
-                        align-items: flex-start;
-                      }
-                      .game-menu {
-                        background-color: var(--pe-mule-fawn);
-                        border-radius: clamp(1rem, 4cqi, 2.5rem);
-                        padding: clamp(0.375rem, 1.5cqi, 0.75rem);
-                        display: flex;
-                        flex-direction: column;
-                        gap: 0;
-                        box-shadow: none;
-                        flex-shrink: 0;
-                        position: relative;
-                      }
-                      .menu-buttons-container {
-                        border-radius: clamp(0.75rem, 3cqi, 1.5rem);
-                        max-height: calc(4 * (clamp(0.75rem, 3cqi, 1.5rem) + (2 * clamp(0.375rem, 1.5cqi, 0.75rem)) + 2px));
-                        overflow-x: hidden;
-                        overflow-y: auto;
-                        scrollbar-width: none;
-                        background-color: var(--pe-aztec);
-                        display: flex;
-                        flex-direction: column;
-                        border: clamp(2px, 0.5cqi, 4px) solid var(--pe-english-walnut);
-                        position: relative;
-                      }
-                      .menu-buttons-container::-webkit-scrollbar {
-                        display: none;
-                      }
-                      @media (prefers-reduced-motion: no-preference) {
-                        .menu-buttons-container {
-                          scroll-behavior: smooth;
-                        }
-                      }
-                      .menu-scroll-hint {
-                        position: absolute;
-                        left: 50%;
-                        z-index: 3;
-                        color: var(--pe-game-gold-light);
-                        font-size: clamp(0.5rem, 1.6cqi, 0.625rem);
-                        line-height: 1;
-                        opacity: 0;
-                        transform: translateX(-50%);
-                        pointer-events: none;
-                      }
-                      .menu-scroll-hint.up {
-                        top: clamp(0.5rem, 2cqi, 0.875rem);
-                      }
-                      .menu-scroll-hint.down {
-                        bottom: clamp(0.5rem, 2cqi, 0.875rem);
-                      }
-                      .menu-scroll-hint.visible {
-                        opacity: 1;
-                      }
-                      .menu-button {
-                        background-color: var(--pe-aztec);
-                        color: var(--pe-stark-white);
-                        border: none;
-                        border-bottom: 2px solid var(--pe-fuel-yellow);
-                        border-radius: 0;
-                        padding: clamp(0.375rem, 1.5cqi, 0.75rem) clamp(1rem, 5cqi, 3rem);
-                        font-size: clamp(0.75rem, 3cqi, 1.5rem);
-                        font-family: 'Space Grotesk', sans-serif;
-                        font-weight: 700;
-                        text-align: center;
-                        cursor: pointer;
-                        transition: background-color 0.2s;
-                        box-shadow: none;
-                        letter-spacing: 1px;
-                        flex-shrink: 0;
-                      }
-                      .menu-button:last-child {
-                        border-bottom: none;
-                      }
-                      .menu-button:hover {
-                        background-color: var(--pe-english-walnut);
-                      }
-                      .menu-button:active {
-                        background-color: var(--pe-english-walnut-dark);
-                        box-shadow: none;
-                      }
-                      .menu-button.selected {
-                        background-color: var(--pe-english-walnut);
-                        color: var(--pe-game-gold-light);
-                        box-shadow: none;
-                      }
-                      .d-pad-container {
-                        display: flex;
-                        justify-content: flex-start;
-                        align-items: flex-end;
-                      }
-                      .nav-switch-image {
-                        width: clamp(2.5rem, 12cqi, 5rem);
-                        height: auto;
-                        cursor: pointer;
-                        /* spring-back on release (overshoot bezier) */
-                        transition: transform 0.38s cubic-bezier(0.3, 1.45, 0.4, 1);
-                        outline: none;
-                        -webkit-tap-highlight-color: transparent;
-                        -webkit-touch-callout: none;
-                        touch-action: none;
-                      }
-                      /* rocker pose: whole pill tilts, cream band slides (SVG user units) */
-                      #nav-switch polygon {
-                        transition: transform 0.38s cubic-bezier(0.3, 1.45, 0.4, 1);
-                      }
-                      #nav-switch.is-up,
-                      #nav-switch.is-down,
-                      #nav-switch.is-up polygon,
-                      #nav-switch.is-down polygon {
-                        transition-duration: 0.09s;
-                        transition-timing-function: cubic-bezier(0.2, 0.7, 0.4, 1);
-                      }
-                      #nav-switch.is-up { transform: perspective(180px) rotateX(16deg); }
-                      #nav-switch.is-down { transform: perspective(180px) rotateX(-16deg); }
-                      #nav-switch.is-up polygon { transform: translateY(-26px); }
-                      #nav-switch.is-down polygon { transform: translateY(26px); }
-                      @media (prefers-reduced-motion: reduce) {
-                        .nav-switch-image,
-                        #nav-switch polygon {
-                          transition-duration: 0s;
-                        }
-                      }
-                      .nav-switch-image:focus {
-                        outline: none;
-                      }
-                      .nav-switch-image:active {
-                        outline: none;
-                      }
-                      .nav-switch-image:hover {
-                        filter: none;
-                      }
-                      #nav-switch {
-                        -webkit-tap-highlight-color: transparent;
-                        outline: none;
-                      }
-                      #nav-switch:focus,
-                      #nav-switch:active {
-                        outline: none;
-                      }
-                      .right-column {
-                        display: flex;
-                        flex-direction: column;
-                        align-items: flex-end;
-                        justify-content: flex-start;
-                        gap: clamp(0.5rem, 2cqi, 1.5rem);
-                        flex: 1;
-                        min-height: 0;
-                      }
-                      #presunta-logo {
-                        width: clamp(3rem, 14cqi, 6rem);
-                        height: auto;
-                        flex-shrink: 0;
-                      }
-                      .action-buttons {
-                        display: flex;
-                        flex-direction: row;
-                        gap: clamp(0.5rem, 3cqi, 1.5rem);
-                        align-items: center;
-                        justify-content: flex-end;
-                        width: 100%;
-                        flex-shrink: 0;
-                      }
-                      .action-button {
-                        width: clamp(3rem, 16cqi, 6.5rem);
-                        height: clamp(3rem, 16cqi, 6.5rem);
-                        border: none;
-                        border-radius: 50%;
-                        cursor: pointer;
-                        padding: 0;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        box-shadow: none;
-                        transition: transform 0.1s;
-                        background-color: transparent !important;
-                        flex-shrink: 0;
-                        outline: none;
-                        -webkit-tap-highlight-color: transparent;
-                        -webkit-touch-callout: none;
-                      }
-                      .action-button:focus {
-                        outline: none;
-                        background-color: transparent !important;
-                      }
-                      .action-button:active {
-                        transform: scale(0.95);
-                        outline: none;
-                        background-color: transparent !important;
-                      }
-                      #button-A,
-                      #button-B {
-                        -webkit-tap-highlight-color: transparent;
-                        outline: none;
-                        background-color: transparent !important;
-                      }
-                      #button-A:focus,
-                      #button-A:active,
-                      #button-B:focus,
-                      #button-B:active {
-                        outline: none;
-                        background-color: transparent !important;
-                        box-shadow: none !important;
-                        border: none !important;
-                      }
-                      button::-moz-focus-inner {
-                        border: 0;
-                        padding: 0;
-                      }
-                      button {
-                        -webkit-appearance: none;
-                        -moz-appearance: none;
-                        appearance: none;
-                      }
-                      .action-button svg {
-                        width: 100%;
-                        height: 100%;
-                        display: block;
-                        margin: auto;
-                        pointer-events: none;
-                      }
-                      .action-button svg * {
-                        pointer-events: none;
-                      }
-                      #nav-switch * {
-                        pointer-events: none;
-                      }
-                      #video-player-container {
-                        /* KEY FIX: Fill screen area properly */
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                        height: 100%;
-                        z-index: 20;
-                        border-radius: clamp(0.75rem, 3cqi, 2rem);
-                        overflow: hidden;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        background-color: var(--pe-aztec);
-                      }
-                      #my-video {
-                        width: 100%;
-                        height: 100%;
-                        /* Cover the space but keep centered */
-                        object-fit: cover;
-                        object-position: center center;
-                        border-radius: clamp(0.75rem, 3cqi, 2rem);
-                      }
-                      .video-control-btn {
-                        background-color: var(--pe-fuel-yellow) !important;
-                        color: var(--pe-aztec) !important;
-                        border: none !important;
-                        font-size: 16px !important;
-                        cursor: pointer !important;
-                        padding: 8px 12px !important;
-                        border-radius: 6px !important;
-                        transition: all 0.2s ease !important;
-                        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
-                        min-width: 40px !important;
-                        height: 40px !important;
-                        display: flex !important;
-                        align-items: center !important;
-                        justify-content: center !important;
-                        font-family: 'Space Grotesk', sans-serif !important;
-                        text-decoration: none !important;
-                        outline: none !important;
-                      }
-                      .video-control-btn * {
-                        color: var(--pe-aztec) !important;
-                        background: none !important;
-                        border: none !important;
-                        font-size: inherit !important;
-                      }
-                      .video-control-btn:hover {
-                        background-color: var(--pe-game-gold-light) !important;
-                        transform: translateY(-1px) !important;
-                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
-                      }
-                      .video-control-btn:active {
-                        transform: translateY(0) !important;
-                        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
-                      }
-                      #video-controls {
-                        background-color: rgba(0, 0, 0, 0.8) !important;
-                        padding: 12px !important;
-                        border-radius: 12px !important;
-                        gap: 8px !important;
-                        position: absolute !important;
-                        bottom: 10px !important;
-                        left: 50% !important;
-                        transform: translateX(-50%) !important;
-                      }
-                      /* Gallery Styles */
-                      #gallery-container {
-                        /* KEY FIX: Absolute position to fill screen area */
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                        height: 100%;
-                        border-radius: clamp(0.75rem, 3cqi, 2rem);
-                        overflow: hidden;
-                      }
-                      .gallery-image {
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                        height: 100%;
-                        background-size: cover;
-                        background-position: center;
-                        opacity: 0;
-                        transition: opacity 1.5s ease-in-out;
-                      }
-                      .gallery-img-1 {
-                        background-image: url('assets/images/foto-trasera-delantal-curso_2560w-p-800.jpg');
-                      }
-                      .gallery-img-2 {
-                        background-image: url('assets/images/ninos-curso-cocina_2560w-p-800.webp');
-                      }
-                      .gallery-img-3 {
-                        background-image: url('assets/images/pareja-curso-cocina-madrid_2560w-p-800.jpg');
-                      }
-                      .gallery-img-4 {
-                        background-image: url('assets/images/muestra-plato-mano_2560w-p-800.webp');
-                      }
-                      .gallery-img-5 {
-                        background-image: url('assets/images/riendo-retrato_2560w-p-800.webp');
-                      }
-                      .gallery-image.active {
-                        opacity: 1;
-                      }
-                      /* Dark Screen and Startup Animation */
-                      #dark-screen {
-                        border-radius: clamp(0.75rem, 3cqi, 2rem);
-                      }
-                      @keyframes startupReveal {
-                        0% {
-                          width: 0;
-                          height: 2px;
-                        }
-                        40% {
-                          width: 100%;
-                          height: 2px;
-                        }
-                        70% {
-                          width: 100%;
-                          height: 100%;
-                        }
-                        100% {
-                          width: 100%;
-                          height: 100%;
-                        }
-                      }
-                      @keyframes logoFlicker {
-                        0% {
-                          opacity: 1;
-                          filter: brightness(0);
-                        }
-                        10% {
-                          opacity: 0.3;
-                          filter: brightness(0);
-                        }
-                        20% {
-                          opacity: 1;
-                          filter: brightness(0.2);
-                        }
-                        30% {
-                          opacity: 0.5;
-                          filter: brightness(0.3);
-                        }
-                        35% {
-                          opacity: 1;
-                          filter: brightness(0.5);
-                        }
-                        40% {
-                          opacity: 0.2;
-                          filter: brightness(0.5);
-                        }
-                        45% {
-                          opacity: 1;
-                          filter: brightness(0.7);
-                        }
-                        55% {
-                          opacity: 0.7;
-                          filter: brightness(0.85);
-                        }
-                        60% {
-                          opacity: 1;
-                          filter: brightness(1);
-                        }
-                        100% {
-                          opacity: 1;
-                          filter: brightness(1);
-                        }
-                      }
-                      #startup-line.animating {
-                        animation: startupReveal 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-                      }
-                      #startup-logo.flickering {
-                        animation: logoFlicker 0.8s ease-in-out;
-                      }
-                      /* Dark screen absolute positioning */
-                      #dark-screen {
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                        height: 100%;
-                        border-radius: clamp(0.75rem, 3cqi, 2rem);
-                      }
-                      /* Snake canvas sizing - fit available space without overflow */
-                      #snake-game-canvas,
-                      #emplatado-canvas,
-                      #equilibrio-canvas {
-                        width: 100% !important;
-                        max-width: 100%;
-                        height: auto;
-                        flex: 1 1 0;
-                        min-height: 0;
-                        border-radius: 0;
-                        box-sizing: border-box;
-                        object-fit: contain;
-                      }
-                      /* Snake game info styling - same as slicer active */
-                      .game-info.snake-active {
-                        padding-top: clamp(0.375rem, 1.5cqi, 0.75rem);
-                        border-top: 2px solid var(--pe-fuel-yellow-dark);
-                        margin-top: clamp(0.25rem, 1cqi, 0.5rem);
-                      }
-                      /* =============================================
-           GAME PREVIEW SCREENS
-           ============================================= */
-                      .game-preview-screen {
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                        height: 100%;
-                        background-color: var(--pe-aztec);
-                        border-radius: clamp(0.75rem, 3cqi, 2rem);
-                        display: none;
-                        flex-direction: column;
-                        align-items: center;
-                        justify-content: center;
-                        padding: clamp(0.75rem, 3cqi, 2rem);
-                        z-index: 15;
-                        box-sizing: border-box;
-                      }
-                      .game-preview-screen.active {
-                        display: flex;
-                      }
-                      .preview-content {
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        justify-content: center;
-                        flex: 1;
-                        width: 100%;
-                      }
-                      .preview-title {
-                        font-family: 'Space Grotesk', sans-serif;
-                        font-size: clamp(1.5rem, 8cqi, 3.5rem);
-                        font-weight: 700;
-                        color: var(--pe-fuel-yellow);
-                        margin-bottom: clamp(0.5rem, 2cqi, 1.5rem);
-                        text-align: center;
-                        text-transform: uppercase;
-                        letter-spacing: 0.25rem;
-                      }
-                      .preview-pixel-art {
-                        width: clamp(4rem, 22cqi, 10rem);
-                        height: clamp(3rem, 18cqi, 8rem);
-                        margin-bottom: clamp(0.5rem, 2cqi, 1.5rem);
-                        image-rendering: pixelated;
-                        image-rendering: crisp-edges;
-                      }
-                      .preview-css-art {
-                        position: relative;
-                        width: clamp(4rem, 22cqi, 10rem);
-                        height: clamp(3rem, 18cqi, 8rem);
-                        margin-bottom: clamp(0.5rem, 2cqi, 1.5rem);
-                      }
-                      .preview-plate-rim {
-                        position: absolute;
-                        top: 8%;
-                        left: 14%;
-                        width: 72%;
-                        aspect-ratio: 1;
-                        border: clamp(3px, 1cqi, 6px) solid var(--pe-stark-white);
-                        border-radius: 50%;
-                        box-shadow: inset 0 0 0 clamp(2px, 0.6cqi, 4px) var(--pe-game-gold-dark);
-                      }
-                      .preview-plate-element {
-                        position: absolute;
-                        width: 14%;
-                        aspect-ratio: 1;
-                        border-radius: 45% 55% 48% 52%;
-                      }
-                      .preview-plate-element.one {
-                        top: 30%;
-                        left: 34%;
-                        background-color: var(--pe-mule-fawn);
-                      }
-                      .preview-plate-element.two {
-                        top: 48%;
-                        left: 52%;
-                        background-color: var(--pe-fuel-yellow);
-                      }
-                      .preview-plate-element.three {
-                        top: 57%;
-                        left: 31%;
-                        background-color: #6b5d30;
-                      }
-                      .preview-tray {
-                        position: absolute;
-                        bottom: 12%;
-                        left: 18%;
-                        width: 64%;
-                        height: 16%;
-                        border: clamp(2px, 0.7cqi, 4px) solid var(--pe-stark-white);
-                        border-radius: 45% 55% 18% 22%;
-                        background-color: var(--pe-english-walnut);
-                      }
-                      .preview-tray::after {
-                        content: '';
-                        position: absolute;
-                        top: 100%;
-                        left: 47%;
-                        width: 6%;
-                        height: 70%;
-                        background-color: var(--pe-fuel-yellow-dark);
-                      }
-                      .preview-falling-dot {
-                        position: absolute;
-                        width: 11%;
-                        aspect-ratio: 1;
-                        border-radius: 48% 52% 44% 56%;
-                      }
-                      .preview-falling-dot.one {
-                        top: 8%;
-                        left: 29%;
-                        background-color: var(--pe-fuel-yellow);
-                      }
-                      .preview-falling-dot.two {
-                        top: 28%;
-                        left: 58%;
-                        background-color: var(--pe-mule-fawn);
-                      }
-                      .preview-falling-dot.three {
-                        top: 43%;
-                        left: 41%;
-                        background-color: var(--pe-game-gold-light);
-                      }
-                      .preview-subtitle {
-                        font-family: 'Space Grotesk', sans-serif;
-                        font-size: clamp(0.5rem, 2.5cqi, 1rem);
-                        font-weight: 500;
-                        color: var(--pe-stark-white);
-                        margin-bottom: clamp(0.5rem, 2cqi, 1.5rem);
-                        text-align: center;
-                        line-height: 1.4;
-                      }
-                      .preview-controls {
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        gap: clamp(0.25rem, 1.5cqi, 0.75rem);
-                        width: 100%;
-                      }
-                      .preview-control-row {
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        gap: clamp(0.25rem, 1.5cqi, 0.75rem);
-                        font-family: 'Space Grotesk', sans-serif;
-                        font-size: clamp(0.5rem, 2cqi, 0.875rem);
-                        font-weight: 600;
-                        color: var(--pe-stark-white);
-                      }
-                      .preview-control-label {
-                        color: var(--pe-game-gold-light);
-                        font-weight: 700;
-                        text-transform: uppercase;
-                        letter-spacing: 0.5px;
-                      }
-                      .preview-key {
-                        background-color: var(--pe-english-walnut);
-                        border: 2px solid var(--pe-fuel-yellow);
-                        border-radius: 0.25rem;
-                        padding: clamp(0.25rem, 1cqi, 0.5rem);
-                        color: var(--pe-fuel-yellow);
-                        font-family: 'Space Grotesk', sans-serif;
-                        font-size: clamp(0.5rem, 1.8cqi, 0.75rem);
-                        font-weight: 700;
-                        min-width: clamp(1.5rem, 5cqi, 2.5rem);
-                        text-align: center;
-                      }
-                      .preview-btn-svg {
-                        width: clamp(1.5rem, 6cqi, 3rem);
-                        height: auto;
-                        flex-shrink: 0;
-                        display: inline-block;
-                        vertical-align: middle;
-                        overflow: visible;
-                      }
-                      .preview-btn-svg rect,
-                      .preview-btn-svg circle {
-                        vector-effect: non-scaling-stroke;
-                      }
-                      .preview-key.arrow-keys {
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        gap: 0.125rem;
-                        padding: clamp(0.25rem, 1cqi, 0.5rem);
-                      }
-                      .preview-key.arrow-keys .arrow-row {
-                        display: flex;
-                        gap: 0.125rem;
-                      }
-                      .preview-key.arrow-keys .arrow {
-                        width: clamp(0.75rem, 2.5cqi, 1.25rem);
-                        height: clamp(0.75rem, 2.5cqi, 1.25rem);
-                        background-color: var(--pe-fuel-yellow-dark);
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        font-size: clamp(0.5rem, 1.5cqi, 0.75rem);
-                        font-family: 'Space Grotesk', sans-serif;
-                        font-weight: 700;
-                        color: var(--pe-aztec);
-                      }
-                      .preview-or {
-                        color: var(--pe-game-gold-dark);
-                        font-size: clamp(0.5rem, 1.5cqi, 0.75rem);
-                        font-weight: 500;
-                      }
-                      .preview-start-hint {
-                        font-family: 'Space Grotesk', sans-serif;
-                        font-size: clamp(0.625rem, 2.5cqi, 1rem);
-                        font-weight: 600;
-                        color: var(--pe-fuel-yellow);
-                        margin-top: clamp(0.5rem, 2cqi, 1.5rem);
-                        text-align: center;
-                        text-transform: uppercase;
-                        letter-spacing: 0.0625rem;
-                        animation: blink 1.2s ease-in-out infinite;
-                      }
-                      @keyframes blink {
-                        0%,
-                        50%,
-                        100% {
-                          opacity: 1;
-                        }
-                        25%,
-                        75% {
-                          opacity: 0.3;
-                        }
-                      }
-                      /* Pixel art SVG styling */
-                      .pixel-knife {
-                        fill: var(--pe-game-gold-light);
-                      }
-                      .pixel-ingredient {
-                        fill: var(--pe-fuel-yellow);
-                      }
-                      .pixel-cutting-board {
-                        fill: var(--pe-english-walnut);
-                      }
-                      .pixel-snake-head {
-                        fill: var(--pe-fuel-yellow);
-                      }
-                      .pixel-snake-body {
-                        fill: var(--pe-game-gold-light);
-                      }
-                      .pixel-food {
-                        fill: var(--pe-mule-fawn);
-                      }
-                      .pixel-table {
-                        fill: var(--pe-english-walnut);
-                      }
-                      /* =============================================
-           BREAKPOINTLESS DESIGN (Lumos Framework)
-           All sizing is handled via fluid clamp() formulas
-           No @media breakpoints needed - fluid variables
-           scale smoothly across all viewports
-           ============================================= */
                     </style>
-                </div><audio id="button-sound" preload="auto">
-                  <source src="https://cdn.freesound.org/previews/378/378085_6260145-lq.mp3" type="audio/mpeg">
-                </audio><audio id="startup-sound" preload="auto">
-                  <source src="https://res.cloudinary.com/dn53emznt/video/upload/v1763111742/console-starts_bczuzf.mp3" type="audio/mpeg">
-                </audio><audio id="chop-sound-1" preload="auto">
-                  <source src="https://res.cloudinary.com/dn53emznt/video/upload/v1763111743/chop-1_qsg8od.mp4" type="audio/mp4">
-                </audio><audio id="chop-sound-2" preload="auto">
-                  <source src="https://res.cloudinary.com/dn53emznt/video/upload/v1763111744/chop-2_ine0k7.mp4" type="audio/mp4">
-                </audio><audio id="slice-result-sound" preload="auto">
-                  <source src="https://res.cloudinary.com/dn53emznt/video/upload/v1763111742/slice-result_m614lq.mp3" type="audio/mpeg">
-                </audio><audio id="game-start-screen-sound" preload="auto">
-                  <source src="https://res.cloudinary.com/dn53emznt/video/upload/v1763111742/game-start-screen_qmzjil.mp3" type="audio/mpeg">
-                </audio><audio id="snake-lose-sound" preload="auto">
-                  <source src="https://res.cloudinary.com/dn53emznt/video/upload/v1763111742/snake-game-lose_kxunmt.mp3" type="audio/mpeg">
-                </audio><audio id="snake-move-sound" preload="auto">
-                  <source src="https://res.cloudinary.com/dn53emznt/video/upload/v1763111743/snake-move_tfdbj1.mp3" type="audio/mpeg">
-                </audio><audio id="snake-carrying-loop" preload="auto">
-                  <source src="https://res.cloudinary.com/dn53emznt/video/upload/v1763112337/loop-until-deliver_j2skcy.mp3" type="audio/mpeg">
-                </audio><audio id="snake-deliver-sound" preload="auto">
-                  <source src="https://res.cloudinary.com/dn53emznt/video/upload/v1763112291/deliver-to-table-snake_ljcmdr.mp3" type="audio/mpeg">
-                </audio><audio id="button-press-sound" preload="auto">
-                  <source src="https://res.cloudinary.com/dn53emznt/video/upload/v1763111743/button-press_lbscvk.mp3" type="audio/mpeg">
-                </audio><audio id="exit-game-sound" preload="auto">
-                  <source src="https://res.cloudinary.com/dn53emznt/video/upload/v1763111743/exit-game_a9ehju.mp3" type="audio/mpeg">
-                </audio>
+                </div>
                 <div class="presunta-game-wrapper pe-con" data-pe-console>
   <div class="pe-con_wheel" data-pe-wheel role="slider" tabindex="0" aria-label="Volumen" aria-valuemin="0" aria-valuemax="10" aria-valuenow="6">
     <div class="pe-con_wheel-ridges"></div>
@@ -3279,17 +2292,17 @@
           </div>
         </div>
       </header>
-      <section class="section_lmanifesto border-top">
+      <section class="section_lmanifesto border-top f-text-body">
         <div class="padding-xhuge">
           <div class="max-width-full">
             <div class="margin-bottom margin-xsmall">
-              <div class="text-style-tagline">Manifesto</div>
+              <div class="text-style-tagline f-text-eyebrow">Manifesto</div>
             </div>
-            <h2 class="text-size-huge two-columns text-reveal"><span class="u-text-style-h3 u-all-caps">¿Por qué<br>Presunta Entropía?</span><br><br>El nombre nace de una convicción: en física, la entropía es la tendencia natural al desorden y al cambio; en nuestro espacio, esa entropía no es una amenaza, sino una posibilidad. Es presunta porque la asumimos como probable, pero la transformamos en motor de creatividad, evolución y en la belleza de lo imperfecto.Cocinar, como vivir,  no sigue un guion rígido. <br><br>En Presunta Entropía abrazamos la incertidumbre creativa: el movimiento, el error y la transformación como caminos para innovar y disfrutar. En cada taller o cena, llegan personas distintas, con niveles y energías diferentes. Y, por un par de horas, el caos se organiza solo: cocinan juntos, se ayudan, se ríen; a veces una salsa se quema o un bizcocho falla, y entre anécdotas aparece algo auténtico.Entonces ocurre lo mágico: la entropía se vuelve hermosa. <br><br>Como en una cocina familiar, sin coreografía, donde uno pela, otro prueba el vino y alguien cuenta una historia, hasta que de forma espontánea, surge un orden que no se impone, se descubre.“La cocina para mí es como una partitura rota que suena bien: entra gente que no se conoce y, en minutos, cocinan como si fueran familia. Ese es el alma de Presunta Entropía: transformar el desorden en un momento íntimo, cálido y nostálgico, como las comidas en casa de los abuelos los domingos. Esos instantes que el tiempo nos arrebató, porque el tiempo, igual que la entropía, es inevitable.<br><br>”Presunta Entropía quiere capturar esa coreografía espontánea y ese momento: no el control absoluto, sino el encuentro real alrededor de la cocina, donde el cambio es la regla y la experiencia compartida, viva, imperfecta, es lo que importa.<br>‍<br>El trayecto se vuelve irrelevante, tal vez sólo el desenlace tiene peso, porque es ahí donde las leyes se imponen y todo alcanza su forma más pura.</h2>
+            <h2 class="two-columns text-reveal f-text-lead"><span class="f-text-h2 f-text-uppercase f-display-block f-margin-top-5 f-margin-bottom-5">¿Por qué<br>Presunta Entropía?</span><br><br>El nombre nace de una convicción: en física, la entropía es la tendencia natural al desorden y al cambio; en nuestro espacio, esa entropía no es una amenaza, sino una posibilidad. Es presunta porque la asumimos como probable, pero la transformamos en motor de creatividad, evolución y en la belleza de lo imperfecto.Cocinar, como vivir,  no sigue un guion rígido. <br><br>En Presunta Entropía abrazamos la incertidumbre creativa: el movimiento, el error y la transformación como caminos para innovar y disfrutar. En cada taller o cena, llegan personas distintas, con niveles y energías diferentes. Y, por un par de horas, el caos se organiza solo: cocinan juntos, se ayudan, se ríen; a veces una salsa se quema o un bizcocho falla, y entre anécdotas aparece algo auténtico.Entonces ocurre lo mágico: la entropía se vuelve hermosa. <br><br>Como en una cocina familiar, sin coreografía, donde uno pela, otro prueba el vino y alguien cuenta una historia, hasta que de forma espontánea, surge un orden que no se impone, se descubre.“La cocina para mí es como una partitura rota que suena bien: entra gente que no se conoce y, en minutos, cocinan como si fueran familia. Ese es el alma de Presunta Entropía: transformar el desorden en un momento íntimo, cálido y nostálgico, como las comidas en casa de los abuelos los domingos. Esos instantes que el tiempo nos arrebató, porque el tiempo, igual que la entropía, es inevitable.<br><br>”Presunta Entropía quiere capturar esa coreografía espontánea y ese momento: no el control absoluto, sino el encuentro real alrededor de la cocina, donde el cambio es la regla y la experiencia compartida, viva, imperfecta, es lo que importa.<br>‍<br>El trayecto se vuelve irrelevante, tal vez sólo el desenlace tiene peso, porque es ahí donde las leyes se imponen y todo alcanza su forma más pura.</h2>
             <div class="margin-top margin-medium">
               <div class="button-group">
-                <a href="#calendario" class="button is-secondary is-alternate w-button">Reserva</a>
-                <a href="index.html" class="button is-link is-icon is-alternate w-inline-block">
+                <a href="#calendario" class="button is-secondary is-alternate w-button f-text-label">Reserva</a>
+                <a href="index.html" class="button is-link is-icon is-alternate w-inline-block f-text-label">
                   <div>Nuestra Metodología</div>
                   <div class="icon-embed-xxsmall w-embed"><svg width="16" height="16" viewbox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M6 3L11 8L6 13" stroke="CurrentColor" stroke-width="1.5"></path>
@@ -3337,7 +2350,7 @@
           </div>
         </div>
       </section>
-      <section class="section_values-marquee color-scheme-1">
+      <section class="section_values-marquee color-scheme-1 f-text-body">
         <div class="complex-css-embed w-embed">
           <style>
               /* Complex CSS (pseudo-classes, media queries, etc.) */
@@ -3417,51 +2430,51 @@
             <div class="w-layout-hflex values-marquee_track">
               <div class="values-marquee_list">
                 <div class="logo3_wrapper"><img src="assets/images/identity_icons-inestabilidad.svg" loading="lazy" alt="" class="logo3_logo">
-                  <h3 class="u-text-style-large">Inestabilidad</h3>
+                  <h3 class="f-text-h5">Inestabilidad</h3>
                 </div>
                 <div class="logo3_wrapper"><img src="assets/images/identity_icons-colision.svg" loading="lazy" alt="" class="logo3_logo">
-                  <h3 class="u-text-style-large">Colisión</h3>
+                  <h3 class="f-text-h5">Colisión</h3>
                 </div>
                 <div class="logo3_wrapper"><img src="assets/images/identity_icons-liberacion.svg" loading="lazy" alt="" class="logo3_logo">
-                  <h3 class="u-text-style-large">Acción</h3>
+                  <h3 class="f-text-h5">Acción</h3>
                 </div>
                 <div class="logo3_wrapper"><img src="assets/images/identity_icons-transformacion.svg" loading="lazy" alt="" class="logo3_logo">
-                  <h3 class="u-text-style-large">Transformación</h3>
+                  <h3 class="f-text-h5">Transformación</h3>
                 </div>
                 <div class="logo3_wrapper"><img src="assets/images/identity_icons-reequilibrio.svg" loading="lazy" alt="" class="logo3_logo">
-                  <h3 class="u-text-style-large">Reequilibrio</h3>
+                  <h3 class="f-text-h5">Reequilibrio</h3>
                 </div>
               </div>
               <div aria-hidden="true" class="values-marquee_list">
                 <div class="logo3_wrapper"><img src="assets/images/identity_icons-inestabilidad.svg" loading="lazy" alt="" class="logo3_logo">
-                  <h3 class="u-text-style-large">Inestabilidad</h3>
+                  <h3 class="f-text-h5">Inestabilidad</h3>
                 </div>
                 <div class="logo3_wrapper"><img src="assets/images/identity_icons-colision.svg" loading="lazy" alt="" class="logo3_logo">
-                  <h3 class="u-text-style-large">Colisión</h3>
+                  <h3 class="f-text-h5">Colisión</h3>
                 </div>
                 <div class="logo3_wrapper"><img src="assets/images/identity_icons-liberacion.svg" loading="lazy" alt="" class="logo3_logo">
-                  <h3 class="u-text-style-large">Acción</h3>
+                  <h3 class="f-text-h5">Acción</h3>
                 </div>
                 <div class="logo3_wrapper"><img src="assets/images/identity_icons-transformacion.svg" loading="lazy" alt="" class="logo3_logo">
-                  <h3 class="u-text-style-large">Transformación</h3>
+                  <h3 class="f-text-h5">Transformación</h3>
                 </div>
                 <div class="logo3_wrapper"><img src="assets/images/identity_icons-reequilibrio.svg" loading="lazy" alt="" class="logo3_logo">
-                  <h3 class="u-text-style-large">Reequilibrio</h3>
+                  <h3 class="f-text-h5">Reequilibrio</h3>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </section>
-      <section data-w-id="518f5219-72b0-8921-24a3-672d64e9953a" class="section_dynamic-banner color-scheme-1">
+      <section data-w-id="518f5219-72b0-8921-24a3-672d64e9953a" class="section_dynamic-banner color-scheme-1 f-text-body">
         <div class="padding-section-large">
           <div class="dynamic-banner_component">
-            <h2 class="dynamic-banner_heading-top">Lo memorable</h2>
-            <h2 class="dynamic-banner_heading-bottom">nunca es perfecto</h2>
+            <h2 class="dynamic-banner_heading-top f-text-giant f-text-uppercase f-margin-bottom-5">Lo memorable</h2>
+            <h2 class="dynamic-banner_heading-bottom f-text-giant f-text-uppercase">nunca es perfecto</h2>
           </div>
         </div>
       </section>
-      <section class="section_productos color-scheme-3">
+      <section class="section_productos color-scheme-3 f-text-body">
         <div class="padding-global">
           <div class="productos_component">
             <div class="w-layout-grid productos_grid-list">
@@ -3469,10 +2482,10 @@
                 <div class="productos_card color-scheme-2">
                   <div id="w-node-_518f5219-72b0-8921-24a3-672d64e995ac-b75f0699" class="productos_card-image-wrapper">
                     <div class="padding-global max-width-full">
-                      <div class="layer-container productos_card-frame"><img sizes="(max-width: 2560px) 100vw, 2560px" srcset="assets/images/instructor-clase-cocina_2560w-p-500.jpg 500w, assets/images/instructor-clase-cocina_2560w-p-800.jpg 800w, assets/images/instructor-clase-cocina_2560w-p-1080.jpg 1080w, assets/images/instructor-clase-cocina_2560w-p-1600.jpg 1600w, assets/images/instructor-clase-cocina_2560w.jpg 2560w" alt="Talleres Presenciales" src="assets/images/instructor-clase-cocina_2560w.jpg" loading="lazy" class="productos_card-image radius-large">
+                      <div class="layer-container productos_card-frame"><img sizes="(max-width: 2560px) 100vw, 2560px" srcset="assets/images/home-2026-10/instructor-clase-cocina-800.webp 500w, assets/images/home-2026-10/instructor-clase-cocina-800.webp 800w, assets/images/home-2026-10/instructor-clase-cocina.webp 1080w, assets/images/home-2026-10/instructor-clase-cocina.webp 1600w, assets/images/home-2026-10/instructor-clase-cocina.webp 2560w" alt="Talleres Presenciales" src="assets/images/home-2026-10/instructor-clase-cocina.webp" loading="lazy" class="productos_card-image radius-large">
                         <div class="layer align-top-right">
                           <div class="padding-global">
-                            <a href="talleres-v2.html" class="button is-simple is-alternate productos_card-tag w-button">Saber más</a>
+                            <a href="talleres.html" class="button is-simple is-alternate productos_card-tag w-button f-text-label f-text-ui-sm">Saber más</a>
                           </div>
                         </div>
                       </div>
@@ -3481,22 +2494,22 @@
                   <div class="productos_card-content">
                     <div class="productos_card-content-top">
                       <div class="margin-bottom margin-xsmall">
-                        <h3 class="u-text-style-h3">Talleres Presenciales</h3>
+                        <h3 class="f-text-h3 f-margin-top-5 f-margin-bottom-5">Talleres Presenciales</h3>
                       </div>
                       <div class="productos-card-subtitle margin-bottom margin-medium">
-                        <div class="text-style-tagline">Energía [Lo que somos]</div>
+                        <div class="text-style-tagline f-text-eyebrow">Energía [Lo que somos]</div>
                       </div>
-                      <p class="u-text-style-main u-weight-light">Experiencias inmersivas de cocina diseñadas para aprender haciendo. Cada taller es un espacio de exploración culinaria donde las recetas, los ingredientes y las técnicas se convierten en vehículos de expresión y comunidad.</p>
+                      <p class="f-text-body">Experiencias inmersivas de cocina diseñadas para aprender haciendo. Cada taller es un espacio de exploración culinaria donde las recetas, los ingredientes y las técnicas se convierten en vehículos de expresión y comunidad.</p>
                     </div>
                   </div>
                 </div>
                 <div class="productos_card color-scheme-5">
                   <div id="w-node-ef694940-df06-beae-1e42-e1fd52a85ba3-b75f0699" class="productos_card-image-wrapper">
                     <div class="padding-global max-width-full">
-                      <div class="layer-container productos_card-frame"><img sizes="(max-width: 2560px) 100vw, 2560px" srcset="assets/images/riendo-comida_2560w-p-500.webp 500w, assets/images/riendo-comida_2560w-p-800.webp 800w, assets/images/riendo-comida_2560w-p-1080.webp 1080w, assets/images/riendo-comida_2560w-p-1600.webp 1600w, assets/images/riendo-comida_2560w-p-2000.webp 2000w, assets/images/riendo-comida_2560w.webp 2560w" alt="" src="assets/images/riendo-comida_2560w.webp" loading="lazy" class="productos_card-image radius-large">
+                      <div class="layer-container productos_card-frame"><img sizes="(max-width: 2560px) 100vw, 2560px" srcset="assets/images/home-2026-10/riendo-comida-800.webp 500w, assets/images/home-2026-10/riendo-comida-800.webp 800w, assets/images/home-2026-10/riendo-comida.webp 1080w, assets/images/home-2026-10/riendo-comida.webp 1600w, assets/images/home-2026-10/riendo-comida.webp 2000w, assets/images/home-2026-10/riendo-comida.webp 2560w" alt="" src="assets/images/home-2026-10/riendo-comida.webp" loading="lazy" class="productos_card-image radius-large">
                         <div class="layer align-top-right">
                           <div class="padding-global">
-                            <a href="team-building-v2.html" class="button is-simple is-alternate productos_card-tag w-button">Saber más</a>
+                            <a href="team-building.html" class="button is-simple is-alternate productos_card-tag w-button f-text-label f-text-ui-sm">Saber más</a>
                           </div>
                         </div>
                       </div>
@@ -3505,22 +2518,22 @@
                   <div class="productos_card-content">
                     <div class="productos_card-content-top">
                       <div class="margin-bottom margin-xsmall">
-                        <h3 class="u-text-style-h3">Team <br>Building</h3>
+                        <h3 class="f-text-h3 f-margin-top-5 f-margin-bottom-5">Team <br>Building</h3>
                       </div>
                       <div class="productos-card-subtitle margin-bottom margin-medium">
-                        <div class="text-style-tagline">Fusión [Donde nos encontramos]</div>
+                        <div class="text-style-tagline f-text-eyebrow">Fusión [Donde nos encontramos]</div>
                       </div>
-                      <p class="u-text-style-main u-weight-light">Actividades diseñadas para empresas o grupos que buscan fortalecer vínculos a través de la cocina. Dinámicas colaborativas que combinan desafío, creatividad y disfrute, todo en un entorno relajado y con propósito.</p>
+                      <p class="f-text-body">Actividades diseñadas para empresas o grupos que buscan fortalecer vínculos a través de la cocina. Dinámicas colaborativas que combinan desafío, creatividad y disfrute, todo en un entorno relajado y con propósito.</p>
                     </div>
                   </div>
                 </div>
                 <div class="productos_card color-scheme-5">
                   <div id="w-node-_500cb021-7991-74cc-eb35-ed0c89c37065-b75f0699" class="productos_card-image-wrapper">
                     <div class="padding-global max-width-full">
-                      <div class="layer-container productos_card-frame"><img sizes="(max-width: 2560px) 100vw, 2560px" srcset="assets/images/plato-gambas_2560w-p-500.jpg 500w, assets/images/plato-gambas_2560w-p-800.jpg 800w, assets/images/plato-gambas_2560w-p-1080.jpg 1080w, assets/images/plato-gambas_2560w-p-1600.jpg 1600w, assets/images/plato-gambas_2560w-p-2000.jpg 2000w, assets/images/plato-gambas_2560w.jpg 2560w" alt="" src="assets/images/plato-gambas_2560w.jpg" loading="lazy" class="productos_card-image radius-large">
+                      <div class="layer-container productos_card-frame"><img sizes="(max-width: 2560px) 100vw, 2560px" srcset="assets/images/home-2026-10/plato-gambas-800.webp 500w, assets/images/home-2026-10/plato-gambas-800.webp 800w, assets/images/home-2026-10/plato-gambas.webp 1080w, assets/images/home-2026-10/plato-gambas.webp 1600w, assets/images/home-2026-10/plato-gambas.webp 2000w, assets/images/home-2026-10/plato-gambas.webp 2560w" alt="" src="assets/images/home-2026-10/plato-gambas.webp" loading="lazy" class="productos_card-image radius-large">
                         <div class="layer align-top-right">
                           <div class="padding-global">
-                            <a href="#" class="button is-simple is-alternate productos_card-tag w-button">Reserva hoy</a>
+                            <a href="#" class="button is-simple is-alternate productos_card-tag w-button f-text-label f-text-ui-sm">Reserva hoy</a>
                           </div>
                         </div>
                       </div>
@@ -3529,12 +2542,12 @@
                   <div class="productos_card-content">
                     <div class="productos_card-content-top">
                       <div class="margin-bottom margin-xsmall">
-                        <h3 class="u-text-style-h3">Cenas <br>y Eventos</h3>
+                        <h3 class="f-text-h3 f-margin-top-5 f-margin-bottom-5">Chef&#x27;s <br>Table</h3>
                       </div>
                       <div class="productos-card-subtitle margin-bottom margin-medium">
-                        <div class="text-style-tagline">Materia [Lo que nace]</div>
+                        <div class="text-style-tagline f-text-eyebrow">Materia [Lo que nace]</div>
                       </div>
-                      <p class="u-text-style-main u-weight-light">Cenas diseñadas para grupos privados, empresas o celebraciones íntimas. Un entorno cuidado donde se combinan narrativa gastronómica, ambientación y servicio cercano. Cada cena puede tener un storytelling o eje conceptual.</p>
+                      <p class="f-text-body">Cenas diseñadas para grupos privados, empresas o celebraciones íntimas. Un entorno cuidado donde se combinan narrativa gastronómica, ambientación y servicio cercano. Cada cena puede tener un storytelling o eje conceptual.</p>
                     </div>
                   </div>
                 </div>
@@ -3543,351 +2556,168 @@
           </div>
         </div>
       </section>
-      <section class="section_precios color-scheme-2">
+      <section class="section_precios color-scheme-2 f-text-body">
         <div class="padding-global">
           <div class="precios_component">
             <div class="margin-bottom margin-xxlarge">
               <div class="content-row">
                 <div class="text-align-left">
-                  <h2 class="u-text-style-h1">Precios</h2>
+                  <h2 class="f-text-h1 f-margin-top-6 f-margin-bottom-6">Precios</h2>
                 </div>
                 <div class="button-group gap-0">
-                  <a href="talleres-v2.html" class="button is-secondary is-alternate is-simple is-small w-button">Energía / Talleres</a>
-                  <a href="team-building-v2.html" class="button is-secondary is-alternate is-simple is-small w-button">Fusión / TEam Building</a>
-                  <a href="#" class="button is-secondary is-alternate is-simple is-small w-button">Materia / Restaurante</a>
+                  <a href="talleres.html" class="button is-secondary is-alternate is-simple is-small w-button f-text-label f-text-ui-sm">Energía / Talleres</a>
+                  <a href="team-building.html" class="button is-secondary is-alternate is-simple is-small w-button f-text-label f-text-ui-sm">Fusión / TEam Building</a>
+                  <a href="#" class="button is-secondary is-alternate is-simple is-small w-button f-text-label f-text-ui-sm">Materia / Chef&#x27;s Table</a>
                 </div>
               </div>
             </div>
-            <div class="w-layout-grid precios_grid-list">
-              <div class="precios_card color-scheme-4">
+            <!-- Packs, live: webflow-packs.js clones [data-pack-template] once per pack on sale (GET /api/packs/types,
+                 admin sortOrder) and sets data-state; js/pe-packs.js adds colour, copy (js/pe-packs-copy.js), facts, limit / paging. -->
+            <div class="w-layout-grid precios_grid-list pe-packs_list" data-entropical-packs-list="" data-pe-packs-limit="4" data-contact-url="contacto.html">
+              <div class="precios_card color-scheme-4" data-pack-template="">
                 <div class="precios_wrapper">
                   <div class="pricing13_content-top">
                     <div class="pricing13_content-left">
                       <div class="margin-bottom margin-xxsmall">
-                        <div class="u-text-style-h2 u-all-caps">Presunto<br>Sacrificio</div>
+                        <h3 class="f-text-h3 f-text-uppercase f-margin-bottom-7" data-pack-field="name"></h3>
                       </div>
-                      <div class="tag u-margin-bottom-3">Ideal para todos</div>
+                      <div class="tag u-margin-bottom-3 f-text-label f-text-ui-sm f-leading-snug" data-pe-copy="tag"></div>
                     </div>
                     <div class="pricing13_top-right">
-                      <div class="u-text-style-h5 text-align-right">Pack Taller<br>Individual</div>
+                      <div class="text-align-right f-text-h6" data-pe-copy="subtitle"></div>
                     </div>
                   </div>
                   <div class="margin-vertical margin-medium">
                     <div class="divider-horizontal"></div>
                   </div>
-                  <div class="margin-bottom margin-xsmall">
+                  <div class="margin-bottom margin-xsmall" data-pe-copy-show="incluye">
                     <div>Incluye:</div>
                   </div>
                   <div class="content-grid">
-                    <div class="precios_feature-list">
-                      <div id="w-node-_518f5219-72b0-8921-24a3-672d64e9966e-b75f0699" class="pricing13_feature">
+                    <div class="precios_feature-list" data-pe-copy="incluye">
+                      <div class="pricing13_feature" data-pe-copy-item="">
                         <div class="pricing13_feature-icon-wrapper">
                           <div class="icon-embed-xsmall w-embed"><svg width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                               <path d="M20.3479 7.56384L9.7479 18.1638C9.65402 18.2585 9.52622 18.3117 9.3929 18.3117C9.25958 18.3117 9.13178 18.2585 9.0379 18.1638L3.6479 12.7738C3.55324 12.68 3.5 12.5522 3.5 12.4188C3.5 12.2855 3.55324 12.1577 3.6479 12.0638L4.3479 11.3638C4.44178 11.2692 4.56958 11.2159 4.7029 11.2159C4.83622 11.2159 4.96402 11.2692 5.0579 11.3638L9.3879 15.6938L18.9379 6.14384C19.1357 5.95205 19.4501 5.95205 19.6479 6.14384L20.3479 6.85384C20.4426 6.94772 20.4958 7.07552 20.4958 7.20884C20.4958 7.34216 20.4426 7.46995 20.3479 7.56384Z" fill="currentColor"></path>
                             </svg></div>
                         </div>
-                        <div>Acceso a talleres básicos</div>
-                      </div>
-                      <div id="w-node-_518f5219-72b0-8921-24a3-672d64e99673-b75f0699" class="pricing13_feature">
-                        <div class="pricing13_feature-icon-wrapper">
-                          <div class="icon-embed-xsmall w-embed"><svg width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M20.3479 7.56384L9.7479 18.1638C9.65402 18.2585 9.52622 18.3117 9.3929 18.3117C9.25958 18.3117 9.13178 18.2585 9.0379 18.1638L3.6479 12.7738C3.55324 12.68 3.5 12.5522 3.5 12.4188C3.5 12.2855 3.55324 12.1577 3.6479 12.0638L4.3479 11.3638C4.44178 11.2692 4.56958 11.2159 4.7029 11.2159C4.83622 11.2159 4.96402 11.2692 5.0579 11.3638L9.3879 15.6938L18.9379 6.14384C19.1357 5.95205 19.4501 5.95205 19.6479 6.14384L20.3479 6.85384C20.4426 6.94772 20.4958 7.07552 20.4958 7.20884C20.4958 7.34216 20.4426 7.46995 20.3479 7.56384Z" fill="currentColor"></path>
-                            </svg></div>
-                        </div>
-                        <div>Materiales incluidos</div>
-                      </div>
-                      <div id="w-node-_518f5219-72b0-8921-24a3-672d64e99678-b75f0699" class="pricing13_feature">
-                        <div class="pricing13_feature-icon-wrapper">
-                          <div class="icon-embed-xsmall w-embed"><svg width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M20.3479 7.56384L9.7479 18.1638C9.65402 18.2585 9.52622 18.3117 9.3929 18.3117C9.25958 18.3117 9.13178 18.2585 9.0379 18.1638L3.6479 12.7738C3.55324 12.68 3.5 12.5522 3.5 12.4188C3.5 12.2855 3.55324 12.1577 3.6479 12.0638L4.3479 11.3638C4.44178 11.2692 4.56958 11.2159 4.7029 11.2159C4.83622 11.2159 4.96402 11.2692 5.0579 11.3638L9.3879 15.6938L18.9379 6.14384C19.1357 5.95205 19.4501 5.95205 19.6479 6.14384L20.3479 6.85384C20.4426 6.94772 20.4958 7.07552 20.4958 7.20884C20.4958 7.34216 20.4426 7.46995 20.3479 7.56384Z" fill="currentColor"></path>
-                            </svg></div>
-                        </div>
-                        <div>Recetas exclusivas</div>
+                        <div data-pe-copy-text=""></div>
                       </div>
                     </div>
-                    <p class="u-text-style-main u-weight-light">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                    <div class="pe-pack-text">
+                      <p class="pe-pack-facts" data-pe-pack-facts=""></p>
+                      <p class="f-text-body" data-pack-field="description"></p>
+                    </div>
                   </div>
                 </div>
                 <div class="margin-top margin-medium">
                   <div class="content-row">
-                    <div class="u-text-style-h1 precios_price">€75</div>
-                    <a href="#" class="button is-secondary is-alternate is-simple w-button">Comienza ahora</a>
+                    <div class="precios_price f-text-stat" data-pack-field="price"></div>
+                    <a href="packs.html" data-pack-buy="" class="button is-secondary is-alternate is-simple w-button f-text-label">Comienza ahora</a>
                   </div>
                 </div>
               </div>
-              <div class="precios_card color-scheme-5">
-                <div class="precios_wrapper">
-                  <div class="pricing13_content-top">
-                    <div class="pricing13_content-left">
-                      <div class="margin-bottom margin-xxsmall">
-                        <div class="u-text-style-h2 u-all-caps">Presunta<br>Calma</div>
-                      </div>
-                      <div class="tag u-margin-bottom-3">Ideal para workaholics</div>
-                    </div>
-                    <div class="pricing13_top-right">
-                      <div class="u-text-style-h5 text-align-right">Pack para <br>equipos y familia</div>
-                    </div>
-                  </div>
-                  <div class="margin-vertical margin-medium">
-                    <div class="divider-horizontal"></div>
-                  </div>
-                  <div class="margin-bottom margin-xsmall">
-                    <div>Incluye:</div>
-                  </div>
-                  <div class="content-grid">
-                    <div class="precios_feature-list">
-                      <div id="w-node-_4f399ddc-1858-ba01-d4fe-65588aea4012-b75f0699" class="pricing13_feature">
-                        <div class="pricing13_feature-icon-wrapper">
-                          <div class="icon-embed-xsmall w-embed"><svg width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M20.3479 7.56384L9.7479 18.1638C9.65402 18.2585 9.52622 18.3117 9.3929 18.3117C9.25958 18.3117 9.13178 18.2585 9.0379 18.1638L3.6479 12.7738C3.55324 12.68 3.5 12.5522 3.5 12.4188C3.5 12.2855 3.55324 12.1577 3.6479 12.0638L4.3479 11.3638C4.44178 11.2692 4.56958 11.2159 4.7029 11.2159C4.83622 11.2159 4.96402 11.2692 5.0579 11.3638L9.3879 15.6938L18.9379 6.14384C19.1357 5.95205 19.4501 5.95205 19.6479 6.14384L20.3479 6.85384C20.4426 6.94772 20.4958 7.07552 20.4958 7.20884C20.4958 7.34216 20.4426 7.46995 20.3479 7.56384Z" fill="currentColor"></path>
-                            </svg></div>
-                        </div>
-                        <div>Acceso a talleres básicos</div>
-                      </div>
-                      <div id="w-node-_4f399ddc-1858-ba01-d4fe-65588aea4017-b75f0699" class="pricing13_feature">
-                        <div class="pricing13_feature-icon-wrapper">
-                          <div class="icon-embed-xsmall w-embed"><svg width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M20.3479 7.56384L9.7479 18.1638C9.65402 18.2585 9.52622 18.3117 9.3929 18.3117C9.25958 18.3117 9.13178 18.2585 9.0379 18.1638L3.6479 12.7738C3.55324 12.68 3.5 12.5522 3.5 12.4188C3.5 12.2855 3.55324 12.1577 3.6479 12.0638L4.3479 11.3638C4.44178 11.2692 4.56958 11.2159 4.7029 11.2159C4.83622 11.2159 4.96402 11.2692 5.0579 11.3638L9.3879 15.6938L18.9379 6.14384C19.1357 5.95205 19.4501 5.95205 19.6479 6.14384L20.3479 6.85384C20.4426 6.94772 20.4958 7.07552 20.4958 7.20884C20.4958 7.34216 20.4426 7.46995 20.3479 7.56384Z" fill="currentColor"></path>
-                            </svg></div>
-                        </div>
-                        <div>Materiales incluidos</div>
-                      </div>
-                      <div id="w-node-_4f399ddc-1858-ba01-d4fe-65588aea401c-b75f0699" class="pricing13_feature">
-                        <div class="pricing13_feature-icon-wrapper">
-                          <div class="icon-embed-xsmall w-embed"><svg width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M20.3479 7.56384L9.7479 18.1638C9.65402 18.2585 9.52622 18.3117 9.3929 18.3117C9.25958 18.3117 9.13178 18.2585 9.0379 18.1638L3.6479 12.7738C3.55324 12.68 3.5 12.5522 3.5 12.4188C3.5 12.2855 3.55324 12.1577 3.6479 12.0638L4.3479 11.3638C4.44178 11.2692 4.56958 11.2159 4.7029 11.2159C4.83622 11.2159 4.96402 11.2692 5.0579 11.3638L9.3879 15.6938L18.9379 6.14384C19.1357 5.95205 19.4501 5.95205 19.6479 6.14384L20.3479 6.85384C20.4426 6.94772 20.4958 7.07552 20.4958 7.20884C20.4958 7.34216 20.4426 7.46995 20.3479 7.56384Z" fill="currentColor"></path>
-                            </svg></div>
-                        </div>
-                        <div>Recetas exclusivas</div>
-                      </div>
-                    </div>
-                    <p class="u-text-style-main u-weight-light">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-                  </div>
-                </div>
-                <div class="margin-top margin-medium">
-                  <div class="content-row">
-                    <div class="u-text-style-h2 precios_price">Consultar</div>
-                    <a href="#" class="button is-secondary is-alternate is-simple w-button">Contáctanos</a>
-                  </div>
-                </div>
-              </div>
-              <div class="precios_card color-scheme-3">
-                <div class="precios_wrapper">
-                  <div class="pricing13_content-top">
-                    <div class="pricing13_content-left">
-                      <div class="margin-bottom margin-xxsmall">
-                        <div class="u-text-style-h2 u-all-caps">Presunto<br>detalle</div>
-                      </div>
-                      <div class="tag u-margin-bottom-3">Ideal para parejas en peligro de extinsión</div>
-                    </div>
-                    <div class="pricing13_top-right">
-                      <div class="u-text-style-h5 text-align-right">Pack para<br>parejas</div>
-                    </div>
-                  </div>
-                  <div class="margin-vertical margin-medium">
-                    <div class="divider-horizontal"></div>
-                  </div>
-                  <div class="margin-bottom margin-xsmall">
-                    <div>Incluye:</div>
-                  </div>
-                  <div class="content-grid">
-                    <div class="precios_feature-list">
-                      <div id="w-node-df675798-7bd9-ab85-a812-c7e18b3445ea-b75f0699" class="pricing13_feature">
-                        <div class="pricing13_feature-icon-wrapper">
-                          <div class="icon-embed-xsmall w-embed"><svg width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M20.3479 7.56384L9.7479 18.1638C9.65402 18.2585 9.52622 18.3117 9.3929 18.3117C9.25958 18.3117 9.13178 18.2585 9.0379 18.1638L3.6479 12.7738C3.55324 12.68 3.5 12.5522 3.5 12.4188C3.5 12.2855 3.55324 12.1577 3.6479 12.0638L4.3479 11.3638C4.44178 11.2692 4.56958 11.2159 4.7029 11.2159C4.83622 11.2159 4.96402 11.2692 5.0579 11.3638L9.3879 15.6938L18.9379 6.14384C19.1357 5.95205 19.4501 5.95205 19.6479 6.14384L20.3479 6.85384C20.4426 6.94772 20.4958 7.07552 20.4958 7.20884C20.4958 7.34216 20.4426 7.46995 20.3479 7.56384Z" fill="currentColor"></path>
-                            </svg></div>
-                        </div>
-                        <div>Acceso a talleres básicos</div>
-                      </div>
-                      <div id="w-node-df675798-7bd9-ab85-a812-c7e18b3445ef-b75f0699" class="pricing13_feature">
-                        <div class="pricing13_feature-icon-wrapper">
-                          <div class="icon-embed-xsmall w-embed"><svg width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M20.3479 7.56384L9.7479 18.1638C9.65402 18.2585 9.52622 18.3117 9.3929 18.3117C9.25958 18.3117 9.13178 18.2585 9.0379 18.1638L3.6479 12.7738C3.55324 12.68 3.5 12.5522 3.5 12.4188C3.5 12.2855 3.55324 12.1577 3.6479 12.0638L4.3479 11.3638C4.44178 11.2692 4.56958 11.2159 4.7029 11.2159C4.83622 11.2159 4.96402 11.2692 5.0579 11.3638L9.3879 15.6938L18.9379 6.14384C19.1357 5.95205 19.4501 5.95205 19.6479 6.14384L20.3479 6.85384C20.4426 6.94772 20.4958 7.07552 20.4958 7.20884C20.4958 7.34216 20.4426 7.46995 20.3479 7.56384Z" fill="currentColor"></path>
-                            </svg></div>
-                        </div>
-                        <div>Materiales incluidos</div>
-                      </div>
-                      <div id="w-node-df675798-7bd9-ab85-a812-c7e18b3445f4-b75f0699" class="pricing13_feature">
-                        <div class="pricing13_feature-icon-wrapper">
-                          <div class="icon-embed-xsmall w-embed"><svg width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M20.3479 7.56384L9.7479 18.1638C9.65402 18.2585 9.52622 18.3117 9.3929 18.3117C9.25958 18.3117 9.13178 18.2585 9.0379 18.1638L3.6479 12.7738C3.55324 12.68 3.5 12.5522 3.5 12.4188C3.5 12.2855 3.55324 12.1577 3.6479 12.0638L4.3479 11.3638C4.44178 11.2692 4.56958 11.2159 4.7029 11.2159C4.83622 11.2159 4.96402 11.2692 5.0579 11.3638L9.3879 15.6938L18.9379 6.14384C19.1357 5.95205 19.4501 5.95205 19.6479 6.14384L20.3479 6.85384C20.4426 6.94772 20.4958 7.07552 20.4958 7.20884C20.4958 7.34216 20.4426 7.46995 20.3479 7.56384Z" fill="currentColor"></path>
-                            </svg></div>
-                        </div>
-                        <div>Recetas exclusivas</div>
-                      </div>
-                    </div>
-                    <p class="u-text-style-main u-weight-light">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-                  </div>
-                </div>
-                <div class="margin-top margin-medium">
-                  <div class="content-row">
-                    <div class="u-text-style-h1 precios_price">€75</div>
-                    <a href="#" class="button is-secondary is-alternate is-simple w-button">Comienza ahora</a>
-                  </div>
-                </div>
-              </div>
-              <div class="precios_card color-scheme-1">
-                <div class="precios_wrapper">
-                  <div class="pricing13_content-top">
-                    <div class="pricing13_content-left">
-                      <div class="margin-bottom margin-xxsmall">
-                        <div class="u-text-style-h2 u-all-caps">Presunta<br>cordura</div>
-                      </div>
-                      <div class="tag u-margin-bottom-3">Cenas privadas y experiencias</div>
-                    </div>
-                    <div class="pricing13_top-right">
-                      <div class="u-text-style-h5 text-align-right">Cenas<br>especiales</div>
-                    </div>
-                  </div>
-                  <div class="margin-vertical margin-medium">
-                    <div class="divider-horizontal"></div>
-                  </div>
-                  <div class="margin-bottom margin-xsmall">
-                    <div>Incluye:</div>
-                  </div>
-                  <div class="content-grid">
-                    <div class="precios_feature-list">
-                      <div id="w-node-_22e0ebf5-2179-b458-507d-3d0caaa4aafa-b75f0699" class="pricing13_feature">
-                        <div class="pricing13_feature-icon-wrapper">
-                          <div class="icon-embed-xsmall w-embed"><svg width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M20.3479 7.56384L9.7479 18.1638C9.65402 18.2585 9.52622 18.3117 9.3929 18.3117C9.25958 18.3117 9.13178 18.2585 9.0379 18.1638L3.6479 12.7738C3.55324 12.68 3.5 12.5522 3.5 12.4188C3.5 12.2855 3.55324 12.1577 3.6479 12.0638L4.3479 11.3638C4.44178 11.2692 4.56958 11.2159 4.7029 11.2159C4.83622 11.2159 4.96402 11.2692 5.0579 11.3638L9.3879 15.6938L18.9379 6.14384C19.1357 5.95205 19.4501 5.95205 19.6479 6.14384L20.3479 6.85384C20.4426 6.94772 20.4958 7.07552 20.4958 7.20884C20.4958 7.34216 20.4426 7.46995 20.3479 7.56384Z" fill="currentColor"></path>
-                            </svg></div>
-                        </div>
-                        <div>Acceso a talleres básicos</div>
-                      </div>
-                      <div id="w-node-_22e0ebf5-2179-b458-507d-3d0caaa4aaff-b75f0699" class="pricing13_feature">
-                        <div class="pricing13_feature-icon-wrapper">
-                          <div class="icon-embed-xsmall w-embed"><svg width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M20.3479 7.56384L9.7479 18.1638C9.65402 18.2585 9.52622 18.3117 9.3929 18.3117C9.25958 18.3117 9.13178 18.2585 9.0379 18.1638L3.6479 12.7738C3.55324 12.68 3.5 12.5522 3.5 12.4188C3.5 12.2855 3.55324 12.1577 3.6479 12.0638L4.3479 11.3638C4.44178 11.2692 4.56958 11.2159 4.7029 11.2159C4.83622 11.2159 4.96402 11.2692 5.0579 11.3638L9.3879 15.6938L18.9379 6.14384C19.1357 5.95205 19.4501 5.95205 19.6479 6.14384L20.3479 6.85384C20.4426 6.94772 20.4958 7.07552 20.4958 7.20884C20.4958 7.34216 20.4426 7.46995 20.3479 7.56384Z" fill="currentColor"></path>
-                            </svg></div>
-                        </div>
-                        <div>Materiales incluidos</div>
-                      </div>
-                      <div id="w-node-_22e0ebf5-2179-b458-507d-3d0caaa4ab04-b75f0699" class="pricing13_feature">
-                        <div class="pricing13_feature-icon-wrapper">
-                          <div class="icon-embed-xsmall w-embed"><svg width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M20.3479 7.56384L9.7479 18.1638C9.65402 18.2585 9.52622 18.3117 9.3929 18.3117C9.25958 18.3117 9.13178 18.2585 9.0379 18.1638L3.6479 12.7738C3.55324 12.68 3.5 12.5522 3.5 12.4188C3.5 12.2855 3.55324 12.1577 3.6479 12.0638L4.3479 11.3638C4.44178 11.2692 4.56958 11.2159 4.7029 11.2159C4.83622 11.2159 4.96402 11.2692 5.0579 11.3638L9.3879 15.6938L18.9379 6.14384C19.1357 5.95205 19.4501 5.95205 19.6479 6.14384L20.3479 6.85384C20.4426 6.94772 20.4958 7.07552 20.4958 7.20884C20.4958 7.34216 20.4426 7.46995 20.3479 7.56384Z" fill="currentColor"></path>
-                            </svg></div>
-                        </div>
-                        <div>Recetas exclusivas</div>
-                      </div>
-                    </div>
-                    <p class="u-text-style-main u-weight-light">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-                  </div>
-                </div>
-                <div class="margin-top margin-medium"></div>
-                <div class="content-row">
-                  <div class="u-text-style-h1 precios_price">€75</div>
-                  <a href="#" class="button is-secondary is-alternate is-simple w-button">Comienza ahora</a>
-                </div>
-              </div>
+              <div class="precios_card pe-pack-skeleton" data-pe-packs-skeleton="" aria-hidden="true"><div class="pe-pack-skeleton_bar is-title"></div><div class="pe-pack-skeleton_bar is-short"></div><div class="pe-pack-skeleton_bar"></div><div class="pe-pack-skeleton_bar"></div><div class="pe-pack-skeleton_bar is-price"></div></div>
+              <div class="precios_card pe-pack-skeleton" data-pe-packs-skeleton="" aria-hidden="true"><div class="pe-pack-skeleton_bar is-title"></div><div class="pe-pack-skeleton_bar is-short"></div><div class="pe-pack-skeleton_bar"></div><div class="pe-pack-skeleton_bar"></div><div class="pe-pack-skeleton_bar is-price"></div></div>
+              <div class="precios_card pe-pack-skeleton" data-pe-packs-skeleton="" aria-hidden="true"><div class="pe-pack-skeleton_bar is-title"></div><div class="pe-pack-skeleton_bar is-short"></div><div class="pe-pack-skeleton_bar"></div><div class="pe-pack-skeleton_bar"></div><div class="pe-pack-skeleton_bar is-price"></div></div>
+              <div class="precios_card pe-pack-skeleton" data-pe-packs-skeleton="" aria-hidden="true"><div class="pe-pack-skeleton_bar is-title"></div><div class="pe-pack-skeleton_bar is-short"></div><div class="pe-pack-skeleton_bar"></div><div class="pe-pack-skeleton_bar"></div><div class="pe-pack-skeleton_bar is-price"></div></div>
+              <div class="pe-packs_state" data-pe-packs-empty="" role="status"><p class="pe-packs_state-text f-text-body">Pronto tendremos packs disponibles.</p></div>
+              <div class="pe-packs_state" data-pe-packs-error="" role="status"><p class="pe-packs_state-text f-text-body">No hemos podido cargar los packs.</p><a href="#" role="button" class="button is-secondary w-button f-text-label" data-pe-packs-retry="">Reintentar</a></div>
             </div>
+            <div class="pe-packs_more-row"><a href="packs.html" class="button is-secondary w-button f-text-label">Ver todos los packs</a></div>
           </div>
         </div>
       </section>
-      <section class="section_espacios color-scheme-3">
+      <section class="section_espacios color-scheme-3 f-text-body">
         <div class="padding-global">
           <div class="padding-section-large">
             <div class="margin-bottom margin-medium">
               <div class="text-align-left align-center-copy">
                 <div class="max-width-large">
-                  <h2 class="u-text-style-h1">Espacios</h2>
+                  <h2 class="f-text-h1 f-margin-top-6 f-margin-bottom-6">Espacios</h2>
                 </div>
               </div>
             </div>
-            <div data-w-id="518f5219-72b0-8921-24a3-672d64e995f3" class="w-layout-grid espacios_component gap-0">
+            <div class="w-layout-grid espacios_component gap-0">
               <div class="espacios_card card-1">
-                <div class="espacios_tab" aria-hidden="true">El taller</div>
+                <div class="espacios_tab f-text-label f-text-ui-sm" aria-hidden="true">El taller</div>
                 <div class="espacios_card-content">
                   <div class="layer-container">
                     <div class="padding-huge is-full-height align-middle">
                       <div class="espacios_card-content-top">
                         <div class="margin-bottom margin-medium">
-                          <div class="text-style-tagline">Cocinas</div>
+                          <div class="text-style-tagline f-text-eyebrow">Cocinas</div>
                         </div>
                         <div class="margin-bottom margin-small">
-                          <h3 class="u-text-style-h2">El taller</h3>
+                          <h3 class="f-text-h2 f-margin-bottom-7">El taller</h3>
                         </div>
-                        <p class="u-text-style-main u-weight-light">En Calle Zurbano 83, Madrid, ofrecemos ambientes adaptables para todo tipo de eventos. Desde talleres de cocina hasta cenas privadas, cada rincón está diseñado para inspirar y deleitar.</p>
-                      </div>
-                    </div>
-                    <div class="layer align-bottom-left hide-tablet">
-                      <div class="padding-global">
-                        <a href="la-escuela-v2.html" class="button is-secondary is-alternate w-button">Saber más</a>
+                        <p class="f-text-body">En Calle Zurbano 83, Madrid, ofrecemos ambientes adaptables para todo tipo de eventos. Desde talleres de cocina hasta cenas privadas, cada rincón está diseñado para inspirar y deleitar.</p>
+                        <div class="espacios_card-cta hide-tablet"><a href="la-escuela.html" class="button is-secondary is-alternate w-button f-text-label">Saber más</a></div>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="espacios_card-image-wrapper">
-                  <div class="card-image-container"><img sizes="(max-width: 2560px) 100vw, 2560px" srcset="assets/images/pareja-curso-cocina-madrid_2560w-p-500.jpg 500w, assets/images/pareja-curso-cocina-madrid_2560w-p-800.jpg 800w, assets/images/pareja-curso-cocina-madrid_2560w-p-1080.jpg 1080w, assets/images/pareja-curso-cocina-madrid_2560w-p-1600.jpg 1600w, assets/images/pareja-curso-cocina-madrid_2560w.jpg 2560w" alt="El taller" src="assets/images/pareja-curso-cocina-madrid_2560w.jpg" loading="lazy" class="espacios_image radius-large"></div>
+                  <div class="card-image-container"><img sizes="(max-width: 2560px) 100vw, 2560px" srcset="assets/images/home-2026-10/pareja-curso-cocina-madrid-800.webp 500w, assets/images/home-2026-10/pareja-curso-cocina-madrid-800.webp 800w, assets/images/home-2026-10/pareja-curso-cocina-madrid.webp 1080w, assets/images/home-2026-10/pareja-curso-cocina-madrid.webp 1600w, assets/images/home-2026-10/pareja-curso-cocina-madrid.webp 2560w" alt="El taller" src="assets/images/home-2026-10/pareja-curso-cocina-madrid.webp" loading="lazy" class="espacios_image radius-large"></div>
                 </div>
               </div>
               <div class="espacios_card card-2">
-                <div class="espacios_tab is-2" aria-hidden="true">El local</div>
+                <div class="espacios_tab is-2 f-text-label f-text-ui-sm" aria-hidden="true">El local</div>
                 <div class="espacios_card-image-wrapper">
-                  <div class="card-image-container"><img sizes="(max-width: 991px) 100vw, 60vw" srcset="assets/images/WEBP.webpAI_Image1-p-500.webp 500w, assets/images/WEBP.webpAI_Image1-p-800.webp 800w, assets/images/WEBP.webpAI_Image1-p-1080.webp 1080w, assets/images/WEBP.webpAI_Image1.webp 1456w" alt="El local de Presunta Entropía: mesas de trabajo y cocina abierta" src="assets/images/WEBP.webpAI_Image1-p-1080.webp" loading="lazy" class="espacios_image radius-large"></div>
+                  <div class="card-image-container"><img sizes="(max-width: 991px) 100vw, 60vw" srcset="assets/images/home-2026-10/local-sala-principal-800.webp 500w, assets/images/home-2026-10/local-sala-principal-800.webp 800w, assets/images/home-2026-10/local-sala-principal.webp 1080w, assets/images/home-2026-10/local-sala-principal.webp 1456w" alt="El local de Presunta Entropía: mesas de trabajo y cocina abierta" src="assets/images/home-2026-10/local-sala-principal.webp" loading="lazy" class="espacios_image radius-large"></div>
                 </div>
                 <div class="espacios_card-content">
                   <div class="layer-container">
                     <div class="padding-huge is-full-height align-middle">
                       <div class="espacios_card-content-top">
                         <div class="margin-bottom margin-medium">
-                          <div class="text-style-tagline">Espacio</div>
+                          <div class="text-style-tagline f-text-eyebrow">Espacio</div>
                         </div>
                         <div class="margin-bottom margin-small">
-                          <h3 class="u-text-style-h2">El local</h3>
+                          <h3 class="f-text-h2 f-margin-bottom-7">El local</h3>
                         </div>
-                        <p class="u-text-style-main u-weight-light">Ubicados en Calle Zurbano 83, ofrecemos un entorno inspirador y accesible. Disfruta de nuestras instalaciones modernas y acogedoras para tus experiencias culinarias.</p>
-                      </div>
-                    </div>
-                    <div class="layer align-right-left hide-tablet">
-                      <div class="padding-global">
-                        <a href="la-escuela-v2.html" class="button is-secondary is-alternate w-button">Saber más</a>
+                        <p class="f-text-body">Ubicados en Calle Zurbano 83, ofrecemos un entorno inspirador y accesible. Disfruta de nuestras instalaciones modernas y acogedoras para tus experiencias culinarias.</p>
+                        <div class="espacios_card-cta hide-tablet"><a href="la-escuela.html" class="button is-secondary is-alternate w-button f-text-label">Saber más</a></div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
               <div class="espacios_card card-3">
-                <div class="espacios_tab is-3" aria-hidden="true">Zurbano 83</div>
+                <div class="espacios_tab is-3 f-text-label f-text-ui-sm" aria-hidden="true">Zurbano 83</div>
                 <div class="espacios_card-content">
                   <div class="layer-container">
                     <div class="padding-huge is-full-height align-middle">
                       <div class="espacios_card-content-top">
                         <div class="margin-bottom margin-medium">
-                          <div class="text-style-tagline">Madrid</div>
+                          <div class="text-style-tagline f-text-eyebrow">Madrid</div>
                         </div>
                         <div class="margin-bottom margin-small">
-                          <h3 class="u-text-style-h2">Zurbano 83</h3>
+                          <h3 class="f-text-h2 f-margin-bottom-7">Zurbano 83</h3>
                         </div>
-                        <p class="u-text-style-main u-weight-light">Nuestro espacio combina modernidad y confort. Instalaciones diseñadas para ofrecerte una experiencia única en cada taller y evento.</p>
-                      </div>
-                    </div>
-                    <div class="layer align-bottom-left hide-tablet">
-                      <div class="padding-global">
-                        <a href="la-escuela-v2.html" class="button is-secondary is-alternate w-button">Saber más</a>
+                        <p class="f-text-body">Nuestro espacio combina modernidad y confort. Instalaciones diseñadas para ofrecerte una experiencia única en cada taller y evento.</p>
+                        <div class="espacios_card-cta hide-tablet"><a href="la-escuela.html" class="button is-secondary is-alternate w-button f-text-label">Saber más</a></div>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="espacios_card-image-wrapper">
-                  <div class="card-image-container"><img sizes="(max-width: 991px) 100vw, 60vw" srcset="assets/images/WEBP.webp11-p-500.webp 500w, assets/images/WEBP.webp11-p-800.webp 800w, assets/images/WEBP.webp11-p-1080.webp 1080w, assets/images/WEBP.webp11.webp 1456w" alt="La cocina de Presunta Entropía, con estanterías de cerámica y luz natural" src="assets/images/WEBP.webp11-p-1080.webp" loading="lazy" class="espacios_image radius-large"></div>
+                  <div class="card-image-container"><img sizes="(max-width: 991px) 100vw, 60vw" srcset="assets/images/home-2026-10/local-cocina-800.webp 500w, assets/images/home-2026-10/local-cocina-800.webp 800w, assets/images/home-2026-10/local-cocina.webp 1080w, assets/images/home-2026-10/local-cocina.webp 1456w" alt="La cocina de Presunta Entropía, con estanterías de cerámica y luz natural" src="assets/images/home-2026-10/local-cocina.webp" loading="lazy" class="espacios_image radius-large"></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </section>
-      <section id="calendario" class="section_search color-scheme-2">
+      <section id="calendario" data-pe-list-root="" class="section_search color-scheme-2 f-text-body">
         <div class="padding-global">
           <div class="eventos_component">
             <div class="margin-bottom margin-xxlarge">
               <div class="max-width-large">
                 <div class="margin-bottom margin-small">
-                  <h2 class="u-text-style-h1">Calendario</h2>
+                  <h2 class="f-text-h1 f-margin-top-6 f-margin-bottom-6">Calendario</h2>
                 </div>
-                <p class="text-size-medium u-margin-top-8">Descubre experiencias culinarias únicas que transformarán tus eventos en momentos inolvidables.</p>
+                <p class="text-size-medium f-text-lead f-margin-top-8">Descubre experiencias culinarias únicas que transformarán tus eventos en momentos inolvidables.</p>
               </div>
             </div>
             <div class="eventos_layout-wrapper">
@@ -4066,9 +2896,9 @@
                         }
                       </style>
                   </div>
-                  <form id="email-form" name="email-form" data-name="Email Form" method="get" fs-list-element="filters">
-                    <div class="eventos_filter-menu-2"><input class="filter_input filter_input w-input" maxlength="256" fs-list-field="*" name="field" data-name="" placeholder="Buscar talleres" type="text" id="field">
-                      <div class="select-custom_component"><button type="button" class="select-custom_trigger select-custom_trigger"><span class="select-custom_label select-custom_label">Mes</span><span class="select-custom_arrow select-custom_arrow"></span></button>
+                  <form id="email-form" name="email-form" data-name="Email Form" method="get" class="pe-lc" data-pe-list-controls="" fs-list-element="filters">
+                    <div class="eventos_filter-menu-2 pe-lc_bar"><input class="filter_input filter_input w-input pe-lc_control pe-lc_field pe-lc_search" maxlength="256" fs-list-field="*" name="field" data-name="" placeholder="Buscar talleres" type="text" id="field">
+                      <div class="select-custom_component pe-lc_select"><button type="button" class="select-custom_trigger select-custom_trigger pe-lc_control pe-lc_field"><span class="select-custom_label select-custom_label f-text-small">Mes</span><span class="select-custom_arrow select-custom_arrow"></span></button>
                         <div class="select-custom_list">
                           <a href="#" class="select-custom_option select-custom_option"><span>Mes</span></a>
                           <a href="#" class="select-custom_option select-custom_option"><span>Enero</span></a>
@@ -4099,13 +2929,31 @@
                           <option value="December">Diciembre</option>
                         </select>
                       </div>
-                      <div class="radio_filter-group"><label class="filter_radio w-checkbox filter_radio">
-                          <div class="radio-button_filter"></div><input type="checkbox" id="Talleres" name="Talleres" data-name="Talleres" fs-list-field="category" style="opacity:0;position:absolute;z-index:-1" value="Talleres"><span class="w-form-label" for="Talleres">Talleres</span>
-                        </label><label class="filter_radio w-checkbox filter_radio">
-                          <div class="radio-button_filter"></div><input type="checkbox" id="Cenas" name="Cenas" data-name="Cenas" fs-list-field="category" style="opacity:0;position:absolute;z-index:-1" value="Cenas"><span class="w-form-label" for="Cenas">Cenas</span>
-                        </label><label class="filter_radio w-checkbox filter_radio">
-                          <div class="radio-button_filter"></div><input type="checkbox" id="TeamBuilding" name="TeamBuilding" data-name="Team Building" fs-list-field="category" style="opacity:0;position:absolute;z-index:-1" value="Team Building"><span class="w-form-label" for="TeamBuilding">Team Building</span>
+                      <div class="select-custom_component pe-lc_select"><button type="button" class="select-custom_trigger select-custom_trigger is-cal pe-lc_control pe-lc_field"><span class="select-custom_label select-custom_label f-text-small">Ordenar</span><span class="select-custom_arrow select-custom_arrow"></span></button>
+                        <div class="select-custom_list">
+                          <a href="#" class="select-custom_option select-custom_option"><span>Ordenar</span></a>
+                          <a href="#" class="select-custom_option select-custom_option"><span>Fecha: próximas primero</span></a>
+                          <a href="#" class="select-custom_option select-custom_option"><span>Fecha: más lejanas primero</span></a>
+                          <a href="#" class="select-custom_option select-custom_option"><span>Precio: de menor a mayor</span></a>
+                          <a href="#" class="select-custom_option select-custom_option"><span>Precio: de mayor a menor</span></a>
+                          <a href="#" class="select-custom_option select-custom_option"><span>Nombre: A-Z</span></a>
+                        </div><select id="Sort-Select" name="Sort-Select" data-name="Sort Select" fs-list-element="sort-trigger" class="select-custom_hidden select-custom_hidden">
+                          <option value="">Ordenar</option>
+                          <option value="fecha-asc">Fecha: próximas primero</option>
+                          <option value="fecha-desc">Fecha: más lejanas primero</option>
+                          <option value="price-asc">Precio: de menor a mayor</option>
+                          <option value="price-desc">Precio: de mayor a menor</option>
+                          <option value="name-asc">Nombre: A-Z</option>
+                        </select>
+                      </div>
+                      <div class="radio_filter-group pe-lc_chips"><label class="filter_radio w-checkbox filter_radio pe-lc_control pe-lc_chip">
+                          <div class="radio-button_filter"></div><input type="checkbox" id="Talleres" name="Talleres" data-name="Talleres" fs-list-field="category" fs-list-operator="contain" style="opacity:0;position:absolute;z-index:-1" value="Talleres"><span class="w-form-label f-text-label f-text-ui-sm" for="Talleres">Talleres</span>
+                        </label><label class="filter_radio w-checkbox filter_radio pe-lc_control pe-lc_chip">
+                          <div class="radio-button_filter"></div><input type="checkbox" id="Cenas" name="Cenas" data-name="Cenas" fs-list-field="category" fs-list-operator="contain" style="opacity:0;position:absolute;z-index:-1" value="Cenas"><span class="w-form-label f-text-label f-text-ui-sm" for="Cenas">Chef&#x27;s Table</span>
+                        </label><label class="filter_radio w-checkbox filter_radio pe-lc_control pe-lc_chip">
+                          <div class="radio-button_filter"></div><input type="checkbox" id="TeamBuilding" name="TeamBuilding" data-name="Team Building" fs-list-field="category" fs-list-operator="contain" style="opacity:0;position:absolute;z-index:-1" value="Team Building"><span class="w-form-label f-text-label f-text-ui-sm" for="TeamBuilding">Team Building</span>
                         </label></div>
+                    <label class="pe-lc_cols pe-lc_control"><span class="pe-lc_cols-label f-text-label f-text-ui-sm">Columnas <output class="pe-lc_cols-out" data-pe-list-cols-out="">3</output></span><input type="range" class="pe-lc_range" min="1" max="3" step="1" value="3" aria-label="Número de columnas" data-pe-list-cols-target="calendario"></label>
                     </div>
                   </form>
                   <div></div>
@@ -4156,41 +3004,41 @@
                 </div>
                 <div class="eventos_list-wrapper">
                   <div class="w-dyn-list">
-                    <div fs-list-interactive="true" fs-list-element="list" role="list" class="eventos_list w-dyn-items">
-                      <div id="w-node-_2665a30f-a11e-84b4-600b-26fb31c600b3-b75f0699" role="listitem" class="collection-item w-dyn-item">
-                        <div class="eventos_item color-scheme-4">
-                          <div class="eventos_top-item-content">
-                            <div class="eventos_date-wrapper">
-                              <div fs-list-field="week-day" class="w-dyn-bind-empty"></div>
-                              <div fs-list-field="day" class="heading-style-h4 w-dyn-bind-empty"></div>
+                    <div fs-list-interactive="true" fs-list-element="list" role="list" class="eventos_list w-dyn-items pe-lc_list" data-pe-list="calendario">
+                      <div id="w-node-_2665a30f-a11e-84b4-600b-26fb31c600b3-b75f0699" role="listitem" class="collection-item w-dyn-item pe-lc_item">
+                        <div class="eventos_item pe-lc_card">
+                          <div class="eventos_top-item-content pe-lc_top">
+                            <div class="eventos_date-wrapper pe-lc_date">
+                              <div fs-list-field="week-day" class="w-dyn-bind-empty f-text-small"></div>
+                              <div fs-list-field="day" class="f-text-stat w-dyn-bind-empty"></div>
                               <div data-date="" fs-list-field="mes" class="hidden-ui-elements w-dyn-bind-empty"></div>
                               <div data-date-translate="" class="w-dyn-bind-empty"></div>
                             </div>
-                            <div class="precio_content-wrap">
+                            <div class="precio_content-wrap pe-lc_price">
                               <div fs-list-field="promo" class="tag is-filter-promo-tag">Promo</div>
-                              <div class="heading-style-h3 precio-antes w-dyn-bind-empty"></div>
+                              <div class="precio-antes f-text-h3 w-dyn-bind-empty"></div>
                               <div class="price_block-wrap">
-                                <div fs-list-field="price" class="heading-style-h4 precio">€</div>
-                                <div fs-list-field="price" class="heading-style-h4 precio w-dyn-bind-empty"></div>
+                                <div fs-list-field="price" fs-list-fieldtype="number" class="precio f-text-stat">€</div>
+                                <div fs-list-field="price" fs-list-fieldtype="number" class="precio f-text-stat w-dyn-bind-empty"></div>
                               </div>
                             </div>
                           </div>
-                          <div id="w-node-_20244872-ae06-6940-0769-3f20f7bba867-b75f0699" class="divider-vertical"></div>
-                          <div class="event2_item-content">
-                            <div class="event2_item-content-top">
+                          <div id="w-node-_20244872-ae06-6940-0769-3f20f7bba867-b75f0699" class="divider-vertical pe-lc_divider"></div>
+                          <div class="event2_item-content pe-lc_body">
+                            <div class="event2_item-content-top pe-lc_head">
                               <div class="event2_title">
-                                <div fs-list-field="name" class="heading-style-h5 w-dyn-bind-empty"></div>
-                                <p class="text-size-large w-dyn-bind-empty"></p>
+                                <div fs-list-field="name" class="f-text-h4 w-dyn-bind-empty f-margin-bottom-3"></div>
+                                <p class="f-text-body w-dyn-bind-empty pe-lc_text"></p>
                               </div>
                             </div>
-                            <div class="text-size-small u-margin-top-3">Disponibilidad:</div>
-                            <div class="disponibilidad_content-wrap">
-                              <div class="text-size-huge w-dyn-bind-empty"></div>
-                              <div class="text-size-huge">/</div>
-                              <div class="text-size-large w-dyn-bind-empty"></div>
+                            <div class="f-text-small u-margin-top-3 pe-lc_avail-label">Disponibilidad:</div>
+                            <div class="disponibilidad_content-wrap pe-lc_avail">
+                              <div class="f-text-body w-dyn-bind-empty"></div>
+                              <div class="f-text-body">/</div>
+                              <div class="f-text-body w-dyn-bind-empty"></div>
                             </div>
                           </div>
-                          <div class="button-group max-width-full gap-0">
+                          <div class="button-group max-width-full gap-0 pe-lc_tags">
                             <div fs-list-field="promo" class="tag is-filter-fomo-tag">Quedan pocos</div>
                             <div class="max-width-full w-dyn-list">
                               <div role="list" class="button-group gap-0 max-width-full w-dyn-items">
@@ -4200,9 +3048,9 @@
                               </div>
                             </div>
                           </div>
-                          <div class="button-group max-width-full">
-                            <a href="#" class="button is-alternate is-small is-simple max-width-full w-button">Reserva tu lugar</a>
-                            <a href="#" class="button is-secondary is-alternate is-simple is-small max-width-full w-button">Saber más</a>
+                          <div class="button-group max-width-full pe-lc_cta">
+                            <a href="#" class="button is-alternate is-simple max-width-full w-button f-text-label">Reserva tu lugar</a>
+                            <a href="#" class="button is-secondary is-alternate is-simple max-width-full w-button f-text-label">Saber más</a>
                           </div>
                         </div>
                       </div>
@@ -4211,16 +3059,16 @@
                   </div>
                 </div>
                 <div fs-list-element="empty" class="empty_state-wrap">
-                  <h2 class="heading-style-h3">No se han encontrado<br>coincidencias con tu búsqueda</h2>
-                  <div>Inténtalo de nuevo</div>
-                  <a fs-list-element="clear" href="#" class="button is-secondary is-alternate is-simple w-button">Reestablecer búsqueda</a>
+                  <h2 class="f-text-h3 pe-state_title">No se han encontrado<br>coincidencias con tu búsqueda</h2>
+                  <div class="pe-state_text f-text-body">Inténtalo de nuevo</div>
+                  <a fs-list-element="clear" href="#" class="button is-secondary is-alternate is-simple w-button f-text-label pe-state_action">Reestablecer búsqueda</a>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </section>
-      <section class="section_values-marquee color-scheme-1 color-scheme-2">
+      <section class="section_values-marquee color-scheme-1 color-scheme-2 f-text-body">
         <div class="padding-section-medium">
           <div data-marquee-speed="40" class="values-marquee_component">
             <div class="w-layout-hflex values-marquee_track">
@@ -4288,7 +3136,7 @@
           </div>
         </div>
       </section>
-      <section class="section_contacto">
+      <section class="section_contacto f-text-body">
         <div class="padding-global">
           <div class="padding-section-large">
             <div class="contact1_component">
@@ -4296,35 +3144,35 @@
                 <div class="text-align-left">
                   <div class="max-width-large">
                     <div class="margin-bottom margin-small">
-                      <h2 class="u-text-style-h1">Contáctanos</h2>
+                      <h2 class="f-text-h1 f-margin-top-6 f-margin-bottom-6">Contáctanos</h2>
                     </div>
-                    <p class="text-size-medium u-margin-top-8">Estamos aquí para resolver tus dudas y consultas.</p>
+                    <p class="text-size-medium f-text-lead f-margin-top-8">Estamos aquí para resolver tus dudas y consultas.</p>
                   </div>
                 </div>
               </div>
               <div class="contact1_form-block w-form">
                 <form id="wf-form-Contact-1-Form" name="wf-form-Contact-1-Form" data-name="Contact 1 Form" method="get" class="contacto_form" data-wf-page-id="6863e33e21c92195b75f0699" data-wf-element-id="518f5219-72b0-8921-24a3-672d64e99752">
                   <div class="contacto_layout-wrapper">
-                    <div class="form_field-wrapper"><input class="form_input w-input" maxlength="256" name="Name" data-name="Name" placeholder="Nombre" type="text" id="Name" required=""></div>
-                    <div class="form_field-wrapper"><input class="form_input w-input" maxlength="256" name="Email" data-name="Email" placeholder="Correo" type="email" id="Email" required=""></div>
-                    <div class="form_field-wrapper"><input class="form_input w-input" maxlength="256" name="Phone" data-name="Phone" placeholder="Teléfono" type="tel" id="Phone" required=""></div>
-                    <div class="form_field-wrapper"><input class="form_input w-input" maxlength="256" name="CP" data-name="CP" placeholder="Código Postal" type="text" inputmode="numeric" pattern="[0-9]{5}" autocomplete="postal-code" id="CP" required=""></div>
+                    <div class="form_field-wrapper"><input class="form_input w-input f-text-body" maxlength="256" name="Name" data-name="Name" placeholder="Nombre" type="text" id="Name" required=""></div>
+                    <div class="form_field-wrapper"><input class="form_input w-input f-text-body" maxlength="256" name="Email" data-name="Email" placeholder="Correo" type="email" id="Email" required=""></div>
+                    <div class="form_field-wrapper"><input class="form_input w-input f-text-body" maxlength="256" name="Phone" data-name="Phone" placeholder="Teléfono" type="tel" id="Phone" required=""></div>
+                    <div class="form_field-wrapper"><input class="form_input w-input f-text-body" maxlength="256" name="CP" data-name="CP" placeholder="Código Postal" type="text" inputmode="numeric" pattern="[0-9]{5}" autocomplete="postal-code" id="CP" required=""></div>
                   </div>
-                  <div class="form_field-wrapper"><textarea id="Message" name="Message" maxlength="5000" data-name="Message" placeholder="Escribe tu mensaje..." required="" class="form_input is-text-area w-input"></textarea></div>
+                  <div class="form_field-wrapper"><textarea id="Message" name="Message" maxlength="5000" data-name="Message" placeholder="Escribe tu mensaje..." required="" class="form_input is-text-area w-input f-text-body"></textarea></div>
                   <div class="contacto_form-content-bottom"><label id="Contact-1-Checkbox" class="w-checkbox form_checkbox">
-                      <div class="w-checkbox-input w-checkbox-input--inputType-custom form_checkbox-icon"></div><input type="checkbox" name="Contact-1-Checkbox" id="Contact-1-Checkbox" data-name="Contact 1 Checkbox" required="" style="opacity:0;position:absolute;z-index:-1"><span for="Contact-1-Checkbox" class="form_checkbox-label w-form-label">Acepto los Términos</span>
+                      <div class="w-checkbox-input w-checkbox-input--inputType-custom form_checkbox-icon"></div><input type="checkbox" name="Contact-1-Checkbox" id="Contact-1-Checkbox" data-name="Contact 1 Checkbox" required="" style="opacity:0;position:absolute;z-index:-1"><span for="Contact-1-Checkbox" class="form_checkbox-label w-form-label f-text-small">Acepto los Términos</span>
                     </label>
-                    <div id="w-node-f7bee7a4-18d2-4053-a16c-f08d6aff4ccd-b75f0699" class="contact_button-wrapper"><input type="submit" data-wait="Please wait..." id="w-node-_518f5219-72b0-8921-24a3-672d64e99764-b75f0699" class="button is-form w-button" value="Enviar"></div>
+                    <div id="w-node-f7bee7a4-18d2-4053-a16c-f08d6aff4ccd-b75f0699" class="contact_button-wrapper"><input type="submit" data-wait="Please wait..." id="w-node-_518f5219-72b0-8921-24a3-672d64e99764-b75f0699" class="button is-form w-button f-text-label f-text-ui-xl" value="Enviar"></div>
                   </div>
                 </form>
                 <div class="form_message-success-wrapper w-form-done">
                   <div class="form_message-success">
-                    <div class="success-text">¡Gracias! Tu mensaje ha sido recibido.</div>
+                    <div class="success-text f-text-small">¡Gracias! Tu mensaje ha sido recibido.</div>
                   </div>
                 </div>
                 <div class="form_message-error-wrapper w-form-fail">
                   <div class="form_message-error">
-                    <div class="error-text">¡Ups! Ocurrió un error al enviar el formulario.</div>
+                    <div class="error-text f-text-small">¡Ups! Ocurrió un error al enviar el formulario.</div>
                   </div>
                 </div>
               </div>
@@ -4333,7 +3181,7 @@
         </div>
       </section>
     </main>
-    <footer class="footer15_component color-scheme-1">
+    <footer class="footer15_component color-scheme-1 f-text-body">
       <div class="padding-global">
         <div class="padding-bottom padding-xlarge">
           <div class="w-layout-grid footer15_top-wrapper">
@@ -4346,16 +3194,16 @@
               <div class="margin-bottom margin-medium">
                 <div class="footer15_details-wrapper">
                   <div class="margin-bottom margin-tiny">
-                    <div class="text-size-small">Dirección:</div>
+                    <div class="f-text-eyebrow">Dirección:</div>
                   </div>
                   <div class="margin-bottom margin-small">
-                    <div class="text-size-small">Calle Zurbano 83, Madrid</div>
+                    <div class="f-text-small">Calle Zurbano 83, Madrid</div>
                   </div>
                   <div class="margin-bottom margin-tiny">
-                    <div class="text-size-small">Contacto:</div>
+                    <div class="f-text-eyebrow">Contacto:</div>
                   </div>
-                  <a href="#" class="text-size-small">+34 1800 123 4567</a>
-                  <a href="#" class="text-size-small"><br>info@presuntaentropia.com</a>
+                  <a href="#" class="f-text-small">+34 1800 123 4567</a>
+                  <a href="#" class="f-text-small"><br>info@presuntaentropia.com</a>
                 </div>
               </div>
               <div class="w-layout-grid footer15_social-list">
@@ -4386,20 +3234,48 @@
                 </a>
               </div>
             </div>
+            <div class="pe-newsletter">
+              <div class="pe-newsletter_head">
+                <h3 class="pe-newsletter_title f-text-h4 f-text-uppercase">Newsletter</h3>
+                <p class="pe-newsletter_text f-text-small">Novedades, eventos y experiencias de Presunta Entropía en tu correo.</p>
+              </div>
+              <form class="pe-newsletter_form" data-newsletter-form data-surface="footer-form">
+                <input class="pe-newsletter_input form_input w-input" type="email" name="email" required autocomplete="email" placeholder="Tu email">
+                <label class="pe-newsletter_consent f-text-tiny">
+                  <input class="pe-newsletter_check" type="checkbox" name="consent" data-consent-version="newsletter-v1">
+                  Quiero recibir por email novedades, eventos y experiencias de Presunta Entropía. Puedo darme de baja en cualquier momento. Más información en la <a href="/politica-de-privacidad">Política de privacidad</a>.
+                </label>
+                <details class="pe-newsletter_info f-text-tiny">
+                  <summary class="pe-newsletter_info-link">Información básica sobre protección de datos</summary>
+                  <table class="pe-newsletter_info-table"><tbody>
+                    <tr><th scope="row">Responsable</th><td>THE COOKING LAB SLU (Presunta Entropía)</td></tr>
+                    <tr><th scope="row">Finalidad</th><td>enviarte por email novedades, eventos y experiencias.</td></tr>
+                    <tr><th scope="row">Legitimación</th><td>tu consentimiento.</td></tr>
+                    <tr><th scope="row">Destinatarios</th><td>no se ceden datos a terceros, salvo obligación legal. Nuestros proveedores tecnológicos los tratan por cuenta nuestra.</td></tr>
+                    <tr><th scope="row">Derechos</th><td>acceso, rectificación, supresión y otros, escribiendo a privacidad@presuntaentropia.com.</td></tr>
+                    <tr><th scope="row">Más información</th><td><a href="/politica-de-privacidad">Política de privacidad</a></td></tr>
+                  </tbody></table>
+                </details>
+                <div class="pe-newsletter_hp" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off"></div>
+                <button class="pe-newsletter_button button is-secondary is-small f-text-label f-text-ui-sm" type="submit">Suscribirme</button>
+                <p class="pe-newsletter_msg f-text-small" data-newsletter-success hidden>Casi listo. Revisa tu correo y confirma la suscripción.</p>
+                <p class="pe-newsletter_msg f-text-small" data-newsletter-error hidden>No se ha podido enviar. Inténtalo de nuevo en unos minutos.</p>
+              </form>
+            </div>
             <div class="w-layout-grid footer15_menu-wrapper">
               <div class="footer15_link-list">
-                <a href="#" class="footer15_link">Inicio Rápido</a>
-                <a href="#" class="footer15_link">Contáctanos Ya</a>
-                <a href="#" class="footer15_link">Nuestros Menús</a>
-                <a href="#" class="footer15_link">Reserva Ahora</a>
-                <a href="#" class="footer15_link">Eventos Especiales</a>
+                <a href="#" class="footer15_link f-text-small">Inicio Rápido</a>
+                <a href="#" class="footer15_link f-text-small">Contáctanos Ya</a>
+                <a href="#" class="footer15_link f-text-small">Nuestros Menús</a>
+                <a href="#" class="footer15_link f-text-small">Reserva Ahora</a>
+                <a href="#" class="footer15_link f-text-small">Eventos Especiales</a>
               </div>
               <div class="footer15_link-list">
-                <a href="#" class="footer15_link">Blog Recetas</a>
-                <a href="#" class="footer15_link">Sobre Nosotros</a>
-                <a href="#" class="footer15_link">Tienda Online</a>
-                <a href="#" class="footer15_link">Eventos Privados</a>
-                <a href="#" class="footer15_link">Cocina Creativa</a>
+                <a href="#" class="footer15_link f-text-small">Blog Recetas</a>
+                <a href="#" class="footer15_link f-text-small">Sobre Nosotros</a>
+                <a href="#" class="footer15_link f-text-small">Tienda Online</a>
+                <a href="#" class="footer15_link f-text-small">Eventos Privados</a>
+                <a href="#" class="footer15_link f-text-small">Cocina Creativa</a>
               </div>
             </div>
           </div>
@@ -4412,12 +3288,13 @@
         <div class="divider-horizontal"></div>
         <div class="padding-top padding-medium">
           <div class="footer15_bottom-wrapper">
-            <div class="footer15_credit-text">© 2025 Presunta Entropía. Todos los derechos reservados.</div>
+            <div class="footer15_credit-text f-text-tiny">© 2026 Presunta Entropía. Todos los derechos reservados.</div>
             <div class="w-layout-grid footer15_legal-list">
-              <a href="#" class="footer15_legal-link">Política Privacidad</a>
-              <a href="#" class="footer15_legal-link">Términos de Servicio</a>
-              <a href="#" class="footer15_legal-link">Configuración Cookies</a>
-            </div>
+            <a href="/aviso-legal" class="footer15_legal-link f-text-tiny">Aviso legal</a>
+            <a href="/politica-de-privacidad" class="footer15_legal-link f-text-tiny">Política de privacidad</a>
+            <a href="/politica-de-cookies" class="footer15_legal-link f-text-tiny">Política de cookies</a>
+            <a href="/condiciones-de-cancelacion" class="footer15_legal-link f-text-tiny">Condiciones de cancelación</a>
+          </div>
           </div>
         </div>
       </div>
@@ -4777,36 +3654,44 @@
             }
           </style>
       </div>
-      <div class="booking-modal_inner">
+      <div class="booking-modal_inner pe-lc">
         <div class="booking-modal_topbar">
-          <a href="#" class="booking-modal_close" data-modal-close="modal-1"><span class="booking-modal_close-x"><svg class="booking-modal_icon" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="2.2" stroke-linecap="square" fill="none"/></svg></span><span>Cerrar</span></a>
-          <h2 class="booking-modal_title">Calendario</h2>
+          <a href="#" class="booking-modal_close button is-secondary f-text-label" data-modal-close="modal-1"><div class="navbar_menu-close-button-content"><div>Cerrar</div><div class="menu-icon"><div class="menu-close-icon_wrapper"><div class="menu-close_line-top"></div><div class="menu-close_line-bottom"></div></div></div></div></a>
+          <h2 class="booking-modal_title f-text-h1">Calendario</h2>
           <div class="booking-modal_controls">
-            <label class="booking-modal_search-wrap"><input class="booking-modal_search" type="text" placeholder="Buscar" data-booking-search=""><span class="booking-modal_search-icon" aria-hidden="true"></span></label>
+            <label class="booking-modal_search-wrap pe-lc_control pe-lc_search"><input class="booking-modal_search" type="text" placeholder="Buscar" data-booking-search=""><span class="booking-modal_search-icon" aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="7" cy="7" r="4.6"/><path d="M10.6 10.6L14 14"/></svg></span></label>
           </div>
         </div>
         <div class="booking-modal_body">
           <div class="booking-modal_side">
             <img src="assets/images/identity_main-isologo.svg" loading="lazy" alt="" class="booking-modal_brand">
-            <div class="booking-modal_heading">
-              <div class="is-accent">Talleres</div>
-              <div>Eventos</div>
-              <div>Restaurante</div>
+            <div class="booking-modal_heading f-text-h2 f-text-uppercase">
+              <div class="booking-modal_cat is-accent">Talleres</div>
+              <div class="booking-modal_cat">Eventos</div>
+              <div class="booking-modal_cat">Restaurante</div>
             </div>
           </div>
           <div class="booking-modal_main">
             <div class="booking-modal_toolbar">
-              <div class="booking-modal_week-nav">
+              <div class="booking-modal_week-nav pe-lc_control is-seg f-text-small">
                 <button type="button" class="booking-modal_week-arrow" data-booking-week-prev="" aria-label="Semana anterior"><svg class="booking-modal_icon" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M11 2v12L3 8z" fill="currentColor"/></svg></button>
                 <span data-booking-week-label="">Semana 1</span>
                 <button type="button" class="booking-modal_week-arrow" data-booking-week-next="" aria-label="Semana siguiente"><svg class="booking-modal_icon" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M5 2v12l8-6z" fill="currentColor"/></svg></button>
               </div>
-              <div class="booking-modal_view-toggle">
-                <button type="button" class="booking-modal_view-btn is-active" data-booking-view="week">Semanal</button>
-                <button type="button" class="booking-modal_view-btn" data-booking-view="month">Mensual</button>
+              <div class="booking-modal_view-toggle pe-lc_control is-seg">
+                <button type="button" class="booking-modal_view-btn f-text-small is-active" data-booking-view="week">Semanal</button>
+                <button type="button" class="booking-modal_view-btn f-text-small" data-booking-view="month">Mensual</button>
               </div>
             </div>
             <div class="booking-modal_grid" data-booking-grid=""></div>
+            <!-- Packs: pay now, pick the date later (webflow-packs.js handles the redeem button) -->
+            <div class="booking-modal_packs">
+              <p class="booking-modal_packs-text f-text-h6">¿Prefieres pagar ahora y elegir fecha después?</p>
+              <div class="booking-modal_packs-actions">
+                <a href="packs.html" class="booking-modal_packs-btn button f-text-label">Ver packs</a>
+                <a href="canjear-pack.html" class="booking-modal_packs-btn is-ghost button is-secondary f-text-label" data-entropical-pack-redeem-open="" data-auto-open="false">Ya tengo un pack</a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -4862,22 +3747,22 @@
 
               function cardHTML(c) {
                 var it = c.it;
-                var href = c.coleccion === 'cenas' ? 'cenas-v2.html' : 'taller-item-v2.html?slug=' + encodeURIComponent(it.slug);
+                var href = c.coleccion === 'cenas' ? 'cenas.html' : 'taller-item.html?slug=' + encodeURIComponent(it.slug);
                 var price = it.precio !== null && it.precio !== undefined ? '€' + it.precio : '';
                 var foot;
                 if (c.itemId) {
                   var seats = it.seatsLeft !== null && it.seatsLeft !== undefined
-                    ? '<div class="booking-modal_card-seats">Quedan <span data-item-seats-left data-item-id="' + esc(c.itemId) + '">' + esc(it.seatsLeft) + '</span> plazas</div>'
+                    ? '<div class="booking-modal_card-seats f-text-small">Quedan <span data-item-seats-left data-item-id="' + esc(c.itemId) + '">' + esc(it.seatsLeft) + '</span> plazas</div>'
                     : '';
-                  foot = seats + '<button type="button" class="booking-modal_card-add" data-cart-add data-item-id="' + esc(c.itemId) + '">Añadir al carrito</button>';
+                  foot = seats + '<button type="button" class="booking-modal_card-add button f-text-label f-text-ui-sm" data-cart-add data-item-id="' + esc(c.itemId) + '">Añadir al carrito</button>';
                 } else {
-                  foot = '<div class="booking-modal_card-soon">Nuevas fechas próximamente</div>';
+                  foot = '<div class="booking-modal_card-soon f-text-small">Nuevas fechas próximamente</div>';
                 }
-                return '<div class="booking-modal_card" data-booking-card data-booking-slug="' + esc(it.slug) + '" data-booking-text="' + esc((it.name + ' ' + (it.tipo || '')).toLowerCase()) + '">' +
-                  '<div class="booking-modal_card-date' + (c.date ? '' : ' is-soon') + '">' + (c.date ? esc(c.date) : 'Próximamente') + '</div>' +
-                  '<a class="booking-modal_card-title" href="' + href + '">' + esc(it.name) + '</a>' +
-                  '<div class="booking-modal_card-meta"><span class="booking-modal_card-type">' + esc(it.tipo || '') + '</span>' +
-                  '<span class="booking-modal_card-price">' + esc(price) + '</span></div>' +
+                return '<div class="booking-modal_card' + (c.date ? '' : ' is-soon') + '" data-booking-card data-booking-slug="' + esc(it.slug) + '" data-booking-text="' + esc((it.name + ' ' + (it.tipo || '')).toLowerCase()) + '">' +
+                  '<div class="booking-modal_card-date f-text-h3' + (c.date ? '' : ' is-soon') + '">' + (c.date ? esc(c.date) : 'Próximamente') + '</div>' +
+                  '<a class="booking-modal_card-title f-text-h6 f-text-uppercase" href="' + href + '">' + esc(it.name) + '</a>' +
+                  '<div class="booking-modal_card-meta"><span class="booking-modal_card-type f-text-small">' + esc(it.tipo || '') + '</span>' +
+                  '<span class="booking-modal_card-price f-text-stat">' + esc(price) + '</span></div>' +
                   foot + '</div>';
               }
 
@@ -4886,7 +3771,7 @@
                 ? CARDS.map(cardHTML).join('')
                 : '';
               var empty = document.createElement('div');
-              empty.className = 'booking-modal_empty';
+              empty.className = 'booking-modal_empty f-text-small';
               empty.textContent = 'No hay experiencias con fechas abiertas. Vuelve pronto.';
               grid.appendChild(empty);
               var cardEls = Array.prototype.slice.call(grid.querySelectorAll('[data-booking-card]'));
@@ -5521,7 +4406,7 @@
               <path d="M1 1H5L7.68 14.39C7.77144 14.8504 8.02191 15.264 8.38755 15.5583C8.75318 15.8526 9.2107 16.009 9.68 16H19.4C19.8693 16.009 20.3268 15.8526 20.6925 15.5583C21.0581 15.264 21.3086 14.8504 21.4 14.39L23 6H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg>
             <p class="cart-modal_empty-text">Tu carrito está vacío</p>
-            <a href="todos-nuestros-talleres-v2.html" class="cart-modal_empty-link cart-modal_empty-link">Ver experiencias</a>
+            <a href="todos-nuestros-talleres.html" class="cart-modal_empty-link cart-modal_empty-link">Ver experiencias</a>
           </div>
           <div data-cart-not-empty="" class="cart-modal_filled">
             <div data-cart-items="" class="cart-modal_items"></div>
@@ -5548,7 +4433,6 @@
   </div>
   <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=6863e33e21c92195b75f05fe" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
   <script src="js/webflow.js?v=0703fbaf" type="text/javascript"></script>
-  <script async="" type="text/javascript" src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=Rh22Bu"></script>
   <script>
       (function() {
         function getBackgroundColor(el) {
@@ -5759,6 +4643,13 @@
   <!-- Entropical cart, site-wide. The script sends customers to /carrito unless told otherwise. -->
   <script>window.ENTROPICAL_CHECKOUT_PAGE_URL = '/checkout';</script>
   <script src="https://presunta.ntropical.com/webflow-cart.js"></script>
+  <!-- Entropical packs (buy / redeem modals, cart pack block, js/pe-packs.js glue). Load after the cart.
+       [confirmar] the three values with Juan: terms page, contact, payment providers enabled for packs. -->
+  <script>window.ENTROPICAL_PACKS = { termsUrl: '/condiciones-de-cancelacion', contactUrl: 'mailto:info@presuntaentropia.com', paymentMethods: ['redsys'] };</script>
+  <script src="https://presunta.ntropical.com/webflow-packs.js" defer></script>
+  <script src="js/pe-packs-copy.js?v=73a6b73a" defer></script>
+  <script src="js/pe-packs.js?v=9c42bd9b" defer></script>
+  <script src="https://presunta.ntropical.com/webflow-newsletter.js" defer></script>
 
   <!--  Bottom-left float (css/pe-music.css): the music screen + ORDEN/CAOS, shown once
         the console and the hero dock are out of view. Phones: the music screen only.  -->

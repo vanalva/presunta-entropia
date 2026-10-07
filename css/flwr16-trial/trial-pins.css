@@ -1,0 +1,14 @@
+/* =============================================================
+   TRIAL 2 PINS: the one side effect of flwr 1.1+ that a variable cannot pin.
+   [data-flwr] h1..h6, p, ul, ol { margin-top: 0; margin-bottom: 0 } (0,1,1, tag reset, 1.3) beats the project
+   margin of a single class (0,1,0). The Text Style table has margin-top / margin-bottom rows, but they are not
+   applied by any style yet (planned), so no cell can restore them. These rules re-state the project's own
+   margins, same variables, at 0,2,0. Margins only: nothing here touches type.
+   ============================================================= */
+[data-flwr] h2.u-text-style-h1 { margin-top: var(--_spacing-semantics---gap--gap-lg); margin-bottom: var(--_spacing-semantics---gap--gap-lg); }
+[data-flwr] h3.u-text-style-h2 { margin-bottom: var(--_spacing-semantics---gap--gap-xl); }
+[data-flwr] h3.u-text-style-h3 { margin-top: var(--_spacing-semantics---gap--gap-md); margin-bottom: var(--_spacing-semantics---gap--gap-md); }
+[data-flwr] .u-margin-top-8 { margin-top: var(--_spacing---space--8); }
+[data-flwr] .dynamic-banner_heading-top { margin-bottom: var(--_spacing-semantics---gap--gap-2xl); }
+[data-flwr] .dynamic-banner_heading-bottom { margin-top: var(--_spacing-semantics---gap--gap-2xl); }
+[data-flwr] .pe-newsletter_text { margin-bottom: var(--_spacing-semantics---padding--pad-section-sm); }
