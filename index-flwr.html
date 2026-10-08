@@ -154,7 +154,7 @@
   <script src="js/pe-console/games/emplatado.js?v=479f3168" defer></script>
   <script src="js/pe-console/games/equilibrio.js?v=4e7bd236" defer></script>
   <script src="js/pe-console/games/punto.js?v=d644dd06" defer></script>
-  <script src="js/pe-console/pe-console.js?v=b0dd7b90" defer></script>
+  <script src="js/pe-console/pe-console.js?v=830eb062" defer></script>
   <script src="js/hero-dock.js?v=8cdf4df5" defer></script>
   <script src="js/hero-swiper.js?v=7c39220e" defer></script>
   <script src="js/pe-motion.js?v=90bf7d39" defer></script>
@@ -1488,6 +1488,28 @@
                   });
                 }
               }
+              // The preloader hides the page while it gets ready: its 1.7 s sequence is the
+              // minimum, then it holds on the full line until the page has loaded (window load +
+              // fonts), capped at 5 s, and lifts two frames later so the first animations do not
+              // run on a busy main thread. Lifting announces itself: html.pe-ready + the
+              // "pe:preloader-out" event, for anything that should start exactly then.
+              var startedAt = Date.now();
+              function whenPageReady(minMs, fn) {
+                var loaded = new Promise(function(res) {
+                  if (document.readyState === 'complete') res();
+                  else window.addEventListener('load', function() { res(); }, { once: true });
+                });
+                var fonts = (document.fonts && document.fonts.ready) ? document.fonts.ready.catch(function() {}) : Promise.resolve();
+                var minimum = new Promise(function(res) { setTimeout(res, Math.max(0, minMs - (Date.now() - startedAt))); });
+                var cap = new Promise(function(res) { setTimeout(res, 5000); });
+                Promise.race([Promise.all([loaded, fonts, minimum]), cap]).then(function() {
+                  requestAnimationFrame(function() { requestAnimationFrame(function() {
+                    document.documentElement.classList.add('pe-ready');
+                    try { document.dispatchEvent(new CustomEvent('pe:preloader-out')); } catch (e) {}
+                    fn();
+                  }); });
+                });
+              }
               // Start the animation sequence
               function runPreloaderAnimation() {
                 // Show the preloader (remove initially-hidden, add visible)
@@ -1526,8 +1548,8 @@
                     preloaderLogo.style.opacity = '0';
                   }
                 }, 1400);
-                // Step 4: Hide preloader after animation completes (1700ms delay)
-                setTimeout(function() {
+                // Step 4: Hide preloader once the sequence has played AND the page is ready
+                whenPageReady(1700, function() {
                   if (preloader) {
                     preloader.classList.remove('pe-preloader-visible');
                     preloader.classList.add('pe-preloader-fade-out');
@@ -1544,7 +1566,7 @@
                       preloader.parentNode.removeChild(preloader);
                     }
                   }, 500);
-                }, 1700);
+                });
               }
               // Run animation when DOM is ready
               if (document.readyState === 'loading') {

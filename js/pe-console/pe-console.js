@@ -1791,8 +1791,10 @@
       if (it.play) { sfx('open'); go(launcher); return; }
       if (it.here) { sfx('back'); closeNav(); return; }
       if (it.modal) { sfx('open'); closeNav(); setTimeout(function () { it.el.click(); }, 60); return; }
-      sampleSoon('gamestart');
-      playWake(function () { location.href = it.href; });
+      // straight to the page: the next page's preloader is the transition. The console's own
+      // wake animation in front of it played two transitions back to back.
+      sfx('open');
+      location.href = it.href;
     }
     listEl.addEventListener('click', function (e) {
       var row = e.target.closest('[data-i]');
@@ -1822,6 +1824,9 @@
   // ---- docking: the one console instance leaves its slot and comes back ----
   var dockPh = null, dockBackdrop = null, dockKind = null, closeKey = null;
   function dock(kind) {
+    // reopened while the last close is still sliding out: finish that close first, or its
+    // pending cleanup lands after this dock and strips it (menu open, console gone)
+    if (undockT) finishUndock();
     if (dockKind) return;
     var r = hostEl.getBoundingClientRect();
     dockKind = kind;
@@ -1914,13 +1919,18 @@
     hostEl.classList.remove('is-in');
     if (dockBackdrop) dockBackdrop.classList.remove('is-on');
     screenEl.classList.remove('is-docked');
-    setTimeout(function () {
-      hostEl.classList.remove('pe-dock', 'pe-dock--' + kind);
-      hostEl.style.width = ''; hostEl.style.height = '';
-      if (dockPh) { dockPh.remove(); dockPh = null; }
-      de.classList.remove('pe-menu-sheet');
-      dockKind = null;
-    }, 560);
+    undockKind = kind;
+    undockT = setTimeout(finishUndock, 560);
+  }
+  var undockT = 0, undockKind = null;
+  function finishUndock() {
+    clearTimeout(undockT); undockT = 0;
+    var kind = undockKind; undockKind = null;
+    hostEl.classList.remove('pe-dock', 'pe-dock--' + kind, 'is-in');
+    hostEl.style.width = ''; hostEl.style.height = '';
+    if (dockPh) { dockPh.remove(); dockPh = null; }
+    document.documentElement.classList.remove('pe-menu-sheet');
+    dockKind = null;
   }
   // CERRAR inside the screen's status bar (shown while the console is the
   // phone menu): big, yellow, always in the same spot whatever app is open
