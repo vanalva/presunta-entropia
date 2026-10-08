@@ -8,6 +8,15 @@
    Field slugs below are chosen so Webflow binding is mechanical.
    Images reference src/assets/images (relative from src/pages/).
    ============================================================ */
+/* Asset base for paths written in data files: the page's own stylesheet link knows it
+   ("../css/project.css" in src/pages, "css/project.css" in the built site under a subpath),
+   so images resolve on the dev server, the build and GitHub Pages alike. */
+window.PE_ASSETS = window.PE_ASSETS || (function () {
+  var l = document.querySelector('link[href*="css/project.css"]');
+  var h = l ? l.getAttribute('href') : '../css/project.css';
+  return h.slice(0, h.indexOf('css/project.css')) + 'assets/';
+})();
+
 window.PE_CMS = {
 
   personas: [
@@ -16,21 +25,21 @@ window.PE_CMS = {
       name: "Mariana Lira",
       rol: "Chef",
       bio: "Mariana Lira es una chef madrileña especializada en técnicas ancestrales y fermentaciones vivas, con formación internacional en gastronomía contemporánea y una marcada pasión por la cultura culinaria tradicional.",
-      image: "../assets/images/home-2026-10/riendo-retrato-1600.webp"
+      image: window.PE_ASSETS + "images/home-2026-10/riendo-retrato-1600.webp"
     },
     {
       slug: "diego-entropia",
       name: "Diego Salaz",
       rol: "Chef",
       bio: "Diego Salaz viene del mundo del fuego: brasas, arroces y cocina de campo. En Presunta Entropía dirige los talleres de mar y arroz, donde el error se corrige con humor y la paella nunca sale dos veces igual.",
-      image: "../assets/images/home-2026-10/foto-trasera-delantal-curso-1600.webp"
+      image: window.PE_ASSETS + "images/home-2026-10/foto-trasera-delantal-curso-1600.webp"
     },
     {
       slug: "akiko-mun",
       name: "Akiko Mun",
       rol: "Chef invitada",
       bio: "Akiko Mun explora las cocinas de Asia desde la técnica y la memoria. Sus talleres recorren fermentos coreanos, caldos japoneses y la calle tailandesa sin salir de Zurbano 83.",
-      image: "../assets/images/home-2026-10/riendo-comida-1600.webp"
+      image: window.PE_ASSETS + "images/home-2026-10/riendo-comida-1600.webp"
     }
   ],
 
@@ -164,7 +173,7 @@ window.PE_CMS = {
 
 /* Image fallback for experiences without a platform image (local preview only;
    in Webflow the hero-image field binds directly). */
-window.PE_CMS.PLACEHOLDER_IMG = '../assets/images/identity_main-isologo.svg';
+window.PE_CMS.PLACEHOLDER_IMG = window.PE_ASSETS + 'images/identity_main-isologo.svg';
 window.PE_CMS.setImage = function (img, url, alt) {
   if (!img) return;
   img.removeAttribute('srcset');

@@ -18,6 +18,15 @@
    js/pe-booking-flow.js refuses to put them in the cart.
    Nothing here is written to the Entropical app.
    ============================================================ */
+/* Asset base for paths written in data files: the page's own stylesheet link knows it
+   ("../css/project.css" in src/pages, "css/project.css" in the built site under a subpath),
+   so images resolve on the dev server, the build and GitHub Pages alike. */
+window.PE_ASSETS = window.PE_ASSETS || (function () {
+  var l = document.querySelector('link[href*="css/project.css"]');
+  var h = l ? l.getAttribute('href') : '../css/project.css';
+  return h.slice(0, h.indexOf('css/project.css')) + 'assets/';
+})();
+
 (function () {
   'use strict';
   var KEY = 'pe-fixtures';
@@ -31,7 +40,7 @@
   var src = window.PE_EXPERIENCIAS;
   if (!on || !src || !src.items) return;
 
-  var IMG = '../assets/images/home-2026-10/';
+  var IMG = window.PE_ASSETS + 'images/home-2026-10/';
   var n = 0;
   // a date `days` from today at hh:mm Madrid time (summer or winter time, whichever that day has)
   function at(days, hh, mm) {
@@ -56,11 +65,11 @@
 
   // ---- people (platform shape: Person via PersonItem; the profiles exist in data/pe-personas.js) ----
   var P = {
-    juan: { slug: 'juan-perez', name: 'Juan Pérez', role: 'Chef', photoUrl: '../assets/images/site-2026-10/equipo-chef-brazos-cruzados-1600.webp', bio: 'Apasionado por la cocina mediterránea, con más de 10 años de experiencia en restaurantes de Madrid.' },
-    carlos: { slug: 'carlos-ruiz', name: 'Carlos Ruiz', role: 'Invitado especial', photoUrl: '../assets/images/home-2026-10/instructor-clase-cocina-1600.webp', bio: 'Sommelier certificado: marida cada plato con la bebida que le toca.' },
-    lara: { slug: 'lara-ladriana', name: 'Lara Ladriana', role: 'Chef', photoUrl: '../assets/images/site-2026-10/equipo-retrato-cocinera-1600.webp', bio: 'Cocinera del equipo de Presunta Entropía.' },
-    manuel: { slug: 'manuel-lugo', name: 'Manuel Lugo', role: 'Chef', photoUrl: '../assets/images/home-2026-10/riendo-retrato-1600.webp', bio: 'Cocinero del equipo de Presunta Entropía.' },
-    ana: { slug: 'ana-lobenco', name: 'Ana Lobenco', role: 'Chef invitada', photoUrl: '../assets/images/site-2026-10/equipo-retrato-sentada-1600.webp', bio: 'Chef invitada para las noches nikkei.' }
+    juan: { slug: 'juan-perez', name: 'Juan Pérez', role: 'Chef', photoUrl: window.PE_ASSETS + 'images/site-2026-10/equipo-chef-brazos-cruzados-1600.webp', bio: 'Apasionado por la cocina mediterránea, con más de 10 años de experiencia en restaurantes de Madrid.' },
+    carlos: { slug: 'carlos-ruiz', name: 'Carlos Ruiz', role: 'Invitado especial', photoUrl: window.PE_ASSETS + 'images/home-2026-10/instructor-clase-cocina-1600.webp', bio: 'Sommelier certificado: marida cada plato con la bebida que le toca.' },
+    lara: { slug: 'lara-ladriana', name: 'Lara Ladriana', role: 'Chef', photoUrl: window.PE_ASSETS + 'images/site-2026-10/equipo-retrato-cocinera-1600.webp', bio: 'Cocinera del equipo de Presunta Entropía.' },
+    manuel: { slug: 'manuel-lugo', name: 'Manuel Lugo', role: 'Chef', photoUrl: window.PE_ASSETS + 'images/home-2026-10/riendo-retrato-1600.webp', bio: 'Cocinero del equipo de Presunta Entropía.' },
+    ana: { slug: 'ana-lobenco', name: 'Ana Lobenco', role: 'Chef invitada', photoUrl: window.PE_ASSETS + 'images/site-2026-10/equipo-retrato-sentada-1600.webp', bio: 'Chef invitada para las noches nikkei.' }
   };
   function people() { return Array.prototype.map.call(arguments, function (p) { return { person: null, slug: p.slug, name: p.name, role: p.role, photoUrl: p.photoUrl, bio: p.bio, specialties: [] }; }); }
 

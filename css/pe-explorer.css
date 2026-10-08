@@ -279,7 +279,7 @@ body .tag.pe-tcard_pill { margin: 0; font-weight: var(--_typography---weight--no
 
 /* hover: the Experiencia card follows the pointer (js: floatShow) */
 .pe-xp_float {
-  position: fixed; top: 0; left: 0; z-index: 2147483000; width: 24rem;
+  position: fixed; top: 0; left: 0; z-index: 2147483000; width: 34rem; max-width: calc(100vw - 2rem);
   pointer-events: none; opacity: 0; visibility: hidden;
   transition: opacity .16s ease, visibility 0s linear .16s;
 }
@@ -465,3 +465,40 @@ body .pe-xp_row.is-compact > .pe-book { width: 100%; }
 @media (max-width: 767px) {
   body .pe-xp_row > .pe-book { grid-column: 1 / -1; width: 100%; }
 }
+
+/* ---- compact card (the hover card): square photo left, the essentials right ----
+   rows on the right: type · title · people / price + seats / Reservar + cart, Más info / date pills */
+.talleres_card.pe-tcard.is-compact { display: grid; grid-template-columns: 11rem minmax(0, 1fr); column-gap: var(--_spacing---space--3); align-items: start; }
+.pe-tcard.is-compact .pe-tcard_media { aspect-ratio: 1 / 1; height: auto; }
+.pe-tcard.is-compact .pe-tcard_date { min-width: 3.25rem; padding-top: 0.2rem; padding-bottom: 0.25rem; }
+.pe-tcard.is-compact .pe-tcard_date-day { font-size: var(--_typography---size--h5); }
+.pe-tcard.is-compact .pe-tcard_flags { top: auto; bottom: var(--_spacing---space--1); right: var(--_spacing---space--1); }
+.pe-tcard.is-compact .pe-tcard_flag { padding: 0.2rem 0.45rem; font-size: 0.6875rem; }
+.pe-tcard.is-compact .pe-tcard_body { padding: 0.15rem 0.25rem 0.25rem 0; row-gap: var(--_spacing---space--2); }
+.pe-tcard.is-compact .pe-tcard_title { font-size: var(--_typography---size--h5); line-height: 1.15; }
+.pe-tcard.is-compact .pe-tcard_person-role, .pe-tcard.is-compact .pe-tcard_person-more { display: none; }
+.pe-tcard.is-compact .pe-tcard_person-img { width: 1.75rem; height: 1.75rem; }
+/* the two fact columns melt into one grid: labels, then price | seats, then the buttons, then the pills */
+.pe-tcard.is-compact .pe-tcard_facts { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: var(--_spacing---space--4); row-gap: 0.2rem; margin-top: var(--_spacing---space--1); padding-top: var(--_spacing---space--2); }
+.pe-tcard.is-compact .pe-tcard_fact { display: contents; }
+.pe-tcard.is-compact .pe-tcard_fact:not(.is-next) > .pe-tcard_fact-label { grid-column: 1; grid-row: 1; }
+.pe-tcard.is-compact .pe-tcard_fact:not(.is-next) > .pe-tcard_fact-value { grid-column: 1; grid-row: 2; align-self: center; }
+.pe-tcard.is-compact .pe-tcard_fact.is-next > .pe-tcard_fact-label { grid-column: 2; grid-row: 1; }
+.pe-tcard.is-compact .pe-tcard_fact.is-next > .pe-tcard_fact-value,
+.pe-tcard.is-compact .pe-tcard_fact.is-next > .pe-ficha_seats { grid-column: 2; grid-row: 2; align-self: center; margin-top: 0; }
+.pe-tcard.is-compact .pe-tcard_ctas { grid-column: 1 / -1; grid-row: 3; flex-direction: row; column-gap: var(--_spacing---space--1); margin-top: var(--_spacing---space--2); }
+.pe-tcard.is-compact .pe-tcard_ctas > * { flex: 1 1 0; min-width: 0; }
+.pe-tcard.is-compact .pe-tcard_pills { grid-column: 1 / -1; grid-row: 4; margin-top: var(--_spacing---space--2); }
+.pe-tcard.is-compact .button.pe-tcard_cta { padding-left: 0.75rem; padding-right: 0.75rem; }
+.pe-tcard.is-compact .pe-tcard_ctas > .pe-book { flex: 1.45 1 0; }
+.pe-tcard.is-compact .pe-book > [data-pe-add] { padding-left: 0.5rem; padding-right: 0.5rem; }
+/* the photo runs the full height of the compact card */
+.talleres_card.pe-tcard.is-compact { align-items: stretch; }
+.pe-tcard.is-compact .pe-tcard_media { aspect-ratio: auto; height: 100%; min-height: 11rem; }
+.pe-tcard.is-compact .pe-tcard_image { height: 100%; }
+
+/* Experiencias: "Ver más" under the grid */
+.pe-xp_more { display: flex; flex-direction: column; align-items: center; row-gap: var(--_spacing---space--2); margin-top: var(--_spacing---space--5); }
+.pe-xp_more-count { margin: 0; color: var(--xp-mute); }
+.pe-xp_more-btn { min-width: 14rem; }
+@media (max-width: 478px) { .pe-xp_more-btn { width: 100%; } }

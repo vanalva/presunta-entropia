@@ -208,7 +208,9 @@
     // a past experience turns dark (the site's dark card); on the dark overlay it dims instead
     var dark = !!(opts && opts.dark) || st === 'past';
     var boxed = !!(opts && opts.boxed) || (st === 'past' && !(opts && opts.dark));
-    var c = shell(dark, ' is-' + st + (pct ? ' is-promo' : '') + (it.featured ? ' is-featured' : '') + (boxed ? ' is-boxed' : ''));
+    // compact (the hover card): square photo left, the essentials right; no summary, level or duration
+    var compact = !!(opts && opts.compact);
+    var c = shell(dark, ' is-' + st + (pct ? ' is-promo' : '') + (it.featured ? ' is-featured' : '') + (boxed ? ' is-boxed' : '') + (compact ? ' is-compact' : ''));
     c.setAttribute('data-pe-card-href', itemHref(it));
     c.setAttribute('data-pe-state', st);
     var media = h('div', 'pe-tcard_media');
@@ -238,7 +240,7 @@
     t.appendChild(a); body.appendChild(t);
     var ppl = peopleRow(it);
     if (ppl) body.appendChild(ppl);
-    if (it.summary) body.appendChild(h('p', 'pe-tcard_text f-text-body', it.summary));
+    if (it.summary && !compact) body.appendChild(h('p', 'pe-tcard_text f-text-body', it.summary));
 
     var price = ses && typeof ses.precio === 'number' ? ses.precio : it.precio;
     var priceEl = h('div', 'pe-tcard_fact-value pe-tcard_price f-text-h6');
@@ -262,8 +264,8 @@
     R.appendChild(pills([
       dateTxt && canDates && st !== 'past' ? datesPill(it, dateTxt, true) : dateTxt,
       st === 'past' ? 'Próximamente' : '',
-      it.duracion,
-      it.nivel ? 'Nivel ' + it.nivel.toLowerCase() : '',
+      compact ? '' : it.duracion,
+      compact ? '' : (it.nivel ? 'Nivel ' + it.nivel.toLowerCase() : ''),
       others > 0 ? (canDates ? datesPill(it, '+' + others + (others === 1 ? ' fecha' : ' fechas'), false) : '+' + others + (others === 1 ? ' fecha' : ' fechas')) : ''
     ]));
     body.appendChild(facts(L, R));
@@ -521,14 +523,53 @@
       if (!grid) return;
       grid.className = 'pe-xp_grid is-cols-' + state.cols;
     }
-    function renderExp() {
-      panelExp.innerHTML = '';
+    // Experiencias shows a page at a time: three rows of the chosen columns on a desktop
+    // (never fewer than 6), 6 on tablet and phone. "Ver más" adds the next page; any new
+    // filter, sort or search starts again from the first page.
+    function pageSize() {
+      if (window.matchMedia && matchMedia('(max-width: 991px)').matches) return 6;
+      return Math.max(6, state.cols * 3);
+    }
+    function renderExp(more) {
       var list = filteredItems();
-      var grid = h('div', 'pe-xp_grid is-cols-' + state.cols);
-      grid.setAttribute('role', 'list');
-      list.forEach(function (it) { var c = tcard(it); c.setAttribute('role', 'listitem'); grid.appendChild(c); });
-      var p = packCard(false); p.setAttribute('role', 'listitem'); grid.appendChild(p);
-      panelExp.appendChild(grid);
+      if (!more) state.limit = pageSize();
+      var shown = list.slice(0, state.limit);
+      var grid = panelExp.querySelector('.pe-xp_grid');
+      var from = 0;
+      if (more && grid) {
+        // keep what is there, append the next page before the packs card
+        var pack = grid.querySelector('.pe-tcard.is-pack');
+        from = grid.querySelectorAll('.pe-tcard:not(.is-pack)').length;
+        shown.slice(from).forEach(function (it) { var c = tcard(it); c.setAttribute('role', 'listitem'); grid.insertBefore(c, pack); });
+      } else {
+        panelExp.innerHTML = '';
+        grid = h('div', 'pe-xp_grid is-cols-' + state.cols);
+        grid.setAttribute('role', 'list');
+        shown.forEach(function (it) { var c = tcard(it); c.setAttribute('role', 'listitem'); grid.appendChild(c); });
+        var p = packCard(false); p.setAttribute('role', 'listitem'); grid.appendChild(p);
+        panelExp.appendChild(grid);
+      }
+      var old = panelExp.querySelector('.pe-xp_more');
+      if (old) old.remove();
+      if (list.length > shown.length) {
+        var box = h('div', 'pe-xp_more');
+        box.appendChild(h('p', 'pe-xp_more-count f-text-small', 'Mostrando ' + shown.length + ' de ' + list.length));
+        var left = list.length - shown.length;
+        var btn = attr(h('button', BTN_S + ' pe-xp_more-btn w-button f-text-label', 'Ver más (' + Math.min(left, pageSize()) + ')'), { type: 'button', 'data-ep-role': 'secondary' });
+        btn.addEventListener('click', function () {
+          state.limit += pageSize();
+          renderExp(true);
+          var cards = panelExp.querySelectorAll('.pe-tcard:not(.is-pack)');
+          if (!reduced) Array.prototype.slice.call(cards, from).forEach(function (c, i) {
+            c.animate([{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }], { duration: 280, delay: Math.min(i * 40, 240), easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)', fill: 'backwards' });
+          });
+          // keyboard users land on the first new card
+          var nextLink = cards[from] && cards[from].querySelector('.pe-tcard_link');
+          if (nextLink) nextLink.focus({ preventScroll: true });
+        });
+        box.appendChild(btn);
+        panelExp.appendChild(box);
+      }
       return list.length;
     }
 
@@ -762,10 +803,10 @@
     // pinned  while the pointer is on the card (Reservar / Más info / the card itself)
     // leaving the card closes it (the same session does not reopen it until the pointer
     // leaves that session); leaving the calendar without reaching it hides it after GRACE_MS
-    var REST_MS = 450, GRACE_MS = 280;
+    var REST_MS = 450, GRACE_MS = 280, SETTLED_GRACE_MS = 600;
     var canHover = !!(window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches);
     var fl = null, flSid = -1, flCache = {}, fx = 0, fy = 0, tx = 0, ty = 0, flRaf = 0, flOn = false;
-    var settled = false, pinned = false, restT = 0, hideT = 0, dismissed = -1;
+    var settled = false, pinned = false, restT = 0, hideT = 0, dismissed = -1, switchT = 0, switchSid = -1;
     function floatEl() {
       if (fl) return fl;
       fl = attr(h('div', 'pe-xp_float' + (dark ? ' is-dark' : '')), { 'aria-hidden': 'true' });
@@ -773,7 +814,7 @@
       fl.addEventListener('pointerenter', function () {
         if (!flOn) return;
         pinned = true; settle();
-        clearTimeout(hideT); clearTimeout(restT);
+        clearTimeout(hideT); clearTimeout(restT); clearTimeout(switchT); switchSid = -1;
       });
       fl.addEventListener('pointerleave', function () {
         // been on it and left: it closes. The same session does not bring it back until the
@@ -808,7 +849,7 @@
       fx = tx; fy = ty;
       fl.style.transform = 'translate3d(' + Math.round(fx) + 'px,' + Math.round(fy) + 'px,0)';
     }
-    function hideSoon() { clearTimeout(hideT); hideT = setTimeout(floatHide, GRACE_MS); }
+    function hideSoon(ms) { clearTimeout(hideT); hideT = setTimeout(floatHide, ms || GRACE_MS); }
     function floatShow(sid, e) {
       var s = curList[sid];
       if (!s) return floatHide();
@@ -816,7 +857,7 @@
       clearTimeout(hideT);
       if (settled && sid === flSid) return;          // resting on the same session: stay put
       if (sid !== flSid) {
-        var cardEl = flCache[sid] || (flCache[sid] = card(s.item, { dark: dark, ses: s, boxed: true }));
+        var cardEl = flCache[sid] || (flCache[sid] = card(s.item, { dark: dark, ses: s, boxed: true, compact: true }));
         fl.innerHTML = ''; fl.appendChild(cardEl); flSid = sid;
       }
       settled = false; fl.classList.remove('is-settled');
@@ -827,7 +868,7 @@
       restT = setTimeout(settle, REST_MS);
     }
     function floatHide() {
-      clearTimeout(restT); clearTimeout(hideT);
+      clearTimeout(restT); clearTimeout(hideT); clearTimeout(switchT); switchSid = -1;
       if (!fl || !flOn) return;
       flOn = false; flSid = -1; settled = false; pinned = false;
       fl.classList.remove('is-on', 'is-settled');
@@ -839,13 +880,26 @@
         var t = e.target.closest && e.target.closest('[data-sid], [data-first-sid]');
         if (!t || !panelCal.contains(t)) {
           dismissed = -1;
+          clearTimeout(switchT); switchSid = -1;
           // off the session: stop, give the pointer time to reach the card
-          if (flOn) { if (!settled) settle(); hideSoon(); }
+          if (flOn) { var was = settled; if (!settled) settle(); hideSoon(was ? SETTLED_GRACE_MS : GRACE_MS); }
           return;
         }
         var sid = t.hasAttribute('data-sid') ? +t.getAttribute('data-sid') : +t.getAttribute('data-first-sid');
         if (sid === dismissed) return;
         dismissed = -1;
+        // stopped card: the pointer is on its way to it, crossing other sessions. Another
+        // session takes over only when the pointer RESTS on it (REST_MS), never on the way.
+        if (settled && flOn && sid !== flSid) {
+          clearTimeout(hideT);
+          // every move restarts the wait: only a real pause on that session switches
+          clearTimeout(switchT);
+          switchSid = sid;
+          var at = { clientX: e.clientX, clientY: e.clientY };
+          switchT = setTimeout(function () { switchSid = -1; settled = false; floatShow(sid, at); }, REST_MS);
+          return;
+        }
+        clearTimeout(switchT); switchSid = -1;
         floatShow(sid, e);
       });
       panelCal.addEventListener('pointerleave', function (e) {

@@ -16,7 +16,7 @@
   var db = window.PE_CMS;
   if (!db) return;
   var EQUIPO_BIO = 'En Presunta Entropía, valoramos la calidad y la sostenibilidad en cada aspecto de nuestro trabajo. Nuestro equipo está compuesto por profesionales apasionados que buscan ofrecer experiencias culinarias memorables y responsables.';
-  var IMG = '../assets/images/';
+  var IMG = window.PE_ASSETS + 'images/';
   var page = [
     { slug: 'lara-ladriana', name: 'Lara Ladriana', rol: 'Equipo', tipo: 'equipo', bio: EQUIPO_BIO, image: IMG + 'site-2026-10/equipo-retrato-cocinera-1600.webp' },
     { slug: 'rebecca-soto', name: 'Rebecca Soto', rol: 'Equipo', tipo: 'equipo', bio: EQUIPO_BIO, image: IMG + 'home-2026-10/riendo-comida-1600.webp' },

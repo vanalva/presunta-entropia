@@ -269,7 +269,7 @@ body .pe-bookdlg_err { color: var(--pe---color--mule-fawn-light); }
 body .pe-bookdlg_err:empty { display: none; }
 body .pe-bookdlg :focus-visible { outline: 2px solid var(--pe---color--fuel-yellow); outline-offset: 3px; }
 @media (max-width: 478px) {
-  body .pe-bookdlg { align-items: flex-end; padding: var(--_spacing---space--2); }
+  body .pe-bookdlg { padding: var(--_spacing---space--2); }
   body .pe-bookdlg_panel { padding: var(--_spacing---space--4); }
   body .pe-bookdlg_head { grid-template-columns: 5rem minmax(0, 1fr); }
   body .pe-bookdlg_ctas { grid-template-columns: minmax(0, 1fr); }
