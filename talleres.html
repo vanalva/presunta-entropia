@@ -156,7 +156,7 @@
   <script src="js/pe-console/games/emplatado.js?v=479f3168" defer></script>
   <script src="js/pe-console/games/equilibrio.js?v=4e7bd236" defer></script>
   <script src="js/pe-console/games/punto.js?v=d644dd06" defer></script>
-  <script src="js/pe-console/pe-console.js?v=4b367c2c" defer></script>
+  <script src="js/pe-console/pe-console.js?v=b0dd7b90" defer></script>
   <script src="js/hero-dock.js?v=8cdf4df5" defer></script>
   <script src="js/pe-chat-buddy.js?v=c1cc8f5f" defer></script>
   <script>try{if(localStorage.getItem('pe-entropy')==='1'){document.documentElement.classList.add('modo-entropia');}}catch(e){}</script>
@@ -173,16 +173,22 @@
 
   <link rel="stylesheet" href="css/framework.css?v=9e6b5644">
   <link rel="stylesheet" href="css/variables.css?v=b9782eaf">
-  <link rel="stylesheet" href="css/project.css?v=ba01a3d7">
-  <link rel="stylesheet" href="css/pe-packs.css?v=ae3c4693">
+  <link rel="stylesheet" href="css/project.css?v=320c7bee">
+  <link href="css/pe-overlays.css?v=42baaf38" rel="stylesheet" type="text/css">
+  <link href="css/pe-forms.css?v=1b46480e" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="css/pe-packs.css?v=18ec285a">
+  <link href="css/pe-platform.css?v=3e0c887a" rel="stylesheet" type="text/css">
+  <link href="css/pe-explorer.css?v=8082c0c3" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="css/pe-motion.css?v=71450f25">
   <link rel="stylesheet" href="css/pe-music.css?v=11cb1acc">
   <script>(function(h){try{if(!h.classList.contains('modo-entropia')&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){h.classList.add('pe-m-boot');setTimeout(function(){h.classList.remove('pe-m-boot')},3000)}}catch(e){}})(document.documentElement);</script>
-  <script src="js/pe-motion.js?v=b523ee5c" defer></script>
+  <script src="js/pe-motion.js?v=90bf7d39" defer></script>
   <script src="data/pe-experiencias.js"></script>
+  <script src="data/pe-fixtures.js"></script><!-- TEST DATA, inert unless ?fixtures=1. Delete before launch -->
   <script src="data/pe-cms.js"></script>
   <script src="data/pe-cms-lists.js" defer></script>
   <script src="js/pe-list-controls.js?v=3d12fa90" defer></script>
+  <script src="js/pe-talleres-bento.js?v=1be285af" defer></script>
 </head>
 <body data-scrollbar-color="var(--_color-primitives---colors--fuel-yellow)">
   <div class="flowriter-import">
@@ -1567,11 +1573,11 @@
      CART MODAL COMPONENT - DARK MODE
      Presunta Entropia Design System
      Colors:
-     - aztec (dark blue): #0d161d
-     - stark-white (cream): #e8d5c4
-     - fuel-yellow (accent): #efa02e
-     - fuel-yellow-dark: #bf8024
-     - mule-fawn (warning): #9b4933
+     - aztec (dark blue): var(--pe---color--aztec)
+     - stark-white (cream): var(--pe---color--stark-white)
+     - fuel-yellow (accent): var(--pe---color--fuel-yellow)
+     - fuel-yellow-dark: var(--pe---color--fuel-yellow-dark)
+     - mule-fawn (warning): var(--pe---color--mule-fawn)
      - border-width: 1.5px
      ===================================================== */
           /* Base Component */
@@ -1600,14 +1606,14 @@
             right: 0;
             bottom: 0;
             left: 0;
-            background-color: rgba(13, 22, 29, 0);
+            background-color: color-mix(in srgb, var(--pe---color--aztec) 0%, transparent);
             -webkit-backdrop-filter: blur(0px);
             backdrop-filter: blur(0px);
             cursor: pointer;
             transition: background-color 0.3s ease, backdrop-filter 0.3s ease, -webkit-backdrop-filter 0.3s ease;
           }
           .cart-modal_component.is-open .cart-modal_overlay {
-            background-color: rgba(13, 22, 29, 0.6);
+            background-color: color-mix(in srgb, var(--pe---color--aztec) 60%, transparent);
             -webkit-backdrop-filter: blur(8px);
             backdrop-filter: blur(8px);
           }
@@ -1618,7 +1624,7 @@
             width: 100%;
             max-width: 420px;
             height: 100%;
-            background: #0d161d;
+            background: var(--pe---color--aztec);
             display: flex;
             flex-direction: column;
             transform: translateX(100%);
@@ -1635,14 +1641,14 @@
             align-items: center;
             justify-content: space-between;
             padding: 1.5rem;
-            border-bottom: 1.5px solid rgba(232, 213, 196, 0.15);
+            border-bottom: 1.5px solid color-mix(in srgb, var(--pe---color--stark-white) 15%, transparent);
             gap: 1rem;
           }
           .cart-modal_title {
             font-family: "Space Grotesk", sans-serif;
             font-size: 1.25rem;
             font-weight: 500;
-            color: #e8d5c4;
+            color: var(--pe---color--stark-white);
             margin: 0;
             text-transform: uppercase;
             letter-spacing: 0.02em;
@@ -1659,18 +1665,18 @@
             min-width: 2.5rem;
             padding: 0;
             background: transparent;
-            border: 1.5px solid #e8d5c4;
+            border: var(--pe---border-width) solid var(--pe---color--stark-white);
             border-radius: 50%;
-            color: #e8d5c4;
+            color: var(--pe---color--stark-white);
             cursor: pointer;
             transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
             flex-shrink: 0;
             order: 2;
           }
           .cart-modal_close:hover {
-            background: #efa02e;
-            border-color: #efa02e;
-            color: #0d161d;
+            background: var(--pe---color--fuel-yellow);
+            border-color: var(--pe---color--fuel-yellow);
+            color: var(--pe---color--aztec);
           }
           .cart-modal_close svg {
             width: 36%;
@@ -1684,19 +1690,19 @@
             align-items: center;
             gap: 0.75rem;
             padding: 1rem 1.5rem;
-            background: rgba(239, 160, 46, 0.1);
-            border-bottom: 1.5px solid rgba(239, 160, 46, 0.3);
+            background: color-mix(in srgb, var(--pe---color--fuel-yellow) 10%, transparent);
+            border-bottom: 1.5px solid color-mix(in srgb, var(--pe---color--fuel-yellow) 30%, transparent);
             font-family: "Space Grotesk", sans-serif;
             font-size: 0.875rem;
-            color: #efa02e;
+            color: var(--pe---color--fuel-yellow);
           }
           .cart-modal_countdown.is-visible {
             display: flex;
           }
           .cart-modal_countdown.is-urgent {
-            background: rgba(155, 73, 51, 0.15);
-            border-color: rgba(155, 73, 51, 0.4);
-            color: #9b4933;
+            background: color-mix(in srgb, var(--pe---color--mule-fawn) 15%, transparent);
+            border-color: color-mix(in srgb, var(--pe---color--mule-fawn) 40%, transparent);
+            color: var(--pe---color--mule-fawn);
           }
           .cart-modal_countdown-icon {
             width: 1.25rem;
@@ -1711,7 +1717,7 @@
             overflow-y: auto;
             padding: 1.5rem;
             scrollbar-width: thin;
-            scrollbar-color: #e8d5c4 transparent;
+            scrollbar-color: var(--pe---color--stark-white) transparent;
           }
           .cart-modal_content::-webkit-scrollbar {
             width: 6px;
@@ -1720,7 +1726,7 @@
             background: transparent;
           }
           .cart-modal_content::-webkit-scrollbar-thumb {
-            background: #e8d5c4;
+            background: var(--pe---color--stark-white);
             border-radius: 3px;
           }
           /* Empty State */
@@ -1736,26 +1742,26 @@
           .cart-modal_empty-icon {
             width: 4rem;
             height: 4rem;
-            color: rgba(232, 213, 196, 0.3);
+            color: color-mix(in srgb, var(--pe---color--stark-white) 30%, transparent);
           }
           .cart-modal_empty-text {
             font-family: "Space Grotesk", sans-serif;
             font-size: 1rem;
-            color: rgba(232, 213, 196, 0.6);
+            color: color-mix(in srgb, var(--pe---color--stark-white) 60%, transparent);
             margin: 0;
           }
           .cart-modal_empty-link {
             font-family: "Space Grotesk", sans-serif;
             font-size: 0.875rem;
             font-weight: 500;
-            color: #efa02e;
+            color: var(--pe---color--fuel-yellow);
             text-decoration: underline;
             text-underline-offset: 3px;
             text-transform: uppercase;
             letter-spacing: 0.02em;
           }
           .cart-modal_empty-link:hover {
-            color: #bf8024;
+            color: var(--pe---color--fuel-yellow-dark);
           }
           /* Filled State */
           .cart-modal_filled {
@@ -1780,7 +1786,7 @@
             gap: 1rem !important;
             padding: 1rem !important;
             background: transparent !important;
-            border: 1.5px solid rgba(232, 213, 196, 0.15) !important;
+            border: var(--pe---border-width) solid color-mix(in srgb, var(--pe---color--stark-white) 15%, transparent) !important;
             border-radius: var(--_radius---card) !important;
             font-family: "Space Grotesk", sans-serif !important;
           }
@@ -1790,7 +1796,7 @@
             border-radius: var(--_radius---control-sm) !important;
             object-fit: cover !important;
             flex-shrink: 0 !important;
-            border: 1.5px solid rgba(232, 213, 196, 0.1) !important;
+            border: var(--pe---border-width) solid color-mix(in srgb, var(--pe---color--stark-white) 10%, transparent) !important;
           }
           .cart-item_details {
             flex: 1 !important;
@@ -1803,7 +1809,7 @@
             font-family: "Space Grotesk", sans-serif !important;
             font-size: 0.875rem !important;
             font-weight: 500 !important;
-            color: #e8d5c4 !important;
+            color: var(--pe---color--stark-white) !important;
             margin: 0 !important;
             line-height: 1.3 !important;
             display: block !important;
@@ -1812,7 +1818,7 @@
             font-family: "Space Grotesk", sans-serif !important;
             font-size: 0.875rem !important;
             font-weight: 700 !important;
-            color: #efa02e !important;
+            color: var(--pe---color--fuel-yellow) !important;
             display: block !important;
           }
           .cart-item_quantity {
@@ -1823,14 +1829,12 @@
           }
           /* Quantity Buttons - OUTLINE STYLE */
           .cart-item_qty-btn {
-            width: 1.75rem !important;
-            height: 1.75rem !important;
-            min-width: 1.75rem !important;
+            width: 2rem !important; height: 2rem !important; min-width: 2rem !important;
             padding: 0 !important;
             background: transparent !important;
-            border: 1.5px solid #e8d5c4 !important;
+            border: var(--pe---border-width) solid var(--pe---color--stark-white) !important;
             border-radius: var(--_radius---control-sm) !important;
-            color: #e8d5c4 !important;
+            color: var(--pe---color--stark-white) !important;
             font-family: "Space Grotesk", sans-serif !important;
             font-size: 1rem !important;
             font-weight: 500 !important;
@@ -1842,15 +1846,15 @@
             line-height: 1 !important;
           }
           .cart-item_qty-btn:hover {
-            background: #efa02e !important;
-            border-color: #efa02e !important;
-            color: #0d161d !important;
+            background: var(--pe---color--fuel-yellow) !important;
+            border-color: var(--pe---color--fuel-yellow) !important;
+            color: var(--pe---color--aztec) !important;
           }
           .cart-item_qty-value {
             font-family: "Space Grotesk", sans-serif !important;
             font-size: 1rem !important;
             font-weight: 500 !important;
-            color: #e8d5c4 !important;
+            color: var(--pe---color--stark-white) !important;
             min-width: 1.5rem !important;
             text-align: center !important;
           }
@@ -1863,7 +1867,7 @@
             padding: 0 !important;
             background: transparent !important;
             border: none !important;
-            color: rgba(232, 213, 196, 0.4) !important;
+            color: color-mix(in srgb, var(--pe---color--stark-white) 40%, transparent) !important;
             cursor: pointer !important;
             transition: color 0.2s ease !important;
             flex-shrink: 0 !important;
@@ -1874,7 +1878,7 @@
             justify-content: center !important;
           }
           .cart-item_remove:hover {
-            color: #9b4933 !important;
+            color: var(--pe---color--mule-fawn) !important;
           }
           .cart-item_remove svg {
             width: 100% !important;
@@ -1900,29 +1904,29 @@
             justify-content: flex-start;
             padding: 0.75rem 1rem;
             background: transparent !important;
-            border: 1.5px solid #efa02e !important;
+            border: var(--pe---border-width) solid var(--pe---color--fuel-yellow) !important;
             border-radius: var(--_radius---control-sm);
             font-family: "Space Grotesk", sans-serif;
             font-size: 0.875rem;
-            color: #efa02e !important;
+            color: var(--pe---color--fuel-yellow) !important;
           }
           /* Available state - Yellow outline */
           .cart-modal_availability-item.is-available {
             background: transparent !important;
-            border-color: #efa02e !important;
-            color: #efa02e !important;
+            border-color: var(--pe---color--fuel-yellow) !important;
+            color: var(--pe---color--fuel-yellow) !important;
           }
           /* Low stock state - Dark yellow outline */
           .cart-modal_availability-item.is-low {
             background: transparent !important;
-            border-color: #bf8024 !important;
-            color: #bf8024 !important;
+            border-color: var(--pe---color--fuel-yellow-dark) !important;
+            color: var(--pe---color--fuel-yellow-dark) !important;
           }
           /* Unavailable state - Mule fawn (warning) outline */
           .cart-modal_availability-item.is-unavailable {
             background: transparent !important;
-            border-color: #9b4933 !important;
-            color: #9b4933 !important;
+            border-color: var(--pe---color--mule-fawn) !important;
+            color: var(--pe---color--mule-fawn) !important;
           }
           .cart-modal_availability-name {
             display: flex;
@@ -1946,8 +1950,8 @@
             flex-direction: column;
             gap: 1.5rem;
             padding: 1.5rem;
-            border-top: 1.5px solid rgba(232, 213, 196, 0.15);
-            background: #0d161d;
+            border-top: 1.5px solid color-mix(in srgb, var(--pe---color--stark-white) 15%, transparent);
+            background: var(--pe---color--aztec);
             width: 100%;
             box-sizing: border-box;
           }
@@ -1957,7 +1961,7 @@
           /* Total Section - Full width */
           .cart-modal_total-section {
             padding-bottom: 1rem;
-            border-bottom: 1.5px solid rgba(232, 213, 196, 0.1);
+            border-bottom: 1.5px solid color-mix(in srgb, var(--pe---color--stark-white) 10%, transparent);
             width: 100%;
           }
           .cart-modal_total-row {
@@ -1969,13 +1973,13 @@
           .cart-modal_total-label {
             font-family: "Space Grotesk", sans-serif;
             font-size: 0.875rem;
-            color: rgba(232, 213, 196, 0.7);
+            color: color-mix(in srgb, var(--pe---color--stark-white) 70%, transparent);
           }
           .cart-modal_total-value {
             font-family: "Space Grotesk", sans-serif;
             font-size: 1.5rem;
             font-weight: 700;
-            color: #e8d5c4;
+            color: var(--pe---color--stark-white);
           }
           /* Actions Section - Full width */
           .cart-modal_actions {
@@ -1992,13 +1996,13 @@
             justify-content: center;
             padding: 0.875rem 1.5rem;
             background: transparent;
-            border: 1.5px solid #bf8024;
-            box-shadow: 0 3px 0 0 #bf8024;
+            border: var(--pe---border-width) solid var(--pe---color--fuel-yellow-dark);
+            box-shadow: 0 3px 0 0 var(--pe---color--fuel-yellow-dark);
             border-radius: 12px;
             font-family: "Space Grotesk", sans-serif;
             font-size: 0.875rem;
             font-weight: 400;
-            color: #efa02e;
+            color: var(--pe---color--fuel-yellow);
             text-transform: uppercase;
             text-align: center;
             letter-spacing: 0.02em;
@@ -2007,10 +2011,11 @@
             box-sizing: border-box;
           }
           .cart-modal_checkout-btn:hover {
-            box-shadow: 0 0 0 0 #bf8024;
+            box-shadow: 0 0 0 0 var(--pe---color--fuel-yellow-dark);
             transform: translateY(3px);
           }
-          .cart-modal_checkout-btn span {
+          /* the button's own text only: the hover effect's layers (pe-rise_*) place themselves */
+              .cart-modal_checkout-btn > span:not([class*="pe-rise"]) {
             display: block;
             width: 100%;
             text-align: center;
@@ -2030,24 +2035,24 @@
             gap: 0.5rem;
             padding: 0.625rem 1rem;
             background: transparent;
-            border: 1.5px solid rgba(232, 213, 196, 0.2);
+            border: var(--pe---border-width) solid color-mix(in srgb, var(--pe---color--stark-white) 20%, transparent);
             border-radius: 0.5rem;
             font-family: "Space Grotesk", sans-serif;
             font-size: 0.75rem;
             font-weight: 400;
-            color: rgba(232, 213, 196, 0.6);
+            color: color-mix(in srgb, var(--pe---color--stark-white) 60%, transparent);
             text-transform: uppercase;
             letter-spacing: 0.02em;
             cursor: pointer;
             transition: border-color 0.2s ease, color 0.2s ease;
           }
           .cart-modal_refresh-btn:hover {
-            border-color: #e8d5c4;
-            color: #e8d5c4;
+            border-color: var(--pe---color--stark-white);
+            color: var(--pe---color--stark-white);
           }
           .cart-modal_clear-btn:hover {
-            border-color: #9b4933;
-            color: #9b4933;
+            border-color: var(--pe---color--mule-fawn);
+            color: var(--pe---color--mule-fawn);
           }
           .cart-modal_refresh-btn svg,
           .cart-modal_clear-btn svg {
@@ -2127,12 +2132,12 @@
         <div class="cart-modal_total-section">
           <div class="cart-modal_total-row"><span class="cart-modal_total-label cart-modal_total-label">Total (<span data-cart-count="">0</span> artículos)</span><span class="cart-modal_total-value cart-modal_total-value" data-cart-total="">0,00 EUR</span></div>
         </div>
-        <div class="cart-modal_actions"><button class="cart-modal_checkout-btn cart-modal_checkout-btn" data-cart-checkout=""><span>Proceder al Pago</span></button>
-          <div class="cart-modal_secondary-actions"><button class="cart-modal_refresh-btn cart-modal_refresh-btn" data-cart-refresh-availability=""><svg viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <div class="cart-modal_actions"><button data-ep-role="primary" class="cart-modal_checkout-btn cart-modal_checkout-btn" data-cart-checkout=""><span>Proceder al Pago</span></button>
+          <div class="cart-modal_secondary-actions"><button data-ep-role="quiet" class="cart-modal_refresh-btn cart-modal_refresh-btn" data-cart-refresh-availability=""><svg viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M1 4V10H7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                 <path d="M23 20V14H17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                 <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10M23 14L18.36 18.36A9 9 0 0 1 3.51 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-              </svg><span>Actualizar</span></button><button class="cart-modal_clear-btn cart-modal_clear-btn" data-cart-clear=""><svg viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              </svg><span>Actualizar</span></button><button data-ep-role="quiet" class="cart-modal_clear-btn cart-modal_clear-btn" data-cart-clear=""><svg viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M3 6H5H21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                 <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
               </svg><span>Vaciar</span></button></div>
@@ -2179,7 +2184,8 @@
               <a href="index.html" class="navbar18_link w-nav-link f-text-h1 f-text-semibold f-leading-tight f-text-uppercase">Inicio</a>
               <a href="#" data-modal-open="modal-1" class="navbar18_link w-nav-link f-text-h1 f-text-semibold f-leading-tight f-text-uppercase">Reservas</a>
               <a href="packs.html" class="navbar18_link w-nav-link f-text-h1 f-text-semibold f-leading-tight f-text-uppercase">Packs</a>
-              <a href="talleres.html" aria-current="page" class="navbar18_link w-nav-link w--current f-text-h1 f-text-semibold f-leading-tight f-text-uppercase">Talleres</a>
+              <a href="canjear-pack.html" data-entropical-pack-redeem-open="" data-auto-open="false" class="navbar18_link w-nav-link f-text-h1 f-text-semibold f-leading-tight f-text-uppercase">Canjear pack</a>
+              <a href="todos-nuestros-talleres.html" class="navbar18_link w-nav-link f-text-h1 f-text-semibold f-leading-tight f-text-uppercase">Talleres</a>
               <a href="team-building.html" class="navbar18_link w-nav-link f-text-h1 f-text-semibold f-leading-tight f-text-uppercase">Team Building</a>
               <a href="cenas.html" class="navbar18_link w-nav-link f-text-h1 f-text-semibold f-leading-tight f-text-uppercase">Chef&#x27;s Table</a>
               <a href="la-escuela.html" class="navbar18_link w-nav-link f-text-h1 f-text-semibold f-leading-tight f-text-uppercase">Método</a>
@@ -2224,13 +2230,12 @@
       </div>
     </div>
     <main class="main-wrapper">
-      <header class="section_hero is-viewport f-text-body">
-        <div class="w-layout-grid hero_component is-simplified">
-          <div id="w-node-eedd054d-a515-ffe0-1e26-4a34124dfe98-27e333f4" class="padding-global mobile-padding-rule">
-            <div id="w-node-eedd054d-a515-ffe0-1e26-4a34124dfe99-27e333f4" class="hero_wrapper-left">
-              <div class="padding-medium is-full-height border-full radius-large">
-                <div class="hero_content">
-                  <div class="hero_content-top">
+      <!-- Bento header (option L of hero-options, 7 Oct 2026): headline + main CTA,
+           a photo, the next workshop and the three dates after it. The next / list
+           boxes are filled from window.PE_CMS by js/pe-talleres-bento.js. -->
+      <header class="section_compressed-hero pe-bento f-text-body">
+        <div class="pe-bento_grid">
+          <div class="pe-bento_cell pe-bento_hd">
                     <div data-collapse="all" data-animation="default" data-duration="0" data-easing2="ease" fs-scrolldisable-element="smart-nav" data-easing="ease" role="banner" class="navbar_hero-inline color-scheme-1 w-nav">
                       <div class="navbar18_container">
         <a href="index.html" class="navbar18_logo-link w-nav-brand"><img loading="lazy" src="assets/images/identity_main-logo-horizontal.svg" alt="Presunta Entropía" class="main_logo hero_logo-wide"><img loading="lazy" src="assets/images/identity_main-isologo.svg" alt="Presunta Entropía" class="hero_logo-iso"></a>
@@ -2336,38 +2341,25 @@
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="hero_title-wrapper">
-                    <div class="padding-section-xl grow hero_stack">
-                      <div class="hero_content-wrapper hero_cluster">
-                        <div class="button-group gap-0 hero_pills is-chips">
-                          <a href="talleres.html" aria-current="page" class="button is-secondary is-simple is-tiny hero_pill w-button w--current f-text-label f-text-ui-xs"><strong class="hero_pill-kicker">Energía /</strong> Talleres</a>
-                          <a href="team-building.html" class="button is-secondary is-simple is-tiny hero_pill w-button f-text-label f-text-ui-xs"><strong class="hero_pill-kicker">Fusión /</strong> Team Building</a>
-                          <a href="cenas.html" class="button is-secondary is-simple is-tiny hero_pill w-button f-text-label f-text-ui-xs"><strong class="hero_pill-kicker">Materia /</strong> Chef&#x27;s Table</a>
-                        </div>
-                        <div class="text-style-tagline f-text-eyebrow">Aprender haciendo</div>
-                        <h1 class="hero_title f-text-hero f-text-uppercase">Talleres<br>culinarios<br>en madrid</h1>
-                        <p class="max-width-large hero_lede f-text-lead f-margin-top-3">En Presunta Entropía, la gastronomía se encuentra con el arte, creando experiencias que transforman. Únete a nosotros en un viaje de descubrimiento y creatividad culinaria.</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="hero_cta-row">
-                    <div class="button-group gap-0 mobile-rule hero_cta-group">
-                      <a href="todos-nuestros-talleres.html" class="button hero_cta w-button f-text-label f-text-ui-lg">Ver todos</a>
-                      <a href="#calendario-v2" data-modal-open="modal-1" class="button is-secondary hero_cta w-button f-text-label f-text-ui-lg">Reserva Ya</a>
-                    </div>
-                  </div>
-                </div>
+            <!-- headline: the three values from the site's values band; the page's own lede -->
+            <div class="hero_content-wrapper hero_cluster pe-bento_title">
+              <div class="text-style-tagline f-text-eyebrow">Talleres culinarios en Madrid</div>
+              <h1 class="hero_title f-text-hero f-text-uppercase pe-bento_h1">Inestabilidad<br>transformación<br>reequilibrio</h1>
+              <p class="max-width-large hero_lede f-text-lead f-margin-top-3">En Presunta Entropía, la gastronomía se encuentra con el arte, creando experiencias que transforman. Únete a nosotros en un viaje de descubrimiento y creatividad culinaria.</p>
+            </div>
+            <div class="hero_cta-row">
+              <div class="button-group gap-0 mobile-rule hero_cta-group pe-bento_cta-group">
+                <a href="#calendario" data-modal-open="modal-1" class="button hero_cta w-button f-text-label f-text-ui-lg">Ver calendario</a>
+                <a href="todos-nuestros-talleres.html" class="button is-secondary hero_cta w-button f-text-label f-text-ui-lg">Ver todos</a>
               </div>
             </div>
           </div>
-          <div id="w-node-eedd054d-a515-ffe0-1e26-4a34124dfec2-27e333f4" class="padding-global content-right padding-left-0">
-            <div class="hero_wrapper-right">
-              <div class="padding-medium is-full-height border-full radius-large is-photo-only">
-                <div class="hero_image-wrapper radius-large"><img loading="lazy" src="assets/images/home-2026-10/muestra-plato-mano.webp" alt="" class="talleres_event_image"></div>
-              </div>
-            </div>
+          <div class="pe-bento_photo pe-bento_ph" data-pe-bento-photo>
+            <img src="assets/images/home-2026-10/instructor-clase-cocina.webp" alt="Instructor en la cocina de Presunta Entropía" class="pe-bento_img is-on">
+            <div class="pe-bento_strip"><span class="pe-bento_silk">Talleres de cocina</span><span class="pe-bento_silk">Zurbano 83 · Madrid</span></div>
           </div>
+          <div class="pe-bento_cell pe-bento_nx is-feature" data-pe-bento-next></div>
+          <ul class="pe-bento_list" role="list" data-pe-bento-list></ul>
         </div>
       </header>
       <header class="section_info-talleres-encabezado color-scheme-3 f-text-body">
@@ -2376,7 +2368,7 @@
             <div class="talleres-list_encabezado_component">
               <div class="w-layout-grid talleres-list_encabezado_content">
                 <div class="talleres-list_encabezado_content-left">
-                  <h1 class="f-text-h1">Explora Nuestros Talleres de Cocina</h1>
+                  <h2 class="f-text-h1">Explora Nuestros Talleres de Cocina</h2>
                 </div>
                 <div class="talleres-list_encabezado_content-right">
                   <p class="text-size-medium f-text-lead">Descubre la magia de la cocina a través de nuestros talleres interactivos. Aprende de chefs expertos y disfruta de una experiencia culinaria única que deleitará tus sentidos.</p>
@@ -2394,7 +2386,7 @@
                 <div class="info_card border-full">
                   <div id="w-node-_10ac7794-5c92-0ad5-e170-af088099cc76-27e333f4" class="productos_card-image-wrapper">
                     <div class="padding-global max-width-full">
-                      <div class="layer-container productos_card-frame"><img sizes="239.89584350585938px" srcset="assets/images/home-2026-10/instructor-clase-cocina-800.webp 500w, assets/images/home-2026-10/instructor-clase-cocina-800.webp 800w, assets/images/home-2026-10/instructor-clase-cocina.webp 1080w, assets/images/home-2026-10/instructor-clase-cocina.webp 1600w, assets/images/home-2026-10/instructor-clase-cocina.webp 2000w, assets/images/home-2026-10/instructor-clase-cocina.webp 2560w" alt="" src="assets/images/home-2026-10/instructor-clase-cocina.webp" loading="lazy" class="productos_card-image radius-large"></div>
+                      <div class="layer-container productos_card-frame"><img sizes="239.89584350585938px" srcset="assets/images/home-2026-10/instructor-clase-cocina-1600.webp 500w, assets/images/home-2026-10/instructor-clase-cocina-1600.webp 800w, assets/images/home-2026-10/instructor-clase-cocina.webp 1080w, assets/images/home-2026-10/instructor-clase-cocina.webp 1600w, assets/images/home-2026-10/instructor-clase-cocina.webp 2000w, assets/images/home-2026-10/instructor-clase-cocina.webp 2560w" alt="" src="assets/images/home-2026-10/instructor-clase-cocina.webp" loading="lazy" class="productos_card-image radius-large"></div>
                     </div>
                   </div>
                   <div class="productos_card-content">
@@ -2409,7 +2401,7 @@
                 <div class="info_card border-full">
                   <div id="w-node-_10ac7794-5c92-0ad5-e170-af088099cc82-27e333f4" class="productos_card-image-wrapper">
                     <div class="padding-global max-width-full">
-                      <div class="layer-container productos_card-frame"><img sizes="239.89584350585938px" srcset="assets/images/home-2026-10/ninos-curso-cocina-800.webp 500w, assets/images/home-2026-10/ninos-curso-cocina-800.webp 800w, assets/images/home-2026-10/ninos-curso-cocina.webp 1080w, assets/images/home-2026-10/ninos-curso-cocina.webp 1600w, assets/images/home-2026-10/ninos-curso-cocina.webp 2000w, assets/images/home-2026-10/ninos-curso-cocina.webp 2560w" alt="" src="assets/images/home-2026-10/ninos-curso-cocina.webp" loading="lazy" class="productos_card-image radius-large"></div>
+                      <div class="layer-container productos_card-frame"><img sizes="239.89584350585938px" srcset="assets/images/home-2026-10/ninos-curso-cocina-1600.webp 500w, assets/images/home-2026-10/ninos-curso-cocina-1600.webp 800w, assets/images/home-2026-10/ninos-curso-cocina.webp 1080w, assets/images/home-2026-10/ninos-curso-cocina.webp 1600w, assets/images/home-2026-10/ninos-curso-cocina.webp 2000w, assets/images/home-2026-10/ninos-curso-cocina.webp 2560w" alt="" src="assets/images/home-2026-10/ninos-curso-cocina.webp" loading="lazy" class="productos_card-image radius-large"></div>
                     </div>
                   </div>
                   <div class="productos_card-content">
@@ -2424,7 +2416,7 @@
                 <div class="info_card border-full">
                   <div id="w-node-_10ac7794-5c92-0ad5-e170-af088099cc8e-27e333f4" class="productos_card-image-wrapper">
                     <div class="padding-global max-width-full">
-                      <div class="layer-container productos_card-frame"><img sizes="239.89584350585938px" srcset="assets/images/home-2026-10/riendo-retrato-800.webp 500w, assets/images/home-2026-10/riendo-retrato-800.webp 800w, assets/images/home-2026-10/riendo-retrato.webp 1080w, assets/images/home-2026-10/riendo-retrato.webp 1600w, assets/images/home-2026-10/riendo-retrato.webp 2000w, assets/images/home-2026-10/riendo-retrato.webp 2560w" alt="" src="assets/images/home-2026-10/riendo-retrato.webp" loading="lazy" class="productos_card-image radius-large"></div>
+                      <div class="layer-container productos_card-frame"><img sizes="239.89584350585938px" srcset="assets/images/home-2026-10/riendo-retrato-1600.webp 500w, assets/images/home-2026-10/riendo-retrato-1600.webp 800w, assets/images/home-2026-10/riendo-retrato.webp 1080w, assets/images/home-2026-10/riendo-retrato.webp 1600w, assets/images/home-2026-10/riendo-retrato.webp 2000w, assets/images/home-2026-10/riendo-retrato.webp 2560w" alt="" src="assets/images/home-2026-10/riendo-retrato.webp" loading="lazy" class="productos_card-image radius-large"></div>
                     </div>
                   </div>
                   <div class="productos_card-content">
@@ -2451,37 +2443,33 @@
                 </div>
               </div>
             </div>
-            <div class="pe-taller-chips-js w-embed w-script">
+            <div class="pe-taller-cards-js w-embed w-script">
               <script>
-                  /* Local preview only. pe-cms-lists.js (deferred) clones the taller card once per
-                     CMS item and fills image, title, text and links; this fills the chips from
-                     window.PE_CMS. It runs at DOMContentLoaded, before the swiper below (which
-                     clones slides for its loop), because it is registered first. In Webflow the
-                     chips are CMS-bound and carry no .w-dyn-bind-empty, so it does nothing. */
+                  /* site-fixes 2026-10-08: each slide shows the site's one card (js/pe-explorer.js,
+                     PEExplorer.card, boxed: cream on this dark section). pe-cms-lists.js (deferred)
+                     has already cloned one slide per experience; this swaps the inside of each
+                     slide at DOMContentLoaded, before the swiper below clones slides for its loop
+                     (this listener is registered first). The old card stays when the script is absent. */
                   document.addEventListener('DOMContentLoaded', function() {
-                    var db = window.PE_CMS;
-                    if (!db || !db.talleres) return;
+                    var db = window.PE_CMS, X = window.PEExplorer;
+                    if (!db || !db.talleres || !X) return;
                     var all = db.talleres.concat(db.cenas || []);
-                    function two(n) { return ('0' + n).slice(-2); }
-                    document.querySelectorAll('.pe-taller-card').forEach(function(card) {
-                      var h = card.querySelector('h3');
+                    var first = {};
+                    (db.sesiones || []).forEach(function(x) { if (!first[x.item] || x.iso < first[x.item]) first[x.item] = x.iso; });
+                    document.querySelectorAll('.pe-taller-card').forEach(function(old) {
+                      var h = old.querySelector('h3');
                       var name = h ? h.textContent.trim() : '';
                       var it = null;
                       for (var i = 0; i < all.length; i++) { if (all[i].name === name) { it = all[i]; break; } }
                       if (!it) return;
-                      var d = it.nextSession ? new Date(it.nextSession) : null;
-                      var v = {
-                        tipo: it.tipo || '',
-                        duracion: it.duracion || '',
-                        plazas: it.seatsLeft !== null && it.seatsLeft !== undefined ? it.seatsLeft + ' plazas disponibles' : (it.plazas || ''),
-                        precio: it.precio !== null && it.precio !== undefined ? it.precio + '€' : '',
-                        chef: it.chef ? it.chef + ' (Chef)' : '',
-                        fecha: d ? two(d.getDate()) + '/' + two(d.getMonth() + 1) + '/' + d.getFullYear() : ''
-                      };
-                      card.querySelectorAll('[data-pe-chip].w-dyn-bind-empty').forEach(function(chip) {
-                        var t = v[chip.getAttribute('data-pe-chip')];
-                        if (t) { chip.textContent = t; chip.classList.remove('w-dyn-bind-empty'); }
-                      });
+                      var c = X.card(it.slug, { boxed: true });
+                      if (c) { old.parentNode.replaceChild(c, old); c.setAttribute('data-pe-next', first[it.slug] || ''); }
+                    });
+                    // 'Próximos': dated sessions first, soonest first; undated ones after
+                    document.querySelectorAll('.section_proximos-talleres-cards .slider_list').forEach(function(list) {
+                      var items = Array.prototype.filter.call(list.children, function(el) { return !!el.querySelector('[data-pe-next]'); });
+                      function when(el) { var c = el.querySelector('[data-pe-next]'); var v = c && c.getAttribute('data-pe-next'); return v ? Date.parse(v) : Infinity; }
+                      items.sort(function(x, y) { return when(x) - when(y); }).forEach(function(el) { list.appendChild(el); });
                     });
                   });
                 </script>
@@ -2497,7 +2485,7 @@
                              p = summary, chips = tipo / duración / plazas libres / precio / chef /
                              próxima fecha, link = the item's template page. Empty chips stay hidden. -->
                         <div class="similar-card color-scheme-2 pe-taller-card">
-                          <div class="pe-taller-card_frame"><img sizes="(max-width: 767px) 90vw, 25vw" srcset="assets/images/site-2026-10/local-clase-en-marcha-800.webp 500w, assets/images/site-2026-10/local-clase-en-marcha-800.webp 800w, assets/images/site-2026-10/local-clase-en-marcha.webp 1080w, assets/images/site-2026-10/local-clase-en-marcha.webp 1456w" alt="" src="assets/images/site-2026-10/local-clase-en-marcha.webp" loading="lazy" class="productos_card-image similar-card_image pe-taller-card_image"></div>
+                          <div class="pe-taller-card_frame"><img sizes="(max-width: 767px) 90vw, 25vw" srcset="assets/images/site-2026-10/local-clase-en-marcha-1600.webp 500w, assets/images/site-2026-10/local-clase-en-marcha-1600.webp 800w, assets/images/site-2026-10/local-clase-en-marcha.webp 1080w, assets/images/site-2026-10/local-clase-en-marcha.webp 1456w" alt="" src="assets/images/site-2026-10/local-clase-en-marcha.webp" loading="lazy" class="productos_card-image similar-card_image pe-taller-card_image"></div>
                           <h3 class="similar-card_title pe-taller-card_title w-dyn-bind-empty f-text-h3"></h3>
                           <div class="similar-card_sub w-dyn-bind-empty f-text-eyebrow"></div>
                           <p class="similar-card_text w-dyn-bind-empty f-text-body"></p>
@@ -2676,14 +2664,14 @@
                   <h2 class="f-margin-bottom-8 f-text-h3">Consulta nuestras fechas y disponibilidad aquí</h2>
                   <div class="margin-top margin-medium">
                     <div class="button-group is-chips pe-fechas_ctas">
-                      <a href="#calendario-v2" class="button is-secondary pe-fechas_cta w-button f-text-label">Empezar</a>
-                      <a href="#precios" class="button pe-fechas_cta w-button f-text-label">Nuestros precios</a>
-                      <a data-modal-open="modal-1" href="#" class="button is-link is-secondary w-inline-block f-text-label">
+                      <a data-modal-open="modal-1" href="#" class="button is-alternate w-inline-block f-text-label">
                         <div>Reservar</div>
                         <div class="icon-embed-xxsmall w-embed"><svg width="16" height="16" viewbox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M6 3L11 8L6 13" stroke="CurrentColor" stroke-width="1.5"></path>
                           </svg></div>
                       </a>
+                      <a href="#calendario-v2" class="button is-secondary pe-fechas_cta w-button f-text-label">Empezar</a>
+                      <a href="#precios" class="button is-secondary pe-fechas_cta w-button f-text-label">Nuestros precios</a>
                     </div>
                   </div>
                 </div>
@@ -2750,365 +2738,8 @@
            Finsweet list instance so the two never share filters. -->
       <section id="calendario-v2" data-pe-list-root="" class="section_search color-scheme-2 pe-calendario f-text-body">
         <div class="padding-global">
-          <div class="eventos_component">
-            <div class="margin-bottom margin-xxlarge">
-              <div class="max-width-large">
-                <div class="margin-bottom margin-small">
-                  <h2 class="f-text-h1 f-margin-top-6 f-margin-bottom-6">Calendario</h2>
-                </div>
-                <p class="text-size-medium f-text-lead f-margin-top-8">Descubre experiencias culinarias únicas que transformarán tus eventos en momentos inolvidables.</p>
-              </div>
-            </div>
-            <div class="eventos_layout-wrapper">
-              <div id="w-node-_9f34edbe-a627-d7dd-4eb7-40d74fc0b79e-b75f0699" class="eventos_left-wrapper">
-                <div class="eventos_filter-tag-container">
-                  <div class="eventos_filter-tag-wrapper">
-                    <div fs-list-element="tag" fs-list-instance="calendario-v2" class="filter_tag-template-wrap tag is-filter-tag">
-                      <div fs-list-element="tag-value" class="filter_tag-calue">Tag</div><svg xmlns="http://www.w3.org/2000/svg" id="Isolation_Mode" viewbox="0 0 18.25 18.25" width="100%" fs-list-element="tag-remove" class="filter_tag-close">
-                        <rect class="cls-1" x="8.37" y="-3.03" width="1.51" height="24.3" transform="translate(-3.78 9.12) rotate(-45)"></rect>
-                        <rect class="cls-1" x="-3.03" y="8.37" width="24.3" height="1.51" transform="translate(-3.78 9.12) rotate(-45.01)"></rect>
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="eventos_content">
-                <div class="calendar-filter_wrap">
-                  <div class="complex-css-embed-3 w-embed">
-                    <style>
-                        /* Complex CSS (pseudo-classes, media queries, etc.) */
-                        /* Search input */
-                        .filter_input {
-                          border: 1.5px solid currentColor;
-                          border-radius: 12px;
-                          background: transparent;
-                          color: inherit;
-                          font-family: inherit;
-                          min-height: 3.25rem;
-                          padding: 0.75rem 1.25rem;
-                          font-size: 1.125rem;
-                        }
-                        .filter_input:focus {
-                          outline: none;
-                          border-color: #efa02e;
-                        }
-                        /* Custom select component */
-                        .select-custom_component {
-                          position: relative;
-                        }
-                        .select-custom_hidden {
-                          position: absolute;
-                          opacity: 0;
-                          pointer-events: none;
-                          height: 0;
-                          width: 0;
-                        }
-                        .select-custom_trigger {
-                          display: flex;
-                          align-items: center;
-                          justify-content: space-between;
-                          gap: 0.5rem;
-                          padding: 0.75rem 1.25rem;
-                          border: 1.5px solid currentColor;
-                          border-radius: 12px;
-                          background: transparent;
-                          cursor: pointer;
-                          color: inherit;
-                          min-height: 3.25rem;
-                          font-size: 1.125rem;
-                        }
-                        .select-custom_trigger:hover {
-                          border-color: #efa02e;
-                        }
-                        .select-custom_arrow {
-                          width: 0;
-                          height: 0;
-                          border-left: 4px solid transparent;
-                          border-right: 4px solid transparent;
-                          border-top: 5px solid currentColor;
-                        }
-                        .select-custom_list {
-                          position: absolute;
-                          top: calc(100% + 8px);
-                          left: 50%;
-                          transform: translateX(-50%);
-                          width: 30vw;
-                          background: var(--_color-primitives---colors--stark-white, #e8d5c4);
-                          border: 1.5px solid currentColor;
-                          border-radius: 10px;
-                          overflow: hidden;
-                          z-index: 100;
-                          display: none;
-                          max-height: 200px;
-                          overflow-y: auto;
-                          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-                          scrollbar-width: thin;
-                          scrollbar-color: #0d161d transparent;
-                        }
-                        .select-custom_list::-webkit-scrollbar {
-                          width: 6px;
-                        }
-                        .select-custom_list::-webkit-scrollbar-track {
-                          background: transparent;
-                        }
-                        .select-custom_list::-webkit-scrollbar-thumb {
-                          background: #0d161d;
-                          border-radius: 3px;
-                        }
-                        .select-custom_component.is-open .select-custom_list {
-                          display: block;
-                        }
-                        .select-custom_option {
-                          display: block;
-                          padding: 0.5rem 0.75rem;
-                          color: #0d161d;
-                          text-decoration: none;
-                        }
-                        .select-custom_option:hover,
-                        .select-custom_option.is-selected {
-                          background-color: #efa02e;
-                          color: #0d161d;
-                        }
-                        /* Checkbox styles */
-                        .filter_radio {
-                          display: flex;
-                          align-items: center;
-                          gap: 0.5rem;
-                          cursor: pointer;
-                          padding: 0.5rem 1rem;
-                          margin-bottom: 0;
-                          white-space: nowrap;
-                          border: 1.5px solid currentColor;
-                          border-radius: 12px;
-                          transition: background-color 0.2s ease, color 0.2s ease;
-                        }
-                        .filter_radio:hover {
-                          background-color: var(--color-scheme-1--text);
-                          color: var(--color-scheme-1--background);
-                        }
-                        .filter_radio.is-list-active,
-                        .filter_radio:has(input:checked) {
-                          background-color: #efa02e;
-                          border-color: #efa02e;
-                          color: #0d161d;
-                        }
-                        .filter_radio input[type="checkbox"] {
-                          position: absolute;
-                          opacity: 0;
-                          z-index: -1;
-                        }
-                        .radio-button_filter {
-                          width: 1rem;
-                          height: 1rem;
-                          border: 1.5px solid currentColor;
-                          border-radius: 4px;
-                          display: flex;
-                          align-items: center;
-                          justify-content: center;
-                          transition: all 0.15s ease;
-                          flex-shrink: 0;
-                        }
-                        .filter_radio .w-form-label {
-                          margin-bottom: 0;
-                        }
-                        .filter_radio:hover .radio-button_filter {
-                          border-color: #efa02e;
-                        }
-                        /* Checked state */
-                        .filter_radio.is-list-active .radio-button_filter,
-                        .filter_radio input:checked+.radio-button_filter {
-                          background-color: #efa02e;
-                          border-color: #efa02e;
-                        }
-                        .filter_radio.is-list-active .radio-button_filter::after,
-                        .filter_radio input:checked+.radio-button_filter::after {
-                          content: '';
-                          width: 0.4rem;
-                          height: 0.4rem;
-                          background-color: #0d161d;
-                          border-radius: 2px;
-                        }
-                        /* Hide form messages */
-                        .w-form-done,
-                        .w-form-fail {
-                          display: none;
-                        }
-                      </style>
-                  </div>
-                  <form id="calendar-filter-form-v2" name="calendar-filter-form-v2" data-name="Calendar Filter Form" method="get" class="pe-lc" data-pe-list-controls="" fs-list-element="filters" fs-list-instance="calendario-v2">
-                    <div class="eventos_filter-menu-2 pe-lc_bar"><input class="filter_input filter_input w-input is-cal pe-lc_control pe-lc_field pe-lc_search" maxlength="256" fs-list-field="*" name="field" data-name="" placeholder="Buscar talleres" type="text" id="field-v2">
-                      <div class="select-custom_component pe-lc_select"><button type="button" class="select-custom_trigger select-custom_trigger is-cal pe-lc_control pe-lc_field"><span class="select-custom_label select-custom_label f-text-small">Mes</span><span class="select-custom_arrow select-custom_arrow"></span></button>
-                        <div class="select-custom_list">
-                          <a href="#" class="select-custom_option select-custom_option"><span>Mes</span></a>
-                          <a href="#" class="select-custom_option select-custom_option"><span>Enero</span></a>
-                          <a href="#" class="select-custom_option select-custom_option"><span>Febrero</span></a>
-                          <a href="#" class="select-custom_option select-custom_option"><span>Marzo</span></a>
-                          <a href="#" class="select-custom_option select-custom_option"><span>Abril</span></a>
-                          <a href="#" class="select-custom_option select-custom_option"><span>Mayo</span></a>
-                          <a href="#" class="select-custom_option select-custom_option"><span>Junio</span></a>
-                          <a href="#" class="select-custom_option select-custom_option"><span>Julio</span></a>
-                          <a href="#" class="select-custom_option select-custom_option"><span>Agosto</span></a>
-                          <a href="#" class="select-custom_option select-custom_option"><span>Septiembre</span></a>
-                          <a href="#" class="select-custom_option select-custom_option"><span>Octubre</span></a>
-                          <a href="#" class="select-custom_option select-custom_option"><span>Noviembre</span></a>
-                          <a href="#" class="select-custom_option select-custom_option"><span>Diciembre</span></a>
-                        </div><select id="Date-Select-v2" name="Date-Select" data-name="Date Select" fs-list-field="mes" class="select-custom_hidden select-custom_hidden">
-                          <option value="">Mes</option>
-                          <option value="January">Enero</option>
-                          <option value="February">Febrero</option>
-                          <option value="March">Marzo</option>
-                          <option value="April">Abril</option>
-                          <option value="May">Mayo</option>
-                          <option value="June">Junio</option>
-                          <option value="July">Julio</option>
-                          <option value="August">Agosto</option>
-                          <option value="September">Septiembre</option>
-                          <option value="October">Octubre</option>
-                          <option value="November">Noviembre</option>
-                          <option value="December">Diciembre</option>
-                        </select>
-                      </div>
-                      <div class="select-custom_component pe-lc_select"><button type="button" class="select-custom_trigger select-custom_trigger is-cal pe-lc_control pe-lc_field"><span class="select-custom_label select-custom_label f-text-small">Ordenar</span><span class="select-custom_arrow select-custom_arrow"></span></button>
-                        <div class="select-custom_list">
-                          <a href="#" class="select-custom_option select-custom_option"><span>Ordenar</span></a>
-                          <a href="#" class="select-custom_option select-custom_option"><span>Fecha: próximas primero</span></a>
-                          <a href="#" class="select-custom_option select-custom_option"><span>Fecha: más lejanas primero</span></a>
-                          <a href="#" class="select-custom_option select-custom_option"><span>Precio: de menor a mayor</span></a>
-                          <a href="#" class="select-custom_option select-custom_option"><span>Precio: de mayor a menor</span></a>
-                          <a href="#" class="select-custom_option select-custom_option"><span>Nombre: A-Z</span></a>
-                        </div><select id="Sort-Select-v2" name="Sort-Select" data-name="Sort Select" fs-list-element="sort-trigger" fs-list-instance="calendario-v2" class="select-custom_hidden select-custom_hidden">
-                          <option value="">Ordenar</option>
-                          <option value="fecha-asc">Fecha: próximas primero</option>
-                          <option value="fecha-desc">Fecha: más lejanas primero</option>
-                          <option value="price-asc">Precio: de menor a mayor</option>
-                          <option value="price-desc">Precio: de mayor a menor</option>
-                          <option value="name-asc">Nombre: A-Z</option>
-                        </select>
-                      </div>
-                      <div class="radio_filter-group pe-lc_chips"><label class="filter_radio w-checkbox filter_radio is-cal pe-lc_control pe-lc_chip">
-                          <div class="radio-button_filter"></div><input type="checkbox" id="Talleres-v2" name="Talleres" data-name="Talleres" fs-list-field="category" fs-list-operator="contain" style="opacity:0;position:absolute;z-index:-1" value="Talleres"><span class="w-form-label f-text-label f-text-ui-sm" for="Talleres-v2">Talleres</span>
-                        </label><label class="filter_radio w-checkbox filter_radio is-cal pe-lc_control pe-lc_chip">
-                          <div class="radio-button_filter"></div><input type="checkbox" id="Cenas-v2" name="Cenas" data-name="Cenas" fs-list-field="category" fs-list-operator="contain" style="opacity:0;position:absolute;z-index:-1" value="Cenas"><span class="w-form-label f-text-label f-text-ui-sm" for="Cenas-v2">Chef&#x27;s Table</span>
-                        </label><label class="filter_radio w-checkbox filter_radio is-cal pe-lc_control pe-lc_chip">
-                          <div class="radio-button_filter"></div><input type="checkbox" id="TeamBuilding-v2" name="TeamBuilding" data-name="Team Building" fs-list-field="category" fs-list-operator="contain" style="opacity:0;position:absolute;z-index:-1" value="Team Building"><span class="w-form-label f-text-label f-text-ui-sm" for="TeamBuilding-v2">Team Building</span>
-                        </label></div>
-                    <label class="pe-lc_cols pe-lc_control"><span class="pe-lc_cols-label f-text-label f-text-ui-sm">Columnas <output class="pe-lc_cols-out" data-pe-list-cols-out="">3</output></span><input type="range" class="pe-lc_range" min="1" max="3" step="1" value="3" aria-label="Número de columnas" data-pe-list-cols-target="calendario-v2"></label>
-                    </div>
-                  </form>
-                  <div></div>
-                  <div></div>
-                  <div class="auto-js-embed-3 w-embed w-script">
-                    <script>
-                        /* Auto-extracted from HTML */
-                        (function() {
-                          /* scoped to the inline Calendario; stopImmediatePropagation keeps the legacy
-                             modal copy of this script (bound later) from toggling it twice */
-                          document.querySelectorAll('.pe-calendario .select-custom_component').forEach(function(component) {
-                            var trigger = component.querySelector('.select-custom_trigger');
-                            var options = component.querySelectorAll('.select-custom_option');
-                            var label = component.querySelector('.select-custom_label');
-                            var select = component.querySelector('select');
-                            var selectOptions = select.querySelectorAll('option');
-                            trigger.addEventListener('click', function(e) {
-                              e.preventDefault();
-                              e.stopImmediatePropagation();
-                              component.classList.toggle('is-open');
-                            });
-                            options.forEach(function(option, index) {
-                              option.addEventListener('click', function(e) {
-                                e.preventDefault();
-                                e.stopImmediatePropagation();
-                                var text = option.textContent.trim();
-                                var value = selectOptions[index].value;
-                                label.textContent = text;
-                                select.value = value;
-                                select.dispatchEvent(new Event('input', {
-                                  bubbles: true
-                                }));
-                                select.dispatchEvent(new Event('change', {
-                                  bubbles: true
-                                }));
-                                options.forEach(function(o) {
-                                  o.classList.remove('is-selected');
-                                });
-                                option.classList.add('is-selected');
-                                component.classList.remove('is-open');
-                              });
-                            });
-                            document.addEventListener('click', function(e) {
-                              if (!component.contains(e.target)) {
-                                component.classList.remove('is-open');
-                              }
-                            });
-                          });
-                        })();
-                      </script>
-                  </div>
-                </div>
-                <div class="eventos_list-wrapper">
-                  <div class="w-dyn-list">
-                    <div fs-list-interactive="true" fs-list-element="list" fs-list-instance="calendario-v2" role="list" class="eventos_list w-dyn-items pe-lc_list" data-pe-list="calendario-v2">
-                      <div id="w-node-_2665a30f-a11e-84b4-600b-26fb31c600b3-b75f0699" role="listitem" class="collection-item w-dyn-item pe-lc_item">
-                        <div class="eventos_item pe-lc_card">
-                          <div class="eventos_top-item-content pe-lc_top">
-                            <div class="eventos_date-wrapper pe-lc_date">
-                              <div fs-list-field="week-day" class="w-dyn-bind-empty f-text-small"></div>
-                              <div fs-list-field="day" class="w-dyn-bind-empty f-text-stat"></div>
-                              <div data-date="" fs-list-field="mes" class="hidden-ui-elements w-dyn-bind-empty"></div>
-                              <div data-date-translate="" class="w-dyn-bind-empty"></div>
-                            </div>
-                            <div class="precio_content-wrap pe-lc_price">
-                              <div fs-list-field="promo" class="tag is-filter-promo-tag">Promo</div>
-                              <div class="precio-antes w-dyn-bind-empty f-text-h3 f-margin-top-5 f-margin-bottom-5"></div>
-                              <div class="price_block-wrap">
-                                <div fs-list-field="price" fs-list-fieldtype="number" class="precio f-text-stat">€</div>
-                                <div fs-list-field="price" fs-list-fieldtype="number" class="precio w-dyn-bind-empty f-text-stat"></div>
-                              </div>
-                            </div>
-                          </div>
-                          <div id="w-node-_20244872-ae06-6940-0769-3f20f7bba867-b75f0699" class="divider-vertical pe-lc_divider"></div>
-                          <div class="event2_item-content pe-lc_body">
-                            <div class="event2_item-content-top pe-lc_head">
-                              <div class="event2_title">
-                                <div fs-list-field="name" class="w-dyn-bind-empty f-text-h4"></div>
-                                <p class="f-text-body w-dyn-bind-empty pe-lc_text"></p>
-                              </div>
-                            </div>
-                            <div class="f-text-small u-margin-top-3 pe-lc_avail-label">Disponibilidad:</div>
-                            <div class="disponibilidad_content-wrap pe-lc_avail">
-                              <div class="f-text-body w-dyn-bind-empty"></div>
-                              <div class="f-text-body">/</div>
-                              <div class="f-text-body w-dyn-bind-empty"></div>
-                            </div>
-                          </div>
-                          <div class="button-group max-width-full gap-0 pe-lc_tags">
-                            <div fs-list-field="promo" class="tag is-filter-fomo-tag">Quedan pocos</div>
-                            <div class="max-width-full w-dyn-list">
-                              <div role="list" class="button-group gap-0 max-width-full w-dyn-items">
-                                <div role="listitem" class="w-dyn-item">
-                                  <div fs-list-field="category" class="tag is-category-tag w-dyn-bind-empty"></div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="button-group max-width-full pe-lc_cta">
-                            <a href="#" class="button is-alternate is-simple max-width-full w-button f-text-label">Reserva tu lugar</a>
-                            <a href="#" class="button is-secondary is-alternate is-simple max-width-full w-button f-text-label">Saber más</a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="empty-state w-dyn-empty"></div>
-                  </div>
-                </div>
-                <div fs-list-element="empty" fs-list-instance="calendario-v2" class="empty_state-wrap">
-                  <h2 class="f-text-h3 pe-state_title">No se han encontrado<br>coincidencias con tu búsqueda</h2>
-                  <div class="pe-state_text f-text-body">Inténtalo de nuevo</div>
-                  <a fs-list-element="clear" fs-list-instance="calendario-v2" href="#" class="button is-secondary is-alternate is-simple w-button f-text-label pe-state_action">Reestablecer búsqueda</a>
-                </div>
-              </div>
-            </div>
-          </div>
+          <!-- Explorador (js/pe-explorer.js): Calendario + Experiencias tabs, one filter bar (site-fixes 2026-10-08) -->
+          <div data-pe-explorer="" data-mode="light" data-tab="experiencias" data-title="Calendario" data-lead="Descubre experiencias culinarias únicas que transformarán tus eventos en momentos inolvidables."></div>
         </div>
       </section>
       <!-- Precios (copied from the home page, 2026-09-26) -->
@@ -3169,7 +2800,7 @@
                 <div class="margin-top margin-medium">
                   <div class="content-row">
                     <div class="precios_price f-text-stat" data-pack-field="price"></div>
-                    <a href="packs.html" data-pack-buy="" class="button is-secondary is-alternate is-simple w-button f-text-label">Comienza ahora</a>
+                    <div class="precios_actions"><a href="packs.html" data-pack-buy="" class="button is-secondary is-alternate is-simple w-button f-text-label">Comienza ahora</a><a href="packs.html" data-pack-cart="" class="button is-secondary is-alternate is-simple w-button f-text-label">Añadir al carrito</a></div>
                   </div>
                 </div>
               </div>
@@ -3272,13 +2903,13 @@
               <div data-autoplay="" data-follow-finger="true" data-free-mode="false" data-mousewheel="true" data-slide-to-clicked="true" data-speed="400" data-loop-mode="true" class="slider_element swiper">
                 <div class="slider_list swiper-wrapper gap-md is-gapless">
                   <div class="image_card border-full">
-                    <div id="w-node-_98b1ff1f-3f32-d7e4-fe65-3737ddd6c112-27e333f4" class="image_card-image-wrapper"><img sizes="79.07408142089844px" srcset="assets/images/home-2026-10/muestra-plato-salmon-800.webp 500w, assets/images/home-2026-10/muestra-plato-salmon-800.webp 800w, assets/images/home-2026-10/muestra-plato-salmon.webp 1080w, assets/images/home-2026-10/muestra-plato-salmon.webp 1600w, assets/images/home-2026-10/muestra-plato-salmon.webp 2000w, assets/images/home-2026-10/muestra-plato-salmon.webp 2560w" alt="" src="assets/images/home-2026-10/muestra-plato-salmon.webp" loading="lazy" class="productos_card-image radius-large"></div>
+                    <div id="w-node-_98b1ff1f-3f32-d7e4-fe65-3737ddd6c112-27e333f4" class="image_card-image-wrapper"><img sizes="79.07408142089844px" srcset="assets/images/home-2026-10/muestra-plato-salmon-1600.webp 500w, assets/images/home-2026-10/muestra-plato-salmon-1600.webp 800w, assets/images/home-2026-10/muestra-plato-salmon.webp 1080w, assets/images/home-2026-10/muestra-plato-salmon.webp 1600w, assets/images/home-2026-10/muestra-plato-salmon.webp 2000w, assets/images/home-2026-10/muestra-plato-salmon.webp 2560w" alt="" src="assets/images/home-2026-10/muestra-plato-salmon.webp" loading="lazy" class="productos_card-image radius-large"></div>
                   </div>
                   <div class="image_card border-full">
-                    <div id="w-node-f22339a5-f016-7e56-27e1-fc5248c43af0-27e333f4" class="image_card-image-wrapper"><img sizes="79.07408142089844px" srcset="assets/images/home-2026-10/pareja-curso-cocina-madrid-800.webp 500w, assets/images/home-2026-10/pareja-curso-cocina-madrid-800.webp 800w, assets/images/home-2026-10/pareja-curso-cocina-madrid.webp 1080w, assets/images/home-2026-10/pareja-curso-cocina-madrid.webp 1600w, assets/images/home-2026-10/pareja-curso-cocina-madrid.webp 2000w, assets/images/home-2026-10/pareja-curso-cocina-madrid.webp 2560w" alt="" src="assets/images/home-2026-10/pareja-curso-cocina-madrid.webp" loading="lazy" class="productos_card-image radius-large"></div>
+                    <div id="w-node-f22339a5-f016-7e56-27e1-fc5248c43af0-27e333f4" class="image_card-image-wrapper"><img sizes="79.07408142089844px" srcset="assets/images/home-2026-10/pareja-curso-cocina-madrid-1600.webp 500w, assets/images/home-2026-10/pareja-curso-cocina-madrid-1600.webp 800w, assets/images/home-2026-10/pareja-curso-cocina-madrid.webp 1080w, assets/images/home-2026-10/pareja-curso-cocina-madrid.webp 1600w, assets/images/home-2026-10/pareja-curso-cocina-madrid.webp 2000w, assets/images/home-2026-10/pareja-curso-cocina-madrid.webp 2560w" alt="" src="assets/images/home-2026-10/pareja-curso-cocina-madrid.webp" loading="lazy" class="productos_card-image radius-large"></div>
                   </div>
                   <div class="image_card border-full">
-                    <div id="w-node-d2c1fe94-919a-d985-5fef-960cf4d49edc-27e333f4" class="image_card-image-wrapper"><img sizes="79.07408142089844px" srcset="assets/images/site-2026-10/pasta-curso-cocina-800.webp 500w, assets/images/site-2026-10/pasta-curso-cocina-800.webp 800w, assets/images/site-2026-10/pasta-curso-cocina.webp 1080w, assets/images/site-2026-10/pasta-curso-cocina.webp 1600w, assets/images/site-2026-10/pasta-curso-cocina.webp 2560w" alt="" src="assets/images/site-2026-10/pasta-curso-cocina.webp" loading="lazy" class="productos_card-image radius-large"></div>
+                    <div id="w-node-d2c1fe94-919a-d985-5fef-960cf4d49edc-27e333f4" class="image_card-image-wrapper"><img sizes="79.07408142089844px" srcset="assets/images/site-2026-10/pasta-curso-cocina-1600.webp 500w, assets/images/site-2026-10/pasta-curso-cocina-1600.webp 800w, assets/images/site-2026-10/pasta-curso-cocina.webp 1080w, assets/images/site-2026-10/pasta-curso-cocina.webp 1600w, assets/images/site-2026-10/pasta-curso-cocina.webp 2560w" alt="" src="assets/images/site-2026-10/pasta-curso-cocina.webp" loading="lazy" class="productos_card-image radius-large"></div>
                   </div>
                 </div>
               </div>
@@ -3685,600 +3316,14 @@
     </script>
         </div>
       </section>
-    <div id="modal-1" class="booking-modal_component" role="dialog" aria-modal="true" aria-label="Calendario de reservas">
-      <div class="complex-css-embed w-embed">
-        <style>
-            /* =====================================================
-     BOOKING CALENDAR MODAL — "Book now" (XD artboard 11)
-     Presunta Entropia Design System
-     Tokens: aztec / stark-white / fuel-yellow / mule-fawn
-     ===================================================== */
-            .booking-modal_component {
-              position: fixed;
-              top: 0;
-              left: 0;
-              right: 0;
-              bottom: 0;
-              z-index: 120000;
-              display: none;
-              background-color: var(--pe---color--aztec, #0d161d);
-              color: var(--pe---color--stark-white, #e8d5c4);
-              font-family: "Space Grotesk", sans-serif;
-            }
-            .booking-modal_component.is-open {
-              display: block;
-            }
-            .booking-modal_inner {
-              position: absolute;
-              top: 1rem;
-              left: 1rem;
-              right: 1rem;
-              bottom: 1rem;
-              border: 1.5px solid var(--pe---color--stark-white, #e8d5c4);
-              border-radius: var(--pe---radius--main, 1rem);
-              padding: clamp(1.25rem, 3vw, 2.5rem);
-              display: flex;
-              flex-direction: column;
-              gap: clamp(1rem, 2.5vh, 2rem);
-              overflow-y: auto;
-              overflow-x: hidden;
-            }
-            .booking-modal_topbar {
-              display: flex;
-              align-items: center;
-              gap: clamp(1rem, 2.5vw, 2.5rem);
-              flex-wrap: wrap;
-            }
-            .booking-modal_close {
-              display: inline-flex;
-              align-items: center;
-              gap: 0.6rem;
-              padding: 0.6rem 1.4rem;
-              background-color: var(--pe---color--aztec, #0d161d);
-              border: 1.5px solid var(--pe---color--fuel-yellow-dark, #bf8024);
-              border-radius: 12px;
-              color: var(--pe---color--stark-white, #e8d5c4);
-              font-weight: 700;
-              letter-spacing: 0.04em;
-              text-transform: uppercase;
-              text-decoration: none;
-              cursor: pointer;
-              transition: border-color 0.2s ease, color 0.2s ease;
-            }
-            .booking-modal_close:hover {
-              border-color: var(--pe---color--fuel-yellow, #efa02e);
-            }
-            .booking-modal_close-x {
-              color: var(--pe---color--fuel-yellow, #efa02e);
-              font-size: 1.1em;
-              line-height: 1;
-            }
-            .booking-modal_title {
-              font-size: clamp(2.5rem, 5vw, 4.5rem);
-              font-weight: 500;
-              line-height: 1;
-              margin: 0;
-              flex-grow: 1;
-            }
-            .booking-modal_controls {
-              display: flex;
-              align-items: center;
-              gap: 1rem;
-              flex-wrap: wrap;
-            }
-            .booking-modal_search-wrap {
-              border: 1.5px solid var(--pe---color--stark-white, #e8d5c4);
-              border-radius: 12px;
-              background-color: transparent;
-              color: var(--pe---color--stark-white, #e8d5c4);
-              font-family: inherit;
-              font-size: clamp(1.1rem, 1.6vw, 1.5rem);
-            }
-            .booking-modal_search-wrap {
-              display: inline-flex;
-              align-items: center;
-              gap: 0.75rem;
-              padding: 0.65rem 1.5rem;
-            }
-            .booking-modal_search {
-              background: transparent;
-              border: none;
-              outline: none;
-              color: inherit;
-              font-family: inherit;
-              font-size: inherit;
-              width: clamp(8rem, 14vw, 14rem);
-            }
-            .booking-modal_search::placeholder {
-              color: var(--pe---color--stark-white, #e8d5c4);
-              opacity: 0.55;
-            }
-            .booking-modal_search-icon {
-              width: 1.4em;
-              height: 1.4em;
-              border: 3px solid currentColor;
-              border-radius: 50%;
-              flex-shrink: 0;
-            }
-            .booking-modal_body {
-              display: grid;
-              grid-template-columns: minmax(16rem, 1fr) 2.2fr;
-              gap: clamp(1.5rem, 3.5vw, 4rem);
-              flex-grow: 1;
-              min-height: 0;
-            }
-            .booking-modal_side {
-              display: flex;
-              flex-direction: column;
-              justify-content: space-between;
-              gap: 1.5rem;
-              min-width: 0;
-            }
-            .booking-modal_brand {
-              width: clamp(4.5rem, 8vw, 8rem);
-              height: auto;
-            }
-            .booking-modal_heading {
-              font-size: clamp(2rem, 3.6vw, 3.75rem);
-              font-weight: 700;
-              text-transform: uppercase;
-              line-height: 1.06;
-              letter-spacing: 0.01em;
-            }
-            .booking-modal_heading .is-accent {
-              color: var(--pe---color--fuel-yellow, #efa02e);
-            }
-            .booking-modal_main {
-              display: flex;
-              flex-direction: column;
-              gap: 1.25rem;
-              min-width: 0;
-            }
-            .booking-modal_toolbar {
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-              gap: 1rem;
-              flex-wrap: wrap;
-            }
-            .booking-modal_week-nav {
-              display: inline-flex;
-              align-items: center;
-              gap: 0.9rem;
-              font-size: 1.15rem;
-            }
-            .booking-modal_week-arrow {
-              background: transparent;
-              border: none;
-              color: var(--pe---color--stark-white, #e8d5c4);
-              font-size: 1rem;
-              cursor: pointer;
-              padding: 0.25rem 0.5rem;
-              transition: color 0.2s ease;
-            }
-            .booking-modal_week-arrow:hover {
-              color: var(--pe---color--fuel-yellow, #efa02e);
-            }
-            .booking-modal_view-toggle {
-              display: inline-flex;
-              align-items: center;
-              gap: 0.35rem;
-            }
-            .booking-modal_view-btn {
-              background: transparent;
-              border: none;
-              border-radius: var(--pe---radius--small, 0.5rem);
-              color: var(--pe---color--stark-white, #e8d5c4);
-              font-family: inherit;
-              font-size: 1.05rem;
-              padding: 0.45rem 1.1rem;
-              cursor: pointer;
-              opacity: 0.7;
-              transition: background-color 0.2s ease, opacity 0.2s ease;
-            }
-            .booking-modal_view-btn.is-active {
-              background-color: rgba(232, 213, 196, 0.18);
-              opacity: 1;
-            }
-            .booking-modal_grid {
-              display: grid;
-              grid-template-columns: repeat(3, 1fr);
-              grid-auto-rows: 1fr;
-              gap: clamp(0.9rem, 1.8vw, 1.75rem);
-              flex-grow: 1;
-            }
-            .booking-modal_component.is-monthly .booking-modal_grid {
-              grid-template-columns: repeat(4, 1fr);
-            }
-            .booking-modal_card {
-              border: 1.5px solid var(--pe---color--stark-white, #e8d5c4);
-              border-radius: clamp(1rem, 1.8vw, 1.75rem);
-              padding: clamp(1rem, 1.8vw, 1.75rem);
-              display: flex;
-              flex-direction: column;
-              justify-content: space-between;
-              gap: 0.75rem;
-              min-height: clamp(9rem, 22vh, 13rem);
-              text-decoration: none;
-              color: inherit;
-              transition: border-color 0.2s ease, transform 0.2s ease;
-            }
-            .booking-modal_card:hover {
-              border-color: var(--pe---color--fuel-yellow, #efa02e);
-              transform: translateY(-3px);
-            }
-            .booking-modal_card.is-empty {
-              border: none;
-              background-color: rgba(232, 213, 196, 0.10);
-            }
-            .booking-modal_card-date {
-              font-size: clamp(1.5rem, 2.4vw, 2.25rem);
-              font-weight: 700;
-            }
-            .booking-modal_card-title {
-              font-size: clamp(1rem, 1.4vw, 1.35rem);
-              font-weight: 700;
-              text-transform: uppercase;
-              line-height: 1.15;
-            }
-            .booking-modal_card-meta {
-              display: flex;
-              align-items: baseline;
-              justify-content: space-between;
-              gap: 0.5rem;
-            }
-            .booking-modal_card-type {
-              font-size: 0.95rem;
-              opacity: 0.8;
-            }
-            .booking-modal_card-price {
-              font-size: clamp(1.4rem, 2.2vw, 2rem);
-              font-weight: 700;
-            }
-            @media (max-width: 991px) {
-              .booking-modal_body {
-                grid-template-columns: 1fr;
-              }
-              .booking-modal_side {
-                flex-direction: row;
-                align-items: flex-end;
-                justify-content: space-between;
-                flex-wrap: wrap;
-              }
-              .booking-modal_brand {
-                display: none;
-              }
-              .booking-modal_grid,
-              .booking-modal_component.is-monthly .booking-modal_grid {
-                grid-template-columns: repeat(2, 1fr);
-              }
-            }
-            @media (max-width: 767px) {
-              .booking-modal_inner {
-                top: 0.5rem;
-                left: 0.5rem;
-                right: 0.5rem;
-                bottom: 0.5rem;
-              }
-              .booking-modal_title {
-                font-size: 2.25rem;
-                order: -1;
-                flex-basis: 100%;
-              }
-              .booking-modal_heading {
-                display: none;
-              }
-              .booking-modal_card.is-empty {
-                display: none;
-              }
-              .booking-modal_grid,
-              .booking-modal_component.is-monthly .booking-modal_grid {
-                grid-template-columns: 1fr;
-              }
-            }
-
-            /* Date cards carry the cart button (webflow-cart.js binds [data-cart-add]) */
-            a.booking-modal_card-title {
-              color: inherit;
-              text-decoration: none;
-            }
-            a.booking-modal_card-title:hover {
-              color: var(--pe---color--fuel-yellow, #efa02e);
-            }
-            .booking-modal_card-date.is-soon {
-              font-size: clamp(1.1rem, 1.6vw, 1.5rem);
-              text-transform: uppercase;
-              opacity: 0.7;
-            }
-            .booking-modal_card-seats,
-            .booking-modal_card-soon {
-              font-size: 0.875rem;
-              opacity: 0.8;
-            }
-            .booking-modal_card-add {
-              width: 100%;
-              padding: 0.7rem 1rem;
-              border: 1.5px solid var(--pe---color--fuel-yellow-dark, #bf8024);
-              border-radius: 12px;
-              box-shadow: 0 3px 0 0 var(--pe---color--fuel-yellow-dark, #bf8024);
-              background: transparent;
-              color: var(--pe---color--fuel-yellow, #efa02e);
-              font: inherit;
-              font-size: 0.9rem;
-              text-transform: uppercase;
-              cursor: pointer;
-              transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
-            }
-            .booking-modal_card-add:hover {
-              background-color: var(--pe---color--fuel-yellow, #efa02e);
-              color: var(--pe---color--aztec, #0d161d);
-              box-shadow: 0 0 0 0 var(--pe---color--fuel-yellow-dark, #bf8024);
-              transform: translateY(3px);
-            }
-            .booking-modal_card-add:focus-visible {
-              outline: 2px solid var(--pe---color--fuel-yellow, #efa02e);
-              outline-offset: 3px;
-            }
-            .booking-modal_card-add:disabled {
-              opacity: 0.6;
-              cursor: default;
-            }
-            .booking-modal_empty {
-              grid-column: 1 / -1;
-              padding: 2rem;
-              text-align: center;
-              opacity: 0.8;
-            }
-            /* rows size to their cards; a single card no longer stretches to fill the grid */
-            .booking-modal_grid {
-              grid-auto-rows: auto;
-              align-content: start;
-            }
-            /* the CMS list wrapper takes the grid's old place in the main column */
-            .booking-modal_list {
-              display: flex;
-              flex-direction: column;
-              flex-grow: 1;
-            }
-            .booking-modal_empty.w-dyn-empty {
-              background-color: transparent;
-            }
-            .booking-modal_card.is-hidden,
-            .booking-modal_empty.is-hidden {
-              display: none;
-            }
-          </style>
-      </div>
-      <div class="booking-modal_inner pe-lc">
+    <div id="modal-1" class="booking-modal_component" role="dialog" aria-modal="true" aria-label="Calendario de reservas" aria-hidden="true">
+      <!-- Booking overlay (site-fixes 2026-10-08): the Explorador in dark mode (js/pe-explorer.js).
+           Openers anywhere: [data-modal-open="modal-1"], + data-booking-item="<slug>" to narrow it. -->
+      <div class="booking-modal_inner">
         <div class="booking-modal_topbar">
-          <a href="#" class="booking-modal_close button is-secondary f-text-label" data-modal-close="modal-1"><div class="navbar_menu-close-button-content"><div>Cerrar</div><div class="menu-icon"><div class="menu-close-icon_wrapper"><div class="menu-close_line-top"></div><div class="menu-close_line-bottom"></div></div></div></div></a>
-          <h2 class="booking-modal_title f-text-h1">Calendario</h2>
-          <div class="booking-modal_controls">
-            <label class="booking-modal_search-wrap pe-lc_control pe-lc_search"><input class="booking-modal_search" type="text" placeholder="Buscar" data-booking-search=""><span class="booking-modal_search-icon" aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="7" cy="7" r="4.6"/><path d="M10.6 10.6L14 14"/></svg></span></label>
-          </div>
+          <button type="button" class="booking-modal_close f-text-label" data-modal-close="">Cerrar <span class="booking-modal_close-x" aria-hidden="true">✕</span></button>
         </div>
-        <div class="booking-modal_body">
-          <div class="booking-modal_side">
-            <img src="assets/images/identity_main-isologo.svg" loading="lazy" alt="" class="booking-modal_brand">
-            <div class="booking-modal_heading f-text-h2 f-text-uppercase">
-              <div class="booking-modal_cat is-accent">Talleres</div>
-              <div class="booking-modal_cat">Eventos</div>
-              <div class="booking-modal_cat">Restaurante</div>
-            </div>
-          </div>
-          <div class="booking-modal_main">
-            <div class="booking-modal_toolbar">
-              <div class="booking-modal_week-nav pe-lc_control is-seg f-text-small">
-                <button type="button" class="booking-modal_week-arrow" data-booking-week-prev="" aria-label="Semana anterior"><svg class="booking-modal_icon" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M11 2v12L3 8z" fill="currentColor"/></svg></button>
-                <span data-booking-week-label="">Semana 1</span>
-                <button type="button" class="booking-modal_week-arrow" data-booking-week-next="" aria-label="Semana siguiente"><svg class="booking-modal_icon" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M5 2v12l8-6z" fill="currentColor"/></svg></button>
-              </div>
-              <div class="booking-modal_view-toggle pe-lc_control is-seg">
-                <button type="button" class="booking-modal_view-btn f-text-small is-active" data-booking-view="week">Semanal</button>
-                <button type="button" class="booking-modal_view-btn f-text-small" data-booking-view="month">Mensual</button>
-              </div>
-            </div>
-            <div class="booking-modal_list w-dyn-list">
-              <!-- Webflow: Collection List bound to the experiences collection (talleres; add
-                   a second list for cenas when the platform has dinners), sorted by
-                   next-session-at. One card per item. Bindings:
-                     card     data-booking-slug  = slug
-                              data-booking-date  = next-session-at (ISO date format)
-                     title    text = name, link = the item's template page
-                     type     static label per collection ("Taller" / "Cena")
-                     price    text = price-current
-                     seats    text = seats-left, data-item-id = entropical-id
-                     button   data-item-id = entropical-id
-                   No conditional visibility needed: the script below keeps the seats
-                   line and the cart button only when data-booking-date is in the future,
-                   and shows "Próximamente" otherwise. -->
-              <div role="list" class="booking-modal_grid w-dyn-items" data-booking-grid="">
-                <div role="listitem" class="booking-modal_card w-dyn-item" data-booking-card="" data-booking-slug="" data-booking-date="">
-                  <div class="booking-modal_card-date f-text-h3" data-booking-date-label="">Próximamente</div>
-                  <a href="#" class="booking-modal_card-title f-text-h6 f-text-uppercase w-dyn-bind-empty" data-booking-name=""></a>
-                  <div class="booking-modal_card-meta"><span class="booking-modal_card-type f-text-small w-dyn-bind-empty" data-booking-type=""></span><span class="booking-modal_card-price f-text-stat">€<span class="w-dyn-bind-empty" data-booking-price=""></span></span></div>
-                  <div class="booking-modal_card-seats f-text-small" data-booking-when="future">Quedan <span class="w-dyn-bind-empty" data-item-seats-left="" data-item-id=""></span> plazas</div>
-                  <button type="button" class="booking-modal_card-add button f-text-label f-text-ui-sm" data-booking-when="future" data-cart-add="" data-item-id="">Añadir al carrito</button>
-                  <div class="booking-modal_card-soon f-text-small" data-booking-when="soon">Nuevas fechas próximamente</div>
-                </div>
-              </div>
-              <div class="booking-modal_empty f-text-small w-dyn-empty">
-                <div>No hay experiencias con fechas abiertas. Vuelve pronto.</div>
-              </div>
-            </div>
-            <!-- Packs: pay now, pick the date later (webflow-packs.js handles the redeem button) -->
-            <div class="booking-modal_packs">
-              <p class="booking-modal_packs-text f-text-h6">¿Prefieres pagar ahora y elegir fecha después?</p>
-              <div class="booking-modal_packs-actions">
-                <a href="packs.html" class="booking-modal_packs-btn button f-text-label">Ver packs</a>
-                <a href="canjear-pack.html" class="booking-modal_packs-btn is-ghost button is-secondary f-text-label" data-entropical-pack-redeem-open="" data-auto-open="false">Ya tengo un pack</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="auto-js-embed w-embed w-script">
-        <script>
-            /* Booking calendar modal: open/close, week/month view, search.
-               The grid is a CMS Collection List (see the binding notes above it).
-               - In Webflow the CMS renders one card per experience; this script
-                 leaves the cards as they are.
-               - In the local preview the card is still an unbound template
-                 (.w-dyn-bind-empty); it is cloned once per experience from
-                 window.PE_CMS (src/data/pe-experiencias.js, synced from the
-                 platform). No API calls either way.
-               Then, for every card: a future data-booking-date keeps the seats line
-               and the cart button (<button data-cart-add data-item-id>); otherwise
-               both are removed and the card reads "Próximamente". Future dates sort
-               first. All of this runs before webflow-cart.js binds its buttons at
-               DOMContentLoaded; paging and search only toggle .is-hidden, so no
-               button is ever re-created.
-               Openers: [data-modal-open="modal-1"]; add data-booking-item="<slug>"
-               to show only that experience's cards. */
-            (function() {
-              'use strict';
-              var modal = document.getElementById('modal-1');
-              if (!modal) return;
-              var grid = modal.querySelector('[data-booking-grid]');
-              var emptyEl = modal.querySelector('.booking-modal_empty');
-              var weekLabel = modal.querySelector('[data-booking-week-label]');
-              var searchInput = modal.querySelector('[data-booking-search]');
-              var PER_PAGE = 6;
-              var MESES = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-              var EMPTY_TEXT = 'No hay experiencias con fechas abiertas. Vuelve pronto.';
-              var NO_MATCH_TEXT = 'Ninguna experiencia coincide con tu búsqueda.';
-
-              function fill(el, txt) {
-                if (!el) return;
-                el.textContent = txt == null ? '' : String(txt);
-                el.classList.remove('w-dyn-bind-empty');
-              }
-
-              // Local preview only: build cards from the synced platform data.
-              var tpl = grid.querySelector('[data-booking-card]');
-              var db = window.PE_CMS;
-              if (tpl && tpl.querySelector('.w-dyn-bind-empty') && db && db.talleres) {
-                [['talleres', 'Taller'], ['cenas', 'Cena']].forEach(function(pair) {
-                  (db[pair[0]] || []).forEach(function(it) {
-                    var card = tpl.cloneNode(true);
-                    var id = it.entropicalId || '';
-                    card.setAttribute('data-booking-slug', it.slug);
-                    card.setAttribute('data-booking-date', it.nextSession || '');
-                    var title = card.querySelector('[data-booking-name]');
-                    fill(title, it.name);
-                    title.href = pair[0] === 'cenas' ? 'cenas.html' : 'taller-item.html?slug=' + encodeURIComponent(it.slug);
-                    fill(card.querySelector('[data-booking-type]'), it.tipo || pair[1]);
-                    fill(card.querySelector('[data-booking-price]'), it.precio);
-                    var seats = card.querySelector('[data-item-seats-left]');
-                    fill(seats, it.seatsLeft);
-                    seats.setAttribute('data-item-id', id);
-                    card.querySelector('[data-cart-add]').setAttribute('data-item-id', id);
-                    grid.appendChild(card);
-                  });
-                });
-                tpl.remove();
-              }
-
-              function parseDate(s) {
-                if (!s) return null;
-                var t = Date.parse(s);
-                if (!isNaN(t)) return new Date(t);
-                var m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(s.trim()); // dd/mm/yyyy
-                return m ? new Date(+m[3], +m[2] - 1, +m[1], 12) : null;
-              }
-
-              var now = Date.now();
-              var cardEls = Array.prototype.slice.call(grid.querySelectorAll('[data-booking-card]'));
-              cardEls.forEach(function(card) {
-                var d = parseDate(card.getAttribute('data-booking-date'));
-                var future = !!d && d.getTime() > now;
-                card.querySelectorAll('[data-booking-when="future"]').forEach(function(el) { if (!future) el.remove(); });
-                card.querySelectorAll('[data-booking-when="soon"]').forEach(function(el) { if (future) el.remove(); });
-                var label = card.querySelector('[data-booking-date-label]');
-                if (label) {
-                  label.textContent = future ? d.getDate() + ' ' + MESES[d.getMonth()] : 'Próximamente';
-                  label.classList.toggle('is-soon', !future);
-                }
-                card.classList.toggle('is-soon', !future);
-                card.setAttribute('data-booking-order', future ? d.getTime() : 9e15);
-              });
-              cardEls.sort(function(a, b) { return a.getAttribute('data-booking-order') - b.getAttribute('data-booking-order'); });
-              cardEls.forEach(function(card) { grid.appendChild(card); });
-
-              var page = 0;
-              var view = 'week';
-              var query = '';
-              var only = '';
-
-              function render() {
-                var pool = cardEls.filter(function(el) {
-                  if (only && el.getAttribute('data-booking-slug') !== only) return false;
-                  if (query && el.textContent.toLowerCase().indexOf(query) === -1) return false;
-                  return true;
-                });
-                var pages = Math.max(1, Math.ceil(pool.length / PER_PAGE));
-                if (page >= pages) page = 0;
-                var shown = view === 'month' ? pool : pool.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE);
-                cardEls.forEach(function(el) { el.classList.toggle('is-hidden', shown.indexOf(el) === -1); });
-                if (emptyEl) {
-                  emptyEl.classList.toggle('w-dyn-hide', shown.length > 0); // Webflow's own hide class (display:none !important)
-                  emptyEl.textContent = query && cardEls.length ? NO_MATCH_TEXT : EMPTY_TEXT;
-                }
-                weekLabel.textContent = view === 'month' ? 'Todas' : 'Semana ' + (page + 1) + (pages > 1 ? ' de ' + pages : '');
-                modal.setAttribute('data-booking-pages', pages);
-              }
-
-              function open(item) {
-                only = item || '';
-                page = 0;
-                modal.classList.add('is-open');
-                document.body.style.overflow = 'hidden';
-                var openMenu = document.querySelector('.w-nav-overlay[style*="block"], .navbar_menu-button.w--open');
-                if (openMenu) {
-                  var closeBtn = document.querySelector('.navbar_menu-close-button-wrapper');
-                  if (closeBtn) closeBtn.click();
-                }
-                render();
-              }
-
-              function close() {
-                modal.classList.remove('is-open');
-                document.body.style.overflow = '';
-              }
-
-              document.addEventListener('click', function(e) {
-                var opener = e.target.closest('[data-modal-open="modal-1"]');
-                if (opener) { e.preventDefault(); open(opener.getAttribute('data-booking-item')); return; }
-                var closer = e.target.closest('[data-modal-close="modal-1"]');
-                if (closer) { e.preventDefault(); close(); }
-              });
-              document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && modal.classList.contains('is-open')) close();
-              });
-              modal.querySelector('[data-booking-week-prev]').addEventListener('click', function() {
-                var pages = +modal.getAttribute('data-booking-pages') || 1;
-                page = (page + pages - 1) % pages; render();
-              });
-              modal.querySelector('[data-booking-week-next]').addEventListener('click', function() {
-                var pages = +modal.getAttribute('data-booking-pages') || 1;
-                page = (page + 1) % pages; render();
-              });
-              modal.querySelectorAll('[data-booking-view]').forEach(function(btn) {
-                btn.addEventListener('click', function() {
-                  view = btn.getAttribute('data-booking-view');
-                  modal.classList.toggle('is-monthly', view === 'month');
-                  modal.querySelectorAll('[data-booking-view]').forEach(function(b) {
-                    b.classList.toggle('is-active', b === btn);
-                  });
-                  render();
-                });
-              });
-              if (searchInput) searchInput.addEventListener('input', function() {
-                query = searchInput.value.trim().toLowerCase(); page = 0; render();
-              });
-              render();
-            })();
-          </script>
+        <div data-pe-explorer="" data-mode="dark" data-tab="calendario" data-title="Calendario"></div>
       </div>
     </div>
 
@@ -4722,7 +3767,7 @@
                                 </div>
                               </div>
                               <div class="button-group max-width-full pe-lc_cta">
-                                <a href="#" class="button is-alternate is-simple max-width-full w-button f-text-label">Reserva tu lugar</a>
+                                <a href="#" class="button max-width-full w-button f-text-label">Reserva tu lugar</a>
                                 <a href="#" class="button is-secondary is-alternate is-simple max-width-full w-button f-text-label">Saber más</a>
                               </div>
                             </div>
@@ -4888,7 +3933,7 @@
         <div class="w-layout-grid footer15_top-wrapper">
           <div class="footer15_left-wrapper">
             <div class="margin-bottom margin-medium">
-              <a href="#" class="footer15_logo-link w-nav-brand">
+              <a href="index.html" aria-label="Presunta Entropía, inicio" class="footer15_logo-link w-nav-brand">
                 <div class="footer15_logo" data-w-id="3a45617a-4720-51f4-df46-eeb38d326be5" data-animation-type="lottie" data-src="../documents/presunta-anim.json" data-loop="0" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="0" data-duration="5" data-loading="eager"></div>
               </a>
             </div>
@@ -4907,29 +3952,30 @@
                 <a href="#" class="f-text-small"><br>info@presuntaentropia.com</a>
               </div>
             </div>
+            <!-- TODO(Juan): real profile URLs for the social links (Facebook, Instagram, X, LinkedIn, YouTube). href="#" until provided. -->
             <div class="w-layout-grid footer15_social-list">
-              <a href="#" class="footer15_social-link w-inline-block">
-                <div class="icon-embed-xsmall w-embed"><svg width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <a href="#" aria-label="Facebook" class="footer15_social-link w-inline-block">
+                <div class="icon-embed-xsmall w-embed"><svg aria-hidden="true" width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M22 12.0611C22 6.50451 17.5229 2 12 2C6.47715 2 2 6.50451 2 12.0611C2 17.0828 5.65684 21.2452 10.4375 22V14.9694H7.89844V12.0611H10.4375V9.84452C10.4375 7.32296 11.9305 5.93012 14.2146 5.93012C15.3088 5.93012 16.4531 6.12663 16.4531 6.12663V8.60261H15.1922C13.95 8.60261 13.5625 9.37822 13.5625 10.1739V12.0611H16.3359L15.8926 14.9694H13.5625V22C18.3432 21.2452 22 17.083 22 12.0611Z" fill="CurrentColor"></path>
                   </svg></div>
               </a>
-              <a href="#" class="footer15_social-link w-inline-block">
-                <div class="icon-embed-xsmall w-embed"><svg width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <a href="#" aria-label="Instagram" class="footer15_social-link w-inline-block">
+                <div class="icon-embed-xsmall w-embed"><svg aria-hidden="true" width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M16 3H8C5.23858 3 3 5.23858 3 8V16C3 18.7614 5.23858 21 8 21H16C18.7614 21 21 18.7614 21 16V8C21 5.23858 18.7614 3 16 3ZM19.25 16C19.2445 17.7926 17.7926 19.2445 16 19.25H8C6.20735 19.2445 4.75549 17.7926 4.75 16V8C4.75549 6.20735 6.20735 4.75549 8 4.75H16C17.7926 4.75549 19.2445 6.20735 19.25 8V16ZM16.75 8.25C17.3023 8.25 17.75 7.80228 17.75 7.25C17.75 6.69772 17.3023 6.25 16.75 6.25C16.1977 6.25 15.75 6.69772 15.75 7.25C15.75 7.80228 16.1977 8.25 16.75 8.25ZM12 7.5C9.51472 7.5 7.5 9.51472 7.5 12C7.5 14.4853 9.51472 16.5 12 16.5C14.4853 16.5 16.5 14.4853 16.5 12C16.5027 10.8057 16.0294 9.65957 15.1849 8.81508C14.3404 7.97059 13.1943 7.49734 12 7.5ZM9.25 12C9.25 13.5188 10.4812 14.75 12 14.75C13.5188 14.75 14.75 13.5188 14.75 12C14.75 10.4812 13.5188 9.25 12 9.25C10.4812 9.25 9.25 10.4812 9.25 12Z" fill="CurrentColor"></path>
                   </svg></div>
               </a>
-              <a href="#" class="footer15_social-link w-inline-block">
-                <div class="icon-embed-xsmall w-embed"><svg width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <a href="#" aria-label="X" class="footer15_social-link w-inline-block">
+                <div class="icon-embed-xsmall w-embed"><svg aria-hidden="true" width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M17.1761 4H19.9362L13.9061 10.7774L21 20H15.4456L11.0951 14.4066L6.11723 20H3.35544L9.80517 12.7508L3 4H8.69545L12.6279 9.11262L17.1761 4ZM16.2073 18.3754H17.7368L7.86441 5.53928H6.2232L16.2073 18.3754Z" fill="CurrentColor"></path>
                   </svg></div>
               </a>
-              <a href="#" class="footer15_social-link w-inline-block">
-                <div class="icon-embed-xsmall w-embed"><svg width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <a href="#" aria-label="LinkedIn" class="footer15_social-link w-inline-block">
+                <div class="icon-embed-xsmall w-embed"><svg aria-hidden="true" width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M4.5 3C3.67157 3 3 3.67157 3 4.5V19.5C3 20.3284 3.67157 21 4.5 21H19.5C20.3284 21 21 20.3284 21 19.5V4.5C21 3.67157 20.3284 3 19.5 3H4.5ZM8.52076 7.00272C8.52639 7.95897 7.81061 8.54819 6.96123 8.54397C6.16107 8.53975 5.46357 7.90272 5.46779 7.00413C5.47201 6.15897 6.13998 5.47975 7.00764 5.49944C7.88795 5.51913 8.52639 6.1646 8.52076 7.00272ZM12.2797 9.76176H9.75971H9.7583V18.3216H12.4217V18.1219C12.4217 17.742 12.4214 17.362 12.4211 16.9819V16.9818V16.9816V16.9815V16.9812C12.4203 15.9674 12.4194 14.9532 12.4246 13.9397C12.426 13.6936 12.4372 13.4377 12.5005 13.2028C12.7381 12.3253 13.5271 11.7586 14.4074 11.8979C14.9727 11.9864 15.3467 12.3141 15.5042 12.8471C15.6013 13.1803 15.6449 13.5389 15.6491 13.8863C15.6605 14.9339 15.6589 15.9815 15.6573 17.0292V17.0294C15.6567 17.3992 15.6561 17.769 15.6561 18.1388V18.3202H18.328V18.1149C18.328 17.6629 18.3278 17.211 18.3275 16.7591V16.759V16.7588C18.327 15.6293 18.3264 14.5001 18.3294 13.3702C18.3308 12.8597 18.276 12.3563 18.1508 11.8627C17.9638 11.1286 17.5771 10.5211 16.9485 10.0824C16.5027 9.77019 16.0133 9.5691 15.4663 9.5466C15.404 9.54401 15.3412 9.54062 15.2781 9.53721L15.2781 9.53721L15.2781 9.53721C14.9984 9.52209 14.7141 9.50673 14.4467 9.56066C13.6817 9.71394 13.0096 10.0641 12.5019 10.6814C12.4429 10.7522 12.3852 10.8241 12.2991 10.9314L12.2991 10.9315L12.2797 10.9557V9.76176ZM5.68164 18.3244H8.33242V9.76733H5.68164V18.3244Z" fill="CurrentColor"></path>
                   </svg></div>
               </a>
-              <a href="#" class="footer15_social-link w-inline-block">
-                <div class="icon-embed-xsmall w-embed"><svg width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <a href="#" aria-label="YouTube" class="footer15_social-link w-inline-block">
+                <div class="icon-embed-xsmall w-embed"><svg aria-hidden="true" width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M20.5686 4.77345C21.5163 5.02692 22.2555 5.76903 22.5118 6.71673C23.1821 9.42042 23.1385 14.5321 22.5259 17.278C22.2724 18.2257 21.5303 18.965 20.5826 19.2213C17.9071 19.8831 5.92356 19.8015 3.40294 19.2213C2.45524 18.9678 1.71595 18.2257 1.45966 17.278C0.827391 14.7011 0.871044 9.25144 1.44558 6.73081C1.69905 5.78311 2.44116 5.04382 3.38886 4.78753C6.96561 4.0412 19.2956 4.282 20.5686 4.77345ZM9.86682 8.70227L15.6122 11.9974L9.86682 15.2925V8.70227Z" fill="CurrentColor"></path>
                   </svg></div>
               </a>
@@ -4941,12 +3987,13 @@
               <p class="pe-newsletter_text f-text-small">Novedades, eventos y experiencias de Presunta Entropía en tu correo.</p>
             </div>
             <form class="pe-newsletter_form" data-newsletter-form data-surface="footer-form">
-              <input class="pe-newsletter_input form_input w-input" type="email" name="email" required autocomplete="email" placeholder="Tu email">
+              <label class="pe-newsletter_sr" for="nl-footer-email">Tu email</label>
+              <input id="nl-footer-email" class="pe-newsletter_input form_input w-input" type="email" name="email" required autocomplete="email" placeholder="Tu email">
               <label class="pe-newsletter_consent f-text-tiny">
-                <input class="pe-newsletter_check" type="checkbox" name="consent" data-consent-version="newsletter-v1">
+                <input class="pe-newsletter_check" type="checkbox" aria-describedby="nl-footer-info" name="consent" data-consent-version="newsletter-v1">
                 Quiero recibir por email novedades, eventos y experiencias de Presunta Entropía. Puedo darme de baja en cualquier momento. Más información en la <a href="/politica-de-privacidad">Política de privacidad</a>.
               </label>
-              <details class="pe-newsletter_info f-text-tiny">
+              <details id="nl-footer-info" class="pe-newsletter_info f-text-tiny">
                 <summary class="pe-newsletter_info-link">Información básica sobre protección de datos</summary>
                 <table class="pe-newsletter_info-table"><tbody>
                   <tr><th scope="row">Responsable</th><td>THE COOKING LAB SLU (Presunta Entropía)</td></tr>
@@ -4959,8 +4006,8 @@
               </details>
               <div class="pe-newsletter_hp" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off"></div>
               <button class="pe-newsletter_button button is-secondary is-small f-text-label f-text-ui-sm" type="submit">Suscribirme</button>
-              <p class="pe-newsletter_msg f-text-small" data-newsletter-success hidden>Casi listo. Revisa tu correo y confirma la suscripción.</p>
-              <p class="pe-newsletter_msg f-text-small" data-newsletter-error hidden>No se ha podido enviar. Inténtalo de nuevo en unos minutos.</p>
+              <p class="pe-newsletter_msg f-text-small" role="status" data-newsletter-success hidden>Casi listo. Revisa tu correo y confirma la suscripción.</p>
+              <p class="pe-newsletter_msg f-text-small" role="alert" data-newsletter-error hidden>No se ha podido enviar. Inténtalo de nuevo en unos minutos.</p>
             </form>
           </div>
           <div class="w-layout-grid footer15_menu-wrapper">
@@ -5225,12 +4272,14 @@
   <!-- Entropical cart, site-wide. The script sends customers to /carrito unless told otherwise. -->
   <script>window.ENTROPICAL_CHECKOUT_PAGE_URL = '/checkout';</script>
   <script src="https://presunta.ntropical.com/webflow-cart.js"></script>
+  <script src="js/pe-booking-flow.js?v=971357ea" defer></script>
   <!-- Entropical packs (buy / redeem modals, cart pack block, js/pe-packs.js glue). Load after the cart.
        [confirmar] the three values with Juan: terms page, contact, payment providers enabled for packs. -->
   <script>window.ENTROPICAL_PACKS = { termsUrl: '/condiciones-de-cancelacion', contactUrl: 'mailto:info@presuntaentropia.com', paymentMethods: ['redsys'] };</script>
   <script src="https://presunta.ntropical.com/webflow-packs.js" defer></script>
   <script src="js/pe-packs-copy.js?v=73a6b73a" defer></script>
   <script src="js/pe-packs.js?v=9c42bd9b" defer></script>
+  <script src="js/pe-explorer.js?v=bf34ae93" defer></script>
   <script src="https://presunta.ntropical.com/webflow-newsletter.js" defer></script>
   <!-- music + ORDEN/CAOS float (js/pe-music.js, entropy-mode.js), same as home -->
   <div class="pe-float" aria-label="Música y modo entropía">

@@ -154,10 +154,10 @@
   <script src="js/pe-console/games/emplatado.js?v=479f3168" defer></script>
   <script src="js/pe-console/games/equilibrio.js?v=4e7bd236" defer></script>
   <script src="js/pe-console/games/punto.js?v=d644dd06" defer></script>
-  <script src="js/pe-console/pe-console.js?v=4b367c2c" defer></script>
+  <script src="js/pe-console/pe-console.js?v=b0dd7b90" defer></script>
   <script src="js/hero-dock.js?v=8cdf4df5" defer></script>
   <script src="js/hero-swiper.js?v=7c39220e" defer></script>
-  <script src="js/pe-motion.js?v=b523ee5c" defer></script>
+  <script src="js/pe-motion.js?v=90bf7d39" defer></script>
   <script src="js/pe-chat-buddy.js?v=c1cc8f5f" defer></script>
   <!--  MODO ENTROPÍA: pre-paint state (no flash) + GSAP (Magneto return) + chaos engine  -->
   <script>try{if(localStorage.getItem('pe-entropy')==='1'){document.documentElement.classList.add('modo-entropia');}}catch(e){}</script>
@@ -177,11 +177,12 @@
 <link rel="stylesheet" href="css/original.css?v=5502636d">
 <link rel="stylesheet" href="css/framework.css?v=9e6b5644">
 <link rel="stylesheet" href="css/variables.css?v=b9782eaf">
-<link rel="stylesheet" href="css/project.css?v=ba01a3d7">
-  <link rel="stylesheet" href="css/pe-packs.css?v=ae3c4693">
+<link rel="stylesheet" href="css/project.css?v=320c7bee">
+  <link rel="stylesheet" href="css/pe-packs.css?v=18ec285a">
 <link rel="stylesheet" href="css/pe-motion.css?v=71450f25">
 <script>(function(h){try{if(!h.classList.contains('modo-entropia')&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){h.classList.add('pe-m-boot');setTimeout(function(){h.classList.remove('pe-m-boot')},3000)}}catch(e){}})(document.documentElement);</script>
   <script src="data/pe-experiencias.js"></script>
+  <script src="data/pe-fixtures.js"></script><!-- TEST DATA, inert unless ?fixtures=1. Delete before launch -->
   <script src="data/pe-cms.js"></script>
   <script src="data/pe-cms-lists.js" defer></script>
 </head>
@@ -3234,12 +3235,13 @@
                 <p class="pe-newsletter_text f-text-small">Novedades, eventos y experiencias de Presunta Entropía en tu correo.</p>
               </div>
               <form class="pe-newsletter_form" data-newsletter-form data-surface="footer-form">
-                <input class="pe-newsletter_input form_input w-input" type="email" name="email" required autocomplete="email" placeholder="Tu email">
+                <label class="pe-newsletter_sr" for="nl-footer-email">Tu email</label>
+                <input id="nl-footer-email" class="pe-newsletter_input form_input w-input" type="email" name="email" required autocomplete="email" placeholder="Tu email">
                 <label class="pe-newsletter_consent f-text-tiny">
-                  <input class="pe-newsletter_check" type="checkbox" name="consent" data-consent-version="newsletter-v1">
+                  <input class="pe-newsletter_check" type="checkbox" aria-describedby="nl-footer-info" name="consent" data-consent-version="newsletter-v1">
                   Quiero recibir por email novedades, eventos y experiencias de Presunta Entropía. Puedo darme de baja en cualquier momento. Más información en la <a href="/politica-de-privacidad">Política de privacidad</a>.
                 </label>
-                <details class="pe-newsletter_info f-text-tiny">
+                <details id="nl-footer-info" class="pe-newsletter_info f-text-tiny">
                   <summary class="pe-newsletter_info-link">Información básica sobre protección de datos</summary>
                   <table class="pe-newsletter_info-table"><tbody>
                     <tr><th scope="row">Responsable</th><td>THE COOKING LAB SLU (Presunta Entropía)</td></tr>
@@ -3252,8 +3254,8 @@
                 </details>
                 <div class="pe-newsletter_hp" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off"></div>
                 <button class="pe-newsletter_button button is-secondary is-small f-text-label f-text-ui-sm" type="submit">Suscribirme</button>
-                <p class="pe-newsletter_msg" data-newsletter-success hidden>Casi listo. Revisa tu correo y confirma la suscripción.</p>
-                <p class="pe-newsletter_msg" data-newsletter-error hidden>No se ha podido enviar. Inténtalo de nuevo en unos minutos.</p>
+                <p class="pe-newsletter_msg" role="status" data-newsletter-success hidden>Casi listo. Revisa tu correo y confirma la suscripción.</p>
+                <p class="pe-newsletter_msg" role="alert" data-newsletter-error hidden>No se ha podido enviar. Inténtalo de nuevo en unos minutos.</p>
               </form>
             </div>
             <div class="w-layout-grid footer15_menu-wrapper">

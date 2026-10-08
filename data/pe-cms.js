@@ -16,21 +16,21 @@ window.PE_CMS = {
       name: "Mariana Lira",
       rol: "Chef",
       bio: "Mariana Lira es una chef madrileña especializada en técnicas ancestrales y fermentaciones vivas, con formación internacional en gastronomía contemporánea y una marcada pasión por la cultura culinaria tradicional.",
-      image: "../assets/images/home-2026-10/riendo-retrato-800.webp"
+      image: "../assets/images/home-2026-10/riendo-retrato-1600.webp"
     },
     {
       slug: "diego-entropia",
       name: "Diego Salaz",
       rol: "Chef",
       bio: "Diego Salaz viene del mundo del fuego: brasas, arroces y cocina de campo. En Presunta Entropía dirige los talleres de mar y arroz, donde el error se corrige con humor y la paella nunca sale dos veces igual.",
-      image: "../assets/images/home-2026-10/foto-trasera-delantal-curso-800.webp"
+      image: "../assets/images/home-2026-10/foto-trasera-delantal-curso-1600.webp"
     },
     {
       slug: "akiko-mun",
       name: "Akiko Mun",
       rol: "Chef invitada",
       bio: "Akiko Mun explora las cocinas de Asia desde la técnica y la memoria. Sus talleres recorren fermentos coreanos, caldos japoneses y la calle tailandesa sin salir de Zurbano 83.",
-      image: "../assets/images/home-2026-10/riendo-comida-800.webp"
+      image: "../assets/images/home-2026-10/riendo-comida-1600.webp"
     }
   ],
 
@@ -62,8 +62,46 @@ window.PE_CMS = {
     return p;
   }
 
+  /* Sessions. Today every experience is one dated event (BOOK_NOW), so its
+     one session is the experience itself (session id = experience id). An
+     experience that carries x.sessions (recurring FIXED items, or the test
+     data in pe-fixtures.js) gets one record per session instead. Each
+     session carries what can differ per date: seats, price, promo, status.
+       sesiones     upcoming, scheduled only (what every page script reads)
+       sesionesAll  every session, past and cancelled included, flagged
+                    (the Explorador shows the states) */
+  window.PE_CMS.sesionesAll = [];
+  window.PE_CMS['team-building'] = window.PE_CMS['team-building'] || [];
+  function promoOf(price, original) {
+    return typeof original === 'number' && typeof price === 'number' && original > price ? original : null;
+  }
+  function sessionsOf(x) {
+    if (Array.isArray(x.sessions) && x.sessions.length) return x.sessions;
+    if (!x.sessionDate) return [];
+    return [{ id: x.entropicalId, sessionDate: x.sessionDate, seatsLeft: x.seatsLeft, status: 'SCHEDULED' }];
+  }
+
   src.items.forEach(function (x) {
-    var future = x.sessionDate && new Date(x.sessionDate).getTime() > now;
+    var col = x.coleccion === 'cenas' ? 'cenas' : x.coleccion === 'team-building' ? 'team-building' : 'talleres';
+    var all = sessionsOf(x).map(function (s) {
+      var price = typeof s.priceEuros === 'number' ? s.priceEuros : x.priceEuros;
+      var original = typeof s.priceOriginalEuros === 'number' ? s.priceOriginalEuros : (x.hasOffer ? x.priceOriginalEuros : null);
+      var t = new Date(s.sessionDate).getTime();
+      return {
+        fecha: madridDay(s.sessionDate), iso: s.sessionDate, coleccion: col, item: x.slug, itemId: s.id || x.entropicalId,
+        seatsLeft: typeof s.seatsLeft === 'number' ? s.seatsLeft : x.seatsLeft,
+        capacity: s.capacity || x.capacityTotal || null,
+        precio: price,
+        precioOriginal: promoOf(price, original),
+        status: s.status || 'SCHEDULED',
+        cancelled: s.status === 'CANCELLED',
+        past: t <= now,
+        test: !!x.test
+      };
+    }).sort(function (a, b) { return a.iso < b.iso ? -1 : 1; });
+    var upcoming = all.filter(function (s) { return !s.past && !s.cancelled; });
+    var next = upcoming[0] || null;
+    var future = !!next;
     var rec = {
       slug: x.slug,
       entropicalId: x.entropicalId,
@@ -73,25 +111,55 @@ window.PE_CMS = {
       summary: x.shortDescription,
       descriptionHtml: x.descriptionHtml,
       includesHtml: x.includesHtml,
+      requirementsHtml: x.requirementsHtml || '',
+      policiesHtml: x.policiesHtml || '',
+      instructors: x.instructors || [],
       tipo: x.categoria,
       nivel: x.level,
       duracion: duracion(x.durationMinutes),
       durationMinutes: x.durationMinutes,
       plazas: x.capacityTotal ? x.capacityTotal + ' plazas' : '',
       capacityTotal: x.capacityTotal,
-      seatsLeft: x.seatsLeft,
-      precio: x.priceEuros,
+      // the next session's figures (what a card shows); the experience's own when there is none
+      seatsLeft: next ? next.seatsLeft : x.seatsLeft,
+      precio: next ? next.precio : x.priceEuros,
+      precioOriginal: next ? next.precioOriginal : promoOf(x.priceEuros, x.hasOffer ? x.priceOriginalEuros : null),
+      featured: !!x.isFeatured,
+      test: !!x.test,
       image: x.heroImageUrl || '',
       gallery: x.galleryUrls || [],
-      nextSession: future ? x.sessionDate : null
+      nextSession: future ? next.iso : null,
+      lastSession: (all.filter(function (s) { return s.past && !s.cancelled; }).pop() || {}).iso || null
     };
-    (x.coleccion === 'cenas' ? window.PE_CMS.cenas : window.PE_CMS.talleres).push(rec);
-    // Today every experience is one dated event, so the session id is the experience id.
-    if (future) {
-      window.PE_CMS.sesiones.push({ fecha: madridDay(x.sessionDate), iso: x.sessionDate, coleccion: x.coleccion === 'cenas' ? 'cenas' : 'talleres', item: x.slug, itemId: x.entropicalId });
-    }
+    window.PE_CMS[col].push(rec);
+    all.forEach(function (s) {
+      window.PE_CMS.sesionesAll.push(s);
+      if (!s.past && !s.cancelled) window.PE_CMS.sesiones.push(s);
+    });
   });
   window.PE_CMS.sesiones.sort(function (a, b) { return a.iso < b.iso ? -1 : 1; });
+  window.PE_CMS.sesionesAll.sort(function (a, b) { return a.iso < b.iso ? -1 : 1; });
+
+  // Instructors the platform links to experiences join the personas list
+  // (public profile fields only; see tools/sync-entropical.js person()).
+  src.items.forEach(function (x) {
+    (x.instructors || []).forEach(function (p) {
+      if (!p || !p.slug) return;
+      var known = null;
+      window.PE_CMS.personas.forEach(function (q) { if (q.slug === p.slug) known = q; });
+      var rec = known || { slug: p.slug, items: [] };
+      rec.items = rec.items || [];
+      rec.name = p.name; rec.rol = p.role || rec.rol || 'Chef'; rec.tipo = rec.tipo || 'equipo';
+      if (p.bio) rec.bio = p.bio;
+      if (p.photoUrl) rec.image = p.photoUrl;
+      rec.specialties = (p.specialties && p.specialties.length) ? p.specialties : (rec.specialties || []);
+      rec.instagramUrl = p.instagramUrl || rec.instagramUrl || '';
+      rec.websiteUrl = p.websiteUrl || rec.websiteUrl || '';
+      rec.linkedinUrl = p.linkedinUrl || rec.linkedinUrl || '';
+      if (rec.items.indexOf(x.slug) === -1) rec.items.push(x.slug);
+      if (!known) window.PE_CMS.personas.push(rec);
+    });
+  });
 })();
 
 /* Image fallback for experiences without a platform image (local preview only;

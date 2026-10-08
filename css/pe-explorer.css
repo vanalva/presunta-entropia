@@ -1,0 +1,467 @@
+/* ============================================================
+   PRESUNTA ENTROPÍA — Explorador (js/pe-explorer.js)
+   EMBED-ONLY (Webflow: site-wide <style> embed, like pe-console.css):
+   the component is built by its script, uses descendant selectors and
+   state attributes. The controls bar reuses the LIST CONTROLS classes
+   (pe-lc_*) from project.css, so it is the same bar as before.
+   Light (cream sections) and dark (the booking overlay) come from one
+   set of variables; tokens only.
+   ============================================================ */
+.pe-xp {
+  --xp-ink: var(--pe---color--aztec);
+  --xp-paper: var(--pe---color--stark-white);
+  --xp-line: color-mix(in srgb, var(--pe---color--aztec) 35%, transparent);
+  --xp-soft: color-mix(in srgb, var(--pe---color--aztec) 7%, transparent);
+  --xp-mute: var(--pe---color--stark-white-darker);
+  --xp-hi: var(--pe---color--aztec);
+  --xp-hi-ink: var(--pe---color--stark-white);
+  --xp-chip: color-mix(in srgb, var(--pe---color--fuel-yellow) 55%, transparent);
+  --xp-low: var(--pe---color--mule-fawn);
+  --xp-focus: var(--pe---color--mule-fawn-dark);
+  color: var(--xp-ink);
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--_spacing---space--5);
+}
+.pe-xp.is-dark {
+  --xp-ink: var(--pe---color--stark-white);
+  --xp-paper: var(--pe---color--aztec);
+  --xp-line: color-mix(in srgb, var(--pe---color--stark-white) 30%, transparent);
+  --xp-soft: color-mix(in srgb, var(--pe---color--stark-white) 6%, transparent);
+  --xp-mute: var(--pe---color--stark-white-dark);
+  --xp-hi: var(--pe---color--fuel-yellow);
+  --xp-hi-ink: var(--pe---color--aztec);
+  --xp-chip: color-mix(in srgb, var(--pe---color--fuel-yellow) 30%, transparent);
+  --xp-low: var(--pe---color--mule-fawn-light);
+  --xp-focus: var(--pe---color--fuel-yellow);
+}
+.pe-xp [hidden] { display: none !important; }
+.pe-xp :focus-visible { outline: 2px solid var(--xp-focus); outline-offset: 3px; }
+
+/* ---- head: title left, tabs + active filters right ---- */
+.pe-xp_head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: var(--_spacing---space--4); }
+.pe-xp_head-left { display: flex; flex-direction: column; row-gap: var(--_spacing---space--3); max-width: 42rem; }
+.pe-xp_title, .pe-xp_lead { margin: 0; }
+.pe-xp_head-right { display: flex; flex-direction: column; align-items: flex-end; row-gap: var(--_spacing---space--2); margin-left: auto; }
+.pe-xp_tabs { display: inline-flex; padding: 3px; border: var(--border-width--main) solid var(--xp-ink); border-radius: var(--_radius---control); }
+.pe-xp_tab {
+  padding: var(--_spacing---space--2) var(--_spacing---space--4);
+  background: transparent; color: inherit; border: 0;
+  border-radius: calc(var(--_radius---control) - 3px);
+  text-transform: uppercase; cursor: pointer;
+  transition: background-color .2s ease, color .2s ease;
+}
+.pe-xp_tab.is-active { background: var(--xp-hi); color: var(--xp-hi-ink); }
+.pe-xp_tags { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: var(--_spacing---space--2); min-height: 2.5rem; }
+/* active filters: solid ink chips (aztec on light, cream on dark) with the x to remove */
+.pe-xp_tag {
+  display: inline-flex; align-items: center; gap: var(--_spacing---space--2);
+  min-height: 2.5rem; padding: 0.45rem 0.6rem 0.45rem 0.9rem;
+  background: var(--xp-ink); color: var(--xp-paper);
+  border: var(--border-width--main) solid var(--xp-ink); border-radius: var(--_radius---tag);
+  font-size: var(--_typography---size--body, 1rem); font-weight: var(--_typography---weight--medium); line-height: 1.2;
+  cursor: pointer; transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+}
+.pe-xp_tag-x { position: relative; width: 1.1rem; height: 1.1rem; flex: none; }
+.pe-xp_tag-x::before, .pe-xp_tag-x::after { content: ''; position: absolute; top: 50%; left: 15%; width: 70%; height: 1.5px; background: currentColor; }
+.pe-xp_tag-x::before { transform: rotate(45deg); }
+.pe-xp_tag-x::after { transform: rotate(-45deg); }
+.pe-xp_tag:hover { background: var(--pe---color--fuel-yellow); color: var(--pe---color--aztec); border-color: var(--pe---color--fuel-yellow); }
+.pe-xp_tag-clear { background: none; border: 0; color: inherit; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; padding: 0.25rem; }
+
+/* ---- bar: the LIST CONTROLS bar; selects and type chips ---- */
+.pe-xp_bar { margin: 0; }
+.pe-xp_search::-webkit-search-cancel-button { filter: grayscale(1); }
+.pe-xp_select { position: relative; }
+.pe-xp_select-trigger { display: flex; align-items: center; justify-content: space-between; gap: var(--_spacing---space--2); width: 100%; cursor: pointer; }
+.pe-xp_select-trigger.is-set { background: var(--xp-soft); }
+.pe-xp_select-arrow { width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid currentColor; transition: transform .2s ease; }
+.pe-xp_select.is-open .pe-xp_select-arrow { transform: rotate(180deg); }
+.pe-xp_select-list {
+  position: absolute; top: calc(100% + 6px); left: 0; z-index: 20; min-width: 100%;
+  display: flex; flex-direction: column; max-height: 16rem; overflow-y: auto;
+  padding: 4px; background: var(--xp-paper); color: var(--xp-ink);
+  border: var(--border-width--main) solid var(--xp-ink); border-radius: var(--_radius---control);
+}
+.pe-xp_select-option { padding: 0.5rem 0.75rem; text-align: left; white-space: nowrap; background: transparent; color: inherit; border: 0; border-radius: var(--_radius---control-sm); cursor: pointer; }
+.pe-xp_select-option:hover, .pe-xp_select-option[aria-selected="true"] { background: var(--xp-hi); color: var(--xp-hi-ink); }
+.pe-xp_chip { background: transparent; color: inherit; }
+.pe-xp_box { width: 0.9rem; height: 0.9rem; flex: none; border: var(--border-width--main) solid currentColor; border-radius: var(--_radius---xs); }
+.pe-xp_chip.is-active .pe-xp_box { background: currentColor; box-shadow: inset 0 0 0 2px var(--xp-hi); }
+.pe-xp_chip.is-active { background: var(--xp-hi); color: var(--xp-hi-ink); border-color: var(--xp-hi); }
+
+/* ---- stage: the small wait while typing, then the results enter ---- */
+.pe-xp_stage { position: relative; display: flex; flex-direction: column; row-gap: var(--_spacing---space--5); }
+.pe-xp_stage::before {
+  content: ''; position: absolute; top: calc(-1 * var(--_spacing---space--3)); left: 0; height: 2px; width: 0;
+  background: var(--xp-hi); opacity: 0;
+}
+.pe-xp_stage.is-settling > .pe-xp_panel { opacity: 0.45; transition: opacity .18s ease; }
+.pe-xp_stage.is-settling::before { opacity: 1; width: 100%; transition: width .28s linear; }
+
+/* ---- Experiencias: the workshop cards, 1–4 columns ---- */
+.pe-xp_grid { display: grid; gap: var(--_spacing---space--5); grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: stretch; }
+.pe-xp_grid.is-cols-1 { grid-template-columns: minmax(0, 1fr); }
+.pe-xp_grid.is-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.pe-xp_grid.is-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--_spacing---space--4); }
+.pe-xp_grid.is-cols-1 .pe-tcard { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); column-gap: var(--_spacing---space--4); }
+.pe-xp_grid.is-cols-1 .pe-tcard_media { aspect-ratio: auto; min-height: 14rem; }
+@media (max-width: 991px) {
+  .pe-xp_grid.is-cols-3, .pe-xp_grid.is-cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 767px) {
+  .pe-xp_grid, .pe-xp_grid.is-cols-2, .pe-xp_grid.is-cols-3, .pe-xp_grid.is-cols-4 { grid-template-columns: minmax(0, 1fr); }
+  .pe-xp_grid.is-cols-1 .pe-tcard { display: flex; flex-direction: column; }
+  .pe-xp_cols { display: none; }
+}
+/* the workshop card on dark (the booking overlay) */
+.pe-tcard.is-dark { --pe-tcard-frame: var(--pe---color--stark-white); color: var(--pe---color--stark-white); }
+.pe-tcard.is-dark:hover { --pe-tcard-frame: var(--pe---color--fuel-yellow); }
+.pe-tcard.is-dark .pe-tcard_text, .pe-tcard.is-dark .pe-tcard_fact-label { color: var(--pe---color--stark-white-dark); }
+.pe-tcard.is-dark .pe-tcard_meta { color: var(--pe---color--fuel-yellow); }
+.pe-tcard.is-dark .pe-tcard_facts, .pe-tcard.is-dark .pe-tcard_fact.is-next { border-color: var(--pe---color--aztec-light); }
+.pe-tcard.is-dark .pe-tcard_fact-value.is-low { color: var(--pe---color--mule-fawn-light); }
+/* ---- the card's lower half (js/pe-explorer.js card()/pack()) ----
+   two columns under one rule: Precio + Reservar/Más info on the left,
+   Plazas (the ficha's seat meter) + the experience's facts as pills on the right */
+body .pe-tcard .pe-tcard_facts { align-items: start; column-gap: 0; row-gap: var(--_spacing---space--3); }
+body .pe-tcard .pe-tcard_fact { min-width: 0; padding-right: var(--_spacing---space--2); }
+body .pe-tcard .pe-tcard_fact.is-next { padding-right: 0; align-self: stretch; }
+.pe-tcard_ctas { display: flex; flex-direction: column; row-gap: var(--_spacing---space--1); margin-top: var(--_spacing---space--2); }
+body .pe-tcard .button.pe-tcard_cta { width: 100%; margin: 0; white-space: nowrap; text-align: center; justify-content: center; }
+.pe-tcard_seats { margin-top: 0.375rem; display: flex; }
+.pe-tcard_seats .pe-ficha_meter { flex-wrap: nowrap; }
+.pe-tcard_pills { display: flex; flex-wrap: wrap; gap: 0.375rem; margin: var(--_spacing---space--3) 0 0; padding: 0; list-style: none; }
+.pe-tcard_pill-item { display: contents; }
+body .tag.pe-tcard_pill.is-dates { gap: 0.35rem; background-color: transparent; font-family: inherit; cursor: pointer; transition: background-color .15s ease, color .15s ease, border-color .15s ease; }
+body .tag.pe-tcard_pill.is-dates svg { flex: none; }
+body .tag.pe-tcard_pill.is-dates:hover { background-color: var(--pe---color--aztec); color: var(--pe---color--stark-white); border-color: var(--pe---color--aztec); }
+body .pe-tcard.is-dark .tag.pe-tcard_pill.is-dates:hover { background-color: var(--pe---color--fuel-yellow); color: var(--pe---color--aztec); border-color: var(--pe---color--fuel-yellow); }
+body .tag.pe-tcard_pill.is-dates:focus-visible { outline: 2px solid var(--pe---color--fuel-yellow-dark, var(--pe---color--fuel-yellow)); outline-offset: 2px; }
+body .tag.pe-tcard_pill { margin: 0; font-weight: var(--_typography---weight--normal, 400); text-transform: none; letter-spacing: 0; white-space: nowrap; padding: 0.25rem 0.625rem; line-height: 1.2; }
+/* narrow cards (4 across, phones): the two columns stack */
+.pe-xp_grid.is-cols-4 .pe-tcard_facts, .pe-tcard.is-narrow .pe-tcard_facts { grid-template-columns: minmax(0, 1fr); }
+.pe-tcard.is-narrow .pe-tcard_fact { padding-right: 0; }
+.pe-tcard.is-narrow .pe-tcard_fact.is-next { padding-left: 0; padding-top: var(--_spacing---space--2); border-left-width: 0; border-top: 1px solid var(--pe---color--stark-white-dark); }
+.pe-tcard.is-narrow.is-dark .pe-tcard_fact.is-next { border-top-color: var(--pe---color--aztec-light); }
+.pe-xp_grid.is-cols-4 .pe-tcard_fact.is-next { padding-left: 0; padding-top: var(--_spacing---space--2); border-left-width: 0; border-top: 1px solid var(--pe---color--stark-white-dark); }
+.pe-xp_grid.is-cols-4 .pe-tcard_fact { padding-right: 0; }
+@media (max-width: 478px) {
+  body .pe-tcard .pe-tcard_facts { grid-template-columns: minmax(0, 1fr); }
+  body .pe-tcard .pe-tcard_fact { padding-right: 0; }
+  body .pe-tcard .pe-tcard_fact.is-next { padding-left: 0; padding-top: var(--_spacing---space--2); border-left-width: 0; border-top: 1px solid var(--pe---color--stark-white-dark); }
+}
+/* the meter on dark: the hero's yellow */
+.pe-tcard.is-dark .pe-ficha_seg { background-color: color-mix(in srgb, var(--pe---color--stark-white) 18%, transparent); }
+.pe-tcard.is-dark .pe-ficha_seg.is-on { background-color: var(--pe---color--fuel-yellow); }
+.pe-tcard.is-dark .pe-ficha_seats { color: var(--pe---color--fuel-yellow); }
+.pe-tcard.is-dark .pe-xp_grid.is-cols-4 .pe-tcard_fact.is-next,
+.pe-xp_grid.is-cols-4 .pe-tcard.is-dark .pe-tcard_fact.is-next { border-top-color: var(--pe---color--aztec-light); }
+
+/* boxed: the card on a surface of its own (dark sections, the hover card): cream fill and the
+   light section scheme its buttons read; on dark mode it stays aztec */
+.talleres_card.pe-tcard.is-boxed { --color-scheme-1--background: var(--pe---color--stark-white); --color-scheme-1--text: var(--pe---color--aztec); background-color: var(--pe---color--stark-white); color: var(--pe---color--aztec); }
+.talleres_card.pe-tcard.is-boxed.is-dark { --color-scheme-1--background: var(--pe---color--aztec); --color-scheme-1--text: var(--pe---color--stark-white); background-color: var(--pe---color--aztec); color: var(--pe---color--stark-white); }
+
+/* the packs card: same card, the packs photo, a yellow PACK badge */
+.pe-tcard_date.is-pack { background-color: var(--pe---color--fuel-yellow); color: var(--pe---color--aztec); border-color: var(--pe---color--fuel-yellow); }
+.pe-tcard.is-pack.is-wide { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); column-gap: var(--_spacing---space--4); }
+.pe-tcard.is-pack.is-wide .pe-tcard_media { aspect-ratio: auto; min-height: 12rem; height: 100%; }
+.pe-tcard.is-pack.is-wide .pe-tcard_ctas { flex-direction: row; column-gap: var(--_spacing---space--2); }
+.pe-tcard.is-pack.is-wide .button.pe-tcard_cta { width: auto; flex: 1 1 0; }
+@media (max-width: 767px) {
+  .pe-tcard.is-pack.is-wide { display: flex; flex-direction: column; }
+  .pe-tcard.is-pack.is-wide .pe-tcard_ctas { flex-direction: column; }
+  .pe-tcard.is-pack.is-wide .button.pe-tcard_cta { width: 100%; }
+}
+
+/* ---- Calendario ---- */
+.pe-xp_calbar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--_spacing---space--3); margin-bottom: var(--_spacing---space--3); }
+.pe-xp_seg { display: inline-flex; align-items: center; gap: 2px; padding: 3px; }
+.pe-xp_seg-btn { padding: 0.4rem 0.9rem; background: transparent; color: inherit; border: 0; border-radius: calc(var(--_radius---control) - 3px); cursor: pointer; }
+.pe-xp_seg-btn.is-active { background: var(--xp-hi); color: var(--xp-hi-ink); }
+.pe-xp_nav { display: flex; align-items: center; gap: var(--_spacing---space--2); }
+.pe-xp_navbtn { display: inline-flex; align-items: center; justify-content: center; width: var(--pe-lc-h, 2.75rem); padding: 0; cursor: pointer; }
+.pe-xp_navlabel { min-width: 11rem; margin: 0; text-align: center; }
+.pe-xp_today { width: auto; padding: 0 0.9rem; cursor: pointer; }
+.pe-xp_month { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.pe-xp_wd { padding: 0.25rem 0.5rem; color: var(--xp-mute); }
+.pe-xp_cell {
+  position: relative; display: flex; flex-direction: column; align-items: stretch; gap: 3px;
+  min-height: 6.25rem; padding: 0.5rem; text-align: left;
+  background: transparent; color: inherit;
+  border: 1px solid var(--xp-line); border-radius: var(--_radius---control-sm);
+  cursor: pointer; transition: border-color .15s ease, background-color .15s ease;
+}
+.pe-xp_cell:hover { border-color: var(--xp-ink); }
+.pe-xp_cell.is-out { opacity: 0.35; }
+.pe-xp_cell.is-past { color: var(--xp-mute); }
+.pe-xp_cell.is-today .pe-xp_cell-num { display: inline-flex; align-self: flex-start; padding: 0 0.35rem; background: var(--xp-ink); color: var(--xp-paper); border-radius: var(--_radius---xs); }
+.pe-xp_cell.has-sessions { background: var(--xp-soft); }
+.pe-xp_cell.is-selected { border-color: var(--xp-hi); box-shadow: inset 0 0 0 1.5px var(--xp-hi); }
+.pe-xp_cell-more { color: var(--xp-mute); }
+@media (max-width: 767px) {
+  .pe-xp_cell { min-height: 3.25rem; padding: 0.35rem; }
+  .pe-xp_cell-more { display: none; }
+  .pe-xp_navlabel { min-width: 0; }
+}
+/* a session = a yellow ticket (month cells, tiles): time over name, ink on fuel yellow */
+.pe-xp_calbar-left { display: flex; flex-wrap: wrap; align-items: center; gap: var(--_spacing---space--2); }
+.pe-xp_hide { cursor: pointer; }
+.pe-xp_tk {
+  display: flex; flex-direction: column; row-gap: 1px; min-width: 0;
+  padding: 0.35rem 0.5rem 0.4rem; text-align: left;
+  background: var(--pe---color--fuel-yellow); color: var(--pe---color--aztec);
+  border-left: 3px solid var(--pe---color--aztec); border-radius: var(--_radius---xs);
+  transition: transform .15s ease, background-color .15s ease;
+}
+.pe-xp_tk-time { letter-spacing: 0.04em; opacity: 0.8; }
+.pe-xp_tk-name {
+  font-weight: var(--_typography---weight--medium); line-height: 1.2;
+  font-size: var(--_typography---font-size--text-small);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.pe-xp_tk-meta { opacity: 0.8; line-height: 1.25; }
+.pe-xp_tk.is-low { border-left-color: var(--pe---color--mule-fawn); }
+.pe-xp_tk.is-full, .pe-xp_tk.is-past { background: color-mix(in srgb, var(--pe---color--fuel-yellow) 40%, transparent); color: inherit; border-left-color: currentColor; }
+.pe-xp_tk:hover { background: var(--pe---color--fuel-yellow-dark, var(--pe---color--fuel-yellow)); transform: translateX(2px); }
+.pe-xp_cell.has-sessions { background: var(--xp-soft); }
+@media (max-width: 767px) {
+  .pe-xp_cell .pe-xp_tk { width: 0.5rem; height: 0.5rem; padding: 0; border: 0; border-radius: 50%; overflow: hidden; }
+  .pe-xp_cell .pe-xp_tk > * { display: none; }
+}
+
+/* "Ocultar días vacíos": only the days with sessions, sized by how many */
+.pe-xp_tiles { display: grid; gap: var(--_spacing---space--2); }
+.pe-xp_tiles.is-n-1 { grid-template-columns: minmax(0, 1fr); }
+.pe-xp_tiles.is-n-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.pe-xp_tiles.is-n-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.pe-xp_tiles.is-n-4, .pe-xp_tiles.is-some { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.pe-xp_tiles.is-many { grid-template-columns: repeat(auto-fill, minmax(11.5rem, 1fr)); }
+.pe-xp_tile {
+  display: flex; flex-direction: column; row-gap: var(--_spacing---space--2);
+  min-height: 15rem; padding: var(--_spacing---space--3); text-align: left;
+  background: var(--xp-soft); color: inherit;
+  border: 1px solid var(--xp-line); border-radius: var(--_radius---control);
+  cursor: pointer; transition: border-color .15s ease, background-color .15s ease;
+}
+.pe-xp_tiles.is-few .pe-xp_tile { min-height: 20rem; }
+.pe-xp_tiles.is-many .pe-xp_tile { min-height: 0; aspect-ratio: 1 / 1; }
+.pe-xp_tile:hover { border-color: var(--xp-ink); }
+.pe-xp_tile.is-selected { border-color: var(--xp-hi); box-shadow: inset 0 0 0 1.5px var(--xp-hi); }
+.pe-xp_tile.is-past { opacity: 0.55; }
+.pe-xp_tile-head { display: flex; align-items: flex-end; column-gap: 0.6rem; }
+.pe-xp_tile-num { font-size: var(--_typography---size--h2); line-height: 0.85; font-weight: var(--_typography---weight--medium); letter-spacing: -0.02em; }
+.pe-xp_tiles.is-few .pe-xp_tile-num { font-size: var(--_typography---size--h1); }
+.pe-xp_tiles.is-many .pe-xp_tile-num { font-size: var(--_typography---size--h4); }
+.pe-xp_tile-when { display: flex; flex-direction: column; padding-bottom: 0.15rem; }
+.pe-xp_tile-mon { color: var(--xp-mute); }
+.pe-xp_tile.is-today .pe-xp_tile-wd::after { content: " · Hoy"; }
+.pe-xp_tile-media { position: relative; display: block; flex-grow: 1; min-height: 8rem; overflow: hidden; border-radius: var(--_radius---control-sm); background: var(--pe---color--aztec); }
+.pe-xp_tiles.is-some .pe-xp_tile-media { flex-grow: 0; aspect-ratio: 4 / 3; min-height: 0; }
+.pe-xp_tile-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
+.pe-xp_tile-img.pe-img-placeholder { box-sizing: border-box; object-fit: contain; padding: 1.75rem; }
+.pe-xp_tile:hover .pe-xp_tile-img { transform: scale(1.04); }
+.pe-xp_tile-list { display: flex; flex-direction: column; row-gap: 0.35rem; margin-top: auto; min-height: 0; overflow: hidden; flex-shrink: 0; }
+.pe-xp_tiles.is-few .pe-xp_tk { padding: 0.6rem 0.75rem 0.7rem; }
+.pe-xp_tiles.is-few .pe-xp_tk-name { font-size: var(--_typography---font-size--text-main); }
+.pe-xp_tiles.is-many .pe-xp_tk-meta { display: none; }
+@media (max-width: 991px) {
+  .pe-xp_tiles.is-n-4, .pe-xp_tiles.is-some { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pe-xp_tiles.is-n-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 767px) {
+  .pe-xp_tiles.is-n-2, .pe-xp_tiles.is-n-3, .pe-xp_tiles.is-n-4, .pe-xp_tiles.is-some { grid-template-columns: minmax(0, 1fr); }
+  .pe-xp_tiles.is-many { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pe-xp_tile, .pe-xp_tiles.is-few .pe-xp_tile { min-height: 0; }
+  .pe-xp_tiles.is-few .pe-xp_tile-num { font-size: var(--_typography---size--h2); }
+}
+
+/* hover: the Experiencia card follows the pointer (js: floatShow) */
+.pe-xp_float {
+  position: fixed; top: 0; left: 0; z-index: 2147483000; width: 24rem;
+  pointer-events: none; opacity: 0; visibility: hidden;
+  transition: opacity .16s ease, visibility 0s linear .16s;
+}
+/* outside any section: give it the light (or dark) section scheme the buttons read */
+.pe-xp_float { --color-scheme-1--background: var(--pe---color--stark-white); --color-scheme-1--text: var(--pe---color--aztec); color: var(--pe---color--aztec); }
+.pe-xp_float.is-dark { --color-scheme-1--background: var(--pe---color--aztec); --color-scheme-1--text: var(--pe---color--stark-white); color: var(--pe---color--stark-white); }
+.pe-xp_float.is-on { opacity: 1; visibility: visible; transition: opacity .16s ease; }
+/* settled: it stops following and takes clicks (Reservar, Más info, the card) */
+.pe-xp_float.is-on.is-settled { pointer-events: auto; }
+.pe-xp_float.is-settled .pe-tcard { cursor: pointer; }
+.pe-xp_float .pe-tcard { height: auto; background-color: var(--pe---color--stark-white); box-shadow: 0 18px 40px -18px color-mix(in srgb, var(--pe---color--aztec) 55%, transparent); }
+.pe-xp_float .pe-tcard.is-dark { background-color: var(--pe---color--aztec); }
+.pe-xp_float .pe-tcard_media { aspect-ratio: 16 / 10; }
+.pe-xp_float .pe-tcard_text { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+@media (prefers-reduced-motion: reduce) { .pe-xp_float, .pe-xp_float.is-on { transition: none; } }
+.pe-xp_agenda { display: flex; flex-direction: column; margin-top: var(--_spacing---space--4); border-top: var(--border-width--main) solid var(--xp-ink); }
+.pe-xp_agenda-title { margin: var(--_spacing---space--3) 0 var(--_spacing---space--2); }
+.pe-xp_agenda-none { margin: 0; color: var(--xp-mute); }
+.pe-xp_row {
+  display: grid; grid-template-columns: 4.5rem minmax(0, 1fr) auto auto auto; align-items: center; column-gap: var(--_spacing---space--4);
+  padding: var(--_spacing---space--3) 0; border-bottom: 1px solid var(--xp-line);
+}
+.pe-xp_row-time { margin: 0; }
+.pe-xp_row-main { display: flex; flex-direction: column; row-gap: 2px; min-width: 0; }
+.pe-xp_row-name { color: inherit; text-decoration: none; }
+.pe-xp_row-name:hover { text-decoration: underline; text-underline-offset: 3px; }
+.pe-xp_row-meta { color: var(--xp-mute); }
+.pe-xp_row-seats.is-low { color: var(--xp-low); font-weight: var(--_typography---weight--medium); }
+.pe-xp_row-price { margin: 0; white-space: nowrap; }
+.pe-xp_row-cta { margin-bottom: 0; }
+.pe-xp_row-cta.is-off { color: var(--xp-mute); }
+@media (max-width: 767px) {
+  .pe-xp_row { grid-template-columns: 4rem minmax(0, 1fr); row-gap: var(--_spacing---space--2); }
+  .pe-xp_row-seats, .pe-xp_row-price { grid-column: 2; }
+  .pe-xp_row-cta { grid-column: 1 / -1; width: 100%; }
+}
+.pe-xp_week { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.pe-xp_wcol { display: flex; flex-direction: column; gap: var(--_spacing---space--2); min-height: 14rem; padding: 0.5rem; border: 1px solid var(--xp-line); border-radius: var(--_radius---control-sm); }
+.pe-xp_wcol.is-today { border-color: var(--xp-ink); }
+.pe-xp_wcol-head { padding-bottom: 0.35rem; border-bottom: 1px solid var(--xp-line); }
+.pe-xp_row.is-compact { display: flex; flex-direction: column; align-items: stretch; row-gap: 4px; padding: 0.5rem; background: var(--xp-soft); border: 0; border-radius: var(--_radius---xs); }
+.pe-xp_row.is-compact .pe-xp_row-time { font-size: var(--_typography---font-size--text-small); }
+.pe-xp_row.is-compact .pe-xp_row-name { font-size: var(--_typography---font-size--text-main); }
+.pe-xp_row.is-compact .pe-xp_row-meta { display: none; }
+.pe-xp_row.is-compact .pe-xp_row-price { font-size: var(--_typography---font-size--text-main); }
+.pe-xp_row.is-compact .pe-xp_row-cta { width: 100%; }
+@media (max-width: 991px) {
+  .pe-xp_week { grid-template-columns: minmax(0, 1fr); }
+  .pe-xp_wcol { min-height: 0; }
+}
+.pe-xp_none { display: flex; flex-wrap: wrap; align-items: center; gap: var(--_spacing---space--3); margin-top: var(--_spacing---space--4); color: var(--xp-mute); }
+.pe-xp_none p { margin: 0; }
+.pe-xp_panel > .pe-tcard.is-pack { margin-top: var(--_spacing---space--5); }
+
+/* ---- empty state (the home's) ---- */
+.pe-xp_empty { display: flex; flex-direction: column; align-items: flex-start; row-gap: var(--_spacing---space--3); padding: var(--_spacing---space--6) 0; }
+.pe-xp_empty .pe-state_title, .pe-xp_empty .pe-state_text { margin: 0; }
+.pe-xp_panel.is-empty .pe-xp_grid { display: none; }
+
+/* ---- the booking overlay shell (#modal-1): a dark sheet on the glass ---- */
+.booking-modal_component { position: fixed; inset: 0; z-index: 120000; display: none; color: var(--pe---color--stark-white); }
+.booking-modal_component.is-open { display: block; }
+.booking-modal_inner {
+  position: absolute; inset: 1.5rem; display: flex; flex-direction: column; row-gap: var(--_spacing---space--4);
+  padding: clamp(1.25rem, 3vw, 2.5rem); overflow-y: auto; overscroll-behavior: contain;
+  background: var(--pe---color--aztec);
+  border: var(--pe---border-width) solid var(--pe---color--stark-white); border-radius: var(--_radius---card);
+}
+.booking-modal_topbar { display: flex; justify-content: flex-start; }
+.booking-modal_close {
+  display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.6rem 1.25rem;
+  background: transparent; color: var(--pe---color--stark-white);
+  border: var(--border-width--main) solid var(--pe---color--stark-white); border-radius: var(--_radius---control);
+  text-transform: uppercase; font-weight: var(--_typography---weight--semibold); cursor: pointer;
+}
+.booking-modal_close:hover { border-color: var(--pe---color--fuel-yellow); color: var(--pe---color--fuel-yellow); }
+.booking-modal_close-x { color: var(--pe---color--fuel-yellow); }
+html.pe-modal-open { overflow: hidden; }
+@media (max-width: 767px) { .booking-modal_inner { inset: 0.75rem; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .pe-xp_tab, .pe-xp_cell, .pe-xp_select-arrow, .pe-xp_stage.is-settling > .pe-xp_panel, .pe-xp_stage.is-settling::before { transition: none; }
+}
+
+/* the site's line-height trim (h1-h6/p ::before/::after) pulls the explorer's own
+   text into its rules and borders; the explorer spaces its text itself */
+html body .pe-xp.pe-xp :is(h1, h2, h3, h4, h5, h6, p)::before,
+html body .pe-xp.pe-xp :is(h1, h2, h3, h4, h5, h6, p)::after,
+html body .pe-tcard.pe-tcard :is(h3, p)::before,
+html body .pe-tcard.pe-tcard :is(h3, p)::after { content: none; display: none; }
+.pe-xp_agenda-title { padding-top: var(--_spacing---space--2); }
+
+/* ---- States (js/pe-explorer.js stateOf): open · low · full · past · cancelled · soon,
+   plus promo and featured. One card, the state changes its look:
+     low        "Últimas plazas" flag, rust frame, the meter in rust
+     full       "Completo" flag, photo greyed, no Reservar
+     past       the dark card (aztec), photo greyed, "Finalizado", "Nuevas fechas próximamente"
+     cancelled  (a single date: the hover card, the agenda) struck through, greyed
+     promo      "Promo −X%" flag, the old price struck, the new one in rust
+     featured   "Destacado" flag
+   ---------------------------------------------------------------------------- */
+.pe-tcard_flags { position: absolute; top: var(--_spacing---space--2); right: var(--_spacing---space--2); display: flex; flex-direction: column; align-items: flex-end; row-gap: 0.35rem; pointer-events: none; }
+.pe-tcard_flag {
+  display: inline-flex; align-items: center; padding: 0.35rem 0.65rem;
+  background-color: var(--pe---color--aztec); color: var(--pe---color--stark-white);
+  border: var(--pe---border-width, 0.094rem) solid var(--pe---color--stark-white); border-radius: var(--_radius---tag);
+  text-transform: uppercase; letter-spacing: 0.04em; line-height: 1.1; white-space: nowrap;
+}
+.pe-tcard_flag.is-low { background-color: var(--pe---color--mule-fawn); border-color: var(--pe---color--mule-fawn); }
+.pe-tcard_flag.is-full { background-color: var(--pe---color--stark-white); color: var(--pe---color--aztec); border-color: var(--pe---color--aztec); }
+.pe-tcard_flag.is-promo { background-color: var(--pe---color--fuel-yellow); color: var(--pe---color--aztec); border-color: var(--pe---color--aztec); }
+.pe-tcard_flag.is-featured { background-color: transparent; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.pe-tcard_flag.is-cancelled { background-color: var(--pe---color--mule-fawn-dark, var(--pe---color--mule-fawn)); border-color: transparent; }
+
+.talleres_card.pe-tcard.is-low { --pe-tcard-frame: var(--pe---color--mule-fawn); }
+.talleres_card.pe-tcard.is-full .pe-tcard_image,
+.talleres_card.pe-tcard.is-past .pe-tcard_image,
+.talleres_card.pe-tcard.is-cancelled .pe-tcard_image { filter: grayscale(1) contrast(0.9); opacity: 0.6; }
+.talleres_card.pe-tcard.is-past .pe-tcard_date,
+.talleres_card.pe-tcard.is-cancelled .pe-tcard_date { opacity: 0.7; }
+.talleres_card.pe-tcard.is-cancelled .pe-tcard_date-day { text-decoration-line: line-through; }
+.talleres_card.pe-tcard.is-cancelled .pe-tcard_title { text-decoration-line: line-through; text-decoration-thickness: 1px; }
+/* on the dark overlay a past card cannot get darker: it dims */
+.pe-xp.is-dark .talleres_card.pe-tcard.is-past { opacity: 0.72; }
+.pe-xp.is-dark .talleres_card.pe-tcard.is-past:hover { opacity: 1; }
+
+.pe-tcard_price-was { margin-right: 0.15rem; font-weight: var(--_typography---weight--normal, 400); opacity: 0.55; text-decoration-thickness: 1px; }
+.talleres_card.pe-tcard.is-promo .pe-tcard_price-now { color: var(--pe---color--mule-fawn); }
+.talleres_card.pe-tcard.is-promo.is-dark .pe-tcard_price-now { color: var(--pe---color--fuel-yellow); }
+
+
+/* calendar tickets and agenda rows: the same states */
+.pe-xp_tk { position: relative; }
+.pe-xp_tk.is-cancelled { background: transparent; color: inherit; border-left-color: currentColor; opacity: 0.6; }
+.pe-xp_tk.is-cancelled .pe-xp_tk-name { text-decoration-line: line-through; }
+.pe-xp_tk.is-full { background: color-mix(in srgb, var(--pe---color--fuel-yellow) 35%, transparent); color: inherit; border-left-color: currentColor; }
+.pe-xp_tk.is-full .pe-xp_tk-time::after { content: " · Completo"; }
+.pe-xp_tk.is-low { border-left-color: var(--pe---color--mule-fawn); }
+.pe-xp_tk.is-low .pe-xp_tk-time::after { content: " · Últimas"; }
+.pe-xp_tk-promo { position: absolute; top: 0.3rem; right: 0.35rem; padding: 0.05rem 0.3rem; background-color: var(--pe---color--aztec); color: var(--pe---color--fuel-yellow); border-radius: var(--_radius---xs); line-height: 1.2; }
+.pe-xp_row.is-cancelled .pe-xp_row-name, .pe-xp_row.is-cancelled .pe-xp_row-time { text-decoration-line: line-through; opacity: 0.6; }
+.pe-xp_row.is-full .pe-xp_row-name, .pe-xp_row.is-past .pe-xp_row-name { opacity: 0.6; }
+.pe-xp_row-was { margin-right: 0.2rem; opacity: 0.55; }
+.pe-xp_row.is-promo .pe-xp_row-price { color: var(--pe---color--mule-fawn); }
+.pe-xp.is-dark .pe-xp_row.is-promo .pe-xp_row-price { color: var(--pe---color--fuel-yellow); }
+
+/* test data on (data/pe-fixtures.js): never mistaken for the real thing */
+.pe-fixtures-banner {
+  position: fixed; top: 0.5rem; left: 50%; z-index: 2147483001; transform: translate(-50%, 0);
+  padding: 0.35rem 0.8rem; background-color: var(--pe---color--mule-fawn); color: var(--pe---color--stark-white);
+  font-family: inherit; font-size: 0.8125rem; line-height: 1.3;
+  border-radius: var(--_radius---tag); white-space: nowrap;
+}
+.pe-fixtures-banner a { color: inherit; text-decoration-line: underline; }
+
+/* ---- who teaches it: round photo + name (+ role), linked to the profile ---- */
+.pe-tcard_people { display: flex; flex-wrap: wrap; align-items: center; column-gap: var(--_spacing---space--3); row-gap: var(--_spacing---space--1); }
+.pe-tcard_person { display: inline-flex; align-items: center; column-gap: 0.5rem; min-width: 0; color: inherit; text-decoration-line: none; border-radius: var(--_radius---tag); }
+.pe-tcard_person-img {
+  flex: 0 0 auto; width: 2.25rem; height: 2.25rem; object-fit: cover; border-radius: 50%;
+  border: var(--pe---border-width, 0.094rem) solid currentColor; background-color: var(--pe---color--aztec);
+}
+.pe-tcard_person-img.pe-img-placeholder { box-sizing: border-box; object-fit: contain; padding: 0.35rem; }
+.pe-tcard_person-txt { display: flex; flex-direction: column; min-width: 0; line-height: 1.15; }
+.pe-tcard_person-name { font-weight: var(--_typography---weight--medium); white-space: nowrap; }
+.pe-tcard_person-role { opacity: 0.7; white-space: nowrap; }
+.pe-tcard_person:hover .pe-tcard_person-name { text-decoration-line: underline; text-underline-offset: 3px; }
+.pe-tcard_person:hover .pe-tcard_person-img { border-color: var(--pe---color--fuel-yellow-dark, var(--pe---color--fuel-yellow)); }
+.pe-tcard_person:focus-visible { outline: 2px solid var(--pe---color--fuel-yellow-dark, var(--pe---color--fuel-yellow)); outline-offset: 3px; }
+.pe-tcard_person-more { opacity: 0.7; }
+@media (max-width: 991px) {
+  .pe-xp_tk-promo { position: static; align-self: flex-start; margin-bottom: 0.1rem; }
+}
+/* no active filters: no empty band under the tabs */
+.pe-xp_tags:empty { display: none; }
+@media (max-width: 991px) {
+  .pe-xp_head-right { align-items: flex-start; margin-left: 0; }
+  .pe-xp_tags { justify-content: flex-start; }
+}
+/* the Reservar + cart pair inside calendar rows: the pair takes the CTA slot */
+body .pe-xp_row > .pe-book { width: auto; }
+body .pe-xp_row.is-compact > .pe-book { width: 100%; }
+@media (max-width: 767px) {
+  body .pe-xp_row > .pe-book { grid-column: 1 / -1; width: 100%; }
+}

@@ -1,0 +1,289 @@
+/* ============================================================
+   PRESUNTA ENTROPÍA — one glass for every overlay
+   (site-fixes 2026-10-07, Juan: "the blurred background with a
+   grain, like the cart, everywhere we have modals and overlays —
+   but the animation is too slow")
+
+   EMBED-ONLY (Webflow: site-wide <style> embed). It styles
+   elements owned by other scripts (webflow-cart.js, webflow-
+   packs.js, the booking-modal embed, the console lightbox) and
+   uses descendant selectors, so it cannot live in styleLess.
+
+   The look: the page behind turns into smoked privacy glass —
+   aztec tint, heavy blur, a little more colour, fine grain.
+   The speed: the blur radius is FIXED (animating backdrop-filter
+   from 0 → 28px re-rendered the blur every frame for 0.6s, which
+   is what felt heavy). Only opacity fades, 0.22s, on the
+   compositor. Reduced motion: no fade at all.
+   ============================================================ */
+
+:root {
+  /* darker (reads as our aztec background) and cheaper: the blur cost grows with its
+     radius and every extra filter is another full-screen pass, so 14px and no saturate() */
+  --pe-glass-tint: color-mix(in srgb, var(--pe---color--aztec) 80%, transparent);
+  --pe-glass-blur: blur(14px);
+  --pe-glass-grain-opacity: 0.12;
+  --pe-glass-fade: 0.22s;
+  --pe-glass-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --pe-glass-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.91  0 0 0 0 0.84  0 0 0 0 0.77  0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---- 1. Cart: same glass, no animated blur ---------------------- */
+body .cart-modal_component {
+  transition-duration: var(--pe-glass-fade), var(--pe-glass-fade);
+}
+body .cart-modal_component div.cart-modal_overlay,
+body .cart-modal_component.is-open div.cart-modal_overlay {
+  background-color: var(--pe-glass-tint);
+  -webkit-backdrop-filter: var(--pe-glass-blur);
+  backdrop-filter: var(--pe-glass-blur);
+  transition-property: none;
+}
+body .cart-modal_component div.cart-modal_overlay::after,
+body .cart-modal_component.is-open div.cart-modal_overlay::after {
+  mix-blend-mode: normal;
+  opacity: var(--pe-glass-grain-opacity);
+  transition-property: none;
+}
+body .cart-modal_component div.cart-modal_container {
+  transition-duration: 0.32s;
+  transition-timing-function: var(--pe-glass-ease);
+}
+
+/* ---- 2. Packs dialogs (buy / gift / redeem, webflow-packs.js) --- */
+body .ep-backdrop {
+  background: var(--pe-glass-tint) !important;   /* embed: beats the script's injected rgba(10,10,10,.6) */
+  -webkit-backdrop-filter: var(--pe-glass-blur);
+  backdrop-filter: var(--pe-glass-blur);
+  animation: pe-glass-in var(--pe-glass-fade) var(--pe-glass-ease) both !important;
+}
+body .ep-backdrop::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--pe-glass-grain);
+  background-size: 160px 160px;
+  mix-blend-mode: normal;
+  opacity: var(--pe-glass-grain-opacity);
+  pointer-events: none;
+}
+body .ep-backdrop > * { position: relative; }
+body .ep-backdrop .ep-dialog {
+  animation: pe-glass-rise 0.28s var(--pe-glass-ease) both;
+}
+
+/* ---- 3. Booking calendar: a sheet floating on the glass --------- */
+body .booking-modal_component {
+  background-color: var(--pe-glass-tint);
+  -webkit-backdrop-filter: var(--pe-glass-blur);
+  backdrop-filter: var(--pe-glass-blur);
+}
+body .booking-modal_component::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--pe-glass-grain);
+  background-size: 160px 160px;
+  mix-blend-mode: normal;
+  opacity: var(--pe-glass-grain-opacity);
+  pointer-events: none;
+}
+body .booking-modal_component.is-open {
+  animation: pe-glass-in var(--pe-glass-fade) var(--pe-glass-ease) both;
+}
+body .booking-modal_component .booking-modal_inner {
+  top: 1.5rem;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  background-color: var(--pe---color--aztec);
+}
+body .booking-modal_component.is-open .booking-modal_inner {
+  animation: pe-glass-rise 0.32s var(--pe-glass-ease) both;
+}
+@media (max-width: 767px) {
+  body .booking-modal_component .booking-modal_inner { top: 0.75rem; right: 0.75rem; bottom: 0.75rem; left: 0.75rem; }
+}
+
+/* ---- 4. Console gallery lightbox --------------------------------- */
+body .pe-lightbox {
+  background-color: var(--pe-glass-tint);
+  -webkit-backdrop-filter: var(--pe-glass-blur);
+  backdrop-filter: var(--pe-glass-blur);
+}
+body .pe-lightbox::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--pe-glass-grain);
+  background-size: 160px 160px;
+  mix-blend-mode: normal;
+  opacity: var(--pe-glass-grain-opacity);
+  pointer-events: none;
+}
+body .pe-lightbox.is-open { transition-duration: var(--pe-glass-fade), 0s; }
+
+/* ---- 5. Any future overlay: add class pe-glass ------------------ */
+body .pe-glass {
+  background-color: var(--pe-glass-tint);
+  -webkit-backdrop-filter: var(--pe-glass-blur);
+  backdrop-filter: var(--pe-glass-blur);
+}
+
+@keyframes pe-glass-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pe-glass-rise { from { opacity: 0; transform: translate(0, 12px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  body .cart-modal_component,
+  body .cart-modal_component div.cart-modal_container { transition-duration: 0s; }
+  body .ep-backdrop,
+  body .ep-backdrop .ep-dialog,
+  body .booking-modal_component.is-open,
+  body .booking-modal_component.is-open .booking-modal_inner { animation: none !important; }
+  body .pe-lightbox.is-open { transition-duration: 0s; }
+}
+
+/* ---- Add-to-cart feedback (js/pe-booking-flow.js) ---------------- */
+body [data-pe-add].is-adding { cursor: progress; opacity: 0.7; }
+body [data-pe-add].is-added,
+body [data-cart-add].is-added {
+  background-color: var(--pe---color--fuel-yellow);
+  border-color: var(--pe---color--fuel-yellow);
+  color: var(--pe---color--aztec);
+}
+@media (prefers-reduced-motion: no-preference) {
+  body [data-pe-add].is-added { animation: pe-added-pop 0.3s var(--pe-glass-ease); }
+}
+@keyframes pe-added-pop { 0% { transform: scale(0.96); } 100% { transform: none; } }
+
+/* ---- While any glass is up, the page behind holds still ----------
+   A backdrop blur is recomputed every frame something behind it moves
+   (marquees, the hero, the console). js/pe-booking-flow.js sets
+   html.pe-glass-on while an overlay is open, pauses GSAP and freezes
+   the console; this pauses the CSS animations of the page content. */
+html.pe-glass-on .main-wrapper *,
+html.pe-glass-on .footer15_component * {
+  animation-play-state: paused !important;
+}
+/* ...but never the overlays themselves: #modal-1 (and the cart, the dialogs) can sit inside
+   .main-wrapper, and a paused fade-in leaves them open at opacity 0 */
+html.pe-glass-on .main-wrapper .booking-modal_component,
+html.pe-glass-on .main-wrapper .booking-modal_component *,
+html.pe-glass-on .main-wrapper .cart-modal_component,
+html.pe-glass-on .main-wrapper .cart-modal_component *,
+html.pe-glass-on .main-wrapper .pe-bookdlg,
+html.pe-glass-on .main-wrapper .pe-bookdlg *,
+html.pe-glass-on .main-wrapper .pe-xp_float,
+html.pe-glass-on .main-wrapper .pe-xp_float * {
+  animation-play-state: running !important;
+}
+body .cart-modal_component div.cart-modal_overlay,
+body .booking-modal_component,
+body .ep-backdrop,
+body .pe-lightbox {
+  will-change: opacity;
+}
+
+/* ---- Reservar + the small cart button (js/pe-booking-flow.js) ----
+   Every Reservar with a session id sits in a .pe-book row with a square
+   cart button: Reservar books (dialog → pay), the cart adds one seat. */
+body .pe-book { display: flex; align-items: stretch; column-gap: var(--_spacing---space--1); width: 100%; min-width: 0; }
+body .pe-book > [data-pe-add] { flex: 1 1 auto; width: auto; min-width: 0; margin: 0; }
+/* the dock cart button as is (.cart-header_button); only its place in the row changes:
+   in line after Reservar (its dock order:-9999 would put it first), as tall as Reservar */
+body button.cart-header_button.pe-book_cart { order: 0; flex: 0 0 auto; align-self: stretch; width: auto; height: auto; min-height: 2.5rem; aspect-ratio: 1 / 1; margin: 0; }
+/* no extra effects: it behaves exactly like the dock cart button (pe-motion.js slide, :active press) */
+
+/* ---- The booking dialog: Reservar → seats → pay (js/pe-booking-flow.js) ---- */
+body .pe-bookdlg {
+  position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 130000;
+  display: flex; align-items: center; justify-content: center;
+  padding: var(--_spacing---space--3);
+  opacity: 0; transition: opacity var(--pe-glass-fade) var(--pe-glass-ease);
+  --color-scheme-1--background: var(--pe---color--aztec);
+  --color-scheme-1--text: var(--pe---color--stark-white);
+  color-scheme: dark;
+}
+body .pe-bookdlg::before {
+  content: ""; position: absolute; top: 0; right: 0; bottom: 0; left: 0;
+  background-image: var(--pe-glass-grain); background-size: 160px 160px;
+  opacity: var(--pe-glass-grain-opacity); pointer-events: none;
+}
+body .pe-bookdlg.is-open { opacity: 1; }
+body .pe-bookdlg_panel {
+  position: relative; width: 100%; max-width: 34rem; max-height: calc(100vh - 2rem); overflow-y: auto;
+  display: flex; flex-direction: column; row-gap: var(--_spacing---space--4);
+  padding: var(--_spacing---space--5);
+  background-color: var(--pe---color--aztec); color: var(--pe---color--stark-white);
+  border: var(--pe---border-width, 0.094rem) solid var(--pe---color--stark-white);
+  border-radius: var(--_radius---panel);
+  transform: translate(0, 12px); transition: transform 0.32s var(--pe-glass-ease);
+}
+body .pe-bookdlg.is-open .pe-bookdlg_panel { transform: none; }
+body .pe-bookdlg_close {
+  position: absolute; top: var(--_spacing---space--3); right: var(--_spacing---space--3);
+  display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; padding: 0;
+  background: transparent; color: inherit; cursor: pointer;
+  border: var(--pe---border-width, 0.094rem) solid currentColor; border-radius: var(--_radius---control-sm);
+}
+body .pe-bookdlg_close:hover { background-color: var(--pe---color--stark-white); color: var(--pe---color--aztec); }
+body .pe-bookdlg_head { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); column-gap: var(--_spacing---space--3); align-items: center; padding-right: 2.5rem; }
+body .pe-bookdlg_media { position: relative; aspect-ratio: 1 / 1; overflow: hidden; border-radius: var(--_radius---control-sm); background-color: color-mix(in srgb, var(--pe---color--stark-white) 8%, var(--pe---color--aztec)); }
+body .pe-bookdlg_img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+body .pe-bookdlg_img.pe-img-placeholder { box-sizing: border-box; object-fit: contain; padding: 1.25rem; }
+body .pe-bookdlg_txt { display: flex; flex-direction: column; row-gap: 0.35rem; min-width: 0; }
+body .pe-bookdlg_eyebrow { color: var(--pe---color--fuel-yellow); text-transform: uppercase; letter-spacing: 0.06em; }
+body .pe-bookdlg_title, body .pe-bookdlg_when, body .pe-bookdlg_note, body .pe-bookdlg_err { margin: 0; }
+body .pe-bookdlg :is(h2, p)::before, body .pe-bookdlg :is(h2, p)::after { content: none; display: none; }
+body .pe-bookdlg_when { color: var(--pe---color--stark-white-dark); }
+body .pe-bookdlg_rows { display: flex; flex-direction: column; border-top: 1px solid color-mix(in srgb, var(--pe---color--stark-white) 25%, transparent); }
+body .pe-bookdlg_row {
+  display: flex; align-items: center; justify-content: space-between; column-gap: var(--_spacing---space--3);
+  padding: var(--_spacing---space--3) 0; border-bottom: 1px solid color-mix(in srgb, var(--pe---color--stark-white) 25%, transparent);
+}
+body .pe-bookdlg_label { display: flex; flex-direction: column; row-gap: 0.35rem; }
+body .pe-bookdlg_k, body .pe-bookdlg_unit { color: var(--pe---color--stark-white-dark); }
+body .pe-bookdlg .pe-ficha_seg { background-color: color-mix(in srgb, var(--pe---color--stark-white) 18%, transparent); }
+body .pe-bookdlg .pe-ficha_seg.is-on { background-color: var(--pe---color--fuel-yellow); }
+body .pe-bookdlg .pe-ficha_seats { color: var(--pe---color--fuel-yellow); }
+body .pe-bookdlg_step {
+  display: inline-flex; align-items: center; column-gap: 0.25rem; padding: 0.2rem;
+  border: var(--pe---border-width, 0.094rem) solid var(--pe---color--stark-white); border-radius: var(--_radius---control);
+}
+body .pe-bookdlg_stepbtn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2.5rem; height: 2.5rem; padding: 0; font-size: 1.25rem; line-height: 1;
+  background: transparent; color: inherit; border: 0; border-radius: calc(var(--_radius---control) - 0.2rem); cursor: pointer;
+}
+body .pe-bookdlg_stepbtn:hover:not(:disabled) { background-color: var(--pe---color--fuel-yellow); color: var(--pe---color--aztec); }
+body .pe-bookdlg_stepbtn:disabled { opacity: 0.35; cursor: default; }
+body .pe-bookdlg_qty { min-width: 2rem; margin: 0; text-align: center; }
+body .pe-bookdlg_total { margin: 0; white-space: nowrap; }
+body .pe-bookdlg_ctas { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: var(--_spacing---space--2); row-gap: var(--_spacing---space--2); }
+body .button.pe-bookdlg_cta { width: 100%; margin: 0; white-space: nowrap; }
+body .button.pe-bookdlg_cta.is-adding { cursor: progress; opacity: 0.7; }
+body .pe-bookdlg_note { color: var(--pe---color--stark-white-dark); }
+body .pe-bookdlg_was { opacity: 0.6; }
+body .pe-bookdlg_promo { display: inline-flex; margin-left: 0.4rem; padding: 0.1rem 0.4rem; background-color: var(--pe---color--fuel-yellow); color: var(--pe---color--aztec); border-radius: var(--_radius---tag); }
+body .pe-bookdlg_err { color: var(--pe---color--mule-fawn-light); }
+body .pe-bookdlg_err:empty { display: none; }
+body .pe-bookdlg :focus-visible { outline: 2px solid var(--pe---color--fuel-yellow); outline-offset: 3px; }
+@media (max-width: 478px) {
+  body .pe-bookdlg { align-items: flex-end; padding: var(--_spacing---space--2); }
+  body .pe-bookdlg_panel { padding: var(--_spacing---space--4); }
+  body .pe-bookdlg_head { grid-template-columns: 5rem minmax(0, 1fr); }
+  body .pe-bookdlg_ctas { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+  body .pe-bookdlg, body .pe-bookdlg_panel { transition-duration: 0s; }
+}
+
+/* taller-item date rows: the Reservar + cart pair takes the CTA slot of the row grid
+   (the same placement .button.ti-fecha_cta has in project.css at each breakpoint) */
+body .ti-fecha > .pe-book { width: 100%; }
+@media (max-width: 991px) {
+  body .ti-fecha > .pe-book { grid-column-start: 3; grid-column-end: 4; width: auto; }
+}
+@media (max-width: 767px) {
+  body .ti-fecha > .pe-book { grid-column-start: 1; grid-column-end: 3; width: 100%; }
+}

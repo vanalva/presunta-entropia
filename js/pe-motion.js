@@ -567,28 +567,31 @@
       if (b.classList.contains('pe-rise')) return;
       if (/^(INPUT|SELECT|TEXTAREA)$/.test(b.tagName)) return;
       if (b.matches('.is-simple, .is-link, .is-tiny, .is-small, .hero_pill, .is-form') || claimed(b)) return;
-      var label = (b.textContent || '').replace(/\s+/g, ' ').trim();
-      if (!label) return;
-      var cs = getComputedStyle(b);
-      var lab = document.createElement('span');
-      lab.className = 'pe-rise_label';
-      while (b.firstChild) lab.appendChild(b.firstChild);
-      var alt = document.createElement('span');
-      alt.className = 'pe-rise_alt';
-      alt.setAttribute('aria-hidden', 'true');
-      b.appendChild(lab); b.appendChild(alt);
-      alt.__peWant = RISE_TEXT[label.toLowerCase()] || label;
-      alt.__peLabel = label;
-      fitRise(b);
-      // the inverted state: the button's text colour fills, the surface it
-      // sits on becomes the ink
-      b.style.setProperty('--pe-rise-bg', cs.color);
-      b.style.setProperty('--pe-rise-ink', surfaceBg(b));
-      anchor(b);
-      b.classList.add('pe-rise');
-      n++;
+      if (riseOne(b)) n++;
     });
     return n;
+  }
+  function riseOne(b) {
+    var label = (b.textContent || '').replace(/\s+/g, ' ').trim();
+    if (!label) return false;
+    var cs = getComputedStyle(b);
+    var lab = document.createElement('span');
+    lab.className = 'pe-rise_label';
+    while (b.firstChild) lab.appendChild(b.firstChild);
+    var alt = document.createElement('span');
+    alt.className = 'pe-rise_alt';
+    alt.setAttribute('aria-hidden', 'true');
+    b.appendChild(lab); b.appendChild(alt);
+    alt.__peWant = RISE_TEXT[label.toLowerCase()] || label;
+    alt.__peLabel = label;
+    fitRise(b);
+    // the inverted state: the button's text colour fills, the surface it
+    // sits on becomes the ink
+    b.style.setProperty('--pe-rise-bg', cs.color);
+    b.style.setProperty('--pe-rise-ink', surfaceBg(b));
+    anchor(b);
+    b.classList.add('pe-rise');
+    return true;
   }
   /* The other two families (lab 05 and 06). Juan's split, 2026-09-26:
        main volume buttons ........ slide + press  (riseButtons above)
@@ -615,47 +618,91 @@
     var n = 0;
     arr((root || document).querySelectorAll(TICK_SEL)).forEach(function (b) {
       if (claimed(b) || /^(INPUT|SELECT|TEXTAREA)$/.test(b.tagName)) return;
-      var label = (b.textContent || '').replace(/\s+/g, ' ').trim();
-      if (!label) return;
-      var cs = getComputedStyle(b);
-      wrapLabel(b, 'pe-tick_label');
-      var track = document.createElement('span');
-      track.className = 'pe-tick_track';
-      track.setAttribute('aria-hidden', 'true');
-      for (var i = 0; i < 4; i++) {
-        var item = document.createElement('span');
-        item.innerHTML = RISE_GLYPH;
-        item.appendChild(document.createTextNode(label));
-        track.appendChild(item);
-      }
-      b.appendChild(track);
-      b.style.setProperty('--pe-tick-pad', cs.paddingLeft);
-      // the same reading speed for short and long labels
-      b.style.setProperty('--pe-tick-dur', Math.max(1.6, label.length * 0.22).toFixed(2) + 's');
-      anchor(b);
-      b.classList.add('pe-tick');
-      n++;
+      if (tickOne(b)) n++;
     });
     return n;
+  }
+  function tickOne(b) {
+    var label = (b.textContent || '').replace(/\s+/g, ' ').trim();
+    if (!label) return false;
+    var cs = getComputedStyle(b);
+    wrapLabel(b, 'pe-tick_label');
+    var track = document.createElement('span');
+    track.className = 'pe-tick_track';
+    track.setAttribute('aria-hidden', 'true');
+    for (var i = 0; i < 4; i++) {
+      var item = document.createElement('span');
+      item.innerHTML = RISE_GLYPH;
+      item.appendChild(document.createTextNode(label));
+      track.appendChild(item);
+    }
+    b.appendChild(track);
+    b.style.setProperty('--pe-tick-pad', cs.paddingLeft);
+    // the same reading speed for short and long labels
+    b.style.setProperty('--pe-tick-dur', Math.max(1.6, label.length * 0.22).toFixed(2) + 's');
+    anchor(b);
+    b.classList.add('pe-tick');
+    return true;
   }
   function powerButtons(root) {
     var n = 0;
     arr((root || document).querySelectorAll('.button.is-simple')).forEach(function (b) {
       if (claimed(b) || b.matches(TICK_SEL) || b.matches('.is-link')) return;
       if (/^(INPUT|SELECT|TEXTAREA)$/.test(b.tagName)) return;
-      if (!(b.textContent || '').trim()) return;
-      var cs = getComputedStyle(b);
-      wrapLabel(b, 'pe-pwr_label');
-      b.style.setProperty('--pe-rest-bg', cs.backgroundColor);
-      b.style.setProperty('--pe-rest-color', cs.color);
-      b.style.setProperty('--pe-fx-bg', cs.color);
-      b.style.setProperty('--pe-fx-ink', surfaceBg(b));
-      anchor(b);
-      b.classList.add('pe-pwr');
-      n++;
+      if (powerOne(b)) n++;
     });
     return n;
   }
+  function powerOne(b) {
+    if (!(b.textContent || '').trim()) return false;
+    var cs = getComputedStyle(b);
+    wrapLabel(b, 'pe-pwr_label');
+    b.style.setProperty('--pe-rest-bg', cs.backgroundColor);
+    b.style.setProperty('--pe-rest-color', cs.color);
+    b.style.setProperty('--pe-fx-bg', cs.color);
+    b.style.setProperty('--pe-fx-ink', surfaceBg(b));
+    anchor(b);
+    b.classList.add('pe-pwr');
+    return true;
+  }
+
+  /* PLATFORM CONTROLS (Entropical embeds: packs dialogs, cart pack block,
+     "También con pack"). They are drawn after this script runs, so they
+     are dressed on demand: the first time the pointer or keyboard focus
+     reaches one, it gets the family of its role (UI contract:
+     data-ep-role). primary / secondary = slide, quiet = power on,
+     chip = ticker; link, close and option stay plain. Until the app
+     release with roles is live, PLATFORM_FALLBACK maps today's classes.
+     A label the platform rewrites later (busy state, price) is picked up
+     again on the next hover. Reduced motion is handled by pe-motion.css
+     for these classes like for every site button. */
+  var ROLE_FX = { primary: riseOne, secondary: riseOne, quiet: powerOne, chip: tickOne };
+  var PLATFORM_FALLBACK = [
+    ['.ep-btn.ep-secondary', 'secondary'], ['.ep-btn', 'primary'], ['.cart-pack_btn', 'primary'],
+    ['.ep-covers-btn', 'chip'], ['.cart-modal_refresh-btn', 'quiet'], ['.cart-modal_clear-btn', 'quiet']
+  ];
+  var PLATFORM_SEL = '[data-ep-role], ' + PLATFORM_FALLBACK.map(function (p) { return p[0]; }).join(', ');
+  function platformRole(b) {
+    var r = b.getAttribute('data-ep-role');
+    if (r) return r;
+    for (var i = 0; i < PLATFORM_FALLBACK.length; i++) if (b.matches(PLATFORM_FALLBACK[i][0])) return PLATFORM_FALLBACK[i][1];
+    return null;
+  }
+  function dressPlatform(e) {
+    var b = e.target && e.target.closest && e.target.closest(PLATFORM_SEL);
+    if (!b || /^(INPUT|SELECT|TEXTAREA)$/.test(b.tagName) || b.getAttribute('aria-busy') === 'true') return;
+    if (claimed(b)) {
+      // the platform rewrote the label since: refit the rising copy
+      var alt = b.querySelector('.pe-rise_alt');
+      var now = (b.querySelector('.pe-rise_label') || b).textContent.replace(/\s+/g, ' ').trim();
+      if (alt && now && alt.__peLabel !== now) { alt.__peLabel = alt.__peWant = now; fitRise(b); }
+      return;
+    }
+    var fx = ROLE_FX[platformRole(b)];
+    if (fx && RISE_PAGES.test(location.pathname.replace(/\/$/, ''))) fx(b);
+  }
+  document.addEventListener('pointerover', dressPlatform, true);
+  document.addEventListener('focusin', dressPlatform, true);
   // icon-only buttons (the navbar cart): the same slide inside a clipped
   // inner layer, so a badge poking out of the corner is never cut
   var RISE_ICON_SEL = 'button.cart-header_button';
@@ -688,6 +735,15 @@
     });
     return n;
   }
+  // cart buttons created after load (the one next to every Reservar, js/pe-booking-flow.js)
+  // get the same slide the first time a pointer or focus reaches them
+  function dressIcon(e) {
+    var b = e.target && e.target.closest && e.target.closest(RISE_ICON_SEL);
+    if (!b || b.classList.contains('pe-rise-icon') || !RISE_PAGES.test(location.pathname.replace(/\/$/, ''))) return;
+    riseIcons(b.parentNode);
+  }
+  document.addEventListener('pointerover', dressIcon, true);
+  document.addEventListener('focusin', dressIcon, true);
   function buttonFx(root) {
     if (!RISE_PAGES.test(location.pathname.replace(/\/$/, ''))) return {};
     // small first, so a small flat chip is claimed by the ticker

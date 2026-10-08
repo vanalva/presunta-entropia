@@ -28,15 +28,15 @@
   };
   var FONT = "'Space Grotesk', sans-serif";
   var GALLERY = [
-    { src: 'assets/images/home-2026-10/grupo-amigos-cocina-800.webp', cap: 'Cocinar juntos' },
-    { src: 'assets/images/home-2026-10/pareja-curso-cocina-madrid-800.webp', cap: 'Cocinar en pareja' },
-    { src: 'assets/images/home-2026-10/ninos-curso-cocina-800.webp', cap: 'Pequeños chefs' },
-    { src: 'assets/images/home-2026-10/foto-trasera-delantal-curso-800.webp', cap: 'Taller en marcha' },
-    { src: 'assets/images/home-2026-10/muestra-plato-mano-800.webp', cap: 'El emplatado' },
-    { src: 'assets/images/home-2026-10/riendo-retrato-800.webp', cap: 'Lo memorable' },
-    { src: 'assets/images/home-2026-10/riendo-comida-800.webp', cap: 'La sobremesa' },
-    { src: 'assets/images/home-2026-10/local-sala-principal-800.webp', cap: 'Zurbano 83' },
-    { src: 'assets/images/home-2026-10/local-cocina-800.webp', cap: 'La cocina' }
+    { src: 'assets/images/home-2026-10/grupo-amigos-cocina-1600.webp', cap: 'Cocinar juntos' },
+    { src: 'assets/images/home-2026-10/pareja-curso-cocina-madrid-1600.webp', cap: 'Cocinar en pareja' },
+    { src: 'assets/images/home-2026-10/ninos-curso-cocina-1600.webp', cap: 'Pequeños chefs' },
+    { src: 'assets/images/home-2026-10/foto-trasera-delantal-curso-1600.webp', cap: 'Taller en marcha' },
+    { src: 'assets/images/home-2026-10/muestra-plato-mano-1600.webp', cap: 'El emplatado' },
+    { src: 'assets/images/home-2026-10/riendo-retrato-1600.webp', cap: 'Lo memorable' },
+    { src: 'assets/images/home-2026-10/riendo-comida-1600.webp', cap: 'La sobremesa' },
+    { src: 'assets/images/home-2026-10/local-sala-principal-1600.webp', cap: 'Zurbano 83' },
+    { src: 'assets/images/home-2026-10/local-cocina-1600.webp', cap: 'La cocina' }
   ];
   var VIDEO_SRC = 'https://res.cloudinary.com/dn53emznt/video/upload/v1763080295/presunta-entropia_bgg2ln.mp4';
   var MESES = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC'];
@@ -1139,7 +1139,17 @@
         // an add is already on its way: no second click, just show where it stands again
         if (cartBusy) { toast('Carrito', { value: cartPending, ms: cartPending === 'En camino' ? 2400 : 9000 }); return; }
         var btn = null;
-        try { btn = document.querySelector('#modal-1 [data-cart-add][data-item-id="' + (window.CSS && CSS.escape ? CSS.escape(s.itemId) : s.itemId) + '"]'); } catch (e) {}
+        var q = window.CSS && CSS.escape ? CSS.escape(s.itemId) : s.itemId;
+        // the cart button next to a Reservar (js/pe-booking-flow.js adds it); none rendered for this
+        // session (another month, another tab) = a hidden one, same one-click add
+        try { btn = document.querySelector('[data-pe-cart-add][data-item-id="' + q + '"], [data-cart-add][data-item-id="' + q + '"]'); } catch (e) {}
+        if (!btn && window.EntropicalCart) {
+          btn = document.createElement('a');
+          btn.href = '#'; btn.hidden = true;
+          btn.setAttribute('data-pe-cart-add', ''); btn.setAttribute('data-item-id', s.itemId);
+          document.body.appendChild(btn);
+          setTimeout(function (b) { return function () { b.remove(); }; }(btn), 0);
+        }
         if (btn) {
           // sold out only when the page's live seat count for this session says 0
           // (the cart itself disables its button during every add, so that is no signal)
@@ -1871,6 +1881,19 @@
       need = Math.max(need, rg.getBoundingClientRect().right);
     });
     var GAP = 48;
+    // The parked menu-only console (inner pages) has a fixed 500px box, so on
+    // narrower screens the width limit used to shrink it below full height,
+    // under CERRAR. Like the home console (which reflows to its hero slot), it
+    // narrows its own box until full height fits beside the menu.
+    if (hostEl.hasAttribute('data-pe-menu-only')) {
+      var sH = Math.min(1.25, (window.innerHeight - 48) / r.height);
+      var maxW = Math.floor((vw - 24 - GAP - need) / sH);
+      if (r.width > maxW) {
+        var w = Math.max(260, maxW);
+        hostEl.style.width = w + 'px';
+        r = { width: w, height: r.height };
+      }
+    }
     var s = Math.min(1.25, (window.innerHeight - 48) / r.height, (vw - 24 - GAP - need) / r.width);
     s = Math.max(0.4, s);
     var de = document.documentElement;
@@ -1959,6 +1982,11 @@
     booted = true;
   }
   function openNav(mode) {
+    // MENU is a deliberate request: wake the screen first, or the resting
+    // saver (or a switched-off screen) stays on top and hides the menu
+    consoleIdle = 0; restT = 0; restN = 0;
+    if (screenDvd && screenDvd.on && screenDvd.mode === 'idle') screenDvd.hide();
+    if (bright === 0) powerOn();
     navMode = mode;
     if (current !== navView) navPrev = current;
     if (mode === 'side' || mode === 'sheet') { dock(mode); bootNow(); kick(); }
@@ -3619,9 +3647,15 @@
       if (booted) return;                     // bootNow() got there first
       ledEl.classList.add('is-on');
       offEl.classList.add('is-gone');
+      // docked as the site menu before it ever booted: keep the menu up.
+      // Otherwise the console wakes on the launcher with the FECHAS card
+      // selected (Juan, 8 Oct: the card, not the opened app); A opens it.
+      if (current !== navView) {
+        var hasFechas = false;
+        apps.forEach(function (a) { if (a.id === 'fechas') hasFechas = true; });
+        if (hasFechas) { launcher.focus('fechas'); go(launcher); } else go(attract);
+      }
       booted = true;
-      // docked as the site menu before it ever booted: keep the menu up
-      if (current !== navView) go(attract);
       assist('boot');
     }, 1900);
   }

@@ -1,0 +1,413 @@
+/* ============================================================
+   PRESUNTA ENTROPÍA — one skin for everything the platform injects
+   (site-fixes 2026-10-08, Juan: "unify everything external, use our
+   tokens, reuse our styles, don't hard-code").
+
+   EMBED-ONLY (Webflow: one site-wide <style> embed, after pe-packs.css).
+   Entropical's scripts draw their own UI (webflow-packs.js: buy / gift /
+   redeem dialogs, "También con pack"; webflow-cart.js: the pack block
+   and chooser in the cart, toasts, loading overlay; webflow-checkout.js:
+   loading overlay). Their injected <style> lands late in <head>, so
+   every rule here starts with `body` to outrank it.
+
+   No colour, radius or stroke is written by hand: every value is a site
+   token, and every part takes the recipe of the site component it
+   matches (reference values measured on the live site 2026-10-08):
+
+     PANEL      aztec, cream stroke, card radius, no shadow   (cart sidebar)
+     TITLE      1.25rem, medium, uppercase, 0.02em            (cart title)
+     CLOSE      40px square, cream stroke, control radius      (cart close)
+     PRIMARY    transparent, yellow-dark stroke, yellow text,
+                yellow-dark volume, control radius, uppercase  (.button)
+     SECONDARY  same in cream                                  (.button.is-secondary.is-alternate)
+     QUIET      secondary without volume                       (.is-simple)
+     LINK       yellow, underlined                             (cart pack toggle)
+     FIELD      transparent, cream stroke, control radius;
+                focus = stroke turns yellow                    (footer newsletter)
+     LABEL      small, uppercase, cream-dark                   (checkout labels)
+     CHECKBOX   20px, cream stroke, control-sm radius          (.pe-newsletter_check)
+     BOX        transparent, cream hairline, card radius       (checkout cart line)
+     CHIP       stroke, tag radius, uppercase label            (.tag)
+     OVERLAY    the smart glass                                (pe-overlays.css)
+   ============================================================ */
+
+:root {
+  /* shared recipe values (all tokens) */
+  --pe-ui-stroke: var(--border-width--main);
+  --pe-ui-frame: var(--pe---border-width);
+  --pe-ui-line: color-mix(in srgb, var(--pe---color--stark-white) 35%, transparent);
+  --pe-ui-divider: color-mix(in srgb, var(--pe---color--stark-white) 20%, transparent);
+  --pe-ui-font: var(--_typography-primitives---font-styles--heading);
+
+  /* webflow-packs.js theming API: its own fallbacks are neutral grey/blue */
+  --ep-font: var(--pe-ui-font);
+  --ep-color-bg: var(--pe---color--aztec);
+  --ep-color-text: var(--pe---color--stark-white);
+  --ep-color-muted: var(--pe---color--stark-white-dark);
+  --ep-color-surface: transparent;
+  --ep-color-border: var(--pe-ui-line);
+  --ep-color-accent: var(--pe---color--fuel-yellow);
+  --ep-color-accent-text: var(--pe---color--aztec);
+  --ep-color-focus: var(--pe---color--fuel-yellow);
+  --ep-color-error: var(--pe---color--mule-fawn-light);
+  --ep-color-error-bg: transparent;
+  --ep-color-success: var(--pe---color--fuel-yellow);
+  --ep-color-error-on-dark: var(--pe---color--mule-fawn-light);
+  --ep-color-focus-on-dark: var(--pe---color--fuel-yellow);
+  /* webflow-cart.js / webflow-checkout.js (themeable since 2026-10-08): dark-surface parts */
+  --ep-color-text-on-dark: var(--pe---color--stark-white);
+  --ep-color-bg-on-dark: var(--pe---color--aztec);
+  --ep-color-accent-strong: var(--pe---color--fuel-yellow-dark);
+  --ep-shadow: none;
+  --ep-radius: var(--_radius---card);
+  --ep-overlay: var(--pe-glass-tint);
+}
+/* the same scripts on cream sections ("También con pack" on the taller page) */
+.pe-ep-light {
+  --ep-color-bg: var(--pe---color--stark-white);
+  --ep-color-text: var(--pe---color--aztec);
+  --ep-color-muted: var(--pe---color--stark-white-darkest);
+  --ep-color-border: var(--pe---color--aztec);
+  --ep-color-focus: var(--pe---color--mule-fawn-dark);
+  --ep-color-error: var(--pe---color--mule-fawn-dark);
+  --ep-color-success: var(--pe---color--mule-fawn-dark);
+  --pe-ui-line: color-mix(in srgb, var(--pe---color--aztec) 35%, transparent);
+}
+
+/* ---------- PANEL ---------- */
+/* native pickers (date, select) draw light-on-dark inside the dark dialogs */
+body .ep-scope.ep-backdrop,
+body .ep-backdrop .ep-dialog { color-scheme: dark; }
+body .pe-ep-light .ep-scope { color-scheme: light; }
+body .ep-backdrop .ep-dialog,
+body .cart-packchoice {
+  background: var(--pe---color--aztec);
+  color: var(--pe---color--stark-white);
+  border: var(--pe-ui-frame) solid var(--pe---color--stark-white);
+  border-radius: var(--_radius---card);
+  box-shadow: none;
+  font-family: var(--pe-ui-font);
+}
+body .ep-backdrop .ep-dialog { overflow: hidden; }
+@media (max-width: 599px) {
+  /* bottom sheet on phones: open bottom edge */
+  body .ep-backdrop .ep-dialog { border-bottom-width: 0; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+}
+body .ep-scope .ep-head { padding: var(--_spacing---space--4) var(--_spacing---space--4) var(--_spacing---space--3); border-bottom: 1px solid var(--pe-ui-divider); align-items: center; }
+body .ep-scope .ep-body { padding: var(--_spacing---space--4) var(--_spacing---space--4) 0; }
+body .ep-scope .ep-footer { margin-left: calc(-1 * var(--_spacing---space--4)); margin-right: calc(-1 * var(--_spacing---space--4)); padding-left: var(--_spacing---space--4); padding-right: var(--_spacing---space--4); background: var(--pe---color--aztec); border-top: 1px solid var(--pe-ui-divider); }
+
+/* inline redeem flow (/canjear-pack): the hero panel is the frame, so no second one */
+body .ep-scope.ep-inline { max-width: none; width: 100%; }
+body .pe-redeem_panel .ep-scope.ep-inline { padding: 0; border: 0; background: transparent; }
+body .ep-scope.ep-inline .ep-body { padding-left: 0; padding-right: 0; }
+body .ep-scope.ep-inline .ep-footer { margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; background: transparent; }
+
+/* ---------- TITLE / TEXT ---------- */
+body .ep-scope .ep-title,
+body .cart-packchoice .cart-packchoice_title {
+  font-family: var(--pe-ui-font);
+  font-size: 1.25rem;
+  font-weight: var(--_typography---weight--medium);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--pe---color--stark-white);
+}
+body .ep-scope .ep-h,
+body .ep-scope .ep-card-title { font-weight: var(--_typography---weight--medium); }
+body .ep-scope .ep-lead,
+body .ep-scope .ep-small,
+body .ep-scope .ep-hint,
+body .ep-scope .ep-opt,
+body .ep-scope .ep-count { color: var(--ep-color-muted); font-weight: var(--_typography---weight--light); }
+body .ep-scope .ep-err { color: var(--ep-color-error); font-weight: var(--_typography---weight--medium); }
+/* the site's LUMOS line-height trim collapses the scripts' own text spacing */
+html body .ep-scope.ep-scope :is(h1, h2, h3, h4, h5, h6, p)::before,
+html body .ep-scope.ep-scope :is(h1, h2, h3, h4, h5, h6, p)::after,
+html body .cart-pack.cart-pack :is(h1, h2, h3, h4, h5, h6, p)::before,
+html body .cart-pack.cart-pack :is(h1, h2, h3, h4, h5, h6, p)::after,
+html body .cart-packchoice :is(h1, h2, h3, h4, h5, h6, p)::before,
+html body .cart-packchoice :is(h1, h2, h3, h4, h5, h6, p)::after { content: none; display: none; margin: 0; }
+body .ep-scope .ep-facts li { margin: 0; padding-left: 0; }
+
+/* ---------- CLOSE ---------- */
+body .ep-scope .ep-close,
+body .cart-notification .cart-notification-close {
+  width: 2.5rem;
+  height: 2.5rem;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: var(--pe-ui-stroke) solid var(--pe---color--stark-white);
+  border-radius: var(--_radius---control);
+  color: var(--pe---color--stark-white);
+  font-size: 1.25rem;
+  font-weight: var(--_typography---weight--light);
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+body .ep-scope .ep-close:hover,
+body .cart-notification .cart-notification-close:hover { background: transparent; border-color: var(--pe---color--fuel-yellow); color: var(--pe---color--fuel-yellow); }
+
+/* ---------- PRIMARY ---------- */
+body .ep-scope .ep-btn,
+body .cart-pack .cart-pack_btn {
+  background: transparent;
+  color: var(--pe---color--fuel-yellow);
+  border: var(--pe-ui-stroke) solid var(--pe---color--fuel-yellow-dark);
+  border-radius: var(--_radius---control);
+  box-shadow: 0 var(--pe---volume) 0 0 var(--pe---color--fuel-yellow-dark);
+  font-family: var(--pe-ui-font);
+  font-weight: var(--_typography---weight--semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  filter: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+body .ep-scope .ep-btn { min-height: 3rem; margin-bottom: var(--pe---volume); }
+body .ep-scope .ep-btn:hover,
+body .cart-pack .cart-pack_btn:hover { background: transparent; color: var(--pe---color--fuel-yellow); filter: none; }
+body .ep-scope .ep-btn:active,
+body .cart-pack .cart-pack_btn:active { transform: translate(0, var(--pe---volume)); box-shadow: 0 0 0 0 var(--pe---color--fuel-yellow-dark); }
+body .ep-scope .ep-btn[disabled],
+body .ep-scope .ep-btn[aria-disabled="true"],
+body .cart-pack .cart-pack_btn:disabled { opacity: 0.5; box-shadow: none; transform: none; }
+
+/* ---------- SECONDARY ---------- */
+body .ep-scope .ep-btn.ep-secondary {
+  color: var(--pe---color--stark-white);
+  border-color: var(--pe---color--stark-white);
+  box-shadow: 0 var(--pe---volume) 0 0 var(--pe---color--stark-white);
+}
+body .ep-scope .ep-btn.ep-secondary:hover { background: transparent; color: var(--pe---color--stark-white); }
+body .ep-scope .ep-btn.ep-secondary:active { box-shadow: 0 0 0 0 var(--pe---color--stark-white); }
+
+/* ---------- LINK ---------- */
+body .ep-scope .ep-linkbtn,
+body .ep-scope .ep-alert-actions a,
+body .ep-scope .ep-alert-actions button,
+body .ep-scope .ep-check a,
+body .cart-pack .cart-pack_toggle,
+body .cart-packchoice .cart-packchoice_cancel,
+body .cart-notification .cart-notification-link {
+  font-family: var(--pe-ui-font);
+  font-size: var(--_typography---font-size--text-small);
+  font-weight: var(--_typography---weight--medium);
+  color: var(--pe---color--fuel-yellow);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+body .ep-scope .ep-check a { color: inherit; font-size: inherit; }
+
+/* ---------- FIELD ---------- */
+body .ep-scope .ep-input,
+body .cart-pack .cart-pack_input {
+  min-height: 3.25rem;
+  padding: 0 var(--_spacing---space--3);
+  background: transparent;
+  color: var(--pe---color--stark-white);
+  border: var(--pe-ui-stroke) solid var(--pe---color--stark-white);
+  border-radius: var(--_radius---control);
+  box-shadow: none;
+  font-family: var(--pe-ui-font);
+  transition: border-color 0.2s ease;
+}
+body .ep-scope textarea.ep-input { padding-top: var(--_spacing---space--2); padding-bottom: var(--_spacing---space--2); }
+body .ep-scope .ep-input::placeholder,
+body .cart-pack .cart-pack_input::placeholder { color: var(--pe---color--stark-white-dark); opacity: 1; }
+body .ep-scope .ep-input:focus,
+body .cart-pack .cart-pack_input:focus,
+body .cart-pack .cart-pack_input:focus-visible { outline: none; box-shadow: none; border-color: var(--pe---color--fuel-yellow); }
+body .ep-scope .ep-input[aria-invalid="true"] { border-color: var(--ep-color-error); }
+body .ep-scope .ep-codebox { font-family: var(--pe-ui-font); font-weight: var(--_typography---weight--semibold); }
+
+/* ---------- LABEL ---------- */
+body .ep-scope .ep-label,
+body .ep-scope .ep-fieldset legend,
+body .ep-scope .ep-steps-text,
+body .ep-scope .ep-covers-label,
+body .cart-pack .cart-pack_label {
+  font-family: var(--pe-ui-font);
+  font-size: var(--_typography---font-size--text-small);
+  font-weight: var(--_typography---weight--semibold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ep-color-muted);
+  opacity: 1;
+}
+
+/* ---------- CHECKBOX ---------- */
+body .ep-scope .ep-check input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 2px 0 0;
+  background: transparent;
+  border: var(--pe-ui-stroke) solid currentColor;
+  border-radius: var(--_radius---control-sm);
+  cursor: pointer;
+}
+body .ep-scope .ep-check input[type="checkbox"]:checked { background: currentColor; box-shadow: inset 0 0 0 3px var(--ep-color-bg); }
+body .ep-scope .ep-check input[type="checkbox"]:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+
+/* ---------- SWITCH ("Es un regalo") ---------- */
+body .ep-scope .ep-switch { background: transparent; border: 1px solid var(--pe-ui-line); border-radius: var(--_radius---card); }
+body .ep-scope .ep-switch.is-on { border-color: var(--pe---color--fuel-yellow-dark); }
+body .ep-scope .ep-switch-title { font-weight: var(--_typography---weight--medium); }
+body .ep-scope .ep-track { background: transparent; border: var(--pe-ui-stroke) solid var(--pe---color--stark-white); border-radius: var(--_radius---control-sm); }
+body .ep-scope .ep-track::after { top: 2px; left: 2px; background: var(--pe---color--stark-white); border-radius: var(--_radius---xs); box-shadow: none; }
+body .ep-scope .ep-switch input:checked + .ep-track { background: var(--pe---color--fuel-yellow); border-color: var(--pe---color--fuel-yellow); }
+body .ep-scope .ep-switch input:checked + .ep-track::after { background: var(--pe---color--aztec); }
+
+/* ---------- BOX (summaries, previews, details, sessions) ---------- */
+body .ep-scope .ep-card,
+body .ep-scope .ep-preview,
+body .ep-scope .ep-more,
+body .ep-scope .ep-fieldset,
+body .ep-scope .ep-details,
+body .ep-scope .ep-session,
+body .cart-packchoice .cart-packchoice_btn {
+  background: transparent;
+  color: inherit;
+  border: 1px solid var(--pe-ui-line);
+  border-radius: var(--_radius---card);
+  box-shadow: none;
+}
+body .ep-scope .ep-session:hover,
+body .cart-packchoice .cart-packchoice_btn:hover { border-color: var(--pe---color--stark-white); }
+body .ep-scope .ep-session.is-selected { background: transparent; border-color: var(--pe---color--fuel-yellow); box-shadow: none; }
+body .ep-scope .ep-date { background: transparent; border: var(--pe-ui-stroke) solid var(--pe---color--stark-white); border-radius: var(--_radius---control); }
+body .ep-scope .ep-session.is-selected .ep-date { background: var(--pe---color--fuel-yellow); border-color: var(--pe---color--fuel-yellow); color: var(--pe---color--aztec); }
+body .ep-scope .ep-date-d { font-weight: var(--_typography---weight--medium); }
+body .ep-scope .ep-thumb { border-radius: var(--_radius---control); background: var(--pe---color--english-walnut); }
+body .ep-scope .ep-seats { color: var(--pe---color--fuel-yellow); }
+body .ep-scope .ep-seats.is-low { color: var(--pe---color--mule-fawn-light); }
+body .ep-scope .ep-quote { background: transparent; border-left: 2px solid var(--pe---color--fuel-yellow); border-radius: 0; }
+body .ep-scope .ep-alert { background: transparent; border: var(--pe-ui-stroke) solid var(--pe---color--mule-fawn-light); border-radius: var(--_radius---card); color: var(--pe---color--stark-white); }
+body .ep-scope .ep-alert.is-info { border-color: var(--pe-ui-line); }
+body .cart-packchoice .cart-packchoice_btn { color: var(--pe---color--stark-white); font-family: var(--pe-ui-font); }
+body .cart-packchoice .cart-packchoice_label { font-weight: var(--_typography---weight--medium); }
+body .cart-packchoice .cart-packchoice_hint { color: var(--pe---color--stark-white-dark); opacity: 1; }
+
+/* ---------- PROGRESS + SUCCESS ---------- */
+body .ep-scope .ep-steps-bar li { height: 3px; border-radius: 0; background: var(--pe-ui-divider); }
+body .ep-scope .ep-steps-bar li.is-done { background: var(--pe---color--fuel-yellow); }
+body .ep-scope .ep-tick { border-radius: var(--_radius---control); background: var(--pe---color--fuel-yellow); }
+body .ep-scope .ep-tick::after { border-color: var(--pe---color--aztec); }
+body .ep-scope .ep-spinner { border-color: var(--pe-ui-divider); border-top-color: var(--pe---color--fuel-yellow); }
+
+/* ---------- CHIP ("También con pack") ---------- */
+body .ep-scope.ep-covers { font-family: var(--pe-ui-font); }
+body .ep-scope .ep-covers-btn {
+  min-height: 2.75rem;
+  padding: var(--_spacing---space--1) var(--_spacing---space--2);
+  background: transparent;
+  color: var(--ep-color-text);
+  border: var(--pe-ui-stroke) solid currentColor;
+  border-radius: var(--_radius---tag);
+  font-family: var(--pe-ui-font);
+  font-size: var(--_typography---font-size--text-small);
+  font-weight: var(--_typography---weight--semibold);
+  text-transform: uppercase;
+}
+body .ep-scope .ep-covers-btn:hover { border-color: var(--pe---color--fuel-yellow-dark); }
+
+/* ---------- FOCUS (one ring for every platform control) ---------- */
+body .ep-scope .ep-btn:focus-visible,
+body .ep-scope .ep-close:focus-visible,
+body .ep-scope .ep-linkbtn:focus-visible,
+body .ep-scope .ep-covers-btn:focus-visible,
+body .ep-scope .ep-details summary:focus-visible,
+body .ep-scope .ep-switch input:focus-visible + .ep-track,
+body .ep-scope .ep-session:focus-within,
+body .cart-pack button:focus-visible,
+body .cart-packchoice button:focus-visible,
+body .cart-notification a:focus-visible,
+body .cart-notification button:focus-visible { outline: 2px solid var(--ep-color-focus); outline-offset: 3px; }
+
+/* ---------- CART: pack block (webflow-cart.js) ---------- */
+body div.cart-pack { margin-top: var(--_spacing---space--3); padding-top: var(--_spacing---space--3); border-top: 1px dashed var(--pe-ui-line); font-family: var(--pe-ui-font); color: var(--pe---color--stark-white); }
+body .cart-pack .cart-pack_form { gap: var(--_spacing---space--2); }
+body .cart-pack .cart-pack_btn { min-height: 3.25rem; padding: 0 var(--_spacing---space--3); margin-bottom: var(--pe---volume); }
+body .cart-pack .cart-pack_input { letter-spacing: 0.08em; text-transform: uppercase; }
+/* the script sets font: inherit, which picks up the panel's large text: same sizes as the cart's own pay button and fields */
+body .cart-pack .cart-pack_btn { font-size: var(--_typography---font-size--text-small); }
+body .cart-pack .cart-pack_input { font-size: var(--_typography---font-size--text-main); }
+body .cart-modal_component .cart-modal_checkout-btn,
+body .cart-modal_component .cart-modal_refresh-btn,
+body .cart-modal_component .cart-modal_clear-btn { font-weight: var(--_typography---weight--semibold); }
+body .cart-pack .cart-pack_msg,
+body .cart-pack .cart-pack_hint,
+body .cart-pack .cart-pack_line-note { color: var(--pe---color--stark-white-dark); opacity: 1; font-size: var(--_typography---font-size--text-small); }
+body .cart-pack .cart-pack_summary { color: var(--pe---color--fuel-yellow); font-size: var(--_typography---font-size--text-small); font-weight: var(--_typography---weight--semibold); }
+body .cart-pack .cart-pack_line { border-top: 1px solid var(--pe-ui-divider); font-size: var(--_typography---font-size--text-small); }
+body .cart-item .cart-item_unavailable-msg { color: var(--pe---color--mule-fawn-light); }
+
+/* ---------- CART: sidebar controls (page markup, shared with the embed on every page) ---------- */
+body .cart-modal_component .cart-item_qty-btn {
+  width: 2rem;
+  height: 2rem;
+  border: var(--pe-ui-stroke) solid var(--pe---color--stark-white);
+  border-radius: var(--_radius---control-sm);
+  background: transparent;
+  color: var(--pe---color--stark-white);
+}
+body .cart-modal_component .cart-item_qty-btn:hover { border-color: var(--pe---color--fuel-yellow); color: var(--pe---color--fuel-yellow); background: transparent; }
+body .cart-modal_component .cart-modal_refresh-btn,
+body .cart-modal_component .cart-modal_clear-btn {
+  border: var(--pe-ui-stroke) solid var(--pe---color--stark-white);
+  border-radius: var(--_radius---control-sm);
+  background: transparent;
+  color: var(--pe---color--stark-white);
+  font-family: var(--pe-ui-font);
+  font-weight: var(--_typography---weight--semibold);
+}
+body .cart-modal_component .cart-modal_refresh-btn:hover,
+body .cart-modal_component .cart-modal_clear-btn:hover { border-color: var(--pe---color--fuel-yellow); color: var(--pe---color--fuel-yellow); background: transparent; }
+
+/* ---------- TOAST (cart notifications) ---------- */
+body .cart-notification {
+  top: var(--_spacing---space--4);
+  right: var(--_spacing---space--4);
+  padding: var(--_spacing---space--3) calc(2.5rem + var(--_spacing---space--3)) var(--_spacing---space--3) var(--_spacing---space--3);
+  background: var(--pe---color--aztec);
+  color: var(--pe---color--stark-white);
+  border: var(--pe-ui-frame) solid var(--pe---color--stark-white);
+  border-radius: var(--_radius---card);
+  box-shadow: none;
+  font-family: var(--pe-ui-font);
+  font-size: var(--_typography---font-size--text-small);
+}
+body .cart-notification.cart-notification-success,
+body .cart-notification.cart-notification-warning { border-color: var(--pe---color--fuel-yellow-dark); }
+body .cart-notification.cart-notification-error { border-color: var(--pe---color--mule-fawn-light); }
+body .cart-notification .cart-notification-close { position: absolute; top: var(--_spacing---space--2); right: var(--_spacing---space--2); width: 2rem; height: 2rem; }
+body .cart-notification .cart-notification-close-line-top,
+body .cart-notification .cart-notification-close-line-bottom { width: 12px; height: 1.5px; background-color: currentColor; }
+body .cart-notification .cart-notification-close:hover .cart-notification-close-line-top,
+body .cart-notification .cart-notification-close:hover .cart-notification-close-line-bottom { background-color: currentColor; }
+
+/* ---------- LOADING (cart + checkout): the smart glass ---------- */
+body .cart-loading-overlay,
+body #checkout-loading {
+  background: var(--pe-glass-tint);
+  -webkit-backdrop-filter: var(--pe-glass-blur);
+  backdrop-filter: var(--pe-glass-blur);
+  color: var(--pe---color--stark-white);
+  font-family: var(--pe-ui-font);
+}
+body .cart-loading-overlay .cart-loading-content { color: var(--pe---color--stark-white); }
+body .cart-loading-overlay .cart-loading-spinner { border-color: var(--pe-ui-divider); border-top-color: var(--pe---color--fuel-yellow); }
+body .cart-loading-overlay .cart-loading-message { font-weight: var(--_typography---weight--medium); text-transform: uppercase; letter-spacing: 0.02em; }
+body .cart-loading-overlay .cart-loading-submessage { color: var(--pe---color--stark-white-dark); opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  body .cart-notification,
+  body .ep-backdrop .ep-dialog,
+  body .ep-scope .ep-tick { animation: none; }
+  body .ep-scope .ep-btn,
+  body .cart-pack .cart-pack_btn { transition: none; }
+}

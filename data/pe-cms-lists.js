@@ -39,7 +39,7 @@
 
     /* ---------- A. talleres_card grids + swiper card lists ---------- */
     function hydrateTalleresCards(db) {
-        document.querySelectorAll('.w-dyn-items').forEach(function (list) {
+        document.querySelectorAll('.w-dyn-items:not([data-pe-tcards])').forEach(function (list) {
             var tpl = list.querySelector('.talleres_card.w-dyn-item');
             if (!tpl || !tpl.querySelector('.w-dyn-bind-empty')) return;
             var wrap = list;
@@ -134,10 +134,18 @@
                     if (t.classList.contains('is-filter-fomo-tag')) t.style.display = left > 0 && left <= 3 ? '' : 'none';
                     else t.style.display = 'none';
                 });
-                // bookings go through the calendar modal's date cards, never from this list
+                // Reservar on a dated session puts it straight in the cart
+                // (js/pe-booking-flow.js, [data-pe-add]); no modal detour.
+                // Webflow: bind data-item-id to the CMS field entropical-id.
                 card.querySelectorAll('[data-cart-add]').forEach(function (b) { b.remove(); });
                 card.querySelectorAll('a').forEach(function (a) {
-                    if (/RESERVA/i.test(a.textContent)) { a.setAttribute('data-modal-open', 'modal-1'); a.setAttribute('data-booking-item', it.slug); }
+                    if (/RESERVA/i.test(a.textContent)) {
+                        a.removeAttribute('data-modal-open');
+                        a.setAttribute('data-pe-add', '');
+                        a.setAttribute('data-item-id', ses.itemId || it.entropicalId || '');
+                        a.setAttribute('data-booking-item', it.slug);
+                        a.setAttribute('aria-label', 'Reservar ' + it.name + ', ' + DIAS[d.getDay()] + ' ' + d.getDate() + ' ' + MESES[d.getMonth()]);
+                    }
                 });
                 // any remaining unfilled binds: hide
                 card.querySelectorAll('.w-dyn-bind-empty').forEach(function (e) { e.style.display = 'none'; });
@@ -146,6 +154,9 @@
                 card.querySelectorAll('a').forEach(function (a) {
                     if (/SABER|VER/i.test(a.textContent)) a.href = href;
                 });
+                // the whole card opens the detail page (title/Saber más stay real links)
+                card.setAttribute('data-pe-card-href', href);
+                card.style.cursor = 'pointer';
                 host.appendChild(card);
             });
             tpl.remove();
@@ -213,9 +224,106 @@
         });
     }
 
+    /* ---------- E. pe-tcard: the workshop card (listing + similares) ----------
+       One template per list: [data-pe-tcards] > [data-pe-tcard-template].
+       Order: dated sessions first (soonest first), then "Próximamente".
+       Optional on the list: data-pe-tcards-exclude="<slug>" (the current
+       item on its own page; "auto" = ?slug=), data-pe-tcards-limit="6".
+       Webflow: the CMS list renders one card per item; bind
+         image -> hero-image, name -> name (link: item page),
+         summary -> short-description, price -> price-current,
+         seats -> seats-left / capacity-total, date badge -> next-session-at,
+         Reservar data-item-id -> entropical-id (hide when no future date). */
+    var MESES_LARGO = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+    function hydrateTcards(db) {
+        document.querySelectorAll('[data-pe-tcards]').forEach(function (list) {
+            var tpl = list.querySelector('[data-pe-tcard-template]');
+            if (!tpl || !tpl.querySelector('.w-dyn-bind-empty')) return;
+            var ex = list.getAttribute('data-pe-tcards-exclude');
+            if (ex === 'auto') ex = new URLSearchParams(location.search).get('slug') || (db.talleres[0] && db.talleres[0].slug);
+            var limit = parseInt(list.getAttribute('data-pe-tcards-limit'), 10) || 99;
+            // data-pe-tcards-person="auto": only the workshops of the profile on screen (persona.html?slug=)
+            var who = list.getAttribute('data-pe-tcards-person');
+            var person = who && db.findPersona ? db.findPersona(who === 'auto' ? new URLSearchParams(location.search).get('slug') : who) : null;
+            var items = db.talleres.filter(function (it) {
+                if (it.slug === ex) return false;
+                if (who) return !!(person && person.items && person.items.indexOf(it.slug) !== -1);
+                return true;
+            }).map(function (it) {
+                return { it: it, ses: firstSession(db, it.slug) };
+            });
+            items.sort(function (a, b) {
+                if (a.ses && b.ses) return a.ses.iso < b.ses.iso ? -1 : 1;
+                return a.ses ? -1 : b.ses ? 1 : 0;
+            });
+            items.slice(0, limit).forEach(function (x) {
+                var it = x.it, ses = x.ses;
+                // the Explorador card (js/pe-explorer.js) when it is on the page: one card site-wide
+                var shared = window.PEExplorer && window.PEExplorer.card(it.slug);
+                if (shared) { list.appendChild(shared); return; }
+                var card = tpl.cloneNode(true);
+                card.removeAttribute('data-pe-tcard-template');
+                var q = function (k) { return card.querySelector('[data-pe-tcard="' + k + '"]'); };
+                var href = 'taller-item.html?slug=' + encodeURIComponent(it.slug);
+                var img = q('image');
+                if (img) { db.setImage(img, it.image, it.name); img.classList.remove('w-dyn-bind-empty'); }
+                var name = q('name');
+                if (name) { fillText(name, it.name); name.href = href; }
+                fillText(q('summary'), it.summary || '');
+                fillText(q('meta'), [it.tipo, it.duracion].filter(Boolean).join(' · '));
+                fillText(q('price'), it.precio !== null && it.precio !== undefined ? it.precio + '€' : '—');
+                var seats = q('seats');
+                if (seats) {
+                    var n = it.seatsLeft;
+                    if (!ses || n === null || n === undefined) fillText(seats, it.capacityTotal ? it.capacityTotal + ' plazas' : '—');
+                    else if (n <= 0) { fillText(seats, 'Completo'); card.classList.add('is-full'); }
+                    else { fillText(seats, (n === 1 ? 'Queda 1 plaza' : 'Quedan ' + n + ' plazas')); if (n <= 5) seats.classList.add('is-low'); }
+                }
+                // filter keys read by the listing's filter bar
+                var kf = card.querySelector('[data-todos-field="fecha"]');
+                if (kf) fillText(kf, ses ? ses.fecha.split('-').reverse().join('/') : 'Próximamente');
+                var kd = card.querySelector('[data-todos-field="duracion"]');
+                if (kd) fillText(kd, String(it.durationMinutes || ''));
+                var d = ses ? new Date(ses.fecha + 'T12:00:00') : null;
+                fillText(q('day'), d ? String(d.getDate()) : '');
+                fillText(q('month'), d ? MESES[d.getMonth()] : 'Próximamente');
+                var badge = q('badge');
+                if (badge) {
+                    badge.classList.toggle('is-soon', !d);
+                    if (d) badge.setAttribute('aria-label', DIAS[d.getDay()] + ' ' + d.getDate() + ' de ' + MESES_LARGO[d.getMonth()]);
+                }
+                var add = card.querySelector('[data-pe-add]');
+                if (add) {
+                    if (ses && (it.seatsLeft === null || it.seatsLeft === undefined || it.seatsLeft > 0)) {
+                        add.setAttribute('data-item-id', ses.itemId || it.entropicalId || '');
+                        add.setAttribute('data-booking-item', it.slug);
+                        add.setAttribute('aria-label', 'Reservar ' + it.name + (d ? ', ' + d.getDate() + ' de ' + MESES_LARGO[d.getMonth()] : ''));
+                    } else add.remove();
+                }
+                var more = q('more');
+                if (more) {
+                    more.href = href;
+                    more.setAttribute('aria-label', 'Más información sobre ' + it.name);
+                    if (!add || !card.contains(add)) more.textContent = 'Más información';
+                }
+                card.setAttribute('data-pe-card-href', href);
+                list.appendChild(card);
+            });
+            tpl.remove();
+            var dyn = list.closest('.w-dyn-list');
+            var none = !list.querySelector('.pe-tcard');
+            if (dyn) { var empty = dyn.querySelector('.w-dyn-empty'); if (empty) empty.style.display = none ? '' : 'none'; }
+            if (none) list.style.display = 'none';
+        });
+    }
+
     ready(function () {
         var db = window.PE_CMS;
         if (!db || !db.talleres) return;
+        // the shared card comes from js/pe-explorer.js, a later deferred script: wait for it
+        if (!window.PEExplorer && document.querySelector('script[src*="pe-explorer.js"]') && document.readyState !== 'complete') {
+            document.addEventListener('DOMContentLoaded', function () { hydrateTcards(db); });
+        } else hydrateTcards(db);
         hydrateTalleresCards(db);
         hydrateEventos(db);
         hydrateEventCards(db);

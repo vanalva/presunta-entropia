@@ -11,206 +11,16 @@
    Flat: no shadows, no gradients. Controls: squared 12px, no pills.
    ===================================================================== */
 
-/* ---------- 1. Theme for the packs modals (dark, like the booking modal) ---------- */
-:root {
-  --ep-font: "Space Grotesk", sans-serif;
-  --ep-color-bg: var(--pe---color--aztec, #0d161d);
-  --ep-color-text: var(--pe---color--stark-white, #e8d5c4);
-  --ep-color-muted: var(--pe---color--stark-white-dark, #b9aa9c);       /* 8.9:1 on aztec */
-  --ep-color-surface: #15222c;                                           /* console aztec-2 */
-  --ep-color-border: var(--pe---color--neutral, #858380);               /* 4.9:1 on aztec */
-  --ep-color-accent: var(--pe---color--fuel-yellow, #efa02e);
-  --ep-color-accent-text: var(--pe---color--aztec, #0d161d);
-  --ep-color-focus: var(--pe---color--fuel-yellow, #efa02e);
-  --ep-color-error: var(--pe---color--mule-fawn-light, #b97f70);        /* 5.6:1 on aztec */
-  --ep-color-error-bg: var(--pe---color--mule-fawn-darkest, #2e150f);
-  --ep-color-success: var(--pe---color--fuel-yellow, #efa02e);
-  --ep-radius: 12px;
-  --ep-overlay: rgba(13, 22, 29, 0.82);
-}
-
-/* Light contexts (cream sections): the same scripts, dark ink on cream. */
-.pe-ep-light {
-  --ep-color-bg: var(--pe---color--stark-white, #e8d5c4);
-  --ep-color-text: var(--pe---color--aztec, #0d161d);
-  --ep-color-muted: var(--pe---color--stark-white-darkest, #453f3a);    /* 7.3:1 on cream */
-  --ep-color-surface: var(--pe---color--stark-white-light, #eee1d5);
-  --ep-color-border: var(--pe---color--aztec, #0d161d);
-  --ep-color-focus: var(--pe---color--mule-fawn-dark, #7c3a28);
-  --ep-color-error: var(--pe---color--mule-fawn-dark, #7c3a28);
-  --ep-color-error-bg: var(--pe---color--mule-fawn-lighter, #ebdad6);
-  --ep-color-success: var(--pe---color--mule-fawn-dark, #7c3a28);
-}
-
-/* ---------- 2. Flat overrides of the script's own look ----------
-   Two-class selectors so they beat the <style> the script injects later. */
-.ep-scope.ep-backdrop { color-scheme: dark; }
-.ep-backdrop .ep-dialog {
-  box-shadow: none;
-  border-top-width: 1.5px;
-  border-right-width: 1.5px;
-  border-bottom-width: 0;
-  border-left-width: 1.5px;
-  border-top-style: solid;
-  border-right-style: solid;
-  border-bottom-style: solid;
-  border-left-style: solid;
-  border-top-color: var(--ep-color-text);
-  border-right-color: var(--ep-color-text);
-  border-bottom-color: var(--ep-color-text);
-  border-left-color: var(--ep-color-text);
-}
-@media (min-width: 600px) {
-  .ep-backdrop .ep-dialog { border-bottom-width: 1.5px; }
-}
-/* the sticky footer and the body run into the rounded corners: clip them to the border */
-.ep-backdrop .ep-dialog { overflow-x: hidden; overflow-y: hidden; }
-
-/* The site embeds the LUMOS "Line Height Trim" on every h1-h6/p (negative
-   ::before/::after margins, specificity 0,2,2). The packs and cart scripts
-   space their own text, so the trim only collapses it (overlapping lines).
-   html + doubled class = 0,2,3: switch the trim off inside them. */
-html .ep-scope.ep-scope :is(h1, h2, h3, h4, h5, h6, p)::before,
-html .ep-scope.ep-scope :is(h1, h2, h3, h4, h5, h6, p)::after,
-html .cart-pack.cart-pack :is(h1, h2, h3, h4, h5, h6, p)::before,
-html .cart-pack.cart-pack :is(h1, h2, h3, h4, h5, h6, p)::after {
-  content: none;
-  display: none;
-  margin-top: 0;
-  margin-bottom: 0;
-}
-.ep-scope .ep-title { font-weight: 500; letter-spacing: 0.02em; text-transform: uppercase; }
-.ep-scope .ep-close { border-top-left-radius: 12px; border-top-right-radius: 12px; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; }
-.ep-scope .ep-close:focus-visible { outline-color: var(--ep-color-focus); }
-.ep-scope .ep-btn:hover { filter: none; background-color: var(--pe---color--fuel-yellow-light, #f3bc6c); border-color: var(--pe---color--fuel-yellow-light, #f3bc6c); }
-.ep-scope .ep-btn.ep-secondary:hover { background-color: var(--ep-color-surface); border-color: var(--ep-color-text); }
-.ep-scope .ep-btn { text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; }
-.ep-scope .ep-track { border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom-left-radius: 6px; border-bottom-right-radius: 6px; }
-.ep-scope .ep-track::after { border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px; box-shadow: none; background-color: var(--ep-color-text); }
-.ep-scope .ep-switch input:checked + .ep-track::after { background-color: var(--ep-color-accent-text); }
-.ep-scope .ep-tick { border-top-left-radius: 12px; border-top-right-radius: 12px; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; }
-.ep-scope .ep-tick::after { border-color: var(--ep-color-accent-text); }
-.ep-scope .ep-session.is-selected { box-shadow: none; }
-.ep-scope .ep-input { background-color: var(--ep-color-bg); }
-/* the site's list resets add margins to every li */
-.ep-scope .ep-facts li { margin-top: 0; margin-bottom: 0; padding-left: 0; }
-.ep-scope .ep-codebox { font-family: "Space Grotesk", sans-serif; font-weight: 600; }
-
-/* inline redeem flow (/canjear-pack): fills its panel */
-.ep-scope.ep-inline { max-width: none; width: 100%; }
-/* inside the hero panel the panel is the frame: no second border */
-.pe-redeem_panel .ep-scope.ep-inline {
-  padding-top: 0;
-  padding-right: 0;
-  padding-bottom: 0;
-  padding-left: 0;
-  border-top-width: 0;
-  border-right-width: 0;
-  border-bottom-width: 0;
-  border-left-width: 0;
-  background-color: transparent;
-}
+/* ---------- 1, 2, 4 moved (site-fixes 2026-10-08) ----------
+   The --ep-* theme, the dialog overrides and the cart pack block now live in
+   pe-platform.css, the one skin for everything the platform injects. */
 
 /* ---------- 3. "También con pack" (taller page, cream section) ---------- */
 .pe-pack-covers { margin-top: 1.25rem; }
-.ep-scope.ep-covers .ep-covers-btn { border-width: 1.5px; text-transform: none; }
-.ep-scope.ep-covers.pe-pack-covers { justify-content: flex-end; }
+.ep-scope.ep-covers.pe-pack-covers { justify-content: flex-start; }
 @media (max-width: 767px) {
   .ep-scope.ep-covers.pe-pack-covers { justify-content: flex-start; }
 }
-
-/* ---------- 4. Pack block in the cart (drawn by webflow-cart.js) ----------
-   Matches the cart modal: aztec panel, cream text, yellow outlined buttons. */
-div.cart-pack {
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top-width: 1px;
-  border-top-style: dashed;
-  border-top-color: rgba(232, 213, 196, 0.35);
-  font-family: "Space Grotesk", sans-serif;
-  color: var(--pe---color--stark-white, #e8d5c4);
-}
-.cart-pack .cart-pack_toggle {
-  min-height: 44px;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  color: var(--pe---color--fuel-yellow, #efa02e);
-  font-size: 0.875rem;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  text-decoration-line: underline;
-  text-underline-offset: 3px;
-}
-.cart-pack .cart-pack_toggle:focus-visible,
-.cart-pack .cart-pack_btn:focus-visible,
-.cart-pack .cart-pack_input:focus-visible {
-  outline-width: 2px;
-  outline-style: solid;
-  outline-color: var(--pe---color--fuel-yellow, #efa02e);
-  outline-offset: 2px;
-}
-.cart-pack .cart-pack_label { font-size: 0.75rem; letter-spacing: 0.04em; text-transform: uppercase; opacity: 1; color: var(--pe---color--stark-white-dark, #b9aa9c); }
-.cart-pack .cart-pack_input {
-  min-height: 44px;
-  color: var(--pe---color--stark-white, #e8d5c4);
-  background-color: transparent;
-  border-top-width: 1.5px;
-  border-right-width: 1.5px;
-  border-bottom-width: 1.5px;
-  border-left-width: 1.5px;
-  border-top-color: rgba(232, 213, 196, 0.45);
-  border-right-color: rgba(232, 213, 196, 0.45);
-  border-bottom-color: rgba(232, 213, 196, 0.45);
-  border-left-color: rgba(232, 213, 196, 0.45);
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-}
-.cart-pack .cart-pack_input::placeholder { color: rgba(232, 213, 196, 0.5); }
-.cart-pack .cart-pack_btn {
-  min-height: 44px;
-  color: var(--pe---color--fuel-yellow, #efa02e);
-  background-color: transparent;
-  border-top-width: 1.5px;
-  border-right-width: 1.5px;
-  border-bottom-width: 1.5px;
-  border-left-width: 1.5px;
-  border-top-style: solid;
-  border-right-style: solid;
-  border-bottom-style: solid;
-  border-left-style: solid;
-  border-top-color: var(--pe---color--fuel-yellow-dark, #bf8024);
-  border-right-color: var(--pe---color--fuel-yellow-dark, #bf8024);
-  border-bottom-color: var(--pe---color--fuel-yellow-dark, #bf8024);
-  border-left-color: var(--pe---color--fuel-yellow-dark, #bf8024);
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  transition-property: background-color, color;
-  transition-duration: 0.2s;
-  transition-timing-function: ease;
-  transition-delay: 0s;
-}
-.cart-pack .cart-pack_btn:hover { background-color: var(--pe---color--fuel-yellow, #efa02e); color: var(--pe---color--aztec, #0d161d); }
-.cart-pack .cart-pack_msg { font-size: 0.875rem; color: var(--pe---color--stark-white-dark, #b9aa9c); }
-.cart-pack .cart-pack_summary { font-size: 0.875rem; font-weight: 600; color: var(--pe---color--fuel-yellow, #efa02e); }
-.cart-pack .cart-pack_line {
-  padding-top: 0.625rem;
-  padding-bottom: 0.625rem;
-  border-top-width: 1px;
-  border-top-style: solid;
-  border-top-color: rgba(232, 213, 196, 0.15);
-  font-size: 0.875rem;
-}
-.cart-pack .cart-pack_line-note { opacity: 1; color: var(--pe---color--stark-white-dark, #b9aa9c); }
 
 /* ---------- 5. Calendar modal strip: "¿Prefieres pagar ahora…?" ---------- */
 .booking-modal_packs {
@@ -222,9 +32,9 @@ div.cart-pack {
   column-gap: 1.5rem;
   margin-top: 1.5rem;
   padding-top: 1.25rem;
-  border-top-width: 1.5px;
+  border-top-width: var(--pe---border-width);
   border-top-style: dashed;
-  border-top-color: var(--pe---color--stark-white, #e8d5c4);
+  border-top-color: var(--pe---color--stark-white);
 }
 .booking-modal_packs-text {
   margin-top: 0;
@@ -247,44 +57,48 @@ div.cart-pack {
   padding-right: 1.25rem;
   padding-bottom: 0.6rem;
   padding-left: 1.25rem;
-  background-color: var(--pe---color--fuel-yellow, #efa02e);
-  border-top-width: 1.5px;
-  border-right-width: 1.5px;
-  border-bottom-width: 1.5px;
-  border-left-width: 1.5px;
+  margin-bottom: var(--pe---volume);
+  background-color: transparent;
+  border-top-width: var(--border-width--main);
+  border-right-width: var(--border-width--main);
+  border-bottom-width: var(--border-width--main);
+  border-left-width: var(--border-width--main);
   border-top-style: solid;
   border-right-style: solid;
   border-bottom-style: solid;
   border-left-style: solid;
-  border-top-color: var(--pe---color--fuel-yellow, #efa02e);
-  border-right-color: var(--pe---color--fuel-yellow, #efa02e);
-  border-bottom-color: var(--pe---color--fuel-yellow, #efa02e);
-  border-left-color: var(--pe---color--fuel-yellow, #efa02e);
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
-  color: var(--pe---color--aztec, #0d161d);
-  font-weight: 500;
-  letter-spacing: 0.04em;
+  border-top-color: var(--pe---color--fuel-yellow-dark);
+  border-right-color: var(--pe---color--fuel-yellow-dark);
+  border-bottom-color: var(--pe---color--fuel-yellow-dark);
+  border-left-color: var(--pe---color--fuel-yellow-dark);
+  border-top-left-radius: var(--_radius---control);
+  border-top-right-radius: var(--_radius---control);
+  border-bottom-left-radius: var(--_radius---control);
+  border-bottom-right-radius: var(--_radius---control);
+  box-shadow: 0 var(--pe---volume) 0 0 var(--pe---color--fuel-yellow-dark);
+  color: var(--pe---color--fuel-yellow);
+  font-weight: var(--_typography---weight--semibold);
+  letter-spacing: 0.02em;
   text-transform: uppercase;
   text-decoration-line: none;
   cursor: pointer;
 }
-.booking-modal_packs-btn:hover { background-color: var(--pe---color--fuel-yellow-light, #f3bc6c); border-top-color: var(--pe---color--fuel-yellow-light, #f3bc6c); border-right-color: var(--pe---color--fuel-yellow-light, #f3bc6c); border-bottom-color: var(--pe---color--fuel-yellow-light, #f3bc6c); border-left-color: var(--pe---color--fuel-yellow-light, #f3bc6c); }
+.booking-modal_packs-btn:hover { background-color: transparent; color: var(--pe---color--fuel-yellow); }
+.booking-modal_packs-btn:active { transform: translate(0, var(--pe---volume)); box-shadow: 0 0 0 0 var(--pe---color--fuel-yellow-dark); }
 .booking-modal_packs-btn.is-ghost {
-  background-color: transparent;
-  border-top-color: var(--pe---color--fuel-yellow-dark, #bf8024);
-  border-right-color: var(--pe---color--fuel-yellow-dark, #bf8024);
-  border-bottom-color: var(--pe---color--fuel-yellow-dark, #bf8024);
-  border-left-color: var(--pe---color--fuel-yellow-dark, #bf8024);
-  color: var(--pe---color--stark-white, #e8d5c4);
+  border-top-color: var(--pe---color--stark-white);
+  border-right-color: var(--pe---color--stark-white);
+  border-bottom-color: var(--pe---color--stark-white);
+  border-left-color: var(--pe---color--stark-white);
+  box-shadow: 0 var(--pe---volume) 0 0 var(--pe---color--stark-white);
+  color: var(--pe---color--stark-white);
 }
-.booking-modal_packs-btn.is-ghost:hover { background-color: transparent; border-top-color: var(--pe---color--fuel-yellow, #efa02e); border-right-color: var(--pe---color--fuel-yellow, #efa02e); border-bottom-color: var(--pe---color--fuel-yellow, #efa02e); border-left-color: var(--pe---color--fuel-yellow, #efa02e); }
+.booking-modal_packs-btn.is-ghost:hover { color: var(--pe---color--stark-white); }
+.booking-modal_packs-btn.is-ghost:active { box-shadow: 0 0 0 0 var(--pe---color--stark-white); }
 .booking-modal_packs-btn:focus-visible {
   outline-width: 2px;
   outline-style: solid;
-  outline-color: var(--pe---color--fuel-yellow, #efa02e);
+  outline-color: var(--pe---color--fuel-yellow);
   outline-offset: 3px;
 }
 @media (max-width: 478px) {
@@ -322,11 +136,11 @@ div.cart-pack {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  color: var(--pe---color--fuel-yellow, #efa02e);
+  color: var(--pe---color--fuel-yellow);
   text-decoration-line: underline;
   text-underline-offset: 4px;
 }
-.menu_canjear-link:hover { color: var(--pe---color--fuel-yellow-light, #f3bc6c); }
+.menu_canjear-link:hover { color: var(--pe---color--fuel-yellow-light); }
 
 /* ---------- 7c. Payment return pages: booking vs pack (?kind=pack) copy ---------- */
 [data-return][hidden] { display: none; }
@@ -362,10 +176,10 @@ div.cart-pack {
 
 .pe-pack-skeleton {
   min-height: 26rem;
-  border-top-width: 1.5px;
-  border-right-width: 1.5px;
-  border-bottom-width: 1.5px;
-  border-left-width: 1.5px;
+  border-top-width: var(--pe---border-width);
+  border-right-width: var(--pe---border-width);
+  border-bottom-width: var(--pe---border-width);
+  border-left-width: var(--pe---border-width);
   border-top-style: solid;
   border-right-style: solid;
   border-bottom-style: solid;
@@ -386,10 +200,10 @@ div.cart-pack {
 }
 .pe-pack-skeleton_bar {
   height: 1rem;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
+  border-top-left-radius: var(--_radius---xs);
+  border-top-right-radius: var(--_radius---xs);
+  border-bottom-left-radius: var(--_radius---xs);
+  border-bottom-right-radius: var(--_radius---xs);
   background-color: currentColor;
   opacity: 0.14;
 }
@@ -433,7 +247,7 @@ html .pe-packs_state-text.pe-packs_state-text::after { content: none; display: n
   column-gap: 1rem;
   align-items: start;
   padding-top: 1rem;
-  border-top-width: 1.5px;
+  border-top-width: var(--pe---border-width);
   border-top-style: dashed;
   border-top-color: currentColor;
 }
@@ -443,12 +257,12 @@ html .pe-packs_state-text.pe-packs_state-text::after { content: none; display: n
   justify-content: center;
   width: 3rem;
   height: 3rem;
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
-  background-color: var(--pe---color--fuel-yellow, #efa02e);
-  color: var(--pe---color--aztec, #0d161d);
+  border-top-left-radius: var(--_radius---control);
+  border-top-right-radius: var(--_radius---control);
+  border-bottom-left-radius: var(--_radius---control);
+  border-bottom-right-radius: var(--_radius---control);
+  background-color: var(--pe---color--fuel-yellow);
+  color: var(--pe---color--aztec);
   font-size: 1.25rem;
   font-weight: 700;
 }
@@ -465,8 +279,8 @@ html .pe-packs_state-text.pe-packs_state-text::after { content: none; display: n
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  background-color: var(--pe---color--aztec, #0d161d);
-  color: var(--pe---color--stark-white, #e8d5c4);
+  background-color: var(--pe---color--aztec);
+  color: var(--pe---color--stark-white);
   overflow-y: auto;
 }
 /* phones: the left hero card is one full screen elsewhere; here it gives way so a gift

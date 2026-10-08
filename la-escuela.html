@@ -147,15 +147,19 @@
 
   <link rel="stylesheet" href="css/framework.css?v=9e6b5644">
   <link rel="stylesheet" href="css/variables.css?v=b9782eaf">
-  <link rel="stylesheet" href="css/project.css?v=ba01a3d7">
-  <link rel="stylesheet" href="css/pe-packs.css?v=ae3c4693">
+  <link rel="stylesheet" href="css/project.css?v=320c7bee">
+  <link href="css/pe-overlays.css?v=42baaf38" rel="stylesheet" type="text/css">
+  <link href="css/pe-forms.css?v=1b46480e" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="css/pe-packs.css?v=18ec285a">
+  <link href="css/pe-platform.css?v=3e0c887a" rel="stylesheet" type="text/css">
+  <link href="css/pe-explorer.css?v=8082c0c3" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="css/pe-motion.css?v=71450f25">
   <link rel="stylesheet" href="css/pe-music.css?v=11cb1acc">
   <link rel="stylesheet" href="css/pe-console.css?v=d3064f7d">
   <link rel="stylesheet" href="css/pe-console-holder.css?v=c338690c">
   <link rel="stylesheet" href="css/pe-chat-buddy.css?v=338f24f9">
   <script>(function(h){try{if(!h.classList.contains('modo-entropia')&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){h.classList.add('pe-m-boot');setTimeout(function(){h.classList.remove('pe-m-boot')},3000)}}catch(e){}})(document.documentElement);</script>
-  <script src="js/pe-motion.js?v=b523ee5c" defer></script>
+  <script src="js/pe-motion.js?v=90bf7d39" defer></script>
   <script src="js/pe-list-controls.js?v=3d12fa90" defer></script>
   <script src="js/pe-music.js?v=83f883ed" defer></script>
   <script src="js/pe-console/games/slicer.js?v=0fa7ad38" defer></script>
@@ -164,13 +168,14 @@
   <script src="js/pe-console/games/emplatado.js?v=479f3168" defer></script>
   <script src="js/pe-console/games/equilibrio.js?v=4e7bd236" defer></script>
   <script src="js/pe-console/games/punto.js?v=d644dd06" defer></script>
-  <script src="js/pe-console/pe-console.js?v=4b367c2c" defer></script>
+  <script src="js/pe-console/pe-console.js?v=b0dd7b90" defer></script>
   <script src="js/hero-dock.js?v=8cdf4df5" defer></script>
   <script src="js/pe-chat-buddy.js?v=c1cc8f5f" defer></script>
   <script>try{if(localStorage.getItem('pe-entropy')==='1'){document.documentElement.classList.add('modo-entropia');}}catch(e){}</script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script src="js/entropy-mode.js?v=4e23aaa0" defer></script>
   <script src="data/pe-experiencias.js"></script>
+  <script src="data/pe-fixtures.js"></script><!-- TEST DATA, inert unless ?fixtures=1. Delete before launch -->
   <script src="data/pe-cms.js"></script>
   <script src="data/pe-cms-lists.js" defer></script>
 </head>
@@ -1589,7 +1594,8 @@
                 <a href="index.html" class="navbar18_link w-nav-link f-text-h1 f-text-semibold f-leading-tight f-text-uppercase">Inicio</a>
                 <a href="#" data-modal-open="modal-1" class="navbar18_link w-nav-link f-text-h1 f-text-semibold f-leading-tight f-text-uppercase">Reservas</a>
                 <a href="packs.html" class="navbar18_link w-nav-link f-text-h1 f-text-semibold f-leading-tight f-text-uppercase">Packs</a>
-                <a href="talleres.html" class="navbar18_link w-nav-link f-text-h1 f-text-semibold f-leading-tight f-text-uppercase">Talleres</a>
+                <a href="canjear-pack.html" data-entropical-pack-redeem-open="" data-auto-open="false" class="navbar18_link w-nav-link f-text-h1 f-text-semibold f-leading-tight f-text-uppercase">Canjear pack</a>
+                <a href="todos-nuestros-talleres.html" class="navbar18_link w-nav-link f-text-h1 f-text-semibold f-leading-tight f-text-uppercase">Talleres</a>
                 <a href="team-building.html" class="navbar18_link w-nav-link f-text-h1 f-text-semibold f-leading-tight f-text-uppercase">Team Building</a>
                 <a href="cenas.html" class="navbar18_link w-nav-link f-text-h1 f-text-semibold f-leading-tight f-text-uppercase">Chef&#x27;s Table</a>
                 <a href="la-escuela.html" aria-current="page" class="navbar18_link w-nav-link w--current f-text-h1 f-text-semibold f-leading-tight f-text-uppercase">Método</a>
@@ -2088,7 +2094,7 @@
                             <div class="f-text-small">Nuevas</div>
                             <div class="f-text-small">fechas</div>
                             <div class="f-text-small">pronto</div>
-                          </div><img loading="lazy" src="assets/images/home-2026-10/plato-gambas-800.webp" alt="Plato de gambas servido en la mesa" class="talleres_event_image">
+                          </div><img loading="lazy" src="assets/images/home-2026-10/plato-gambas-1600.webp" srcset="assets/images/home-2026-10/plato-gambas-1600.webp 800w, assets/images/home-2026-10/plato-gambas-1600.webp 1600w, assets/images/home-2026-10/plato-gambas.webp 1928w" sizes="(max-width: 767px) 92vw, 50vw" alt="Plato de gambas servido en la mesa" class="talleres_event_image">
                         </div>
                         <div class="talleres_event_item-content">
                           <div class="talleres_event_item-content-top">
@@ -2127,7 +2133,7 @@
                             <div class="f-text-small">Nuevas</div>
                             <div class="f-text-small">fechas</div>
                             <div class="f-text-small">pronto</div>
-                          </div><img loading="lazy" src="assets/images/home-2026-10/riendo-comida-800.webp" alt="Amigas riendo durante una cena" class="talleres_event_image">
+                          </div><img loading="lazy" src="assets/images/home-2026-10/riendo-comida-1600.webp" srcset="assets/images/home-2026-10/riendo-comida-1600.webp 800w, assets/images/home-2026-10/riendo-comida-1600.webp 1600w, assets/images/home-2026-10/riendo-comida.webp 2560w" sizes="(max-width: 767px) 92vw, 50vw" alt="Amigas riendo durante una cena" class="talleres_event_image">
                         </div>
                         <div class="talleres_event_item-content">
                           <div class="talleres_event_item-content-top">
@@ -2166,7 +2172,7 @@
                             <div class="f-text-small">Nuevas</div>
                             <div class="f-text-small">fechas</div>
                             <div class="f-text-small">pronto</div>
-                          </div><img loading="lazy" src="assets/images/site-2026-10/participante-cortando-800.webp" alt="Participante concentrada cortando ingredientes" class="talleres_event_image">
+                          </div><img loading="lazy" src="assets/images/site-2026-10/participante-cortando-1600.webp" srcset="assets/images/site-2026-10/participante-cortando-1600.webp 800w, assets/images/site-2026-10/participante-cortando-1600.webp 1600w, assets/images/site-2026-10/participante-cortando.webp 2496w" sizes="(max-width: 767px) 92vw, 50vw" alt="Participante concentrada cortando ingredientes" class="talleres_event_image">
                         </div>
                         <div class="talleres_event_item-content">
                           <div class="talleres_event_item-content-top">
@@ -2205,7 +2211,7 @@
                             <div class="f-text-small">Nuevas</div>
                             <div class="f-text-small">fechas</div>
                             <div class="f-text-small">pronto</div>
-                          </div><img loading="lazy" src="assets/images/home-2026-10/pasta-close-up-800.webp" alt="Plato de pasta fresca" class="talleres_event_image">
+                          </div><img loading="lazy" src="assets/images/home-2026-10/pasta-close-up-1600.webp" srcset="assets/images/home-2026-10/pasta-close-up-1600.webp 800w, assets/images/home-2026-10/pasta-close-up-1600.webp 1600w, assets/images/home-2026-10/pasta-close-up.webp 1928w" sizes="(max-width: 767px) 92vw, 50vw" alt="Plato de pasta fresca" class="talleres_event_image">
                         </div>
                         <div class="talleres_event_item-content">
                           <div class="talleres_event_item-content-top">
@@ -2244,7 +2250,7 @@
                             <div class="f-text-small">Nuevas</div>
                             <div class="f-text-small">fechas</div>
                             <div class="f-text-small">pronto</div>
-                          </div><img loading="lazy" src="assets/images/home-2026-10/muestra-plato-salmon-800.webp" alt="Cocinera mostrando un plato terminado" class="talleres_event_image">
+                          </div><img loading="lazy" src="assets/images/home-2026-10/muestra-plato-salmon-1600.webp" srcset="assets/images/home-2026-10/muestra-plato-salmon-1600.webp 800w, assets/images/home-2026-10/muestra-plato-salmon-1600.webp 1600w, assets/images/home-2026-10/muestra-plato-salmon.webp 1928w" sizes="(max-width: 767px) 92vw, 50vw" alt="Cocinera mostrando un plato terminado" class="talleres_event_image">
                         </div>
                         <div class="talleres_event_item-content">
                           <div class="talleres_event_item-content-top">
@@ -2283,7 +2289,7 @@
                             <div class="f-text-small">Nuevas</div>
                             <div class="f-text-small">fechas</div>
                             <div class="f-text-small">pronto</div>
-                          </div><img loading="lazy" src="assets/images/site-2026-10/pareja-curso-cocina-800.webp" alt="Pareja sonriendo en un taller de cocina" class="talleres_event_image">
+                          </div><img loading="lazy" src="assets/images/site-2026-10/pareja-curso-cocina-1600.webp" srcset="assets/images/site-2026-10/pareja-curso-cocina-1600.webp 800w, assets/images/site-2026-10/pareja-curso-cocina-1600.webp 1600w, assets/images/site-2026-10/pareja-curso-cocina.webp 2560w" sizes="(max-width: 767px) 92vw, 50vw" alt="Pareja sonriendo en un taller de cocina" class="talleres_event_image">
                         </div>
                         <div class="talleres_event_item-content">
                           <div class="talleres_event_item-content-top">
@@ -2501,11 +2507,11 @@
      CART MODAL COMPONENT - DARK MODE
      Presunta Entropia Design System
      Colors:
-     - aztec (dark blue): #0d161d
-     - stark-white (cream): #e8d5c4
-     - fuel-yellow (accent): #efa02e
-     - fuel-yellow-dark: #bf8024
-     - mule-fawn (warning): #9b4933
+     - aztec (dark blue): var(--pe---color--aztec)
+     - stark-white (cream): var(--pe---color--stark-white)
+     - fuel-yellow (accent): var(--pe---color--fuel-yellow)
+     - fuel-yellow-dark: var(--pe---color--fuel-yellow-dark)
+     - mule-fawn (warning): var(--pe---color--mule-fawn)
      - border-width: 1.5px
      ===================================================== */
             /* Base Component */
@@ -2534,14 +2540,14 @@
               right: 0;
               bottom: 0;
               left: 0;
-              background-color: rgba(13, 22, 29, 0);
+              background-color: color-mix(in srgb, var(--pe---color--aztec) 0%, transparent);
               -webkit-backdrop-filter: blur(0px);
               backdrop-filter: blur(0px);
               cursor: pointer;
               transition: background-color 0.3s ease, backdrop-filter 0.3s ease, -webkit-backdrop-filter 0.3s ease;
             }
             .cart-modal_component.is-open .cart-modal_overlay {
-              background-color: rgba(13, 22, 29, 0.6);
+              background-color: color-mix(in srgb, var(--pe---color--aztec) 60%, transparent);
               -webkit-backdrop-filter: blur(8px);
               backdrop-filter: blur(8px);
             }
@@ -2552,7 +2558,7 @@
               width: 100%;
               max-width: 420px;
               height: 100%;
-              background: #0d161d;
+              background: var(--pe---color--aztec);
               display: flex;
               flex-direction: column;
               transform: translateX(100%);
@@ -2569,14 +2575,14 @@
               align-items: center;
               justify-content: space-between;
               padding: 1.5rem;
-              border-bottom: 1.5px solid rgba(232, 213, 196, 0.15);
+              border-bottom: 1.5px solid color-mix(in srgb, var(--pe---color--stark-white) 15%, transparent);
               gap: 1rem;
             }
             .cart-modal_title {
               font-family: "Space Grotesk", sans-serif;
               font-size: 1.25rem;
               font-weight: 500;
-              color: #e8d5c4;
+              color: var(--pe---color--stark-white);
               margin: 0;
               text-transform: uppercase;
               letter-spacing: 0.02em;
@@ -2593,18 +2599,18 @@
               min-width: 2.5rem;
               padding: 0;
               background: transparent;
-              border: 1.5px solid #e8d5c4;
+              border: var(--pe---border-width) solid var(--pe---color--stark-white);
               border-radius: 50%;
-              color: #e8d5c4;
+              color: var(--pe---color--stark-white);
               cursor: pointer;
               transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
               flex-shrink: 0;
               order: 2;
             }
             .cart-modal_close:hover {
-              background: #efa02e;
-              border-color: #efa02e;
-              color: #0d161d;
+              background: var(--pe---color--fuel-yellow);
+              border-color: var(--pe---color--fuel-yellow);
+              color: var(--pe---color--aztec);
             }
             .cart-modal_close svg {
               width: 36%;
@@ -2618,19 +2624,19 @@
               align-items: center;
               gap: 0.75rem;
               padding: 1rem 1.5rem;
-              background: rgba(239, 160, 46, 0.1);
-              border-bottom: 1.5px solid rgba(239, 160, 46, 0.3);
+              background: color-mix(in srgb, var(--pe---color--fuel-yellow) 10%, transparent);
+              border-bottom: 1.5px solid color-mix(in srgb, var(--pe---color--fuel-yellow) 30%, transparent);
               font-family: "Space Grotesk", sans-serif;
               font-size: 0.875rem;
-              color: #efa02e;
+              color: var(--pe---color--fuel-yellow);
             }
             .cart-modal_countdown.is-visible {
               display: flex;
             }
             .cart-modal_countdown.is-urgent {
-              background: rgba(155, 73, 51, 0.15);
-              border-color: rgba(155, 73, 51, 0.4);
-              color: #9b4933;
+              background: color-mix(in srgb, var(--pe---color--mule-fawn) 15%, transparent);
+              border-color: color-mix(in srgb, var(--pe---color--mule-fawn) 40%, transparent);
+              color: var(--pe---color--mule-fawn);
             }
             .cart-modal_countdown-icon {
               width: 1.25rem;
@@ -2645,7 +2651,7 @@
               overflow-y: auto;
               padding: 1.5rem;
               scrollbar-width: thin;
-              scrollbar-color: #e8d5c4 transparent;
+              scrollbar-color: var(--pe---color--stark-white) transparent;
             }
             .cart-modal_content::-webkit-scrollbar {
               width: 6px;
@@ -2654,7 +2660,7 @@
               background: transparent;
             }
             .cart-modal_content::-webkit-scrollbar-thumb {
-              background: #e8d5c4;
+              background: var(--pe---color--stark-white);
               border-radius: 3px;
             }
             /* Empty State */
@@ -2670,26 +2676,26 @@
             .cart-modal_empty-icon {
               width: 4rem;
               height: 4rem;
-              color: rgba(232, 213, 196, 0.3);
+              color: color-mix(in srgb, var(--pe---color--stark-white) 30%, transparent);
             }
             .cart-modal_empty-text {
               font-family: "Space Grotesk", sans-serif;
               font-size: 1rem;
-              color: rgba(232, 213, 196, 0.6);
+              color: color-mix(in srgb, var(--pe---color--stark-white) 60%, transparent);
               margin: 0;
             }
             .cart-modal_empty-link {
               font-family: "Space Grotesk", sans-serif;
               font-size: 0.875rem;
               font-weight: 500;
-              color: #efa02e;
+              color: var(--pe---color--fuel-yellow);
               text-decoration: underline;
               text-underline-offset: 3px;
               text-transform: uppercase;
               letter-spacing: 0.02em;
             }
             .cart-modal_empty-link:hover {
-              color: #bf8024;
+              color: var(--pe---color--fuel-yellow-dark);
             }
             /* Filled State */
             .cart-modal_filled {
@@ -2714,7 +2720,7 @@
               gap: 1rem !important;
               padding: 1rem !important;
               background: transparent !important;
-              border: 1.5px solid rgba(232, 213, 196, 0.15) !important;
+              border: var(--pe---border-width) solid color-mix(in srgb, var(--pe---color--stark-white) 15%, transparent) !important;
               border-radius: var(--_radius---card) !important;
               font-family: "Space Grotesk", sans-serif !important;
             }
@@ -2724,7 +2730,7 @@
               border-radius: var(--_radius---control-sm) !important;
               object-fit: cover !important;
               flex-shrink: 0 !important;
-              border: 1.5px solid rgba(232, 213, 196, 0.1) !important;
+              border: var(--pe---border-width) solid color-mix(in srgb, var(--pe---color--stark-white) 10%, transparent) !important;
             }
             .cart-item_details {
               flex: 1 !important;
@@ -2737,7 +2743,7 @@
               font-family: "Space Grotesk", sans-serif !important;
               font-size: 0.875rem !important;
               font-weight: 500 !important;
-              color: #e8d5c4 !important;
+              color: var(--pe---color--stark-white) !important;
               margin: 0 !important;
               line-height: 1.3 !important;
               display: block !important;
@@ -2746,7 +2752,7 @@
               font-family: "Space Grotesk", sans-serif !important;
               font-size: 0.875rem !important;
               font-weight: 700 !important;
-              color: #efa02e !important;
+              color: var(--pe---color--fuel-yellow) !important;
               display: block !important;
             }
             .cart-item_quantity {
@@ -2757,14 +2763,12 @@
             }
             /* Quantity Buttons - OUTLINE STYLE */
             .cart-item_qty-btn {
-              width: 1.75rem !important;
-              height: 1.75rem !important;
-              min-width: 1.75rem !important;
+              width: 2rem !important; height: 2rem !important; min-width: 2rem !important;
               padding: 0 !important;
               background: transparent !important;
-              border: 1.5px solid #e8d5c4 !important;
+              border: var(--pe---border-width) solid var(--pe---color--stark-white) !important;
               border-radius: var(--_radius---control-sm) !important;
-              color: #e8d5c4 !important;
+              color: var(--pe---color--stark-white) !important;
               font-family: "Space Grotesk", sans-serif !important;
               font-size: 1rem !important;
               font-weight: 500 !important;
@@ -2776,15 +2780,15 @@
               line-height: 1 !important;
             }
             .cart-item_qty-btn:hover {
-              background: #efa02e !important;
-              border-color: #efa02e !important;
-              color: #0d161d !important;
+              background: var(--pe---color--fuel-yellow) !important;
+              border-color: var(--pe---color--fuel-yellow) !important;
+              color: var(--pe---color--aztec) !important;
             }
             .cart-item_qty-value {
               font-family: "Space Grotesk", sans-serif !important;
               font-size: 1rem !important;
               font-weight: 500 !important;
-              color: #e8d5c4 !important;
+              color: var(--pe---color--stark-white) !important;
               min-width: 1.5rem !important;
               text-align: center !important;
             }
@@ -2797,7 +2801,7 @@
               padding: 0 !important;
               background: transparent !important;
               border: none !important;
-              color: rgba(232, 213, 196, 0.4) !important;
+              color: color-mix(in srgb, var(--pe---color--stark-white) 40%, transparent) !important;
               cursor: pointer !important;
               transition: color 0.2s ease !important;
               flex-shrink: 0 !important;
@@ -2808,7 +2812,7 @@
               justify-content: center !important;
             }
             .cart-item_remove:hover {
-              color: #9b4933 !important;
+              color: var(--pe---color--mule-fawn) !important;
             }
             .cart-item_remove svg {
               width: 100% !important;
@@ -2834,29 +2838,29 @@
               justify-content: flex-start;
               padding: 0.75rem 1rem;
               background: transparent !important;
-              border: 1.5px solid #efa02e !important;
+              border: var(--pe---border-width) solid var(--pe---color--fuel-yellow) !important;
               border-radius: var(--_radius---control-sm);
               font-family: "Space Grotesk", sans-serif;
               font-size: 0.875rem;
-              color: #efa02e !important;
+              color: var(--pe---color--fuel-yellow) !important;
             }
             /* Available state - Yellow outline */
             .cart-modal_availability-item.is-available {
               background: transparent !important;
-              border-color: #efa02e !important;
-              color: #efa02e !important;
+              border-color: var(--pe---color--fuel-yellow) !important;
+              color: var(--pe---color--fuel-yellow) !important;
             }
             /* Low stock state - Dark yellow outline */
             .cart-modal_availability-item.is-low {
               background: transparent !important;
-              border-color: #bf8024 !important;
-              color: #bf8024 !important;
+              border-color: var(--pe---color--fuel-yellow-dark) !important;
+              color: var(--pe---color--fuel-yellow-dark) !important;
             }
             /* Unavailable state - Mule fawn (warning) outline */
             .cart-modal_availability-item.is-unavailable {
               background: transparent !important;
-              border-color: #9b4933 !important;
-              color: #9b4933 !important;
+              border-color: var(--pe---color--mule-fawn) !important;
+              color: var(--pe---color--mule-fawn) !important;
             }
             .cart-modal_availability-name {
               display: flex;
@@ -2880,8 +2884,8 @@
               flex-direction: column;
               gap: 1.5rem;
               padding: 1.5rem;
-              border-top: 1.5px solid rgba(232, 213, 196, 0.15);
-              background: #0d161d;
+              border-top: 1.5px solid color-mix(in srgb, var(--pe---color--stark-white) 15%, transparent);
+              background: var(--pe---color--aztec);
               width: 100%;
               box-sizing: border-box;
             }
@@ -2891,7 +2895,7 @@
             /* Total Section - Full width */
             .cart-modal_total-section {
               padding-bottom: 1rem;
-              border-bottom: 1.5px solid rgba(232, 213, 196, 0.1);
+              border-bottom: 1.5px solid color-mix(in srgb, var(--pe---color--stark-white) 10%, transparent);
               width: 100%;
             }
             .cart-modal_total-row {
@@ -2903,13 +2907,13 @@
             .cart-modal_total-label {
               font-family: "Space Grotesk", sans-serif;
               font-size: 0.875rem;
-              color: rgba(232, 213, 196, 0.7);
+              color: color-mix(in srgb, var(--pe---color--stark-white) 70%, transparent);
             }
             .cart-modal_total-value {
               font-family: "Space Grotesk", sans-serif;
               font-size: 1.5rem;
               font-weight: 700;
-              color: #e8d5c4;
+              color: var(--pe---color--stark-white);
             }
             /* Actions Section - Full width */
             .cart-modal_actions {
@@ -2926,13 +2930,13 @@
               justify-content: center;
               padding: 0.875rem 1.5rem;
               background: transparent;
-              border: 1.5px solid #bf8024;
-              box-shadow: 0 3px 0 0 #bf8024;
+              border: var(--pe---border-width) solid var(--pe---color--fuel-yellow-dark);
+              box-shadow: 0 3px 0 0 var(--pe---color--fuel-yellow-dark);
               border-radius: 12px;
               font-family: "Space Grotesk", sans-serif;
               font-size: 0.875rem;
               font-weight: 400;
-              color: #efa02e;
+              color: var(--pe---color--fuel-yellow);
               text-transform: uppercase;
               text-align: center;
               letter-spacing: 0.02em;
@@ -2941,10 +2945,11 @@
               box-sizing: border-box;
             }
             .cart-modal_checkout-btn:hover {
-              box-shadow: 0 0 0 0 #bf8024;
+              box-shadow: 0 0 0 0 var(--pe---color--fuel-yellow-dark);
               transform: translateY(3px);
             }
-            .cart-modal_checkout-btn span {
+            /* the button's own text only: the hover effect's layers (pe-rise_*) place themselves */
+              .cart-modal_checkout-btn > span:not([class*="pe-rise"]) {
               display: block;
               width: 100%;
               text-align: center;
@@ -2964,24 +2969,24 @@
               gap: 0.5rem;
               padding: 0.625rem 1rem;
               background: transparent;
-              border: 1.5px solid rgba(232, 213, 196, 0.2);
+              border: var(--pe---border-width) solid color-mix(in srgb, var(--pe---color--stark-white) 20%, transparent);
               border-radius: 0.5rem;
               font-family: "Space Grotesk", sans-serif;
               font-size: 0.75rem;
               font-weight: 400;
-              color: rgba(232, 213, 196, 0.6);
+              color: color-mix(in srgb, var(--pe---color--stark-white) 60%, transparent);
               text-transform: uppercase;
               letter-spacing: 0.02em;
               cursor: pointer;
               transition: border-color 0.2s ease, color 0.2s ease;
             }
             .cart-modal_refresh-btn:hover {
-              border-color: #e8d5c4;
-              color: #e8d5c4;
+              border-color: var(--pe---color--stark-white);
+              color: var(--pe---color--stark-white);
             }
             .cart-modal_clear-btn:hover {
-              border-color: #9b4933;
-              color: #9b4933;
+              border-color: var(--pe---color--mule-fawn);
+              color: var(--pe---color--mule-fawn);
             }
             .cart-modal_refresh-btn svg,
             .cart-modal_clear-btn svg {
@@ -3061,12 +3066,12 @@
           <div class="cart-modal_total-section">
             <div class="cart-modal_total-row"><span class="cart-modal_total-label cart-modal_total-label">Total (<span data-cart-count="">0</span> artículos)</span><span class="cart-modal_total-value cart-modal_total-value" data-cart-total="">0,00 EUR</span></div>
           </div>
-          <div class="cart-modal_actions"><button class="cart-modal_checkout-btn cart-modal_checkout-btn" data-cart-checkout=""><span>Proceder al Pago</span></button>
-            <div class="cart-modal_secondary-actions"><button class="cart-modal_refresh-btn cart-modal_refresh-btn" data-cart-refresh-availability=""><svg viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <div class="cart-modal_actions"><button data-ep-role="primary" class="cart-modal_checkout-btn cart-modal_checkout-btn" data-cart-checkout=""><span>Proceder al Pago</span></button>
+            <div class="cart-modal_secondary-actions"><button data-ep-role="quiet" class="cart-modal_refresh-btn cart-modal_refresh-btn" data-cart-refresh-availability=""><svg viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M1 4V10H7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                   <path d="M23 20V14H17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                   <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10M23 14L18.36 18.36A9 9 0 0 1 3.51 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                </svg><span>Actualizar</span></button><button class="cart-modal_clear-btn cart-modal_clear-btn" data-cart-clear=""><svg viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                </svg><span>Actualizar</span></button><button data-ep-role="quiet" class="cart-modal_clear-btn cart-modal_clear-btn" data-cart-clear=""><svg viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M3 6H5H21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                   <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                 </svg><span>Vaciar</span></button></div>
@@ -3074,600 +3079,14 @@
         </div>
       </div>
     </div>
-<div id="modal-1" class="booking-modal_component" role="dialog" aria-modal="true" aria-label="Calendario de reservas">
-      <div class="complex-css-embed w-embed">
-        <style>
-            /* =====================================================
-     BOOKING CALENDAR MODAL — "Book now" (XD artboard 11)
-     Presunta Entropia Design System
-     Tokens: aztec / stark-white / fuel-yellow / mule-fawn
-     ===================================================== */
-            .booking-modal_component {
-              position: fixed;
-              top: 0;
-              left: 0;
-              right: 0;
-              bottom: 0;
-              z-index: 120000;
-              display: none;
-              background-color: var(--pe---color--aztec, #0d161d);
-              color: var(--pe---color--stark-white, #e8d5c4);
-              font-family: "Space Grotesk", sans-serif;
-            }
-            .booking-modal_component.is-open {
-              display: block;
-            }
-            .booking-modal_inner {
-              position: absolute;
-              top: 1rem;
-              left: 1rem;
-              right: 1rem;
-              bottom: 1rem;
-              border: 1.5px solid var(--pe---color--stark-white, #e8d5c4);
-              border-radius: var(--pe---radius--main, 1rem);
-              padding: clamp(1.25rem, 3vw, 2.5rem);
-              display: flex;
-              flex-direction: column;
-              gap: clamp(1rem, 2.5vh, 2rem);
-              overflow-y: auto;
-              overflow-x: hidden;
-            }
-            .booking-modal_topbar {
-              display: flex;
-              align-items: center;
-              gap: clamp(1rem, 2.5vw, 2.5rem);
-              flex-wrap: wrap;
-            }
-            .booking-modal_close {
-              display: inline-flex;
-              align-items: center;
-              gap: 0.6rem;
-              padding: 0.6rem 1.4rem;
-              background-color: var(--pe---color--aztec, #0d161d);
-              border: 1.5px solid var(--pe---color--fuel-yellow-dark, #bf8024);
-              border-radius: 12px;
-              color: var(--pe---color--stark-white, #e8d5c4);
-              font-weight: 700;
-              letter-spacing: 0.04em;
-              text-transform: uppercase;
-              text-decoration: none;
-              cursor: pointer;
-              transition: border-color 0.2s ease, color 0.2s ease;
-            }
-            .booking-modal_close:hover {
-              border-color: var(--pe---color--fuel-yellow, #efa02e);
-            }
-            .booking-modal_close-x {
-              color: var(--pe---color--fuel-yellow, #efa02e);
-              font-size: 1.1em;
-              line-height: 1;
-            }
-            .booking-modal_title {
-              font-size: clamp(2.5rem, 5vw, 4.5rem);
-              font-weight: 500;
-              line-height: 1;
-              margin: 0;
-              flex-grow: 1;
-            }
-            .booking-modal_controls {
-              display: flex;
-              align-items: center;
-              gap: 1rem;
-              flex-wrap: wrap;
-            }
-            .booking-modal_search-wrap {
-              border: 1.5px solid var(--pe---color--stark-white, #e8d5c4);
-              border-radius: 12px;
-              background-color: transparent;
-              color: var(--pe---color--stark-white, #e8d5c4);
-              font-family: inherit;
-              font-size: clamp(1.1rem, 1.6vw, 1.5rem);
-            }
-            .booking-modal_search-wrap {
-              display: inline-flex;
-              align-items: center;
-              gap: 0.75rem;
-              padding: 0.65rem 1.5rem;
-            }
-            .booking-modal_search {
-              background: transparent;
-              border: none;
-              outline: none;
-              color: inherit;
-              font-family: inherit;
-              font-size: inherit;
-              width: clamp(8rem, 14vw, 14rem);
-            }
-            .booking-modal_search::placeholder {
-              color: var(--pe---color--stark-white, #e8d5c4);
-              opacity: 0.55;
-            }
-            .booking-modal_search-icon {
-              width: 1.4em;
-              height: 1.4em;
-              border: 3px solid currentColor;
-              border-radius: 50%;
-              flex-shrink: 0;
-            }
-            .booking-modal_body {
-              display: grid;
-              grid-template-columns: minmax(16rem, 1fr) 2.2fr;
-              gap: clamp(1.5rem, 3.5vw, 4rem);
-              flex-grow: 1;
-              min-height: 0;
-            }
-            .booking-modal_side {
-              display: flex;
-              flex-direction: column;
-              justify-content: space-between;
-              gap: 1.5rem;
-              min-width: 0;
-            }
-            .booking-modal_brand {
-              width: clamp(4.5rem, 8vw, 8rem);
-              height: auto;
-            }
-            .booking-modal_heading {
-              font-size: clamp(2rem, 3.6vw, 3.75rem);
-              font-weight: 700;
-              text-transform: uppercase;
-              line-height: 1.06;
-              letter-spacing: 0.01em;
-            }
-            .booking-modal_heading .is-accent {
-              color: var(--pe---color--fuel-yellow, #efa02e);
-            }
-            .booking-modal_main {
-              display: flex;
-              flex-direction: column;
-              gap: 1.25rem;
-              min-width: 0;
-            }
-            .booking-modal_toolbar {
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-              gap: 1rem;
-              flex-wrap: wrap;
-            }
-            .booking-modal_week-nav {
-              display: inline-flex;
-              align-items: center;
-              gap: 0.9rem;
-              font-size: 1.15rem;
-            }
-            .booking-modal_week-arrow {
-              background: transparent;
-              border: none;
-              color: var(--pe---color--stark-white, #e8d5c4);
-              font-size: 1rem;
-              cursor: pointer;
-              padding: 0.25rem 0.5rem;
-              transition: color 0.2s ease;
-            }
-            .booking-modal_week-arrow:hover {
-              color: var(--pe---color--fuel-yellow, #efa02e);
-            }
-            .booking-modal_view-toggle {
-              display: inline-flex;
-              align-items: center;
-              gap: 0.35rem;
-            }
-            .booking-modal_view-btn {
-              background: transparent;
-              border: none;
-              border-radius: var(--pe---radius--small, 0.5rem);
-              color: var(--pe---color--stark-white, #e8d5c4);
-              font-family: inherit;
-              font-size: 1.05rem;
-              padding: 0.45rem 1.1rem;
-              cursor: pointer;
-              opacity: 0.7;
-              transition: background-color 0.2s ease, opacity 0.2s ease;
-            }
-            .booking-modal_view-btn.is-active {
-              background-color: rgba(232, 213, 196, 0.18);
-              opacity: 1;
-            }
-            .booking-modal_grid {
-              display: grid;
-              grid-template-columns: repeat(3, 1fr);
-              grid-auto-rows: 1fr;
-              gap: clamp(0.9rem, 1.8vw, 1.75rem);
-              flex-grow: 1;
-            }
-            .booking-modal_component.is-monthly .booking-modal_grid {
-              grid-template-columns: repeat(4, 1fr);
-            }
-            .booking-modal_card {
-              border: 1.5px solid var(--pe---color--stark-white, #e8d5c4);
-              border-radius: clamp(1rem, 1.8vw, 1.75rem);
-              padding: clamp(1rem, 1.8vw, 1.75rem);
-              display: flex;
-              flex-direction: column;
-              justify-content: space-between;
-              gap: 0.75rem;
-              min-height: clamp(9rem, 22vh, 13rem);
-              text-decoration: none;
-              color: inherit;
-              transition: border-color 0.2s ease, transform 0.2s ease;
-            }
-            .booking-modal_card:hover {
-              border-color: var(--pe---color--fuel-yellow, #efa02e);
-              transform: translateY(-3px);
-            }
-            .booking-modal_card.is-empty {
-              border: none;
-              background-color: rgba(232, 213, 196, 0.10);
-            }
-            .booking-modal_card-date {
-              font-size: clamp(1.5rem, 2.4vw, 2.25rem);
-              font-weight: 700;
-            }
-            .booking-modal_card-title {
-              font-size: clamp(1rem, 1.4vw, 1.35rem);
-              font-weight: 700;
-              text-transform: uppercase;
-              line-height: 1.15;
-            }
-            .booking-modal_card-meta {
-              display: flex;
-              align-items: baseline;
-              justify-content: space-between;
-              gap: 0.5rem;
-            }
-            .booking-modal_card-type {
-              font-size: 0.95rem;
-              opacity: 0.8;
-            }
-            .booking-modal_card-price {
-              font-size: clamp(1.4rem, 2.2vw, 2rem);
-              font-weight: 700;
-            }
-            @media (max-width: 991px) {
-              .booking-modal_body {
-                grid-template-columns: 1fr;
-              }
-              .booking-modal_side {
-                flex-direction: row;
-                align-items: flex-end;
-                justify-content: space-between;
-                flex-wrap: wrap;
-              }
-              .booking-modal_brand {
-                display: none;
-              }
-              .booking-modal_grid,
-              .booking-modal_component.is-monthly .booking-modal_grid {
-                grid-template-columns: repeat(2, 1fr);
-              }
-            }
-            @media (max-width: 767px) {
-              .booking-modal_inner {
-                top: 0.5rem;
-                left: 0.5rem;
-                right: 0.5rem;
-                bottom: 0.5rem;
-              }
-              .booking-modal_title {
-                font-size: 2.25rem;
-                order: -1;
-                flex-basis: 100%;
-              }
-              .booking-modal_heading {
-                display: none;
-              }
-              .booking-modal_card.is-empty {
-                display: none;
-              }
-              .booking-modal_grid,
-              .booking-modal_component.is-monthly .booking-modal_grid {
-                grid-template-columns: 1fr;
-              }
-            }
-
-            /* Date cards carry the cart button (webflow-cart.js binds [data-cart-add]) */
-            a.booking-modal_card-title {
-              color: inherit;
-              text-decoration: none;
-            }
-            a.booking-modal_card-title:hover {
-              color: var(--pe---color--fuel-yellow, #efa02e);
-            }
-            .booking-modal_card-date.is-soon {
-              font-size: clamp(1.1rem, 1.6vw, 1.5rem);
-              text-transform: uppercase;
-              opacity: 0.7;
-            }
-            .booking-modal_card-seats,
-            .booking-modal_card-soon {
-              font-size: 0.875rem;
-              opacity: 0.8;
-            }
-            .booking-modal_card-add {
-              width: 100%;
-              padding: 0.7rem 1rem;
-              border: 1.5px solid var(--pe---color--fuel-yellow-dark, #bf8024);
-              border-radius: 12px;
-              box-shadow: 0 3px 0 0 var(--pe---color--fuel-yellow-dark, #bf8024);
-              background: transparent;
-              color: var(--pe---color--fuel-yellow, #efa02e);
-              font: inherit;
-              font-size: 0.9rem;
-              text-transform: uppercase;
-              cursor: pointer;
-              transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
-            }
-            .booking-modal_card-add:hover {
-              background-color: var(--pe---color--fuel-yellow, #efa02e);
-              color: var(--pe---color--aztec, #0d161d);
-              box-shadow: 0 0 0 0 var(--pe---color--fuel-yellow-dark, #bf8024);
-              transform: translateY(3px);
-            }
-            .booking-modal_card-add:focus-visible {
-              outline: 2px solid var(--pe---color--fuel-yellow, #efa02e);
-              outline-offset: 3px;
-            }
-            .booking-modal_card-add:disabled {
-              opacity: 0.6;
-              cursor: default;
-            }
-            .booking-modal_empty {
-              grid-column: 1 / -1;
-              padding: 2rem;
-              text-align: center;
-              opacity: 0.8;
-            }
-            /* rows size to their cards; a single card no longer stretches to fill the grid */
-            .booking-modal_grid {
-              grid-auto-rows: auto;
-              align-content: start;
-            }
-            /* the CMS list wrapper takes the grid's old place in the main column */
-            .booking-modal_list {
-              display: flex;
-              flex-direction: column;
-              flex-grow: 1;
-            }
-            .booking-modal_empty.w-dyn-empty {
-              background-color: transparent;
-            }
-            .booking-modal_card.is-hidden,
-            .booking-modal_empty.is-hidden {
-              display: none;
-            }
-          </style>
-      </div>
-      <div class="booking-modal_inner pe-lc">
+<div id="modal-1" class="booking-modal_component" role="dialog" aria-modal="true" aria-label="Calendario de reservas" aria-hidden="true">
+      <!-- Booking overlay (site-fixes 2026-10-08): the Explorador in dark mode (js/pe-explorer.js).
+           Openers anywhere: [data-modal-open="modal-1"], + data-booking-item="<slug>" to narrow it. -->
+      <div class="booking-modal_inner">
         <div class="booking-modal_topbar">
-          <a href="#" class="booking-modal_close button is-secondary f-text-label" data-modal-close="modal-1"><div class="navbar_menu-close-button-content"><div>Cerrar</div><div class="menu-icon"><div class="menu-close-icon_wrapper"><div class="menu-close_line-top"></div><div class="menu-close_line-bottom"></div></div></div></div></a>
-          <h2 class="booking-modal_title f-text-h1">Calendario</h2>
-          <div class="booking-modal_controls">
-            <label class="booking-modal_search-wrap pe-lc_control pe-lc_search"><input class="booking-modal_search" type="text" placeholder="Buscar" data-booking-search=""><span class="booking-modal_search-icon" aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="7" cy="7" r="4.6"/><path d="M10.6 10.6L14 14"/></svg></span></label>
-          </div>
+          <button type="button" class="booking-modal_close f-text-label" data-modal-close="">Cerrar <span class="booking-modal_close-x" aria-hidden="true">✕</span></button>
         </div>
-        <div class="booking-modal_body">
-          <div class="booking-modal_side">
-            <img src="assets/images/identity_main-isologo.svg" loading="lazy" alt="" class="booking-modal_brand">
-            <div class="booking-modal_heading f-text-h2 f-text-uppercase">
-              <div class="booking-modal_cat is-accent">Talleres</div>
-              <div class="booking-modal_cat">Eventos</div>
-              <div class="booking-modal_cat">Restaurante</div>
-            </div>
-          </div>
-          <div class="booking-modal_main">
-            <div class="booking-modal_toolbar">
-              <div class="booking-modal_week-nav pe-lc_control is-seg f-text-small">
-                <button type="button" class="booking-modal_week-arrow" data-booking-week-prev="" aria-label="Semana anterior"><svg class="booking-modal_icon" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M11 2v12L3 8z" fill="currentColor"/></svg></button>
-                <span data-booking-week-label="">Semana 1</span>
-                <button type="button" class="booking-modal_week-arrow" data-booking-week-next="" aria-label="Semana siguiente"><svg class="booking-modal_icon" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M5 2v12l8-6z" fill="currentColor"/></svg></button>
-              </div>
-              <div class="booking-modal_view-toggle pe-lc_control is-seg">
-                <button type="button" class="booking-modal_view-btn f-text-small is-active" data-booking-view="week">Semanal</button>
-                <button type="button" class="booking-modal_view-btn f-text-small" data-booking-view="month">Mensual</button>
-              </div>
-            </div>
-            <div class="booking-modal_list w-dyn-list">
-              <!-- Webflow: Collection List bound to the experiences collection (talleres; add
-                   a second list for cenas when the platform has dinners), sorted by
-                   next-session-at. One card per item. Bindings:
-                     card     data-booking-slug  = slug
-                              data-booking-date  = next-session-at (ISO date format)
-                     title    text = name, link = the item's template page
-                     type     static label per collection ("Taller" / "Cena")
-                     price    text = price-current
-                     seats    text = seats-left, data-item-id = entropical-id
-                     button   data-item-id = entropical-id
-                   No conditional visibility needed: the script below keeps the seats
-                   line and the cart button only when data-booking-date is in the future,
-                   and shows "Próximamente" otherwise. -->
-              <div role="list" class="booking-modal_grid w-dyn-items" data-booking-grid="">
-                <div role="listitem" class="booking-modal_card w-dyn-item" data-booking-card="" data-booking-slug="" data-booking-date="">
-                  <div class="booking-modal_card-date f-text-h3" data-booking-date-label="">Próximamente</div>
-                  <a href="#" class="booking-modal_card-title f-text-h6 f-text-uppercase w-dyn-bind-empty" data-booking-name=""></a>
-                  <div class="booking-modal_card-meta"><span class="booking-modal_card-type f-text-small w-dyn-bind-empty" data-booking-type=""></span><span class="booking-modal_card-price f-text-stat">€<span class="w-dyn-bind-empty" data-booking-price=""></span></span></div>
-                  <div class="booking-modal_card-seats f-text-small" data-booking-when="future">Quedan <span class="w-dyn-bind-empty" data-item-seats-left="" data-item-id=""></span> plazas</div>
-                  <button type="button" class="booking-modal_card-add button f-text-label f-text-ui-sm" data-booking-when="future" data-cart-add="" data-item-id="">Añadir al carrito</button>
-                  <div class="booking-modal_card-soon f-text-small" data-booking-when="soon">Nuevas fechas próximamente</div>
-                </div>
-              </div>
-              <div class="booking-modal_empty f-text-small w-dyn-empty">
-                <div>No hay experiencias con fechas abiertas. Vuelve pronto.</div>
-              </div>
-            </div>
-            <!-- Packs: pay now, pick the date later (webflow-packs.js handles the redeem button) -->
-            <div class="booking-modal_packs">
-              <p class="booking-modal_packs-text f-text-h6">¿Prefieres pagar ahora y elegir fecha después?</p>
-              <div class="booking-modal_packs-actions">
-                <a href="packs.html" class="booking-modal_packs-btn button f-text-label">Ver packs</a>
-                <a href="canjear-pack.html" class="booking-modal_packs-btn is-ghost button is-secondary f-text-label" data-entropical-pack-redeem-open="" data-auto-open="false">Ya tengo un pack</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="auto-js-embed w-embed w-script">
-        <script>
-            /* Booking calendar modal: open/close, week/month view, search.
-               The grid is a CMS Collection List (see the binding notes above it).
-               - In Webflow the CMS renders one card per experience; this script
-                 leaves the cards as they are.
-               - In the local preview the card is still an unbound template
-                 (.w-dyn-bind-empty); it is cloned once per experience from
-                 window.PE_CMS (src/data/pe-experiencias.js, synced from the
-                 platform). No API calls either way.
-               Then, for every card: a future data-booking-date keeps the seats line
-               and the cart button (<button data-cart-add data-item-id>); otherwise
-               both are removed and the card reads "Próximamente". Future dates sort
-               first. All of this runs before webflow-cart.js binds its buttons at
-               DOMContentLoaded; paging and search only toggle .is-hidden, so no
-               button is ever re-created.
-               Openers: [data-modal-open="modal-1"]; add data-booking-item="<slug>"
-               to show only that experience's cards. */
-            (function() {
-              'use strict';
-              var modal = document.getElementById('modal-1');
-              if (!modal) return;
-              var grid = modal.querySelector('[data-booking-grid]');
-              var emptyEl = modal.querySelector('.booking-modal_empty');
-              var weekLabel = modal.querySelector('[data-booking-week-label]');
-              var searchInput = modal.querySelector('[data-booking-search]');
-              var PER_PAGE = 6;
-              var MESES = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-              var EMPTY_TEXT = 'No hay experiencias con fechas abiertas. Vuelve pronto.';
-              var NO_MATCH_TEXT = 'Ninguna experiencia coincide con tu búsqueda.';
-
-              function fill(el, txt) {
-                if (!el) return;
-                el.textContent = txt == null ? '' : String(txt);
-                el.classList.remove('w-dyn-bind-empty');
-              }
-
-              // Local preview only: build cards from the synced platform data.
-              var tpl = grid.querySelector('[data-booking-card]');
-              var db = window.PE_CMS;
-              if (tpl && tpl.querySelector('.w-dyn-bind-empty') && db && db.talleres) {
-                [['talleres', 'Taller'], ['cenas', 'Cena']].forEach(function(pair) {
-                  (db[pair[0]] || []).forEach(function(it) {
-                    var card = tpl.cloneNode(true);
-                    var id = it.entropicalId || '';
-                    card.setAttribute('data-booking-slug', it.slug);
-                    card.setAttribute('data-booking-date', it.nextSession || '');
-                    var title = card.querySelector('[data-booking-name]');
-                    fill(title, it.name);
-                    title.href = pair[0] === 'cenas' ? 'cenas.html' : 'taller-item.html?slug=' + encodeURIComponent(it.slug);
-                    fill(card.querySelector('[data-booking-type]'), it.tipo || pair[1]);
-                    fill(card.querySelector('[data-booking-price]'), it.precio);
-                    var seats = card.querySelector('[data-item-seats-left]');
-                    fill(seats, it.seatsLeft);
-                    seats.setAttribute('data-item-id', id);
-                    card.querySelector('[data-cart-add]').setAttribute('data-item-id', id);
-                    grid.appendChild(card);
-                  });
-                });
-                tpl.remove();
-              }
-
-              function parseDate(s) {
-                if (!s) return null;
-                var t = Date.parse(s);
-                if (!isNaN(t)) return new Date(t);
-                var m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(s.trim()); // dd/mm/yyyy
-                return m ? new Date(+m[3], +m[2] - 1, +m[1], 12) : null;
-              }
-
-              var now = Date.now();
-              var cardEls = Array.prototype.slice.call(grid.querySelectorAll('[data-booking-card]'));
-              cardEls.forEach(function(card) {
-                var d = parseDate(card.getAttribute('data-booking-date'));
-                var future = !!d && d.getTime() > now;
-                card.querySelectorAll('[data-booking-when="future"]').forEach(function(el) { if (!future) el.remove(); });
-                card.querySelectorAll('[data-booking-when="soon"]').forEach(function(el) { if (future) el.remove(); });
-                var label = card.querySelector('[data-booking-date-label]');
-                if (label) {
-                  label.textContent = future ? d.getDate() + ' ' + MESES[d.getMonth()] : 'Próximamente';
-                  label.classList.toggle('is-soon', !future);
-                }
-                card.classList.toggle('is-soon', !future);
-                card.setAttribute('data-booking-order', future ? d.getTime() : 9e15);
-              });
-              cardEls.sort(function(a, b) { return a.getAttribute('data-booking-order') - b.getAttribute('data-booking-order'); });
-              cardEls.forEach(function(card) { grid.appendChild(card); });
-
-              var page = 0;
-              var view = 'week';
-              var query = '';
-              var only = '';
-
-              function render() {
-                var pool = cardEls.filter(function(el) {
-                  if (only && el.getAttribute('data-booking-slug') !== only) return false;
-                  if (query && el.textContent.toLowerCase().indexOf(query) === -1) return false;
-                  return true;
-                });
-                var pages = Math.max(1, Math.ceil(pool.length / PER_PAGE));
-                if (page >= pages) page = 0;
-                var shown = view === 'month' ? pool : pool.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE);
-                cardEls.forEach(function(el) { el.classList.toggle('is-hidden', shown.indexOf(el) === -1); });
-                if (emptyEl) {
-                  emptyEl.classList.toggle('w-dyn-hide', shown.length > 0); // Webflow's own hide class (display:none !important)
-                  emptyEl.textContent = query && cardEls.length ? NO_MATCH_TEXT : EMPTY_TEXT;
-                }
-                weekLabel.textContent = view === 'month' ? 'Todas' : 'Semana ' + (page + 1) + (pages > 1 ? ' de ' + pages : '');
-                modal.setAttribute('data-booking-pages', pages);
-              }
-
-              function open(item) {
-                only = item || '';
-                page = 0;
-                modal.classList.add('is-open');
-                document.body.style.overflow = 'hidden';
-                var openMenu = document.querySelector('.w-nav-overlay[style*="block"], .navbar_menu-button.w--open');
-                if (openMenu) {
-                  var closeBtn = document.querySelector('.navbar_menu-close-button-wrapper');
-                  if (closeBtn) closeBtn.click();
-                }
-                render();
-              }
-
-              function close() {
-                modal.classList.remove('is-open');
-                document.body.style.overflow = '';
-              }
-
-              document.addEventListener('click', function(e) {
-                var opener = e.target.closest('[data-modal-open="modal-1"]');
-                if (opener) { e.preventDefault(); open(opener.getAttribute('data-booking-item')); return; }
-                var closer = e.target.closest('[data-modal-close="modal-1"]');
-                if (closer) { e.preventDefault(); close(); }
-              });
-              document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && modal.classList.contains('is-open')) close();
-              });
-              modal.querySelector('[data-booking-week-prev]').addEventListener('click', function() {
-                var pages = +modal.getAttribute('data-booking-pages') || 1;
-                page = (page + pages - 1) % pages; render();
-              });
-              modal.querySelector('[data-booking-week-next]').addEventListener('click', function() {
-                var pages = +modal.getAttribute('data-booking-pages') || 1;
-                page = (page + 1) % pages; render();
-              });
-              modal.querySelectorAll('[data-booking-view]').forEach(function(btn) {
-                btn.addEventListener('click', function() {
-                  view = btn.getAttribute('data-booking-view');
-                  modal.classList.toggle('is-monthly', view === 'month');
-                  modal.querySelectorAll('[data-booking-view]').forEach(function(b) {
-                    b.classList.toggle('is-active', b === btn);
-                  });
-                  render();
-                });
-              });
-              if (searchInput) searchInput.addEventListener('input', function() {
-                query = searchInput.value.trim().toLowerCase(); page = 0; render();
-              });
-              render();
-            })();
-          </script>
+        <div data-pe-explorer="" data-mode="dark" data-tab="calendario" data-title="Calendario"></div>
       </div>
     </div>
       <!-- PE-83 console, menu-only on this page: parked in .pe-con-holder, docked by MENU (js/pe-console.js) -->
@@ -3803,7 +3222,7 @@
           <div class="w-layout-grid footer15_top-wrapper">
             <div class="footer15_left-wrapper">
               <div class="margin-bottom margin-medium">
-                <a href="#" class="footer15_logo-link w-nav-brand">
+                <a href="index.html" aria-label="Presunta Entropía, inicio" class="footer15_logo-link w-nav-brand">
                   <div class="footer15_logo" data-w-id="3a45617a-4720-51f4-df46-eeb38d326be5" data-animation-type="lottie" data-src="../documents/presunta-anim.json" data-loop="0" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="0" data-duration="5" data-loading="eager"></div>
                 </a>
               </div>
@@ -3822,29 +3241,30 @@
                   <a href="#" class="f-text-small"><br>info@presuntaentropia.com</a>
                 </div>
               </div>
+              <!-- TODO(Juan): real profile URLs for the social links (Facebook, Instagram, X, LinkedIn, YouTube). href="#" until provided. -->
               <div class="w-layout-grid footer15_social-list">
-                <a href="#" class="footer15_social-link w-inline-block">
-                  <div class="icon-embed-xsmall w-embed"><svg width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <a href="#" aria-label="Facebook" class="footer15_social-link w-inline-block">
+                  <div class="icon-embed-xsmall w-embed"><svg aria-hidden="true" width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M22 12.0611C22 6.50451 17.5229 2 12 2C6.47715 2 2 6.50451 2 12.0611C2 17.0828 5.65684 21.2452 10.4375 22V14.9694H7.89844V12.0611H10.4375V9.84452C10.4375 7.32296 11.9305 5.93012 14.2146 5.93012C15.3088 5.93012 16.4531 6.12663 16.4531 6.12663V8.60261H15.1922C13.95 8.60261 13.5625 9.37822 13.5625 10.1739V12.0611H16.3359L15.8926 14.9694H13.5625V22C18.3432 21.2452 22 17.083 22 12.0611Z" fill="CurrentColor"></path>
                     </svg></div>
                 </a>
-                <a href="#" class="footer15_social-link w-inline-block">
-                  <div class="icon-embed-xsmall w-embed"><svg width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <a href="#" aria-label="Instagram" class="footer15_social-link w-inline-block">
+                  <div class="icon-embed-xsmall w-embed"><svg aria-hidden="true" width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path fill-rule="evenodd" clip-rule="evenodd" d="M16 3H8C5.23858 3 3 5.23858 3 8V16C3 18.7614 5.23858 21 8 21H16C18.7614 21 21 18.7614 21 16V8C21 5.23858 18.7614 3 16 3ZM19.25 16C19.2445 17.7926 17.7926 19.2445 16 19.25H8C6.20735 19.2445 4.75549 17.7926 4.75 16V8C4.75549 6.20735 6.20735 4.75549 8 4.75H16C17.7926 4.75549 19.2445 6.20735 19.25 8V16ZM16.75 8.25C17.3023 8.25 17.75 7.80228 17.75 7.25C17.75 6.69772 17.3023 6.25 16.75 6.25C16.1977 6.25 15.75 6.69772 15.75 7.25C15.75 7.80228 16.1977 8.25 16.75 8.25ZM12 7.5C9.51472 7.5 7.5 9.51472 7.5 12C7.5 14.4853 9.51472 16.5 12 16.5C14.4853 16.5 16.5 14.4853 16.5 12C16.5027 10.8057 16.0294 9.65957 15.1849 8.81508C14.3404 7.97059 13.1943 7.49734 12 7.5ZM9.25 12C9.25 13.5188 10.4812 14.75 12 14.75C13.5188 14.75 14.75 13.5188 14.75 12C14.75 10.4812 13.5188 9.25 12 9.25C10.4812 9.25 9.25 10.4812 9.25 12Z" fill="CurrentColor"></path>
                     </svg></div>
                 </a>
-                <a href="#" class="footer15_social-link w-inline-block">
-                  <div class="icon-embed-xsmall w-embed"><svg width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <a href="#" aria-label="X" class="footer15_social-link w-inline-block">
+                  <div class="icon-embed-xsmall w-embed"><svg aria-hidden="true" width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M17.1761 4H19.9362L13.9061 10.7774L21 20H15.4456L11.0951 14.4066L6.11723 20H3.35544L9.80517 12.7508L3 4H8.69545L12.6279 9.11262L17.1761 4ZM16.2073 18.3754H17.7368L7.86441 5.53928H6.2232L16.2073 18.3754Z" fill="CurrentColor"></path>
                     </svg></div>
                 </a>
-                <a href="#" class="footer15_social-link w-inline-block">
-                  <div class="icon-embed-xsmall w-embed"><svg width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <a href="#" aria-label="LinkedIn" class="footer15_social-link w-inline-block">
+                  <div class="icon-embed-xsmall w-embed"><svg aria-hidden="true" width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path fill-rule="evenodd" clip-rule="evenodd" d="M4.5 3C3.67157 3 3 3.67157 3 4.5V19.5C3 20.3284 3.67157 21 4.5 21H19.5C20.3284 21 21 20.3284 21 19.5V4.5C21 3.67157 20.3284 3 19.5 3H4.5ZM8.52076 7.00272C8.52639 7.95897 7.81061 8.54819 6.96123 8.54397C6.16107 8.53975 5.46357 7.90272 5.46779 7.00413C5.47201 6.15897 6.13998 5.47975 7.00764 5.49944C7.88795 5.51913 8.52639 6.1646 8.52076 7.00272ZM12.2797 9.76176H9.75971H9.7583V18.3216H12.4217V18.1219C12.4217 17.742 12.4214 17.362 12.4211 16.9819V16.9818V16.9816V16.9815V16.9812C12.4203 15.9674 12.4194 14.9532 12.4246 13.9397C12.426 13.6936 12.4372 13.4377 12.5005 13.2028C12.7381 12.3253 13.5271 11.7586 14.4074 11.8979C14.9727 11.9864 15.3467 12.3141 15.5042 12.8471C15.6013 13.1803 15.6449 13.5389 15.6491 13.8863C15.6605 14.9339 15.6589 15.9815 15.6573 17.0292V17.0294C15.6567 17.3992 15.6561 17.769 15.6561 18.1388V18.3202H18.328V18.1149C18.328 17.6629 18.3278 17.211 18.3275 16.7591V16.759V16.7588C18.327 15.6293 18.3264 14.5001 18.3294 13.3702C18.3308 12.8597 18.276 12.3563 18.1508 11.8627C17.9638 11.1286 17.5771 10.5211 16.9485 10.0824C16.5027 9.77019 16.0133 9.5691 15.4663 9.5466C15.404 9.54401 15.3412 9.54062 15.2781 9.53721L15.2781 9.53721L15.2781 9.53721C14.9984 9.52209 14.7141 9.50673 14.4467 9.56066C13.6817 9.71394 13.0096 10.0641 12.5019 10.6814C12.4429 10.7522 12.3852 10.8241 12.2991 10.9314L12.2991 10.9315L12.2797 10.9557V9.76176ZM5.68164 18.3244H8.33242V9.76733H5.68164V18.3244Z" fill="CurrentColor"></path>
                     </svg></div>
                 </a>
-                <a href="#" class="footer15_social-link w-inline-block">
-                  <div class="icon-embed-xsmall w-embed"><svg width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <a href="#" aria-label="YouTube" class="footer15_social-link w-inline-block">
+                  <div class="icon-embed-xsmall w-embed"><svg aria-hidden="true" width="100%" height="100%" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path fill-rule="evenodd" clip-rule="evenodd" d="M20.5686 4.77345C21.5163 5.02692 22.2555 5.76903 22.5118 6.71673C23.1821 9.42042 23.1385 14.5321 22.5259 17.278C22.2724 18.2257 21.5303 18.965 20.5826 19.2213C17.9071 19.8831 5.92356 19.8015 3.40294 19.2213C2.45524 18.9678 1.71595 18.2257 1.45966 17.278C0.827391 14.7011 0.871044 9.25144 1.44558 6.73081C1.69905 5.78311 2.44116 5.04382 3.38886 4.78753C6.96561 4.0412 19.2956 4.282 20.5686 4.77345ZM9.86682 8.70227L15.6122 11.9974L9.86682 15.2925V8.70227Z" fill="CurrentColor"></path>
                     </svg></div>
                 </a>
@@ -3856,12 +3276,13 @@
                 <p class="pe-newsletter_text f-text-small">Novedades, eventos y experiencias de Presunta Entropía en tu correo.</p>
               </div>
               <form class="pe-newsletter_form" data-newsletter-form data-surface="footer-form">
-                <input class="pe-newsletter_input form_input w-input" type="email" name="email" required autocomplete="email" placeholder="Tu email">
+                <label class="pe-newsletter_sr" for="nl-footer-email">Tu email</label>
+                <input id="nl-footer-email" class="pe-newsletter_input form_input w-input" type="email" name="email" required autocomplete="email" placeholder="Tu email">
                 <label class="pe-newsletter_consent f-text-tiny">
-                  <input class="pe-newsletter_check" type="checkbox" name="consent" data-consent-version="newsletter-v1">
+                  <input class="pe-newsletter_check" type="checkbox" aria-describedby="nl-footer-info" name="consent" data-consent-version="newsletter-v1">
                   Quiero recibir por email novedades, eventos y experiencias de Presunta Entropía. Puedo darme de baja en cualquier momento. Más información en la <a href="/politica-de-privacidad">Política de privacidad</a>.
                 </label>
-                <details class="pe-newsletter_info f-text-tiny">
+                <details id="nl-footer-info" class="pe-newsletter_info f-text-tiny">
                   <summary class="pe-newsletter_info-link">Información básica sobre protección de datos</summary>
                   <table class="pe-newsletter_info-table"><tbody>
                     <tr><th scope="row">Responsable</th><td>THE COOKING LAB SLU (Presunta Entropía)</td></tr>
@@ -3874,8 +3295,8 @@
                 </details>
                 <div class="pe-newsletter_hp" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off"></div>
                 <button class="pe-newsletter_button button is-secondary is-small f-text-label f-text-ui-sm" type="submit">Suscribirme</button>
-                <p class="pe-newsletter_msg f-text-small" data-newsletter-success hidden>Casi listo. Revisa tu correo y confirma la suscripción.</p>
-                <p class="pe-newsletter_msg f-text-small" data-newsletter-error hidden>No se ha podido enviar. Inténtalo de nuevo en unos minutos.</p>
+                <p class="pe-newsletter_msg f-text-small" role="status" data-newsletter-success hidden>Casi listo. Revisa tu correo y confirma la suscripción.</p>
+                <p class="pe-newsletter_msg f-text-small" role="alert" data-newsletter-error hidden>No se ha podido enviar. Inténtalo de nuevo en unos minutos.</p>
               </form>
             </div>
             <div class="w-layout-grid footer15_menu-wrapper">
@@ -4012,11 +3433,13 @@
   <!-- Entropical cart, site-wide. The script sends customers to /carrito unless told otherwise. -->
   <script>window.ENTROPICAL_CHECKOUT_PAGE_URL = '/checkout';</script>
   <script src="https://presunta.ntropical.com/webflow-cart.js"></script>
+  <script src="js/pe-booking-flow.js?v=971357ea" defer></script>
   <!-- Entropical packs (buy / redeem modals, cart pack block, js/pe-packs.js glue). Load after the cart.
        [confirmar] the three values with Juan: terms page, contact, payment providers enabled for packs. -->
   <script>window.ENTROPICAL_PACKS = { termsUrl: '/condiciones-de-cancelacion', contactUrl: 'mailto:info@presuntaentropia.com', paymentMethods: ['redsys'] };</script>
   <script src="https://presunta.ntropical.com/webflow-packs.js" defer></script>
   <script src="js/pe-packs.js?v=9c42bd9b" defer></script>
+  <script src="js/pe-explorer.js?v=bf34ae93" defer></script>
   <script src="https://presunta.ntropical.com/webflow-newsletter.js" defer></script>
   <!-- music + ORDEN/CAOS float (js/pe-music.js, entropy-mode.js), same as home -->
   <div class="pe-float" aria-label="Música y modo entropía">
