@@ -211,7 +211,7 @@ body .pe-bookdlg::before {
 }
 body .pe-bookdlg.is-open { opacity: 1; }
 body .pe-bookdlg_panel {
-  position: relative; width: 100%; max-width: 34rem; max-height: calc(100vh - 2rem); overflow-y: auto;
+  position: relative; width: 100%; max-width: 34rem; max-height: calc(100vh - 2rem); max-height: calc(100dvh - 2rem); overflow-y: auto;
   display: flex; flex-direction: column; row-gap: var(--_spacing---space--4);
   padding: var(--_spacing---space--5);
   background-color: var(--pe---color--aztec); color: var(--pe---color--stark-white);

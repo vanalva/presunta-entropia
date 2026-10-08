@@ -11526,3 +11526,13 @@ a.hero-opt_day:hover { transform: translateY(0.1875rem); box-shadow: 0 0 0 0 var
 .ti-fecha.is-promo .ti-fecha_price {
     color: var(--pe---color--mule-fawn);
 }
+
+/* Preloader on phones: 100vh includes the area behind the browser toolbar (iOS Safari), so the
+   centred logo and lines sat low. 100dvh is the height actually visible; browsers without it
+   ignore the value and keep 100vh. */
+.pe-preloader-container {
+    height: 100dvh;
+}
+.pe-preloader-container.pe-preloader-initially-hidden {
+    height: 100dvh;
+}
