@@ -51,13 +51,15 @@ body .cart-modal_component div.cart-modal_container {
 }
 
 /* ---- 2. Packs dialogs (buy / gift / redeem, webflow-packs.js) --- */
-body .ep-backdrop {
+body .ep-backdrop,
+body .pe-bookdlg {
   background: var(--pe-glass-tint) !important;   /* embed: beats the script's injected rgba(10,10,10,.6) */
   -webkit-backdrop-filter: var(--pe-glass-blur);
   backdrop-filter: var(--pe-glass-blur);
   animation: pe-glass-in var(--pe-glass-fade) var(--pe-glass-ease) both !important;
 }
-body .ep-backdrop::before {
+body .ep-backdrop::before,
+body .pe-bookdlg::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -67,8 +69,10 @@ body .ep-backdrop::before {
   opacity: var(--pe-glass-grain-opacity);
   pointer-events: none;
 }
-body .ep-backdrop > * { position: relative; }
-body .ep-backdrop .ep-dialog {
+body .ep-backdrop > *,
+body .pe-bookdlg > * { position: relative; }
+body .ep-backdrop .ep-dialog,
+body .pe-bookdlg_panel {
   animation: pe-glass-rise 0.28s var(--pe-glass-ease) both;
 }
 
@@ -195,38 +199,20 @@ body button.cart-header_button.pe-book_cart { order: 0; flex: 0 0 auto; align-se
 /* no extra effects: it behaves exactly like the dock cart button (pe-motion.js slide, :active press) */
 
 /* ---- The booking dialog: Reservar → seats → pay (js/pe-booking-flow.js) ---- */
+/* Shell, glass, panel skin and close button are the platform dialog's (pe-platform.css PANEL +
+   CLOSE, the glass above): one dialog for the site. Only what the platform script would
+   otherwise inject is set here: the fixed layer and the inner layout. */
 body .pe-bookdlg {
-  position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 130000;
-  display: flex; align-items: center; justify-content: center;
-  padding: var(--_spacing---space--3);
-  opacity: 0; transition: opacity var(--pe-glass-fade) var(--pe-glass-ease);
+  position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 130000; display: flex;
   --color-scheme-1--background: var(--pe---color--aztec);
   --color-scheme-1--text: var(--pe---color--stark-white);
   color-scheme: dark;
 }
-body .pe-bookdlg::before {
-  content: ""; position: absolute; top: 0; right: 0; bottom: 0; left: 0;
-  background-image: var(--pe-glass-grain); background-size: 160px 160px;
-  opacity: var(--pe-glass-grain-opacity); pointer-events: none;
-}
-body .pe-bookdlg.is-open { opacity: 1; }
 body .pe-bookdlg_panel {
-  position: relative; width: 100%; max-width: 34rem; max-height: calc(100vh - 2rem); max-height: calc(100dvh - 2rem); overflow-y: auto;
-  display: flex; flex-direction: column; row-gap: var(--_spacing---space--4);
+  overflow-y: auto; display: flex; flex-direction: column; row-gap: var(--_spacing---space--4);
   padding: var(--_spacing---space--5);
-  background-color: var(--pe---color--aztec); color: var(--pe---color--stark-white);
-  border: var(--pe---border-width, 0.094rem) solid var(--pe---color--stark-white);
-  border-radius: var(--_radius---panel);
-  transform: translate(0, 12px); transition: transform 0.32s var(--pe-glass-ease);
 }
-body .pe-bookdlg.is-open .pe-bookdlg_panel { transform: none; }
-body .pe-bookdlg_close {
-  position: absolute; top: var(--_spacing---space--3); right: var(--_spacing---space--3);
-  display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; padding: 0;
-  background: transparent; color: inherit; cursor: pointer;
-  border: var(--pe---border-width, 0.094rem) solid currentColor; border-radius: var(--_radius---control-sm);
-}
-body .pe-bookdlg_close:hover { background-color: var(--pe---color--stark-white); color: var(--pe---color--aztec); }
+body .pe-bookdlg .pe-bookdlg_close { position: absolute; top: var(--_spacing---space--3); right: var(--_spacing---space--3); padding: 0; cursor: pointer; }
 body .pe-bookdlg_head { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); column-gap: var(--_spacing---space--3); align-items: center; padding-right: 2.5rem; }
 body .pe-bookdlg_media { position: relative; aspect-ratio: 1 / 1; overflow: hidden; border-radius: var(--_radius---control-sm); background-color: color-mix(in srgb, var(--pe---color--stark-white) 8%, var(--pe---color--aztec)); }
 body .pe-bookdlg_img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -269,13 +255,12 @@ body .pe-bookdlg_err { color: var(--pe---color--mule-fawn-light); }
 body .pe-bookdlg_err:empty { display: none; }
 body .pe-bookdlg :focus-visible { outline: 2px solid var(--pe---color--fuel-yellow); outline-offset: 3px; }
 @media (max-width: 478px) {
-  body .pe-bookdlg { padding: var(--_spacing---space--2); }
   body .pe-bookdlg_panel { padding: var(--_spacing---space--4); }
   body .pe-bookdlg_head { grid-template-columns: 5rem minmax(0, 1fr); }
   body .pe-bookdlg_ctas { grid-template-columns: minmax(0, 1fr); }
 }
 @media (prefers-reduced-motion: reduce) {
-  body .pe-bookdlg, body .pe-bookdlg_panel { transition-duration: 0s; }
+  body .pe-bookdlg, body .pe-bookdlg_panel { animation: none !important; }
 }
 
 /* taller-item date rows: the Reservar + cart pair takes the CTA slot of the row grid

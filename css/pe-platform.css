@@ -80,6 +80,7 @@ body .ep-scope.ep-backdrop,
 body .ep-backdrop .ep-dialog { color-scheme: dark; }
 body .pe-ep-light .ep-scope { color-scheme: light; }
 body .ep-backdrop .ep-dialog,
+body .pe-bookdlg_panel,
 body .cart-packchoice {
   background: var(--pe---color--aztec);
   color: var(--pe---color--stark-white);
@@ -89,9 +90,19 @@ body .cart-packchoice {
   font-family: var(--pe-ui-font);
 }
 body .ep-backdrop .ep-dialog { overflow: hidden; }
-@media (max-width: 599px) {
-  /* bottom sheet on phones: open bottom edge */
-  body .ep-backdrop .ep-dialog { border-bottom-width: 0; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+/* ONE dialog for the whole site: the platform's (packs buy / gift / redeem, webflow-packs.js)
+   and the site's own (Reservar, js/pe-booking-flow.js) share placement and size here, and the
+   PANEL skin above, the CLOSE button below, the glass in pe-overlays.css. Centred on every
+   screen (no bottom sheet), as tall as the VISIBLE viewport (dvh: the phone toolbar excluded). */
+body .ep-backdrop,
+body .pe-bookdlg { align-items: center; justify-content: center; padding: var(--_spacing---space--3); }
+body .ep-backdrop .ep-dialog,
+body .pe-bookdlg_panel { width: 100%; max-width: 34rem; max-height: calc(100vh - 2 * var(--_spacing---space--3)); max-height: calc(100dvh - 2 * var(--_spacing---space--3)); }
+@media (max-width: 478px) {
+  body .ep-backdrop,
+  body .pe-bookdlg { padding: var(--_spacing---space--2); }
+  body .ep-backdrop .ep-dialog,
+  body .pe-bookdlg_panel { max-height: calc(100vh - 2 * var(--_spacing---space--2)); max-height: calc(100dvh - 2 * var(--_spacing---space--2)); }
 }
 body .ep-scope .ep-head { padding: var(--_spacing---space--4) var(--_spacing---space--4) var(--_spacing---space--3); border-bottom: 1px solid var(--pe-ui-divider); align-items: center; }
 body .ep-scope .ep-body { padding: var(--_spacing---space--4) var(--_spacing---space--4) 0; }
@@ -132,6 +143,7 @@ body .ep-scope .ep-facts li { margin: 0; padding-left: 0; }
 
 /* ---------- CLOSE ---------- */
 body .ep-scope .ep-close,
+body .pe-bookdlg .pe-bookdlg_close,
 body .cart-notification .cart-notification-close {
   width: 2.5rem;
   height: 2.5rem;

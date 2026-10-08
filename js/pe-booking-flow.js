@@ -157,7 +157,7 @@
     var d = dlg; dlg = null;
     d.classList.remove('is-open');
     document.removeEventListener('keydown', onKey, true);
-    setTimeout(function () { d.remove(); }, 200);
+    d.remove();   // the platform dialogs close at once too
     if (lastFocus && lastFocus.focus) lastFocus.focus();
   }
   function onKey(e) {
@@ -186,7 +186,7 @@
     var was = s.precioOriginal && price !== null && s.precioOriginal > price ? s.precioOriginal : null;
     var qty = 1;
 
-    var root = el('div', 'pe-bookdlg pe-glass');
+    var root = el('div', 'pe-bookdlg');
     root.setAttribute('data-flwr', '');
     var panel = el('div', 'pe-bookdlg_panel');
     panel.setAttribute('role', 'dialog');
