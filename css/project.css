@@ -2618,12 +2618,6 @@ a {
    Cream page (color-scheme-2 sections) with dark accents.
    ═══════════════════════════════════════════════════════════ */
 
-.taller-detail_divider {
-    border-top-width: 1.5px;
-    border-top-style: dashed;
-    border-top-color: var(--pe---color--aztec-light);
-    width: 100%;
-}
 
 .taller-detail_media-image {
     width: 100%;
@@ -2635,24 +2629,10 @@ a {
     border-bottom-right-radius: var(--_radius---card);
 }
 
-.taller-detail_layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: var(--_spacing-semantics---gap--gap-2xl);
-    row-gap: var(--_spacing-semantics---gap--gap-lg);
-    align-items: start;
-}
 
 
 
 
-.taller-detail_thumbs {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    column-gap: var(--_spacing-semantics---gap--gap-xs);
-    row-gap: var(--_spacing-semantics---gap--gap-xs);
-    margin-top: var(--_spacing-semantics---gap--gap-lg);
-}
 
 .taller-detail_thumb {
     width: 100%;
@@ -2664,28 +2644,8 @@ a {
     border-bottom-right-radius: var(--_radius---lg);
 }
 
-.taller-detail_bullets {
-    list-style-type: none;
-    padding-left: 0;
-    margin-top: 0;
-    margin-bottom: 0;
-}
 
-.taller-detail_bullet {
-    margin-bottom: var(--_spacing-semantics---gap--gap-sm);
-    font-size: 1.1rem;
-    line-height: 1.45;
-}
 
-.taller-detail_ctas {
-    display: flex;
-    align-items: center;
-    column-gap: var(--_spacing-semantics---gap--gap-sm);
-    row-gap: var(--_spacing-semantics---gap--gap-sm);
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    margin-top: var(--_spacing-semantics---gap--gap-xl);
-}
 
 .button_registrate {
     display: inline-flex;
@@ -2852,11 +2812,6 @@ a {
     height: 1.4rem;
 }
 
-.similares_heading {
-    text-align: center;
-    margin-top: 0;
-    margin-bottom: var(--_spacing-semantics---gap--gap-2xl);
-}
 
 .similares_grid {
     display: grid;
@@ -2966,9 +2921,6 @@ a {
 }
 
 @media (max-width: 991px) {
-    .taller-detail_layout {
-        grid-template-columns: 1fr;
-    }
     .similares_grid {
         grid-template-columns: 1fr 1fr;
     }
@@ -2988,18 +2940,12 @@ a {
     .similares_grid {
         grid-template-columns: 1fr;
     }
-    .taller-detail_ctas {
-        justify-content: flex-start;
-    }
     .taller-detail_media-image {
         height: 20rem;
     }
 }
 
 @media (max-width: 478px) {
-    .taller-detail_thumbs {
-        grid-template-columns: 1fr 1fr;
-    }
     .button_registrate,
     .button_similares {
         width: 100%;
@@ -4259,31 +4205,6 @@ iframe[src*="vanny.chat"] { color-scheme: light !important; }
 
     /* P4. ORDEN/CAOS gets its own full-width control row under the CTAs:
        label left, switch right, framed like a console control. */
-    .entropy-switch_wrap.hero_mode-row {
-        width: 100%;
-        margin-right: 0;
-        justify-content: flex-end;
-        padding-top: 0.625rem;
-        padding-right: var(--_spacing-semantics---padding--pad-section-sm);
-        padding-bottom: 0.625rem;
-        padding-left: var(--_spacing-semantics---padding--pad-section-sm);
-        border-top-width: 1px;
-        border-right-width: 1px;
-        border-bottom-width: 1px;
-        border-left-width: 1px;
-        border-top-style: solid;
-        border-right-style: solid;
-        border-bottom-style: solid;
-        border-left-style: solid;
-        border-top-color: var(--color-scheme-1--border);
-        border-right-color: var(--color-scheme-1--border);
-        border-bottom-color: var(--color-scheme-1--border);
-        border-left-color: var(--color-scheme-1--border);
-        border-top-left-radius: var(--_radius---control);
-        border-top-right-radius: var(--_radius---control);
-        border-bottom-left-radius: var(--_radius---control);
-        border-bottom-right-radius: var(--_radius---control);
-    }
 
     /* P6. Calendario filter chips (Talleres · Cenas · Team Building) ran
        440px wide in a 358px column on phones and were cut at both edges;
@@ -4305,9 +4226,6 @@ iframe[src*="vanny.chat"] { color-scheme: light !important; }
         display: block;
     }
 
-    .entropy-switch_wrap.hero_mode-row {
-        margin-right: 0;
-    }
 }
 
 /* ── P6b (opus-home). Phones ≤478: the two hero CTAs ran ~6px past the
@@ -4342,52 +4260,9 @@ iframe[src*="vanny.chat"] { color-scheme: light !important; }
     row-gap: var(--_spacing-semantics---gap--gap-xs);
 }
 
-.entropy-switch_wrap.hero_mode-row {
-    width: auto;
-    min-height: 2.625rem;
-    margin-right: 0;
-    column-gap: var(--_spacing-semantics---gap--gap-2xs);
-    justify-content: flex-start;
-    padding-top: 0.375rem;
-    padding-right: 0.875rem;
-    padding-bottom: 0.375rem;
-    padding-left: var(--_spacing-semantics---padding--pad-section-sm);
-    border-top-width: 1px;
-    border-right-width: 1px;
-    border-bottom-width: 1px;
-    border-left-width: 1px;
-    border-top-style: solid;
-    border-right-style: solid;
-    border-bottom-style: solid;
-    border-left-style: solid;
-    border-top-color: var(--color-scheme-1--border);
-    border-right-color: var(--color-scheme-1--border);
-    border-bottom-color: var(--color-scheme-1--border);
-    border-left-color: var(--color-scheme-1--border);
-    border-top-left-radius: var(--_radius---control);
-    border-top-right-radius: var(--_radius---control);
-    border-bottom-left-radius: var(--_radius---control);
-    border-bottom-right-radius: var(--_radius---control);
-    transition-property: border-top-color, border-right-color, border-bottom-color, border-left-color;
-    transition-duration: 0.3s;
-    transition-timing-function: ease;
-    transition-delay: 0s;
-}
 
 /* one hover / focus state for the control at every width */
-.entropy-switch_wrap.hero_mode-row:hover {
-    border-top-color: var(--color-scheme-1--accent);
-    border-right-color: var(--color-scheme-1--accent);
-    border-bottom-color: var(--color-scheme-1--accent);
-    border-left-color: var(--color-scheme-1--accent);
-}
 
-.entropy-switch_wrap.hero_mode-row:focus-within {
-    border-top-color: var(--color-scheme-1--accent);
-    border-right-color: var(--color-scheme-1--accent);
-    border-bottom-color: var(--color-scheme-1--accent);
-    border-left-color: var(--color-scheme-1--accent);
-}
 
 /* ── F2. Product cards hover into a neighbouring scheme ────────────────
    Cream card (scheme 2) → yellow (scheme 4); rust cards (scheme 5) → aztec
@@ -4475,14 +4350,6 @@ iframe[src*="vanny.chat"] { color-scheme: light !important; }
         align-items: stretch;
     }
 
-    .entropy-switch_wrap.hero_mode-row {
-        width: 100%;
-        justify-content: flex-end;
-        padding-top: 0.625rem;
-        padding-right: var(--_spacing-semantics---padding--pad-section-sm);
-        padding-bottom: 0.625rem;
-        padding-left: var(--_spacing-semantics---padding--pad-section-sm);
-    }
 }
 
 /* ═══ PASS 2 — SHARED FIXES (orchestrator) ═══
@@ -5830,14 +5697,7 @@ iframe[src*="vanny.chat"] { color-scheme: light !important; }
         flex-basis: auto;
     }
 
-    .hero_wrapper-left.todos_hero-left {
-        height: auto;
-    }
 
-    .padding-medium.is-full-height.border-full.todos_hero-card {
-        height: auto;
-        flex-basis: auto;
-    }
 }
 
 /* ── K1. Cream taller card (design p2-01 / p3-00): .similar-card + .is-cream.
@@ -5909,16 +5769,6 @@ iframe[src*="vanny.chat"] { color-scheme: light !important; }
 }
 
 /* the image frame clips the grow to the rounded corners */
-.similar-card_frame {
-    position: relative;
-    display: block;
-    overflow-x: hidden;
-    overflow-y: hidden;
-    border-top-left-radius: var(--_radius---lg);
-    border-top-right-radius: var(--_radius---lg);
-    border-bottom-left-radius: var(--_radius---lg);
-    border-bottom-right-radius: var(--_radius---lg);
-}
 
 .similar-card_image {
     display: block;
@@ -5977,11 +5827,6 @@ iframe[src*="vanny.chat"] { color-scheme: light !important; }
 }
 
 /* ── T2. Todos grid: 3 columns of cream cards (design p3-00). */
-.talleres-list_layout_row.similares_grid {
-    grid-template-columns: 1fr 1fr 1fr;
-    column-gap: var(--_spacing-semantics---gap--gap-md);
-    row-gap: var(--_spacing-semantics---gap--gap-md);
-}
 
 .talleres_card.similar-card.is-cream {
     overflow-x: visible;
@@ -5989,259 +5834,42 @@ iframe[src*="vanny.chat"] { color-scheme: light !important; }
     cursor: pointer;
 }
 
-.productos_card-image-wrapper.todos_card-media {
-    display: block;
-}
 
-.padding-global.todos_card-pad {
-    padding-top: 0;
-    padding-right: 0;
-    padding-bottom: 0;
-    padding-left: 0;
-}
 
 /* the old "Regístrate hoy" flag duplicated the card's Regístrate button */
-.layer.todos_card-flag {
-    display: none;
-}
 
-.productos_card-content.todos_card-content {
-    padding-top: 0;
-    padding-right: 0;
-    padding-bottom: 0;
-    padding-left: 0;
-    row-gap: var(--_spacing-semantics---gap--gap-xs);
-}
 
-.button-group.is-chips.todos_chips {
-    column-gap: 0.25rem;
-    row-gap: 0.25rem;
-    margin-bottom: var(--_spacing-semantics---padding--pad-section-2xs);
-}
 
-.button.is-simple.is-small.todos_chip {
-    flex-grow: 0;
-    flex-shrink: 0;
-    flex-basis: auto;
-    margin-bottom: 0;
-    padding-top: 0.1875rem;
-    padding-right: 0.625rem;
-    padding-bottom: 0.1875rem;
-    padding-left: 0.625rem;
-    border-top-color: currentColor;
-    border-right-color: currentColor;
-    border-bottom-color: currentColor;
-    border-left-color: currentColor;
-    border-top-left-radius: var(--_radius---tag);
-    border-top-right-radius: var(--_radius---tag);
-    border-bottom-left-radius: var(--_radius---tag);
-    border-bottom-right-radius: var(--_radius---tag);
-    column-gap: 0.25rem;
-    background-color: transparent;
-    color: inherit;
-    font-family: inherit;
-    font-size: 0.8125rem;
-    text-transform: none;
-    white-space: nowrap;
-}
 
-.button.is-simple.is-small.todos_chip:hover {
-    background-color: transparent;
-    color: inherit;
-}
 
 /* ── T1. Todos filter bar (design p3-00) ─────────────────────────────── */
-.calendar-filter_wrap.todos_filter {
-    margin-bottom: var(--_spacing-semantics---gap--gap-xl);
-}
 
-.todos_filter-form {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    justify-content: space-between;
-    column-gap: var(--_spacing-semantics---gap--gap-md);
-    row-gap: var(--_spacing-semantics---gap--gap-sm);
-    margin-bottom: 0;
-}
 
-.eventos_filter-menu-2.todos_filter-menu {
-    flex-grow: 1;
-    flex-wrap: wrap;
-    align-items: stretch;
-    column-gap: var(--_spacing-semantics---gap--gap-xs);
-    row-gap: var(--_spacing-semantics---gap--gap-xs);
-}
 
-.todos_search {
-    position: relative;
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: 16rem;
-    max-width: 30rem;
-}
 
-.filter_input.todos_search-input {
-    width: 100%;
-    height: auto;
-    margin-bottom: 0;
-    padding-right: 3.5rem;
-}
 
-.todos_search-icon {
-    position: absolute;
-    top: 50%;
-    right: 1.25rem;
-    width: 1.25rem;
-    height: 1.25rem;
-    margin-top: -0.625rem;
-    border-top-width: 3px;
-    border-right-width: 3px;
-    border-bottom-width: 3px;
-    border-left-width: 3px;
-    border-top-style: solid;
-    border-right-style: solid;
-    border-bottom-style: solid;
-    border-left-style: solid;
-    border-top-color: currentColor;
-    border-right-color: currentColor;
-    border-bottom-color: currentColor;
-    border-left-color: currentColor;
-    border-top-left-radius: var(--_radius---tag);
-    border-top-right-radius: var(--_radius---tag);
-    border-bottom-left-radius: var(--_radius---tag);
-    border-bottom-right-radius: var(--_radius---tag);
-    pointer-events: none;
-}
 
-.select-custom_component.todos_select {
-    min-width: 10rem;
-}
 
-.todos_sort {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    row-gap: 0.375rem;
-}
 
-.todos_sort-label {
-    font-size: 0.8125rem;
-}
 
-.button-group.is-chips.todos_sort-group {
-    column-gap: 0.25rem;
-    row-gap: 0.25rem;
-}
 
-.tag.todos_sort-btn {
-    --todos-arrow-turn: 0deg;
-    column-gap: var(--_spacing-semantics---gap--gap-2xs);
-    min-height: 2.25rem;
-    padding-right: var(--_spacing-semantics---padding--pad-section-xs);
-    padding-left: var(--_spacing-semantics---padding--pad-section-xs);
-    background-color: transparent;
-    color: inherit;
-    font-family: inherit;
-    font-size: 1rem;
-    font-weight: var(--_typography---weight--medium);
-    cursor: pointer;
-    transition-property: background-color, color;
-    transition-duration: 0.25s;
-    transition-timing-function: ease;
-    transition-delay: 0s;
-}
 
-.tag.todos_sort-btn:hover {
-    background-color: var(--pe---color--fuel-yellow);
-    color: var(--pe---color--aztec);
-}
 
-.tag.todos_sort-btn.is-active {
-    background-color: var(--color-scheme-1--text);
-    color: var(--color-scheme-1--background);
-}
 
-.tag.todos_sort-btn.is-desc {
-    --todos-arrow-turn: 180deg;
-}
 
-.select-custom_arrow.todos_sort-arrow {
-    transform: rotate(var(--todos-arrow-turn, 0deg));
-    transition-property: transform;
-    transition-duration: 0.25s;
-    transition-timing-function: ease;
-    transition-delay: 0s;
-}
 
-.eventos_filter-tag-wrapper.todos_tags {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    column-gap: var(--_spacing-semantics---gap--gap-2xs);
-    row-gap: var(--_spacing-semantics---gap--gap-2xs);
-    margin-top: var(--_spacing-semantics---padding--pad-section-sm);
-}
 
-.tag.is-filter-tag.todos_tag {
-    column-gap: var(--_spacing-semantics---gap--gap-xs);
-    min-height: 2.5rem;
-    background-color: transparent;
-    color: inherit;
-    font-family: inherit;
-    font-size: 1.25rem;
-    font-weight: var(--_typography---weight--medium);
-    border-top-left-radius: var(--_radius---control);
-    border-top-right-radius: var(--_radius---control);
-    border-bottom-left-radius: var(--_radius---control);
-    border-bottom-right-radius: var(--_radius---control);
-}
 
-.tag.is-filter-tag.todos_tag:hover {
-    background-color: var(--pe---color--fuel-yellow);
-    color: var(--pe---color--aztec);
-}
 
-.todos_tag-x {
-    font-size: 1rem;
-    line-height: var(--_typography---line-height--small);
-}
 
-.todos_no-results {
-    display: none;
-    flex-direction: column;
-    align-items: flex-start;
-    row-gap: var(--_spacing-semantics---gap--gap-sm);
-    padding-top: var(--_spacing-semantics---padding--pad-section-lg);
-}
 
 @media (max-width: 991px) {
-    .talleres-list_layout_row.similares_grid {
-        grid-template-columns: 1fr 1fr;
-    }
 }
 
 @media (max-width: 767px) {
-    .talleres-list_layout_row.similares_grid {
-        grid-template-columns: 1fr;
-    }
 
-    .eventos_filter-menu-2.todos_filter-menu {
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-items: stretch;
-    }
 
-    .todos_search {
-        flex-basis: 100%;
-        max-width: none;
-    }
 
-    .select-custom_component.todos_select {
-        flex-grow: 1;
-        flex-basis: 40%;
-        min-width: 0;
-    }
 }
 
 /* ── I1. Taller-item hero: the grid sat content-wide inside its flex
@@ -6266,11 +5894,6 @@ iframe[src*="vanny.chat"] { color-scheme: light !important; }
 }
 
 /* ── I3. Dividers: solid hairline (design), was dashed */
-.taller-detail_divider.is-solid {
-    border-top-width: 1px;
-    border-top-style: solid;
-    border-top-color: var(--color-scheme-1--border);
-}
 
 /* I1b. Phones: the two hero CTAs (nowrap labels) are wider than the card;
    they stack full width instead of pushing the grid past the screen. */
@@ -6532,13 +6155,6 @@ div.select-custom_list {
     hyphens: auto;
 }
 
-.u-text-style-h3.taller-item_lead {
-    font-size: clamp(1.75rem, 2.6vw, 2.75rem);
-    line-height: 1.12;
-    font-weight: var(--_typography---weight--medium);
-    letter-spacing: -0.01em;
-    text-transform: none;
-}
 
 .u-text-style-h4.metodo_card-title {
     font-size: clamp(1.75rem, 2.6vw, 2.5rem);
@@ -6904,14 +6520,6 @@ div.radio-button_filter {
     color: var(--color-scheme-1--text);
 }
 /* Page wrapper: centred narrow column inside a section */
-.pe-newsletter_page {
-    width: 100%;
-    max-width: 36rem;
-    margin-right: auto;
-    margin-left: auto;
-    padding-right: var(--_spacing-semantics---padding--pad-section-lg);
-    padding-left: var(--_spacing-semantics---padding--pad-section-lg);
-}
 
 /* AEPD first layer: basic data-protection info, after the consent label.
    Type size is inherited from the .text-size-tiny / .f-text-tiny on the
@@ -6977,10 +6585,6 @@ div.radio-button_filter {
 .pe-newsletter_faq-q::-webkit-details-marker {
     display: none;
 }
-.pe-newsletter_cta-note {
-    margin-top: 0;
-    margin-bottom: 0;
-}
 
 @media (max-width: 991px) {
     .footer15_top-wrapper {
@@ -7003,10 +6607,6 @@ div.radio-button_filter {
         grid-row-start: auto;
         grid-row-end: auto;
         width: 100%;
-    }
-    .pe-newsletter_page {
-        padding-right: var(--_spacing-semantics---padding--pad-section-sm);
-        padding-left: var(--_spacing-semantics---padding--pad-section-sm);
     }
 }
 @media (max-width: 478px) {
@@ -7177,10 +6777,6 @@ div.radio-button_filter {
     background-color: color-mix(in srgb, var(--color-scheme-1--text) 4%, transparent);
     color: var(--color-scheme-1--text);
     text-align: center;
-}
-.pe-util_title {
-    margin-top: 0;
-    margin-bottom: 0;
 }
 .pe-util_states {
     width: 100%;
@@ -7355,11 +6951,6 @@ div.radio-button_filter {
     margin-bottom: 0;
 }
 
-.similar-card_sub.f-text-eyebrow {
-    display: inline-block;
-    margin-top: 0;
-    margin-bottom: 0;
-}
 
 /* ═══ MIGRATION P1 — team-building-v2 ═══ */
 /* flwr 1.6 type migration. Everything this page needs is in the index / talleres-v2 / cenas-v2 blocks above
@@ -7889,7 +7480,7 @@ html .cart-modal_empty-text.cart-modal_empty-text.cart-modal_empty-text::after {
     padding-top: 7px;
     padding-right: 10px;
     padding-bottom: 7px;
-    padding-left: 24px;
+    padding-left: var(--_spacing-semantics---padding--pad-section-md);
     border-top-width: 1px;
     border-right-width: 1px;
     border-bottom-width: 1px;
@@ -8222,12 +7813,6 @@ html .cart-modal_empty-text.cart-modal_empty-text.cart-modal_empty-text::after {
 }
 
 /* Todos: the search input fills its own wrapper (the wrapper carries the flex) */
-.pe-lc_search.todos_search-input {
-    width: 100%;
-    flex-basis: auto;
-    max-width: none;
-    padding-right: calc(var(--pe-lc-pad-x) * 2 + 1.25rem);
-}
 
 /* ── Tablet: 2 columns at most. Phone: 1 column, slider hidden ─────────── */
 @media (max-width: 991px) {
@@ -8342,8 +7927,8 @@ html .cart-modal_empty-text.cart-modal_empty-text.cart-modal_empty-text::after {
 
 .pe-lc_cta.pe-lc_cta .button {
     min-height: 44px;
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
+    padding-top: var(--_spacing-semantics---padding--pad-section-xs);
+    padding-bottom: var(--_spacing-semantics---padding--pad-section-xs);
 }
 /* normal-size buttons can't always share a row: they wrap and share the width */
 .pe-lc_cta.pe-lc_cta {
@@ -9643,19 +9228,6 @@ a.hero-opt_day:hover { transform: translateY(0.1875rem); box-shadow: 0 0 0 0 var
     margin-bottom: 0;
     text-wrap: balance;
 }
-.pe-bento_lede {
-    margin-top: 0;
-    margin-bottom: 0;
-    max-width: 40rem;
-    font-weight: 300;
-}
-.pe-bento_ctas {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    column-gap: var(--_spacing---step--4);
-    row-gap: var(--_spacing---step--3);
-}
 .pe-bento_photo {
     position: relative;
     grid-area: ph;
@@ -9734,7 +9306,7 @@ a.hero-opt_day:hover { transform: translateY(0.1875rem); box-shadow: 0 0 0 0 var
     display: flex;
     flex-direction: column;
     row-gap: var(--_spacing---step--1);
-    padding-bottom: 0.25rem;
+    padding-bottom: var(--_spacing-semantics---padding--pad-section-3xs);
 }
 .pe-bento_nx-foot {
     display: flex;
@@ -9980,10 +9552,6 @@ a.hero-opt_day:hover { transform: translateY(0.1875rem); box-shadow: 0 0 0 0 var
         padding-right: var(--_spacing---step--4);
         padding-bottom: var(--_spacing---step--5);
         padding-left: var(--_spacing---step--4);
-    }
-    .pe-bento_ctas {
-        flex-direction: column;
-        align-items: stretch;
     }
     .hero_title.f-text-hero.pe-bento_h1 {
         font-size: min(var(--_text-style---size), 9.6vw);
@@ -10549,7 +10117,7 @@ a.hero-opt_day:hover { transform: translateY(0.1875rem); box-shadow: 0 0 0 0 var
     line-height: 1;
 }
 .pe-tcard_date-month {
-    margin-top: 0.25rem;
+    margin-top: var(--_spacing-semantics---padding--pad-section-3xs);
     text-transform: uppercase;
     letter-spacing: 0.06em;
 }

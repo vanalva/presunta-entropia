@@ -280,7 +280,7 @@
     var c = shell(dark, ' is-pack' + (opts && opts.wide ? ' is-wide' : ''));
     c.setAttribute('data-pe-card-href', 'packs.html');
     var media = h('div', 'pe-tcard_media');
-    media.appendChild(attr(h('img', 'pe-tcard_image'), { loading: 'lazy', alt: '', src: 'assets/images/home-2026-10/grupo-amigos-cocina.webp' }));
+    media.appendChild(attr(h('img', 'pe-tcard_image'), { loading: 'lazy', alt: '', src: 'assets/images/r4-2026-10/friends-cooking.webp' }));
     var badge = h('div', 'pe-tcard_date is-pack');
     badge.appendChild(h('span', 'pe-tcard_date-month f-text-label f-text-ui-sm', 'Pack'));
     media.appendChild(badge);

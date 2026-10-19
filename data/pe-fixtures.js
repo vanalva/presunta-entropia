@@ -65,11 +65,11 @@ window.PE_ASSETS = window.PE_ASSETS || (function () {
 
   // ---- people (platform shape: Person via PersonItem; the profiles exist in data/pe-personas.js) ----
   var P = {
-    juan: { slug: 'juan-perez', name: 'Juan Pérez', role: 'Chef', photoUrl: window.PE_ASSETS + 'images/site-2026-10/equipo-chef-brazos-cruzados-1600.webp', bio: 'Apasionado por la cocina mediterránea, con más de 10 años de experiencia en restaurantes de Madrid.' },
-    carlos: { slug: 'carlos-ruiz', name: 'Carlos Ruiz', role: 'Invitado especial', photoUrl: window.PE_ASSETS + 'images/home-2026-10/instructor-clase-cocina-1600.webp', bio: 'Sommelier certificado: marida cada plato con la bebida que le toca.' },
-    lara: { slug: 'lara-ladriana', name: 'Lara Ladriana', role: 'Chef', photoUrl: window.PE_ASSETS + 'images/site-2026-10/equipo-retrato-cocinera-1600.webp', bio: 'Cocinera del equipo de Presunta Entropía.' },
-    manuel: { slug: 'manuel-lugo', name: 'Manuel Lugo', role: 'Chef', photoUrl: window.PE_ASSETS + 'images/home-2026-10/riendo-retrato-1600.webp', bio: 'Cocinero del equipo de Presunta Entropía.' },
-    ana: { slug: 'ana-lobenco', name: 'Ana Lobenco', role: 'Chef invitada', photoUrl: window.PE_ASSETS + 'images/site-2026-10/equipo-retrato-sentada-1600.webp', bio: 'Chef invitada para las noches nikkei.' }
+    juan: { slug: 'juan-perez', name: 'Juan Pérez', role: 'Chef', photoUrl: window.PE_ASSETS + 'images/r4-2026-10/p-manuel-1600.webp', bio: 'Apasionado por la cocina mediterránea, con más de 10 años de experiencia en restaurantes de Madrid.' },
+    carlos: { slug: 'carlos-ruiz', name: 'Carlos Ruiz', role: 'Invitado especial', photoUrl: window.PE_ASSETS + 'images/site-2026-10/carlos-fundador-1600.webp', bio: 'Sommelier certificado: marida cada plato con la bebida que le toca.' },
+    lara: { slug: 'lara-ladriana', name: 'Lara Ladriana', role: 'Chef', photoUrl: window.PE_ASSETS + 'images/r4-2026-10/p-laura-1600.webp', bio: 'Cocinera del equipo de Presunta Entropía.' },
+    manuel: { slug: 'manuel-lugo', name: 'Manuel Lugo', role: 'Chef', photoUrl: window.PE_ASSETS + 'images/r4-2026-10/woman-laugh-1600.webp', bio: 'Cocinero del equipo de Presunta Entropía.' },
+    ana: { slug: 'ana-lobenco', name: 'Ana Lobenco', role: 'Chef invitada', photoUrl: window.PE_ASSETS + 'images/r4-2026-10/p-ana-1600.webp', bio: 'Chef invitada para las noches nikkei.' }
   };
   function people() { return Array.prototype.map.call(arguments, function (p) { return { person: null, slug: p.slug, name: p.name, role: p.role, photoUrl: p.photoUrl, bio: p.bio, specialties: [] }; }); }
 

@@ -25,21 +25,21 @@ window.PE_CMS = {
       name: "Mariana Lira",
       rol: "Chef",
       bio: "Mariana Lira es una chef madrileña especializada en técnicas ancestrales y fermentaciones vivas, con formación internacional en gastronomía contemporánea y una marcada pasión por la cultura culinaria tradicional.",
-      image: window.PE_ASSETS + "images/home-2026-10/riendo-retrato-1600.webp"
+      image: window.PE_ASSETS + "images/r4-2026-10/woman-laugh-1600.webp"
     },
     {
       slug: "diego-entropia",
       name: "Diego Salaz",
       rol: "Chef",
       bio: "Diego Salaz viene del mundo del fuego: brasas, arroces y cocina de campo. En Presunta Entropía dirige los talleres de mar y arroz, donde el error se corrige con humor y la paella nunca sale dos veces igual.",
-      image: window.PE_ASSETS + "images/home-2026-10/foto-trasera-delantal-curso-1600.webp"
+      image: window.PE_ASSETS + "images/r4-2026-10/apron-back-1600.webp"
     },
     {
       slug: "akiko-mun",
       name: "Akiko Mun",
       rol: "Chef invitada",
       bio: "Akiko Mun explora las cocinas de Asia desde la técnica y la memoria. Sus talleres recorren fermentos coreanos, caldos japoneses y la calle tailandesa sin salir de Zurbano 83.",
-      image: window.PE_ASSETS + "images/home-2026-10/riendo-comida-1600.webp"
+      image: window.PE_ASSETS + "images/r4-2026-10/meal-laugh-1600.webp"
     }
   ],
 

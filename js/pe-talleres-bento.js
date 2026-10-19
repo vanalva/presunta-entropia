@@ -25,14 +25,14 @@
   var STEP_MS = 3200;          // one box changes every STEP_MS (each box every 3 steps)
   var PHOTO_MS = 6400;
   var ROLL_MS = 650;
-  var IMG = 'assets/images/home-2026-10/';
+  var IMG = 'assets/images/r4-2026-10/';
   var PHOTOS = [
-    ['instructor-clase-cocina.webp', 'Instructor en la cocina de Presunta Entropía'],
-    ['grupo-amigos-cocina.webp', 'Grupo de amigos cocinando juntos en un taller'],
-    ['pasta-close-up.webp', 'Pasta fresca hecha a mano, en primer plano'],
-    ['riendo-comida.webp', 'Participante riendo durante un taller de cocina'],
-    ['pareja-curso-cocina-madrid.webp', 'Pareja en un curso de cocina en Madrid'],
-    ['muestra-plato-mano.webp', 'Plato terminado presentado en la mano']
+    ['instructor-talk-1600.webp', 'Instructor en la cocina de Presunta Entropía'],
+    ['friends-cooking-1600.webp', 'Grupo de amigos cocinando juntos en un taller'],
+    ['pasta-hands-1600.webp', 'Pasta fresca hecha a mano, en primer plano'],
+    ['meal-laugh-1600.webp', 'Participante riendo durante un taller de cocina'],
+    ['pareja-paella-1600.webp', 'Pareja en un curso de cocina en Madrid'],
+    ['plate-in-hand-1600.webp', 'Plato terminado presentado en la mano']
   ];
 
   function esc(s) {

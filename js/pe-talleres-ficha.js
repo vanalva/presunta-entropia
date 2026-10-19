@@ -20,9 +20,9 @@
   var METER_MAX = 16;
   var MAX_TABS = 4;
   // platform items have no photo yet: site photography, pasta has its own
-  var IMG = 'assets/images/home-2026-10/';
-  var PHOTO_BY_SLUG = { 'pasta-fresca-di-cuore': 'pasta-close-up.webp' };
-  var PHOTO_ROTATION = ['instructor-clase-cocina.webp', 'grupo-amigos-cocina.webp', 'riendo-comida.webp', 'pareja-curso-cocina-madrid.webp'];
+  var IMG = 'assets/images/r4-2026-10/';
+  var PHOTO_BY_SLUG = { 'pasta-fresca-di-cuore': 'pasta-hands-1600.webp' };
+  var PHOTO_ROTATION = ['instructor-talk-1600.webp', 'friends-cooking-1600.webp', 'meal-laugh-1600.webp', 'pareja-paella-1600.webp'];
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {

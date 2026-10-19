@@ -4,9 +4,6 @@
    NOT imported into Webflow — local preview only.
    ═══════════════════════════════════════════ */
 
-*, *::before, *::after {
-  box-sizing: border-box;
-}
 
 html {
   height: 100%;
@@ -37,10 +34,6 @@ img {
   border-left-width: 0;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
 
 /* ── webflow.css base typography reset ────────
    These are the Webflow defaults. original.css overrides heading sizes/margins

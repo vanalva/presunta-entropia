@@ -28,13 +28,13 @@
   };
   var FONT = "'Space Grotesk', sans-serif";
   var GALLERY = [
-    { src: 'assets/images/home-2026-10/grupo-amigos-cocina-1600.webp', cap: 'Cocinar juntos' },
+    { src: 'assets/images/r4-2026-10/friends-cooking-1600.webp', cap: 'Cocinar juntos' },
     { src: 'assets/images/home-2026-10/pareja-curso-cocina-madrid-1600.webp', cap: 'Cocinar en pareja' },
-    { src: 'assets/images/home-2026-10/ninos-curso-cocina-1600.webp', cap: 'Pequeños chefs' },
-    { src: 'assets/images/home-2026-10/foto-trasera-delantal-curso-1600.webp', cap: 'Taller en marcha' },
-    { src: 'assets/images/home-2026-10/muestra-plato-mano-1600.webp', cap: 'El emplatado' },
-    { src: 'assets/images/home-2026-10/riendo-retrato-1600.webp', cap: 'Lo memorable' },
-    { src: 'assets/images/home-2026-10/riendo-comida-1600.webp', cap: 'La sobremesa' },
+    { src: 'assets/images/r4-2026-10/kids-1600.webp', cap: 'Pequeños chefs' },
+    { src: 'assets/images/r4-2026-10/apron-back-1600.webp', cap: 'Taller en marcha' },
+    { src: 'assets/images/r4-2026-10/plate-in-hand-1600.webp', cap: 'El emplatado' },
+    { src: 'assets/images/r4-2026-10/woman-laugh-1600.webp', cap: 'Lo memorable' },
+    { src: 'assets/images/r4-2026-10/meal-laugh-1600.webp', cap: 'La sobremesa' },
     { src: 'assets/images/home-2026-10/local-sala-principal-1600.webp', cap: 'Zurbano 83' },
     { src: 'assets/images/home-2026-10/local-cocina-1600.webp', cap: 'La cocina' }
   ];
@@ -1873,6 +1873,10 @@
      zone (pe-console.css, html.pe-menu-side). The scale is the largest that
      fills the height without the zone getting narrower than the logo row
      or the longest link. */
+  // The side dock fills the full height on EVERY page. It was capped at 1.25x: the home docks from its
+  // big hero slot and reached full height under the cap, while every other page docks from the parked
+  // 500x758 box and stopped at 1.25x on large screens (a shorter console). 2x is only a safety limit.
+  var MAX_DOCK_S = 2;
   function sideLayout(r) {
     var vw = document.documentElement.clientWidth;
     var closeEl = document.querySelector('.navbar_menu-close-button-wrapper');
@@ -1891,7 +1895,7 @@
     // under CERRAR. Like the home console (which reflows to its hero slot), it
     // narrows its own box until full height fits beside the menu.
     if (hostEl.hasAttribute('data-pe-menu-only')) {
-      var sH = Math.min(1.25, (window.innerHeight - 48) / r.height);
+      var sH = Math.min(MAX_DOCK_S, (window.innerHeight - 48) / r.height);
       var maxW = Math.floor((vw - 24 - GAP - need) / sH);
       if (r.width > maxW) {
         var w = Math.max(260, maxW);
@@ -1899,7 +1903,7 @@
         r = { width: w, height: r.height };
       }
     }
-    var s = Math.min(1.25, (window.innerHeight - 48) / r.height, (vw - 24 - GAP - need) / r.width);
+    var s = Math.min(MAX_DOCK_S, (window.innerHeight - 48) / r.height, (vw - 24 - GAP - need) / r.width);
     s = Math.max(0.4, s);
     var de = document.documentElement;
     de.style.setProperty('--pe-zone-r', Math.round(r.width * s + GAP) + 'px');
