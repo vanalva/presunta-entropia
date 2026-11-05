@@ -1,0 +1,33 @@
+/* ============================================================
+   PRESUNTA ENTROPÍA — form fixes every page needs
+   (site-fixes 2026-10-08). EMBED-ONLY (Webflow: site-wide <style>
+   embed): it targets browser pseudo-classes inside [data-flwr].
+
+   Autofill. The flwr framework's "BROWSER POLISH" rule paints an
+   autofilled field with the raised surface (light on dark sections)
+   and light text, so the saved value turned into a blank cream box
+   (REQUESTS.md 2026-10-07, framework fix pending). Until the framework
+   is fixed, an autofilled field keeps the look of the section it sits
+   in: each .color-scheme-N section remaps --color-scheme-1--background
+   and --color-scheme-1--text to its own colours, so this works on the
+   dark checkout and on cream forms alike.
+   ============================================================ */
+body [data-flwr] input:-webkit-autofill,
+body [data-flwr] input:-webkit-autofill:hover,
+body [data-flwr] input:-webkit-autofill:focus,
+body [data-flwr] input:-webkit-autofill:active,
+body [data-flwr] textarea:-webkit-autofill,
+body [data-flwr] select:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px var(--color-scheme-1--background, var(--pe---color--aztec)) inset;
+  box-shadow: 0 0 0 1000px var(--color-scheme-1--background, var(--pe---color--aztec)) inset;
+  -webkit-text-fill-color: var(--color-scheme-1--text, var(--pe---color--stark-white));
+  caret-color: var(--color-scheme-1--text, var(--pe---color--stark-white));
+  /* the browser's own autofill tint never gets to paint */
+  transition: background-color 600000s 0s, color 600000s 0s;
+}
+body [data-flwr] input:autofill,
+body [data-flwr] textarea:autofill,
+body [data-flwr] select:autofill {
+  box-shadow: 0 0 0 1000px var(--color-scheme-1--background, var(--pe---color--aztec)) inset;
+  -webkit-text-fill-color: var(--color-scheme-1--text, var(--pe---color--stark-white));
+}

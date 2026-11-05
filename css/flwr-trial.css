@@ -1,0 +1,204 @@
+/* =============================================================
+   FLWR TYPE TRIAL — loaded only by pages/index-flwr.html, as the
+   last stylesheet. Every rule is scoped to html.pe-flwr-trial, so
+   nothing here can reach index.html or any other page.
+
+   Notes and findings: notes/flwr-type-trial-2026-10-01.md
+
+   1. Type tokens: flwr's shipped values, restored over the project's
+      overrides in variables.css (:root). Restated here rather than
+      loading the catalog's tokens.css because that file re-declares
+      every flwr token (palette, theme, spacing, radius, component) on
+      :root and would reset colours, spacing and the font family too.
+      Values copied verbatim from the workspace catalog
+      plugin/frameworks/flowriter/base/styles/tokens.css (1.2.1-alpha).
+      They differ from the pinned 1.0.0 snapshot (.flwr/, framework.css)
+      in two places only: leading--tight 1.05 (1.0.0: 1.1) and the new
+      leading--display 0.95. Sizes, weights, tracking and transforms
+      are identical in both versions.
+      Family is NOT restored: the trial keeps Space Grotesk, which the
+      project already feeds flwr through family--sans / family--display.
+      html.pe-flwr-trial (0,1,1) beats variables.css :root (0,1,0), and
+      :root is the same element, so every alias that reads these tokens
+      (--_text-style---*, --_typography---font-size--*) follows.
+   ============================================================= */
+html.pe-flwr-trial {
+  /* weights */
+  --_typography---weight--thin:       100;
+  --_typography---weight--extralight: 200;
+  --_typography---weight--light:      300;
+  --_typography---weight--regular:    400;
+  --_typography---weight--medium:     500;
+  --_typography---weight--semibold:   600;
+  --_typography---weight--bold:       700;
+  --_typography---weight--extrabold:  800;
+  --_typography---weight--black:      900;
+  /* size scale */
+  --_typography---size--display: clamp(2.75rem,  calc(2.75rem  + ((min(1vw, 1cqi) - 0.2rem) * 4.643)), 7rem);
+  --_typography---size--h1:      clamp(2.25rem,  calc(2.25rem  + ((min(1vw, 1cqi) - 0.2rem) * 3.000)), 5rem);
+  --_typography---size--h2:      clamp(1.875rem, calc(1.875rem + ((min(1vw, 1cqi) - 0.2rem) * 2.232)), 3.875rem);
+  --_typography---size--h3:      clamp(1.625rem, calc(1.625rem + ((min(1vw, 1cqi) - 0.2rem) * 1.563)), 3rem);
+  --_typography---size--h4:      clamp(1.375rem, calc(1.375rem + ((min(1vw, 1cqi) - 0.2rem) * 1.071)), 2.25rem);
+  --_typography---size--h5:      clamp(1.125rem, calc(1.125rem + ((min(1vw, 1cqi) - 0.2rem) * 0.625)), 1.625rem);
+  --_typography---size--h6:      clamp(1rem,     calc(1rem     + ((min(1vw, 1cqi) - 0.2rem) * 0.357)), 1.25rem);
+  --_typography---size--lead:    clamp(1.125rem, calc(1.125rem + ((min(1vw, 1cqi) - 0.2rem) * 0.357)), 1.375rem);
+  --_typography---size--body:    clamp(1rem,     calc(1rem     + ((min(1vw, 1cqi) - 0.2rem) * 0.179)), 1.125rem);
+  --_typography---size--small:   0.875rem;
+  --_typography---size--tiny:    0.75rem;
+  --_typography---size--micro:   0.6875rem;
+  /* leading (1.2.1 values) */
+  --_typography---leading--squashed: 0.9;
+  --_typography---leading--display:  0.95;
+  --_typography---leading--tight:    1.05;
+  --_typography---leading--snug:     1.25;
+  --_typography---leading--normal:   1.5;
+  --_typography---leading--relaxed:  1.7;
+  --_typography---leading--loose:    2;
+  /* tracking */
+  --_typography---tracking--tightest: -0.04em;
+  --_typography---tracking--tighter:  -0.03em;
+  --_typography---tracking--tight:    -0.02em;
+  --_typography---tracking--normal:    0em;
+  --_typography---tracking--wide:      0.04em;
+  --_typography---tracking--wider:     0.08em;
+  --_typography---tracking--widest:    0.12em;
+  /* transform */
+  --_typography---transform--none:       none;
+  --_typography---transform--upper:      uppercase;
+  --_typography---transform--lower:      lowercase;
+  --_typography---transform--capitalize: capitalize;
+}
+
+/* =============================================================
+   2. Component rules that out-rank the flwr utility on the same
+      element ([data-flwr] .f-text-* is 0,2,0; these are 0,2,0
+      later in source, or higher). Each property is pointed at the
+      token of the flwr step the markup chose for that element.
+   ============================================================= */
+
+/* hero title: f-text-display (project: vh clamp on .u-text-style-h1.hero_title) */
+html.pe-flwr-trial .u-text-style-h1.hero_title {
+  font-size: var(--_typography---size--display);
+}
+/* hero lede: f-text-lead (project: vh clamp + line-height--large; text-main-2 at <=767) */
+html.pe-flwr-trial .text-size-huge.hero_lede {
+  font-size: var(--_typography---size--lead);
+  line-height: var(--_typography---leading--relaxed);
+}
+/* large CTAs: flwr_button.is-lg = size--lead (project: vmin clamp; 1rem / 1.25rem on phones) */
+html.pe-flwr-trial .button.is-large,
+html.pe-flwr-trial .button.is-large.hero_cta,
+html.pe-flwr-trial .button.is-form.is-xlarge,
+html.pe-flwr-trial .button.is-xlarge {
+  font-size: var(--_typography---size--lead);
+  line-height: var(--_typography---leading--tight);
+}
+/* small buttons + hero pills (project: text-small clamp, 0.8rem at <=991, 1rem at <=479) */
+html.pe-flwr-trial .button.is-secondary.is-simple.is-small,
+html.pe-flwr-trial .button.is-alternate.is-small.is-simple.max-width-full,
+html.pe-flwr-trial .button.is-secondary.is-alternate.is-simple.is-small.max-width-full,
+html.pe-flwr-trial .button.is-secondary.is-simple.is-tiny,
+html.pe-flwr-trial .button.is-secondary.is-simple.is-tiny.hero_pill {
+  font-size: var(--_typography---size--small);
+}
+/* badges: flwr tag = size--tiny (project: .tag.is-*-tag 1rem) */
+html.pe-flwr-trial .tag.is-filter-promo-tag,
+html.pe-flwr-trial .tag.is-filter-fomo-tag,
+html.pe-flwr-trial .tag.is-category-tag,
+html.pe-flwr-trial .tag.is-filter-tag {
+  font-size: var(--_typography---size--tiny);
+}
+
+/* link-style button: project line-height--small (0,2,0, later) beats f-leading-tight */
+html.pe-flwr-trial .button.is-link {
+  line-height: var(--_typography---leading--tight);
+}
+/* section eyebrow = f-text-small (flwr anatomy heading.block); f-text-small sets no
+   weight, so the tagline's own 400 literal would show. Point it at flwr's text-style
+   default weight (regular). Card eyebrows carry f-text-semibold and are not matched. */
+html.pe-flwr-trial .text-style-tagline.f-text-small {
+  font-weight: var(--_typography---weight--regular);
+}
+/* card description = f-text-body (no weight) -> .u-text-style-main's project weight alias
+   would decide; point it at regular */
+html.pe-flwr-trial .u-text-style-main.f-text-body {
+  font-weight: var(--_typography---weight--regular);
+}
+/* espacios tabs = flwr chip (no tracking): project 0.06em literal -> tracking--normal */
+html.pe-flwr-trial .espacios_tab {
+  letter-spacing: var(--_typography---tracking--normal);
+}
+/* custom select options, incl. the ones the select script clones */
+html.pe-flwr-trial .select-custom_option {
+  font-size: var(--_typography---size--body);
+  line-height: var(--_typography---leading--snug);
+}
+/* form message = flwr_field_message (small, weight inherited): project 600 literal */
+html.pe-flwr-trial .success-text,
+html.pe-flwr-trial .error-text {
+  font-weight: var(--_typography---weight--regular);
+}
+
+/* =============================================================
+   3. Text outside the markup this page owns (injected by JS).
+   ============================================================= */
+
+/* pe-motion's rising duplicate label: 0.85em of the label -> the label's own flwr size */
+html.pe-flwr-trial .pe-rise_alt {
+  font-size: inherit;
+}
+/* music screen in the bottom-left float (pe-music.js markup). The copy of it inside
+   the console (.pe-con_cart) is the console's and is left alone. */
+html.pe-flwr-trial .pe-float .pe-mlcd_title,
+html.pe-flwr-trial .pe-float .pe-mlcd .pe-mlcd_ctrl .pe-mlcd_main {
+  font-size: var(--_typography---size--micro);
+  font-weight: var(--_typography---weight--semibold);
+  line-height: var(--_typography---leading--snug);
+  letter-spacing: var(--_typography---tracking--wider);
+}
+/* chat buddy (pe-chat-buddy.js markup): label = flwr_button.is-sm, bubble = small */
+html.pe-flwr-trial .chat-buddy_label {
+  font-size: var(--_typography---size--small);
+  font-weight: var(--_typography---weight--semibold);
+  line-height: var(--_typography---leading--tight);
+  letter-spacing: var(--_typography---tracking--normal);
+}
+html.pe-flwr-trial .chat-buddy_bubble {
+  font-size: var(--_typography---size--small);
+  font-weight: var(--_typography---weight--medium);
+  line-height: var(--_typography---leading--snug);
+}
+
+/* =============================================================
+   4. Leading trim: left to the page's own trim embed (pseudo-elements
+      reading flwr's --_text-style---trim-* tokens), exactly as on the
+      live home. flwr's own heading trim never applies in current
+      browsers: runtime.css ships `text-box-trim: both`, which Chrome
+      rejects (the value is `trim-both`), so its @supports block is
+      dead and the fallback only targets .f-leading-trim. Logged as a
+      gap in the notes.
+   ============================================================= */
+
+/* =============================================================
+   5. The trial tag (top centre, links back to the live home).
+      Type comes from its flwr classes in the markup.
+   ============================================================= */
+html.pe-flwr-trial .pe-flwr-trial_tag {
+  position: fixed;
+  top: 0.5rem;
+  left: 50%;
+  z-index: 2147483000;
+  padding-top: 0.35rem;
+  padding-right: 0.7rem;
+  padding-bottom: 0.35rem;
+  padding-left: 0.7rem;
+  border-top-left-radius: 999px;
+  border-top-right-radius: 999px;
+  border-bottom-left-radius: 999px;
+  border-bottom-right-radius: 999px;
+  background-color: var(--pe---color--fuel-yellow, #efa02e);
+  color: var(--pe---color--aztec, #0d161d);
+  text-decoration-line: none;
+  white-space: nowrap;
+  transform: translate(-50%, 0);
+}

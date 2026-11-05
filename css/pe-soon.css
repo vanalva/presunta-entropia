@@ -1,0 +1,159 @@
+/* =============================================================
+   COMING SOON + 404 (pages/proximamente.html, pages/404.html)
+   Lives in a CSS embed: relational selectors and dvh. One screen and no
+   frames: logo and title centred, and the PE-83 below them, cut by the bottom
+   of the screen right under its display. Hover lifts it a little. A click
+   (js/pe-soon.js) brings it to the centre and the logo and title leave upwards.
+   Only transforms move, so all of it runs on the compositor.
+   ============================================================= */
+.pe-soon {
+  --pe-soon-head: clamp(14rem, 36vh, 24rem);        /* the least the logo and title get */
+  --pe-soon-vh: 100vh;
+  --pe-soon-show: 0.958;                            /* console height to the end of its display, as a part of its width */
+  --pe-soon-w: min(calc(100vw - 2rem), 60rem, calc((var(--pe-soon-vh) - var(--pe-soon-head)) / var(--pe-soon-show)));
+  --pe-soon-top: calc(var(--pe-soon-vh) - var(--pe-soon-w) * var(--pe-soon-show));
+  --pe-soon-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  box-sizing: border-box;
+  height: var(--pe-soon-vh);
+  overflow-x: hidden;
+  overflow-y: hidden;
+  background-color: var(--pe---color--aztec);
+  color: var(--pe---color--stark-white);
+}
+.pe-soon.is-error { --pe-soon-head: clamp(18rem, 44vh, 28rem); }
+@supports (height: 100dvh) {
+  .pe-soon { --pe-soon-vh: 100dvh; --pe-soon-head: clamp(14rem, 36dvh, 24rem); }
+  .pe-soon.is-error { --pe-soon-head: clamp(18rem, 44dvh, 28rem); }
+}
+.pe-soon_head {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: var(--_spacing---space--2);
+  height: var(--pe-soon-top);
+  padding-top: var(--_spacing---space--3);
+  padding-right: var(--_spacing---space--3);
+  padding-bottom: var(--_spacing---space--3);
+  padding-left: var(--_spacing---space--3);
+  text-align: center;
+  transition: transform 0.8s var(--pe-soon-ease);
+}
+.pe-soon_logo {
+  display: block;
+  width: min(100%, 15rem);
+  height: auto;
+}
+.pe-soon .hero_title.f-text-hero {
+  margin-top: 0;
+  margin-bottom: 0;
+  max-width: none;
+  font-size: min(11.5vw, 19vh);
+  text-align: center;
+}
+.pe-soon.is-error .hero_title.f-text-hero { font-size: min(32vw, 18vh); }
+.pe-soon_head .hero_cta {   /* in the hero it fills its row; here it is one button */
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: auto;
+}
+.pe-soon_stage {
+  position: absolute;
+  top: var(--pe-soon-top);
+  left: calc(50% - var(--pe-soon-w) * 0.485);   /* the volume wheel sticks out on the right: the body is what centres */
+  width: var(--pe-soon-w);
+  cursor: pointer;
+  transform-origin: 50% 0%;
+  transition: transform 0.8s var(--pe-soon-ease);
+}
+.pe-soon_stage .pe-con {
+  flex: none;
+  width: 100%;
+  height: auto;
+  margin: 0;
+}
+@media (hover: hover) {
+  .pe-soon_stage:hover { transform: translateY(-1.5rem); }
+}
+.pe-soon_stage:focus-visible { transform: translateY(-1.5rem); }
+
+/* open */
+.pe-soon.is-open .pe-soon_head {
+  pointer-events: none;
+  transform: translateY(-100%);
+}
+.pe-soon.is-open .pe-soon_stage {
+  cursor: auto;
+  transform: translateY(var(--pe-soon-open-y, 0px)) scale(var(--pe-soon-open-s, 1));
+}
+@media (prefers-reduced-motion: reduce) {
+  .pe-soon_head,
+  .pe-soon_stage { transition-duration: 0.01s; }
+}
+
+/* the form on the console screen: the site's newsletter form, one column,
+   sized for the screen. It scrolls inside the screen (keys ▲▼ or touch). */
+.pe-soon_form {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.75rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1rem 1.25rem 1.25rem;
+  background-color: var(--pe---color--aztec);
+  color: var(--pe---color--stark-white);
+  --scrollbar-thumb: var(--pe---color--fuel-yellow);
+}
+.pe-soon_form .pe-newsletter_head { row-gap: 0.25rem; }
+.pe-soon_form .pe-newsletter_title { margin-top: 0; margin-bottom: 0.25rem; }
+.pe-soon_form .pe-newsletter_text { margin-top: 0; margin-bottom: 0; }
+.pe-soon_form .pe-newsletter_form {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: none;
+}
+.pe-soon_form .pe-newsletter_input,
+.pe-soon_form .pe-newsletter_button,
+.pe-soon_form .pe-newsletter_consent,
+.pe-soon_form .pe-newsletter_info,
+.pe-soon_form .pe-newsletter_msg {
+  grid-column-start: 1;
+  grid-column-end: 2;
+}
+.pe-soon_form .pe-newsletter_input {
+  color: var(--pe---color--stark-white);
+  font-size: clamp(1rem, 2.6cqi, 1.375rem);   /* 16px minimum: iOS zooms the page on smaller inputs */
+}
+/* the type grows with the console, like everything else on its screen */
+.pe-soon_form .pe-newsletter_title { font-size: clamp(1.25rem, 4.4cqi, 2.25rem); }
+.pe-soon_form .pe-newsletter_text { font-size: clamp(0.875rem, 2.6cqi, 1.375rem); }
+.pe-soon_form .pe-newsletter_consent,
+.pe-soon_form .pe-newsletter_info,
+.pe-soon_form .pe-newsletter_msg { font-size: clamp(0.75rem, 2.1cqi, 1.125rem); }
+.pe-soon_form .pe-newsletter_button {
+  grid-row-start: auto;
+  grid-row-end: auto;
+  width: 100%;
+}
+
+@media (max-width: 478px) {
+  /* the status bar already says Newsletter and the consent says the rest:
+     on a phone the screen keeps the form, with the button in reach */
+  .pe-soon_form .pe-newsletter_head { display: none; }
+  .pe-soon_form {
+    padding: 0.75rem 0.875rem 1rem;
+    row-gap: 0.5rem;
+  }
+}

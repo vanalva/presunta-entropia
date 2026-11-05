@@ -1,0 +1,23 @@
+/* =============================================================
+   PE-83 CONSOLE HOLDER (sub-pages)
+   Home keeps the console in its hero. The other pages have no console
+   in the hero, so it waits here, off-screen and invisible, at the width
+   it has in the home hero, and only appears when MENU docks it:
+   desktop beside the fullscreen menu (pe-dock--side), phones as the
+   menu sheet (pe-dock--sheet). pe-console.js measures this box before
+   docking, so the holder keeps a real width and height (no display:none).
+   Absolute, not fixed: a fixed holder would trap the docked console's
+   z-index under the fullscreen menu.
+   ============================================================= */
+.pe-con-holder {
+  position: absolute;
+  top: 0;
+  left: -200vw;
+  width: 31.25rem;
+  visibility: hidden;
+  pointer-events: none;
+}
+.pe-con-holder .pe-con.pe-dock {
+  visibility: visible;
+  pointer-events: auto;
+}
