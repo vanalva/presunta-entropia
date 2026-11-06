@@ -2,14 +2,16 @@
    PHONE NAVIGATION (js/pe-mobile-nav.js)
    Top row: isotype left, cart + MENU right.
    Bottom row: music left, assistant right.
-   The hero keeps its own logo and dock, so the top row takes over when
-   the dock leaves. After the first two seconds of scrolling down the rows
+   The hero keeps its own logo and dock, so both rows arrive when the dock
+   leaves. After their first two seconds on screen while scrolling down they
    follow the direction: up brings them back, down sends them off, top row
    upward and bottom row downward. Music that is playing never leaves.
    The state classes on <html>:
      pe-mnav-hide    the rows are away
      pe-mnav-sound   something is playing
-     pe-mnav-tight   the hero has content under the bottom row, so it waits
+     pe-mnav-top     the top of the page: the rows are off
+   The music screen steps aside for the footer console, which has its own
+   (html.pe-bar-near, css/pe-bar.css), even while it plays.
    ============================================================= */
 .pe-mnav_logo,
 .pe-mnav_chat {
@@ -19,7 +21,6 @@
 @media (max-width: 767px) {
   html {
     --pe-mnav-gutter: 1rem;
-    --pe-mnav-frame: 1.0625rem;     /* the hero frame's inner edge, past the gutter */
     --pe-mnav-key: 3.1875rem;       /* the height of the cart, MENU and assistant */
     --pe-mnav-tall: calc(var(--pe-mnav-key) + var(--pe---volume));
     --pe-mnav-top: calc(var(--pe-mnav-gutter) + env(safe-area-inset-top, 0px));
@@ -27,7 +28,9 @@
   }
 
   /* ---------- top row ---------- */
-  .navbar_fixed-button-container {
+  /* The home pages load this file before project.css, the others after, so
+     every rule that meets project.css carries one more selector than it does. */
+  .navbar_wrapper .navbar_fixed-button-container {
     position: fixed;
     top: var(--pe-mnav-top);
     right: var(--pe-mnav-gutter);
@@ -101,18 +104,10 @@
     transition-timing-function: ease, cubic-bezier(0.2, 0.9, 0.3, 1), linear;
   }
 
-  /* ---------- the hero: the bottom row stands inside its frame ---------- */
-  html.hero-dock-in-view .pe-float {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-    transform: translate(var(--pe-mnav-frame), calc(var(--pe-mnav-frame) * -1));
-    transition-delay: 0s, 0s, 0s;
-  }
-  html.hero-dock-in-view .pe-mnav_chat {
-    transform: translate(calc(var(--pe-mnav-frame) * -1), calc(var(--pe-mnav-frame) * -1));
-  }
-  /* the hero dock is the top row while it is on screen */
+  /* ---------- the hero: its dock is the top row, and neither row shows ---------- */
+  /* (.pe-float steps aside by its own rule in pe-music.css) */
+  html.pe-mnav-top .pe-mnav_logo,
+  html.pe-mnav-top .navbar_wrapper .navbar_fixed-button-container,
   html.hero-dock-in-view .pe-mnav_logo,
   html.hero-dock-in-view .navbar_wrapper .navbar_fixed-button-container {
     opacity: 0;
@@ -121,8 +116,14 @@
     transform: translateY(-12px);
     transition-delay: 0s, 0s, 0.35s;
   }
-  .hero_cta-row {
-    margin-bottom: calc(var(--pe-mnav-tall) + 0.75rem);
+  html.pe-mnav-top .pe-mnav_chat,
+  html.pe-mnav-top .pe-float,
+  html.hero-dock-in-view .pe-mnav_chat {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(12px);
+    transition-delay: 0s, 0s, 0.35s;
   }
 
   /* ---------- away ---------- */
@@ -135,9 +136,7 @@
     transition-delay: 0s, 0s, 0.35s;
   }
   html.pe-mnav-hide .pe-mnav_chat,
-  html.pe-mnav-hide:not(.pe-mnav-sound) .pe-float,
-  html.hero-dock-in-view.pe-mnav-tight .pe-mnav_chat,
-  html.hero-dock-in-view.pe-mnav-tight:not(.pe-mnav-sound) .pe-float {
+  html.pe-mnav-hide:not(.pe-mnav-sound) .pe-float {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -157,7 +156,7 @@
   }
 
   /* the last screen of the page leaves room for the bottom row */
-  .footer15_component {
+  html .footer15_component {
     padding-bottom: calc(var(--pe-mnav-gutter) * 2 + var(--pe-mnav-tall));
   }
 }
