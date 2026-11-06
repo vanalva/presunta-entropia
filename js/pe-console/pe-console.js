@@ -2048,11 +2048,18 @@
     }
     hostEl.classList.add('pe-dock', 'pe-dock--' + kind);
     if (kind === 'sheet') {
-      // the console at its own phone width, scaled to fit the screen height
+      // The console takes the screen: full width, and the room above and below comes from
+      // its height. Scaling is only for screens too short for it, because a scale narrows
+      // the console too, and that was the gutter.
       var vw = document.documentElement.clientWidth, sa = safeInsets();
-      hostEl.style.width = Math.min(440, vw - 2 * (4 + Math.max(sa.l, sa.r))) + 'px';
-      hostEl.style.height = '';
-      s = Math.min(1, (window.innerHeight - 2 * (12 + Math.max(sa.t, sa.b))) / Math.max(1, hostEl.offsetHeight));
+      var room = window.innerHeight - 2 * (12 + Math.max(sa.t, sa.b));
+      hostEl.style.width = Math.min(520, vw - 2 * Math.max(sa.l, sa.r)) + 'px';
+      hostEl.style.height = room + 'px';
+      // too short for the console's minimum height: only then it scales, from its real height
+      var slab = (hostEl.shadowRoot || hostEl).querySelector('.pe-con_body');
+      var need = Math.max(hostEl.offsetHeight, slab ? slab.offsetHeight + slab.offsetTop + 6 : 0);
+      s = Math.min(1, room / Math.max(1, need));
+      if (s < 1) hostEl.style.height = need + 'px';
       if (!dockBackdrop) {
         dockBackdrop = document.createElement('div');
         dockBackdrop.className = 'pe-dock-backdrop';

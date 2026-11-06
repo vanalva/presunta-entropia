@@ -658,6 +658,10 @@
   function fitRise(b) {
     var alt = b.querySelector('.pe-rise_alt');
     if (!alt || !b.getClientRects().length || !b.clientWidth) return;
+    if (!alt.__peLabel) {   // a CMS clone of a dressed button keeps the markup, not these
+      alt.__peLabel = (b.querySelector('.pe-rise_label') || b).textContent.replace(/\s+/g, ' ').trim();
+      alt.__peWant = RISE_TEXT[alt.__peLabel.toLowerCase()] || alt.__peLabel;
+    }
     var room = alt.clientWidth - 16;   // 8px of air each side inside the panel
     var tries = [[alt.__peWant, true], [alt.__peWant, false], [alt.__peLabel, true], [alt.__peLabel, false]];
     for (var i = 0; i < tries.length; i++) {

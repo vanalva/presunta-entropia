@@ -132,7 +132,7 @@ a {
 }
 
 .button:focus-visible {
-    outline-width: var(--pe---border-width-3);
+    outline-width: 2px;
     outline-style: solid;
     outline-color: currentColor;
     outline-offset: 3px;
@@ -352,10 +352,12 @@ a {
              icon       .button.is-icon-only square, an svg and an aria-label
              off        :disabled, .is-unavailable, [aria-disabled="true"]
              busy       .is-loading, [aria-busy="true"]
-   SURFACES  .color-scheme-* set the tokens below for what they paint. A card
-             that paints its own colour, or a CTA group inside one, says what
-             it sits on with .is-on-dark / .is-on-light (tokens only, no
-             paint). A button reads the nearest surface, never the page.
+   SURFACES  Unset tokens are the dark defaults; .color-scheme-1/-3 reset them
+             so dark nests inside cream. Cream, yellow and rust set them. A
+             card that paints its own colour, or a CTA group inside one, says
+             what it sits on with .is-on-dark / .is-on-light (tokens only, no
+             paint): that flips .is-alternate to the outline on dark, which
+             is the only way a dark fill stops sinking into a dark card.
    GROUPS    .button-group              buttons at the standard gap
              .button-group.is-pair      side by side; wraps to full-width rows
                                         when the labels do not fit
@@ -364,11 +366,19 @@ a {
                                         under it on phones
              .button-group.is-with-icon primary + .is-icon-only on one line
              .is-fill                   the buttons take the group's width
+             .is-stack-phone            a pair that always stacks at 478 and below
              .is-chips, .gap-0          small peers: --pe---gap--tight
    The volume hangs below a button, inside the row gap, so a stacked gap is
    the standard gap plus the volume: both axes show the same separation. */
 .color-scheme-1,
-.color-scheme-3,
+.color-scheme-3 {
+    --pe-btn-fill: initial;
+    --pe-btn-ink: initial;
+    --pe-btn-stroke: initial;
+    --pe-btn-volume: initial;
+    --pe-btn-depth: initial;
+}
+
 .is-on-dark {
     --pe-btn-fill: transparent;
     --pe-btn-ink: var(--pe---color--fuel-yellow);
@@ -382,7 +392,7 @@ a {
 .is-on-light {
     --pe-btn-fill: var(--pe---color--aztec);
     --pe-btn-ink: var(--pe---color--fuel-yellow);
-    --pe-btn-stroke: var(--pe---color--aztec);
+    --pe-btn-stroke: var(--pe---color--neutral-darker);
     --pe-btn-volume: var(--pe---color--aztec);
     --pe-btn-depth: 0px;
 }
@@ -547,6 +557,15 @@ a {
         flex-shrink: 1;
         flex-basis: 0%;
         min-width: max-content;
+    }
+
+    .button-group.is-pair.is-stack-phone {
+        flex-direction: column;
+        flex-wrap: nowrap;
+    }
+
+    .button-group.is-pair.is-stack-phone > .button {
+        flex-basis: auto;
     }
 }
 
