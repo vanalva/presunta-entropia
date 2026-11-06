@@ -75,9 +75,18 @@
       seatsLeft: s && typeof s.seatsLeft === 'number' ? s.seatsLeft : it.seatsLeft,
       capacity: (s && s.capacity) || it.capacityTotal,
       precio: s && typeof s.precio === 'number' ? s.precio : it.precio,
-      precioOriginal: s ? s.precioOriginal : null
+      precioOriginal: s ? s.precioOriginal : null,
+      cancelled: !!(s && s.cancelled),
+      past: !!(s && new Date(s.iso) <= new Date())   // read now: a tab left open past the start cannot book it
     };
   }
+  // why a session cannot be booked ('' when it can). The cards and the calendar render no Reservar
+  // or cart for these; this stops the other doors (a page left open, the console, PEBooking.*).
+  function closedText(s) {
+    if (!s) return '';
+    return s.cancelled ? 'Esta sesión está cancelada' : s.past ? 'Esta sesión ya ha finalizado' : s.seatsLeft === 0 ? 'Esta sesión está completa' : '';
+  }
+  function refuseClosed(text) { var c = cart(); if (c && c.notify) c.notify(text, 'warning'); }
   // test data (data/pe-fixtures.js) never reaches the cart
   function isTest(id) { return /^test-/.test(id || ''); }
   function refuseTest() { var c = cart(); if (c && c.notify) c.notify('Sesión de prueba: no se puede reservar', 'warning'); }
@@ -88,6 +97,7 @@
     var c = cart();
     if (!c || typeof c.addToCart !== 'function') return Promise.reject(new Error('cart'));
     var s = session(id), it = s && s.item;
+    if (closedText(s)) { refuseClosed(closedText(s)); return Promise.resolve(); }
     var price = s && typeof s.precio === 'number' ? s.precio : null;
     var name = it ? it.name : null;
     if (btn) { btn.setAttribute('aria-busy', 'true'); btn.classList.add('is-adding'); }
@@ -114,7 +124,13 @@
   }
 
   // next to every Reservar with a session id: the site's own cart button (the dock's
-  // .cart-header_button, same skin and icon), without its badge and without data-cart-toggle
+  // .cart-header_button, same skin and icon), without its badge and without data-cart-toggle.
+  // On a card it is the card's compact secondary instead (the skin of its Más info, by surface).
+  function cartClass(b) {
+    var c = b.closest('.pe-tcard');
+    if (!c) return 'cart-header_button pe-book_cart';
+    return 'button is-secondary' + (c.classList.contains('is-dark') ? ' is-alternate' : '') + ' is-icon-only pe-book_cart';
+  }
   var CART_SVG = '<svg class="cart-header_icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
     '<path d="M9 22C9.55228 22 10 21.5523 10 21C10 20.4477 9.55228 20 9 20C8.44772 20 8 20.4477 8 21C8 21.5523 8.44772 22 9 22Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>' +
     '<path d="M20 22C20.5523 22 21 21.5523 21 21C21 20.4477 20.5523 20 20 20C19.4477 20 19 20.4477 19 21C19 21.5523 19.4477 22 20 22Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>' +
@@ -136,7 +152,7 @@
       }
       var add = row.querySelector('[data-pe-cart-add]');
       if (!add) {
-        add = el('button', 'cart-header_button pe-book_cart');
+        add = el('button', cartClass(b));
         add.type = 'button';
         add.setAttribute('data-pe-cart-add', '');
         add.innerHTML = CART_SVG;
@@ -179,6 +195,7 @@
       addToCart(null, id, 1).then(function () { var c = cart(); if (c && c.checkout) c.checkout(); }, function () {});
       return;
     }
+    if (closedText(s)) { refuseClosed(closedText(s)); return; }
     closeBooking();
     lastFocus = btn;
     var it = s.item;
@@ -278,8 +295,6 @@
     err.setAttribute('role', 'alert');
     panel.appendChild(err);
 
-    if (left === 0) { pay.disabled = true; later.disabled = true; plus.disabled = true; }
-
     function busy(on, b) { pay.disabled = on; later.disabled = on; if (b) b.classList.toggle('is-adding', on); }
     // the seats picked here are the seats in the cart for this session (not added on top)
     function put() {
@@ -315,7 +330,7 @@
     dlg = root;
     requestAnimationFrame(function () { root.classList.add('is-open'); });
     document.addEventListener('keydown', onKey, true);
-    setTimeout(function () { (left === 0 ? close : pay).focus(); }, 30);
+    setTimeout(function () { pay.focus(); }, 30);
   }
 
   /* ---------- clicks ---------- */

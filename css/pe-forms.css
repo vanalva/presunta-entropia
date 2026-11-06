@@ -1,35 +1,68 @@
 /* ============================================================
    PRESUNTA ENTROPÍA — form fixes every page needs
-   (site-fixes 2026-10-08). EMBED-ONLY (Webflow: site-wide <style>
-   embed): it targets browser pseudo-classes inside [data-flwr].
+   (site-fixes 2026-10-08, autofill rewritten r35 / PE-003). EMBED-ONLY
+   (Webflow: site-wide <style> embed): it targets browser pseudo-classes
+   inside [data-flwr].
 
-   Autofill. The flwr framework's "BROWSER POLISH" rule paints an
-   autofilled field with the raised surface (light on dark sections)
-   and light text, so the saved value turned into a blank cream box
-   (REQUESTS.md 2026-10-07, framework fix pending). Until the framework
-   is fixed, an autofilled field keeps the look of the section it sits
-   in: each .color-scheme-N section remaps --color-scheme-1--background
-   and --color-scheme-1--text to its own colours, so this works on the
-   dark checkout and on cream forms alike.
+   Autofill. A field the BROWSER filled (saved name, email, phone) is
+   brand yellow with dark text, so it reads as "filled for you" and is
+   never mistaken for something typed. Only :-webkit-autofill / :autofill
+   match: typed or script-prefilled values keep the normal field look.
+   The browser paints its own tint (light blue in Chrome, pale yellow in
+   Safari) with a background-color that cannot be overridden, so the
+   yellow is an inset shadow over it, and the long transition keeps the
+   tint from ever showing. Text colour goes through -webkit-text-fill-color
+   (the only property autofill text obeys). The same yellow + aztec on
+   dark and on cream sections: a field of the brand colour, never the
+   section's. Focus keeps a visible ring in the section's own text colour
+   (cream on dark, aztec on cream), because a yellow border on a yellow
+   field would vanish.
    ============================================================ */
 body [data-flwr] input:-webkit-autofill,
 body [data-flwr] input:-webkit-autofill:hover,
 body [data-flwr] input:-webkit-autofill:focus,
 body [data-flwr] input:-webkit-autofill:active,
 body [data-flwr] textarea:-webkit-autofill,
-body [data-flwr] select:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0 1000px var(--color-scheme-1--background, var(--pe---color--aztec)) inset;
-  box-shadow: 0 0 0 1000px var(--color-scheme-1--background, var(--pe---color--aztec)) inset;
-  -webkit-text-fill-color: var(--color-scheme-1--text, var(--pe---color--stark-white));
-  caret-color: var(--color-scheme-1--text, var(--pe---color--stark-white));
-  /* the browser's own autofill tint never gets to paint */
+body [data-flwr] textarea:-webkit-autofill:hover,
+body [data-flwr] textarea:-webkit-autofill:focus,
+body [data-flwr] select:-webkit-autofill,
+body [data-flwr] select:-webkit-autofill:hover,
+body [data-flwr] select:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px var(--pe---color--fuel-yellow) inset;
+  box-shadow: 0 0 0 1000px var(--pe---color--fuel-yellow) inset;
+  -webkit-text-fill-color: var(--pe---color--aztec);
+  caret-color: var(--pe---color--aztec);
   transition: background-color 600000s 0s, color 600000s 0s;
 }
 body [data-flwr] input:autofill,
+body [data-flwr] input:autofill:hover,
+body [data-flwr] input:autofill:focus,
+body [data-flwr] input:autofill:active,
 body [data-flwr] textarea:autofill,
-body [data-flwr] select:autofill {
-  box-shadow: 0 0 0 1000px var(--color-scheme-1--background, var(--pe---color--aztec)) inset;
-  -webkit-text-fill-color: var(--color-scheme-1--text, var(--pe---color--stark-white));
+body [data-flwr] textarea:autofill:hover,
+body [data-flwr] textarea:autofill:focus,
+body [data-flwr] select:autofill,
+body [data-flwr] select:autofill:hover,
+body [data-flwr] select:autofill:focus {
+  box-shadow: 0 0 0 1000px var(--pe---color--fuel-yellow) inset;
+  -webkit-text-fill-color: var(--pe---color--aztec);
+  caret-color: var(--pe---color--aztec);
+}
+body [data-flwr] input:-webkit-autofill:focus,
+body [data-flwr] textarea:-webkit-autofill:focus,
+body [data-flwr] select:-webkit-autofill:focus {
+  outline-style: solid;
+  outline-width: 2px;
+  outline-color: var(--color-scheme-1--text, var(--pe---color--stark-white));
+  outline-offset: 2px;
+}
+body [data-flwr] input:autofill:focus,
+body [data-flwr] textarea:autofill:focus,
+body [data-flwr] select:autofill:focus {
+  outline-style: solid;
+  outline-width: 2px;
+  outline-color: var(--color-scheme-1--text, var(--pe---color--stark-white));
+  outline-offset: 2px;
 }
 
 /* ============================================================

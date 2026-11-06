@@ -165,7 +165,8 @@
     list.forEach(function (e) { e.target.classList.toggle('is-narrow', e.contentRect.width < NARROW); });
   }) : null;
   function shell(dark, extra) {
-    var c = h('article', 'talleres_card pe-tcard' + (dark ? ' is-dark' : '') + (extra || ''));
+    // is-on-dark / is-on-light: the buttons read the card's own surface, not the page's (project.css, PE-008)
+    var c = h('article', 'talleres_card pe-tcard ' + (dark ? 'is-dark is-on-dark' : 'is-on-light') + (extra || ''));
     if (narrowRO) narrowRO.observe(c);
     return c;
   }
@@ -309,9 +310,9 @@
     document.addEventListener('visibilitychange', sync);
     sync();
   }
+  // an offer, not an event: the yellow card, on the light page and on the dark overlay alike
   function pack(opts) {
-    var dark = !!(opts && opts.dark);
-    var c = shell(dark, ' is-pack' + (opts && opts.wide ? ' is-wide' : ''));
+    var c = shell(false, ' is-pack' + (opts && opts.wide ? ' is-wide' : ''));
     c.setAttribute('data-pe-card-href', 'packs.html');
     var media = h('div', 'pe-tcard_media');
     media.appendChild(attr(h('img', 'pe-tcard_image'), { loading: 'lazy', alt: '', src: 'assets/images/r4-2026-10/friends-cooking.webp' }));
@@ -323,13 +324,16 @@
     var body = h('div', 'pe-tcard_body');
     var head = h('div', 'pe-tcard_head'); body.appendChild(head);
     head.appendChild(h('div', 'pe-tcard_meta f-text-label f-text-ui-sm', 'Packs'));
-    var t = h('h3', 'pe-tcard_title ' + (opts && opts.wide ? 'f-text-h2' : 'f-text-h4')); var a = h('a', 'pe-tcard_link', 'Paga hoy, elige fecha después'); a.href = 'packs.html'; t.appendChild(a); head.appendChild(t);
+    var t = h('h3', 'pe-tcard_title ' + (opts && opts.wide ? 'f-text-h2' : 'f-text-h3')); var a = h('a', 'pe-tcard_link', 'Paga hoy, elige fecha después'); a.href = 'packs.html'; t.appendChild(a); head.appendChild(t);
     head.appendChild(h('p', 'pe-tcard_text f-text-body', 'Compra un pack y reserva cuando quieras. También para regalar.'));
-    var price = h('div', 'pe-tcard_fact-value f-text-h6', '—');
+    // Precio appears with the live prices; without them there is no empty "—" on the offer
+    var price = h('div', 'pe-tcard_fact-value f-text-h6');
     var L = fact('Precio', price);
+    var priceLabel = L.firstChild;
+    priceLabel.hidden = price.hidden = true;
     var ctas = h('div', 'pe-tcard_ctas');
-    ctas.appendChild(attr(h('a', btnCls(dark, true), 'Ver packs'), { href: 'packs.html', 'data-ep-role': 'primary' }));
-    ctas.appendChild(attr(h('a', btnCls(dark, false), 'Regalar'), { href: 'packs.html#regalo', 'data-ep-role': 'secondary', 'aria-label': 'Regalar un pack' }));
+    ctas.appendChild(attr(h('a', btnCls(false, true), 'Ver packs'), { href: 'packs.html', 'data-ep-role': 'primary' }));
+    ctas.appendChild(attr(h('a', btnCls(false, false), 'Regalar'), { href: 'packs.html#regalo', 'data-ep-role': 'secondary', 'aria-label': 'Regalar un pack' }));
     L.appendChild(ctas);
     var R = fact('Incluye', null, 'is-next');
     var list = pills(PACK_BASE);
@@ -341,7 +345,7 @@
       types = (types || []).filter(function (x) { return x && !x.hidden; });
       function nums(k) { return types.map(function (x) { return x[k]; }).filter(function (v) { return typeof v === 'number' && v > 0; }); }
       var cents = nums('priceCents'), credits = nums('credits'), days = nums('validityDays');
-      if (cents.length) priceRoll(price, types);
+      if (cents.length) { priceLabel.hidden = price.hidden = false; priceRoll(price, types); }
       var extra = [];
       if (credits.length) {
         var lo = Math.min.apply(null, credits), hi = Math.max.apply(null, credits);
@@ -541,7 +545,7 @@
 
     // ---- cards (Experiencias): the shared card() / pack() below the explorer ----
     function tcard(it) { return card(it, { dark: dark }); }
-    function packCard(wide) { return pack({ dark: dark, wide: wide }); }
+    function packCard(wide) { return pack({ wide: wide }); }
     function reservar(ses, cls) { var b = reservarBtn(ses, dark); b.className = cls; return b; }
     window.addEventListener('resize', function () { applyCols(); });
     function applyCols() {

@@ -1,0 +1,182 @@
+/* =============================================================
+   FICHA TECNICA HERO, the phone presentation (PE-001).
+   Loaded only by todos-nuestros-talleres.html, after project.css. The hero's
+   desktop rules stay in project.css; js/pe-talleres-ficha.js fills it.
+   Phone order: date badge, title, description, MAS INFORMACION, the two calls,
+   the photo. The labels above the title stay in the page for screen readers.
+   ============================================================= */
+
+/* The title's clipped top, at every width. The site's heading trim pulls a
+   heading's line box above its own box, up to the cap height, and the panel
+   needs overflow hidden for the roll between dates: the panel's edge fell on
+   the caps and shaved them, and an accent would go whole. The panel gets
+   headroom for the tallest glyph and hands the same space back, so nothing
+   else moves. */
+.pe-ficha_panel {
+    --pe-ficha-headroom: calc(var(--_typography---size--h1) * 0.25);
+    margin-top: calc(var(--pe-ficha-headroom) * -1);
+    padding-top: var(--pe-ficha-headroom);
+}
+
+/* the disclosure is for phones; desktop keeps the open table beside it */
+.pe-ficha_more {
+    display: none;
+}
+
+/* the big booking arrow rides on the phone button only */
+.pe-ficha_cta .pe-arrow {
+    display: none;
+}
+
+@media (max-width: 767px) {
+    .pe-ficha_sheet {
+        justify-content: flex-start;
+        row-gap: var(--_spacing---step--3);
+    }
+
+    /* FICHA TECNICA, NUESTROS TALLERES DISPONIBLES, PROXIMAS FECHAS: off the
+       screen, still the page's h1 and the tablist's heading */
+    .pe-ficha_head,
+    .pe-ficha_silk.pe-ficha_dates-label {
+        position: absolute;
+        overflow-x: hidden;
+        overflow-y: hidden;
+        width: 1px;
+        height: 1px;
+        margin-top: 0;
+        margin-bottom: 0;
+        white-space: nowrap;
+        clip-path: inset(50%);
+    }
+
+    /* the dates: the picked one is the dark badge, the others shrink to their
+       date (each keeps the workshop's name in its aria-label) */
+    .pe-ficha_tabs {
+        display: flex;
+        flex-wrap: wrap;
+        column-gap: var(--pe---gap--tight);
+        row-gap: var(--pe---gap--tight);
+    }
+    .pe-ficha_tab {
+        flex-direction: row;
+        align-items: center;
+        column-gap: var(--_spacing---step--2);
+        max-width: 100%;
+        min-height: 2.75rem;
+        padding-top: var(--_spacing---step--1);
+        padding-right: var(--_spacing---step--3);
+        padding-bottom: var(--_spacing---step--1);
+        padding-left: var(--_spacing---step--3);
+    }
+    .pe-ficha_tab-date {
+        flex-shrink: 0;
+        font-size: 1.125rem;
+        line-height: 1;
+        white-space: nowrap;
+    }
+    .pe-ficha_silk.pe-ficha_tab-name {
+        display: none;
+        min-width: 0;
+    }
+    .pe-ficha_tab.is-active .pe-ficha_silk.pe-ficha_tab-name {
+        display: block;
+    }
+    .pe-ficha_tab.is-active .pe-ficha_tab-name::before {
+        content: "· ";
+    }
+
+    .pe-ficha_face {
+        row-gap: var(--_spacing---step--3);
+    }
+    .pe-ficha_face > .pe-ficha_table {
+        display: none;
+    }
+
+    /* MAS INFORMACION: the same ruled sheet as the table, closed */
+    .pe-ficha_more {
+        display: block;
+        border-top-width: var(--border-width--main);
+        border-top-style: solid;
+        border-top-color: var(--pe---color--aztec);
+        border-bottom-width: var(--border-width--main);
+        border-bottom-style: solid;
+        border-bottom-color: var(--pe---color--aztec);
+    }
+    .pe-ficha_more-q {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        column-gap: var(--_spacing---step--3);
+        min-height: 2.75rem;
+        color: var(--pe---color--aztec);
+        list-style-type: none;
+        cursor: pointer;
+    }
+    .pe-ficha_more-q::-webkit-details-marker {
+        display: none;
+    }
+    /* inside the panel's overflow, so the ring is drawn inward */
+    .pe-ficha_more-q:focus-visible {
+        outline-width: 0.1875rem;
+        outline-style: solid;
+        outline-color: var(--pe---color--mule-fawn);
+        outline-offset: -0.1875rem;
+    }
+    /* a plus that closes to the site's X */
+    .pe-ficha_more-q .pe-x {
+        transform: rotate(45deg);
+        transition-property: transform;
+        transition-duration: 0.2s;
+        transition-timing-function: ease;
+        transition-delay: 0s;
+    }
+    .pe-ficha_more[open] .pe-ficha_more-q .pe-x {
+        transform: rotate(0deg);
+    }
+    .pe-ficha_more .pe-ficha_table {
+        border-top-color: color-mix(in srgb, var(--pe---color--aztec) 26%, transparent);
+        border-bottom-width: 0;
+    }
+
+    .pe-ficha_cta .pe-arrow {
+        display: block;
+    }
+
+    /* a focused control clears the fixed rows of pe-mobile-nav */
+    .pe-ficha_tab,
+    .pe-ficha_more-q,
+    .pe-ficha_cta {
+        scroll-margin-top: calc(var(--pe-mnav-top) + var(--pe-mnav-tall) + var(--_spacing---step--2));
+        scroll-margin-bottom: calc(var(--pe-mnav-bottom) + var(--pe-mnav-tall) + var(--_spacing---step--2));
+    }
+
+    /* the photo at its own shape, the caption strip under it instead of over
+       it. New images share the first cell, so the crossfade still works. */
+    .pe-ficha_photo {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        min-height: 0;
+    }
+    .pe-ficha_img {
+        position: static;
+        grid-row-start: 1;
+        grid-row-end: 2;
+        grid-column-start: 1;
+        grid-column-end: 2;
+        height: auto;
+        aspect-ratio: 16 / 9;
+    }
+    .pe-ficha_strip {
+        position: static;
+        grid-row-start: 2;
+        grid-row-end: 3;
+        grid-column-start: 1;
+        grid-column-end: 2;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pe-ficha_more-q .pe-x {
+        transition-duration: 0s;
+    }
+}

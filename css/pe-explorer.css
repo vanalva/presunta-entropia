@@ -129,8 +129,13 @@
   .pe-xp_grid, .pe-xp_grid.is-cols-1, .pe-xp_grid.is-cols-3, .pe-xp_grid.is-cols-4 { grid-template-columns: minmax(0, 1fr); }
   .pe-xp_grid.is-cols-1 .pe-tcard { display: flex; flex-direction: column; }
 }
-/* the workshop card on dark (the booking overlay) */
-.pe-tcard.is-dark { --pe-tcard-frame: var(--pe---color--stark-white); color: var(--pe---color--stark-white); }
+/* the card's own surface: its ink and paper, for what paints from them (the cart's hover) */
+.pe-tcard { --pe-tcard-ink: var(--pe---color--aztec); --pe-tcard-paper: var(--pe---color--stark-white); }
+/* Reservar on cream: the dark fill stands on the yellow volume, so the booking action is the one
+   solid thing in the row and its base lines up with the cart beside it */
+.pe-tcard.is-on-light { --pe-btn-depth: var(--pe---volume); --pe-btn-volume: var(--pe---color--fuel-yellow-dark); }
+/* the workshop card on dark (the booking overlay); Reservar is the yellow outline + volume of .is-on-dark */
+.pe-tcard.is-dark { --pe-tcard-frame: var(--pe---color--stark-white); --pe-tcard-ink: var(--pe---color--stark-white); --pe-tcard-paper: var(--pe---color--aztec); color: var(--pe---color--stark-white); }
 .pe-tcard.is-dark:hover { --pe-tcard-frame: var(--pe---color--fuel-yellow); }
 .pe-tcard.is-dark .pe-tcard_text, .pe-tcard.is-dark .pe-tcard_fact-label { color: var(--pe---color--stark-white-dark); }
 .pe-tcard.is-dark .pe-tcard_meta { color: var(--pe---color--fuel-yellow); }
@@ -142,9 +147,17 @@
 body .pe-tcard .pe-tcard_facts { align-items: stretch; column-gap: 0; row-gap: var(--_spacing---space--3); }
 body .pe-tcard .pe-tcard_fact { min-width: 0; padding-right: var(--_spacing---space--2); }
 body .pe-tcard .pe-tcard_fact.is-next { padding-right: 0; align-self: stretch; }
-/* the buttons sit on the footer's bottom line: the left column stretches to the right one, Precio stays on top, the buttons take the slack */
-.pe-tcard_ctas { display: flex; flex-direction: column; row-gap: var(--pe---gap--tight); margin-top: auto; padding-top: var(--_spacing---space--2); }
-body .pe-tcard .button.pe-tcard_cta { width: 100%; margin: 0; white-space: nowrap; text-align: center; justify-content: center; }
+/* the buttons sit on the footer's bottom line: the left column stretches to the right one, Precio stays on top, the buttons take the slack.
+   The volume hangs below a button, inside the row gap: the gap is the volume plus the tight token, so nothing touches */
+.pe-tcard_ctas { display: flex; flex-direction: column; row-gap: calc(var(--pe---volume) + var(--pe---gap--tight)); margin-top: auto; padding-top: var(--_spacing---space--2); }
+body .pe-tcard .button.pe-tcard_cta { width: 100%; min-height: 2.75rem; margin: 0; white-space: nowrap; text-align: center; justify-content: center; }
+/* the cart next to Reservar (js/pe-booking-flow.js): the card's compact secondary, a square as tall as Reservar */
+body .pe-tcard .button.pe-book_cart { aspect-ratio: 1 / 1; margin-bottom: 0; padding-right: 0; padding-left: 0; }
+body .pe-tcard .button.pe-book_cart:hover,
+body .pe-tcard .button.pe-book_cart:focus-visible {
+  border-top-color: var(--pe-tcard-ink); border-right-color: var(--pe-tcard-ink); border-bottom-color: var(--pe-tcard-ink); border-left-color: var(--pe-tcard-ink);
+  background-color: var(--pe-tcard-ink); color: var(--pe-tcard-paper);
+}
 .pe-tcard_seats { margin-top: 0.375rem; display: flex; }
 .pe-tcard_seats .pe-ficha_meter { flex-wrap: nowrap; }
 .pe-tcard_pills { display: flex; flex-wrap: wrap; gap: var(--pe---gap--tight); margin: var(--_spacing---space--3) 0 0; padding: 0; list-style: none; }
@@ -174,12 +187,32 @@ body .tag.pe-tcard_pill { margin: 0; font-weight: var(--_typography---weight--no
 .pe-tcard.is-dark .pe-xp_grid.is-cols-4 .pe-tcard_fact.is-next,
 .pe-xp_grid.is-cols-4 .pe-tcard.is-dark .pe-tcard_fact.is-next { border-top-color: var(--pe---color--aztec-light); }
 
-/* boxed: the card on a surface of its own (dark sections, the hover card): cream fill and the
-   light section scheme its buttons read; on dark mode it stays aztec */
-.talleres_card.pe-tcard.is-boxed { --color-scheme-1--background: var(--pe---color--stark-white); --color-scheme-1--text: var(--pe---color--aztec); background-color: var(--pe---color--stark-white); color: var(--pe---color--aztec); }
-.talleres_card.pe-tcard.is-boxed.is-dark { --color-scheme-1--background: var(--pe---color--aztec); --color-scheme-1--text: var(--pe---color--stark-white); background-color: var(--pe---color--aztec); color: var(--pe---color--stark-white); }
+/* boxed: the card on a surface of its own (dark sections, the hover card): cream fill; on dark mode it
+   stays aztec. Its buttons read that surface through .is-on-light / .is-on-dark */
+.talleres_card.pe-tcard.is-boxed { background-color: var(--pe---color--stark-white); color: var(--pe---color--aztec); }
+.talleres_card.pe-tcard.is-boxed.is-dark { background-color: var(--pe---color--aztec); color: var(--pe---color--stark-white); }
 
-/* the packs card: same card, the packs photo, a yellow PACK badge */
+/* the packs card: an offer, not an event. The whole card is the brand yellow, on the light page and on the
+   dark overlay alike: dark text, dark buttons, dark mustard inner borders; same geometry and photo */
+.talleres_card.pe-tcard.is-pack {
+  --pe-tcard-frame: var(--pe---color--fuel-yellow-dark);
+  --pe-tcard-paper: var(--pe---color--fuel-yellow);
+  --pe-btn-fill: var(--pe---color--aztec);
+  --pe-btn-ink: var(--pe---color--fuel-yellow);
+  --pe-btn-stroke: var(--pe---color--aztec);
+  --pe-btn-volume: var(--pe---color--fuel-yellow-darker);
+  background-color: var(--pe---color--fuel-yellow);
+  color: var(--pe---color--aztec);
+}
+.talleres_card.pe-tcard.is-pack:hover,
+.talleres_card.pe-tcard.is-pack:focus-within { --pe-tcard-frame: var(--pe---color--aztec); }
+.talleres_card.pe-tcard.is-pack :focus-visible { outline-color: var(--pe---color--aztec); }
+.talleres_card.pe-tcard.is-pack .pe-tcard_meta,
+.talleres_card.pe-tcard.is-pack .pe-tcard_text,
+.talleres_card.pe-tcard.is-pack .pe-tcard_fact-label { color: inherit; }
+.talleres_card.pe-tcard.is-pack .pe-tcard_facts { border-top-color: var(--pe---color--fuel-yellow-dark); }
+.talleres_card.pe-tcard.is-pack .pe-tcard_fact.is-next { border-top-color: var(--pe---color--fuel-yellow-dark); border-left-color: var(--pe---color--fuel-yellow-dark); }
+.talleres_card.pe-tcard.is-pack .tag.pe-tcard_pill { border-top-color: var(--pe---color--fuel-yellow-dark); border-right-color: var(--pe---color--fuel-yellow-dark); border-bottom-color: var(--pe---color--fuel-yellow-dark); border-left-color: var(--pe---color--fuel-yellow-dark); }
 .pe-tcard_date.is-pack { background-color: var(--pe---color--fuel-yellow); color: var(--pe---color--aztec); border-color: var(--pe---color--fuel-yellow); }
 .pe-tcard.is-pack.is-wide { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); column-gap: var(--_spacing---space--4); }
 .pe-tcard.is-pack.is-wide .pe-tcard_media { aspect-ratio: auto; min-height: 12rem; height: 100%; }
@@ -403,7 +436,9 @@ html body .pe-tcard.pe-tcard :is(h3, p)::after { content: none; display: none; }
    plus promo and featured. One card, the state changes its look:
      low        "Últimas plazas" flag, rust frame, the meter in rust
      full       "Completo" flag, photo greyed, no Reservar
-     past       the dark card (aztec), photo greyed, "Finalizado", "Nuevas fechas próximamente"
+     past       the dark card turned down: muted text and frame, photo greyed, no yellow, the FINALIZADO
+                flag at full strength; no Reservar and no cart (card() renders neither; the booking
+                flow refuses the session), Más info stays
      cancelled  (a single date: the hover card, the agenda) struck through, greyed
      promo      "Promo −X%" flag, the old price struck, the new one in rust
      featured   "Destacado" flag
@@ -429,9 +464,17 @@ html body .pe-tcard.pe-tcard :is(h3, p)::after { content: none; display: none; }
 .talleres_card.pe-tcard.is-cancelled .pe-tcard_date { opacity: 0.7; }
 .talleres_card.pe-tcard.is-cancelled .pe-tcard_date-day { text-decoration-line: line-through; }
 .talleres_card.pe-tcard.is-cancelled .pe-tcard_title { text-decoration-line: line-through; text-decoration-thickness: 1px; }
-/* on the dark overlay a past card cannot get darker: it dims */
-.pe-xp.is-dark .talleres_card.pe-tcard.is-past { opacity: 0.72; }
-.pe-xp.is-dark .talleres_card.pe-tcard.is-past:hover { opacity: 1; }
+/* finished: the same on the light page and the dark overlay. Everything drops to the muted cream (readable
+   on aztec), the yellow goes, the frame stops lighting up; only the FINALIZADO flag stays at full strength */
+.talleres_card.pe-tcard.is-past.is-dark { --pe-tcard-frame: var(--pe---color--aztec-light); --pe-tcard-ink: var(--pe---color--stark-white-dark); color: var(--pe---color--stark-white-dark); }
+.talleres_card.pe-tcard.is-past.is-dark:hover,
+.talleres_card.pe-tcard.is-past.is-dark:focus-within { --pe-tcard-frame: var(--pe---color--stark-white-dark); }
+.talleres_card.pe-tcard.is-past .pe-tcard_image { opacity: 0.4; }
+.talleres_card.pe-tcard.is-past .pe-tcard_meta { color: inherit; }
+.talleres_card.pe-tcard.is-past .button.is-secondary.pe-tcard_cta {
+  border-top-color: currentColor; border-right-color: currentColor; border-bottom-color: currentColor; border-left-color: currentColor;
+  color: var(--pe---color--stark-white-dark);
+}
 
 .pe-tcard_price-was { margin-right: 0.15rem; font-weight: var(--_typography---weight--normal, 400); opacity: 0.55; text-decoration-thickness: 1px; }
 .talleres_card.pe-tcard.is-promo .pe-tcard_price-now { color: var(--pe---color--mule-fawn); }

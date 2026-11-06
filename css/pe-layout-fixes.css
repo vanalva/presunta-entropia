@@ -1,0 +1,48 @@
+/* ============================================================
+   PRESUNTA ENTROPÍA — layout fixes (r35: PE-002 carousels, PE-003 bar + checkout)
+   Linked right after pe-motion.css on every page that has a carousel
+   or the checkout bar. On index the pe-* files load before project.css,
+   but pe-motion.css loads after it, so these rules win there too. Every
+   selector below is a class chain that is not on index at all (no sliders,
+   no checkout bar), so the load order does not change the result.
+   ============================================================ */
+
+/* ---- PE-002. Carousel slides never touch ---------------------------------
+   Swiper positions slides by their widths only. The slide's own spacing is
+   the inline padding from the page's slider embed:
+     padding-inline: calc(var(--_gap---size) / 2)
+   and project.css reset --_gap---size to 0px on every slide ("T7"), so the
+   cards ran edge to edge. The slide takes the tight gap token instead:
+   half of it each side, so two neighbours sit one --pe---gap--tight apart.
+   The wrapper's own column-gap stays 0 (project.css T7): Swiper's maths
+   would count it twice. */
+.slider_list > *,
+.slider_list > .w-dyn-list > * > * > * {
+  --_gap---size: var(--pe---gap--tight);
+}
+/* The offset box pulled the track out by half the OLD slide padding (0.5rem
+   each side, original.css). With 0.125rem of slide padding the first and
+   last card sit on the content edge: pull out by exactly that padding. */
+.slider_offset {
+  margin-left: calc(var(--pe---gap--tight) / -2);
+  margin-right: calc(var(--pe---gap--tight) / -2);
+}
+
+/* ---- PE-003. Checkout bar ------------------------------------------------
+   The bar holds one row (logo, cart, MENU) in a box. The row is top-aligned
+   for the home hero frame, and min-height (4rem / 4.5rem) is taller than the
+   controls, so the box showed 17px above the controls and 30px below them.
+   In the bar the row is exactly as tall as its controls and centred, so top
+   and bottom space are equal. Other boxed pages keep the shared geometry. */
+.section_compressed-hero.is-checkout-bar .navbar_hero-inline {
+  min-height: 0;
+  align-items: center;
+}
+
+/* The bar already ends with its own box gutter (16px phone, 24px desktop);
+   the section added 3rem on top of that, a ~64px empty band before
+   "Revisa tu pedido". The gutter is the gap now, the same as the space
+   between the box and the screen edge. */
+.checkout_section.is-single {
+  padding-top: 0;
+}
