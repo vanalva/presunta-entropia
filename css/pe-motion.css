@@ -123,8 +123,8 @@ html.pe-m-boot.modo-entropia .hero_wrapper-right {
     column-gap: 0.45em;
 }
 .pe-rise_glyph {
-    width: 0.6em;
-    height: 0.6em;
+    width: 1.5em;
+    height: auto;
     flex-shrink: 0;
 }
 .pe-rise:hover::before,

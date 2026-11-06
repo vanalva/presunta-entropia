@@ -58,7 +58,7 @@
     down: '<path d="M8 13L2 4h12z"/>',
     left: '<path d="M3 8l9-6v12z"/>',
     right: '<path d="M13 8L4 14V2z"/>',
-    close: '<path d="M3 3l10 10M13 3L3 13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square"/>',
+    close: '<path d="M14.5 12.56L9.94 8L14.5 3.44L12.56 1.5L8 6.06L3.44 1.5L1.5 3.44L6.06 8L1.5 12.56L3.44 14.5L8 9.94L12.56 14.5Z" fill="currentColor"/>',
     note: '<path d="M6 2h8v3H9v7.5A2.5 2.5 0 1 1 6.5 10H6z"/>',
     play: '<path d="M4 2l10 6-10 6z"/>',
     pause: '<path d="M3 2h4v12H3zM9 2h4v12H9z"/>',
@@ -767,7 +767,7 @@
     exit: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" stroke="currentColor" stroke-width="2.2" fill="none"/></svg>',
     prev: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.4" fill="none"/></svg>',
     next: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2.4" fill="none"/></svg>',
-    close: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" fill="none"/></svg>'
+    close: '<svg viewBox="0 0 26.94 26.94" fill="currentColor" aria-hidden="true"><path d="M26.94 22.93L17.48 13.47L26.94 4.01L22.93 0L13.47 9.46L4.01 0L0 4.01L9.46 13.47L0 22.93L4.01 26.94L13.47 17.48L22.93 26.94Z"/></svg>',
   };
 
   /* =============================================================

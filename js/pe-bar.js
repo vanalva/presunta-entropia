@@ -94,7 +94,7 @@
     pause: '<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2 1h2.400v8H2zM5.600 1H8v8H5.600z" fill="currentColor"/></svg>',
     left: '<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M8 1 2 5l6 4z" fill="currentColor"/></svg>',
     right: '<svg viewBox="0 0 10 10" aria-hidden="true"><path d="m2 1 6 4-6 4z" fill="currentColor"/></svg>',
-    close: '<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 2.200 2.200 1 5 3.800 7.800 1 9 2.200 6.200 5 9 7.800 7.800 9 5 6.200 2.200 9 1 7.800 3.800 5z" fill="currentColor"/></svg>'
+    close: '<svg viewBox="0 0 26.94 26.94" fill="currentColor" aria-hidden="true"><path d="M26.94 22.93L17.48 13.47L26.94 4.01L22.93 0L13.47 9.46L4.01 0L0 4.01L9.46 13.47L0 22.93L4.01 26.94L13.47 17.48L22.93 26.94Z"/></svg>',
   };
 
   /* ---------- one LCD: a visible canvas fed from a detached buffer ---------- */

@@ -196,7 +196,7 @@
     var close = el('button', 'pe-bookdlg_close f-text-label');
     close.type = 'button';
     close.setAttribute('aria-label', 'Cerrar');
-    close.innerHTML = '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.8"/></svg>';
+    close.innerHTML = '<svg viewBox="0 0 26.94 26.94" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M26.94 22.93L17.48 13.47L26.94 4.01L22.93 0L13.47 9.46L4.01 0L0 4.01L9.46 13.47L0 22.93L4.01 26.94L13.47 17.48L22.93 26.94Z"/></svg>';
     close.addEventListener('click', closeBooking);
     panel.appendChild(close);
 

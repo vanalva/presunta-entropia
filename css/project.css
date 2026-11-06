@@ -11236,3 +11236,46 @@ a.hero-opt_day:hover { transform: translateY(0.1875rem); box-shadow: 0 0 0 0 var
     margin-bottom: 0;
 }
 
+
+/* =============================================================
+   BRAND ICONS (the approved UI, [UI] Wireframe Design.pdf)
+   The arrow of the Regístrate card, the MENU bars and the CERRAR X. Carousels
+   keep their own arrows; the console's keys are hardware.
+   The bars are one drawing: the X is the same bar turned 45 degrees.
+   ============================================================= */
+.pe-arrow {
+    display: block;
+    flex-shrink: 0;
+    width: 1.6em;
+    height: auto;
+}
+.pe-arrow.is-back {
+    transform: scaleX(-1);
+}
+.pe-x {
+    display: block;
+    flex-shrink: 0;
+    width: 0.85em;
+    height: 0.85em;
+}
+.icon-embed-xxsmall.pe-arrow-wrap {
+    width: auto;
+}
+.button_registrate-arrow .pe-arrow {
+    width: 2.1em;
+}
+.booking-modal_close-x .pe-x {
+    display: inline-block;
+    vertical-align: -0.05em;
+}
+.navbar_menu-button .menu-icon_wrapper {
+    row-gap: 6px;
+}
+.navbar_menu-button .menu-icon4_line-top,
+.navbar_menu-button .menu-icon4_line-bottom,
+.navbar_menu-close-button-content .menu-close_line-top,
+.navbar_menu-close-button-content .menu-close_line-bottom {
+    width: 28px;
+    height: 5px;
+    background-color: var(--pe---color--fuel-yellow);
+}
