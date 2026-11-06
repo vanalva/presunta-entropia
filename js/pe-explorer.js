@@ -216,7 +216,10 @@
     var boxed = !!(opts && opts.boxed) || (st === 'past' && !(opts && opts.dark));
     // compact (the hover card): square photo left, the essentials right; no summary, level or duration
     var compact = !!(opts && opts.compact);
-    var c = shell(dark, ' is-' + st + (pct ? ' is-promo' : '') + (it.featured ? ' is-featured' : '') + (boxed ? ' is-boxed' : '') + (compact ? ' is-compact' : ''));
+    // slider slides (opts.boxed) stack from the start: Swiper clones them for its loop before the
+    // ResizeObserver reports, and a clone is never observed, so it would keep the two columns
+    var stacked = !!(opts && opts.boxed) && !compact;
+    var c = shell(dark, ' is-' + st + (pct ? ' is-promo' : '') + (it.featured ? ' is-featured' : '') + (boxed ? ' is-boxed' : '') + (compact ? ' is-compact' : '') + (stacked ? ' is-stacked' : ''));
     c.setAttribute('data-pe-card-href', itemHref(it));
     c.setAttribute('data-pe-state', st);
     var media = h('div', 'pe-tcard_media');

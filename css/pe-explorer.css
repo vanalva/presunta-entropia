@@ -154,7 +154,7 @@ body .pe-tcard .button.pe-tcard_cta { width: 100%; min-height: 2.75rem; margin: 
 /* off (Finalizado, Completo, Cancelada in Reservar's place): pressed flat, no volume */
 body .pe-tcard .button.is-unavailable { --pe-btn-depth: 0px; }
 /* the cart next to Reservar (js/pe-booking-flow.js): the card's compact secondary, a square as tall as Reservar */
-body .pe-tcard .button.pe-book_cart { aspect-ratio: 1 / 1; margin-bottom: 0; padding-right: 0; padding-left: 0; }
+body .pe-tcard .button.pe-book_cart { width: 2.75rem; margin-bottom: 0; padding-right: 0; padding-left: 0; }
 /* Reservar shares its row with the cart: the side padding gives way so the label never overflows */
 body .pe-tcard .pe-book > .button.pe-tcard_cta { padding-right: var(--_spacing---space--2); padding-left: var(--_spacing---space--2); }
 body .pe-tcard .button.pe-book_cart:hover,
@@ -172,11 +172,11 @@ body .tag.pe-tcard_pill.is-dates:hover { background-color: var(--pe---color--azt
 body .pe-tcard.is-dark .tag.pe-tcard_pill.is-dates:hover { background-color: var(--pe---color--fuel-yellow); color: var(--pe---color--aztec); border-color: var(--pe---color--fuel-yellow); }
 body .tag.pe-tcard_pill.is-dates:focus-visible { outline: 2px solid var(--pe---color--fuel-yellow-dark, var(--pe---color--fuel-yellow)); outline-offset: 2px; }
 body .tag.pe-tcard_pill { margin: 0; font-weight: var(--_typography---weight--normal, 400); text-transform: none; letter-spacing: 0; white-space: nowrap; padding: 0.25rem 0.625rem; line-height: 1.2; }
-/* narrow cards (4 across, phones) and the grid's pack card: the two columns stack */
+/* narrow cards (4 across, phones), slider slides and the grid's pack card: the two columns stack */
 .pe-xp_grid.is-cols-4 .pe-tcard_facts, .pe-tcard.is-narrow .pe-tcard_facts, .pe-tcard.is-stacked .pe-tcard_facts { grid-template-columns: minmax(0, 1fr); }
 .pe-tcard.is-narrow .pe-tcard_fact, .pe-tcard.is-stacked .pe-tcard_fact { padding-right: 0; }
 .pe-tcard.is-narrow .pe-tcard_fact.is-next, .pe-tcard.is-stacked .pe-tcard_fact.is-next { padding-left: 0; padding-top: var(--_spacing---space--2); border-left-width: 0; border-top: 1px solid var(--pe---color--stark-white-dark); }
-.pe-tcard.is-narrow.is-dark .pe-tcard_fact.is-next { border-top-color: var(--pe---color--aztec-light); }
+.pe-tcard.is-narrow.is-dark .pe-tcard_fact.is-next, .pe-tcard.is-stacked.is-dark .pe-tcard_fact.is-next { border-top-color: var(--pe---color--aztec-light); }
 .pe-xp_grid.is-cols-4 .pe-tcard_fact.is-next { padding-left: 0; padding-top: var(--_spacing---space--2); border-left-width: 0; border-top: 1px solid var(--pe---color--stark-white-dark); }
 .pe-xp_grid.is-cols-4 .pe-tcard_fact { padding-right: 0; }
 @media (max-width: 478px) {
@@ -578,7 +578,6 @@ body .pe-xp_row.is-compact > .pe-book { width: 100%; }
 .pe-tcard.is-compact .pe-tcard_pills { grid-column: 1 / -1; grid-row: 4; margin-top: var(--_spacing---space--2); }
 .pe-tcard.is-compact .button.pe-tcard_cta { padding-left: 0.75rem; padding-right: 0.75rem; }
 .pe-tcard.is-compact .pe-tcard_ctas > .pe-book { flex: 1.45 1 0; }
-.pe-tcard.is-compact .pe-book > [data-pe-add] { padding-left: 0.5rem; padding-right: 0.5rem; }
 /* the photo runs the full height of the compact card */
 .talleres_card.pe-tcard.is-compact { align-items: stretch; }
 .pe-tcard.is-compact .pe-tcard_media { aspect-ratio: auto; height: 100%; min-height: 11rem; }

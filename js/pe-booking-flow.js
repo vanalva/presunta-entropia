@@ -146,8 +146,9 @@
       var row = b.parentNode && b.parentNode.classList && b.parentNode.classList.contains('pe-book') ? b.parentNode : null;
       if (!id) { if (row) row.parentNode.replaceChild(b, row); return; }
       if (!row) {
-        // on a card: the button system's primary + icon group, at the tight gap
-        row = el('span', 'pe-book' + (b.closest('.pe-tcard') ? ' button-group is-with-icon gap-0' : ''));
+        // on a card: the button system's primary + icon group (.pe-book keeps it at the tight gap;
+        // not .gap-0, which turns a group into a column on phones)
+        row = el('span', 'pe-book' + (b.closest('.pe-tcard') ? ' button-group is-with-icon' : ''));
         b.parentNode.insertBefore(row, b);
         row.appendChild(b);
       }
