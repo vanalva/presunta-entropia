@@ -106,6 +106,7 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   white-space: nowrap;
+  text-align: center;
 }
 .pe-mlcd .pe-mlcd_ctrl .pe-mlcd_arrow {
   flex-grow: 0;

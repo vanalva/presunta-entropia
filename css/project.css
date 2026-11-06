@@ -95,14 +95,14 @@ a {
     border-right-style: solid;
     border-bottom-style: solid;
     border-left-style: solid;
-    border-top-color: var(--_color-primitives---colors--fuel-yellow-dark);
-    border-right-color: var(--_color-primitives---colors--fuel-yellow-dark);
-    border-bottom-color: var(--_color-primitives---colors--fuel-yellow-dark);
-    border-left-color: var(--_color-primitives---colors--fuel-yellow-dark);
-    background-color: var(--_color-primitives---opacity--transparent);
-    box-shadow: 0 var(--pe---volume, 5px) 0 0 var(--_color-primitives---colors--fuel-yellow-dark);
+    border-top-color: var(--pe-btn-stroke, var(--pe---color--fuel-yellow-dark));
+    border-right-color: var(--pe-btn-stroke, var(--pe---color--fuel-yellow-dark));
+    border-bottom-color: var(--pe-btn-stroke, var(--pe---color--fuel-yellow-dark));
+    border-left-color: var(--pe-btn-stroke, var(--pe---color--fuel-yellow-dark));
+    background-color: var(--pe-btn-fill, transparent);
+    box-shadow: 0 var(--pe-btn-depth, var(--pe---volume)) 0 0 var(--pe-btn-volume, var(--pe---color--fuel-yellow-dark));
     font-family: var(--_typography-primitives---font-styles--heading);
-    color: var(--_color-primitives---colors--fuel-yellow);
+    color: var(--pe-btn-ink, var(--pe---color--fuel-yellow));
     text-align: center;
     text-transform: var(--_typography---text-transform--uppercase);
     cursor: pointer;
@@ -127,8 +127,28 @@ a {
 }
 
 .button:active {
-    box-shadow: 0 0 0 0 var(--_color-primitives---colors--fuel-yellow-dark);
+    box-shadow: 0 0 0 0 var(--pe-btn-volume, var(--pe---color--fuel-yellow-dark));
     transform: translate(0, var(--pe---volume, 5px));
+}
+
+.button:focus-visible {
+    outline-width: var(--pe---border-width-3);
+    outline-style: solid;
+    outline-color: currentColor;
+    outline-offset: 3px;
+}
+
+.button:disabled,
+.button.is-unavailable,
+.button[aria-disabled="true"] {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.button.is-loading,
+.button[aria-busy="true"] {
+    opacity: 0.7;
+    cursor: progress;
 }
 
 .button.is-link {
@@ -183,6 +203,7 @@ a {
 }
 
 .button.is-secondary {
+    background-color: transparent;
     box-shadow: 0 var(--pe---volume, 5px) 0 0 var(--color-scheme-1--text);
     color: var(--color-scheme-1--text);
     border-top-color: currentColor;
@@ -201,6 +222,7 @@ a {
     border-bottom-color: var(--_color-primitives---colors--stark-white);
     border-left-color: var(--_color-primitives---colors--stark-white);
     background-color: var(--_color-primitives---opacity--transparent);
+    box-shadow: none;
     color: var(--_color-primitives---colors--stark-white);
     text-transform: var(--_typography---text-transform--uppercase);
 }
@@ -249,12 +271,12 @@ a {
 }
 
 .button.is-alternate {
-    border-top-color: var(--_color-primitives---colors--neutral-darker);
-    border-right-color: var(--_color-primitives---colors--neutral-darker);
-    border-bottom-color: var(--_color-primitives---colors--neutral-darker);
-    border-left-color: var(--_color-primitives---colors--neutral-darker);
-    background-color: var(--_color-primitives---colors--neutral-darkest);
-    box-shadow: none;
+    border-top-color: var(--pe-btn-stroke, var(--pe---color--neutral-darker));
+    border-right-color: var(--pe-btn-stroke, var(--pe---color--neutral-darker));
+    border-bottom-color: var(--pe-btn-stroke, var(--pe---color--neutral-darker));
+    border-left-color: var(--pe-btn-stroke, var(--pe---color--neutral-darker));
+    background-color: var(--pe-btn-fill, var(--pe---color--neutral-darkest));
+    box-shadow: 0 var(--pe-btn-depth, 0) 0 0 var(--pe-btn-volume, transparent);
     transition-property: none;
 }
 
@@ -277,9 +299,10 @@ a {
     transition-property: none;
 }
 
+/* inverts against the surface, so a flat button never turns yellow on cream */
 .button.is-simple:hover {
-    background-color: var(--_color-primitives---colors--fuel-yellow);
-    color: var(--_color-primitives---colors--aztec);
+    background-color: var(--color-scheme-1--text);
+    color: var(--color-scheme-1--background);
     transform: none;
 }
 
@@ -311,6 +334,7 @@ a {
    cream). Size comes from .is-xlarge; hover/focus/press: FIX3 block at the
    end of this file. */
 .button.is-form {
+    background-color: transparent;
     border-top-color: var(--color-scheme-1--text);
     border-right-color: var(--color-scheme-1--text);
     border-bottom-color: var(--color-scheme-1--text);
@@ -319,9 +343,88 @@ a {
     color: var(--color-scheme-1--text);
 }
 
+/* ── Button system (PE-008) ─────────────────────────────────────────────
+   ROLES     primary    .button              the surface decides how it looks
+             on light   .button.is-alternate same primary, named for cream
+             secondary  .button.is-secondary the surface's text colour
+             text       .button.is-link      no frame, no volume
+             flat       .is-simple           no volume
+             icon       .button.is-icon-only square, an svg and an aria-label
+             off        :disabled, .is-unavailable, [aria-disabled="true"]
+             busy       .is-loading, [aria-busy="true"]
+   SURFACES  .color-scheme-* set the tokens below for what they paint. A card
+             that paints its own colour, or a CTA group inside one, says what
+             it sits on with .is-on-dark / .is-on-light (tokens only, no
+             paint). A button reads the nearest surface, never the page.
+   GROUPS    .button-group              buttons at the standard gap
+             .button-group.is-pair      side by side; wraps to full-width rows
+                                        when the labels do not fit
+             .button-group.is-stack     full-width rows at every width
+             .button-group.is-with-link primary + .is-link: apart on desktop,
+                                        under it on phones
+             .button-group.is-with-icon primary + .is-icon-only on one line
+             .is-fill                   the buttons take the group's width
+             .is-chips, .gap-0          small peers: --pe---gap--tight
+   The volume hangs below a button, inside the row gap, so a stacked gap is
+   the standard gap plus the volume: both axes show the same separation. */
+.color-scheme-1,
+.color-scheme-3,
+.is-on-dark {
+    --pe-btn-fill: transparent;
+    --pe-btn-ink: var(--pe---color--fuel-yellow);
+    --pe-btn-stroke: var(--pe---color--fuel-yellow-dark);
+    --pe-btn-volume: var(--pe---color--fuel-yellow-dark);
+    --pe-btn-depth: var(--pe---volume);
+}
+
+.color-scheme-2,
+.color-scheme-4,
+.is-on-light {
+    --pe-btn-fill: var(--pe---color--aztec);
+    --pe-btn-ink: var(--pe---color--fuel-yellow);
+    --pe-btn-stroke: var(--pe---color--aztec);
+    --pe-btn-volume: var(--pe---color--aztec);
+    --pe-btn-depth: 0px;
+}
+
+.color-scheme-5 {
+    --pe-btn-fill: transparent;
+    --pe-btn-ink: var(--color-scheme-5--text);
+    --pe-btn-stroke: var(--color-scheme-5--text);
+    --pe-btn-volume: var(--color-scheme-5--text);
+    --pe-btn-depth: var(--pe---volume);
+}
+
+.is-on-dark {
+    --color-scheme-1--text: var(--pe---scheme-dark--text);
+    --color-scheme-1--background: var(--pe---scheme-dark--background);
+    --color-scheme-1--foreground: var(--pe---scheme-dark--foreground);
+    --color-scheme-1--border: var(--pe---scheme-dark--border);
+    --color-scheme-1--accent: var(--pe---scheme-dark--accent);
+}
+
+.is-on-light {
+    --color-scheme-1--text: var(--color-scheme-2--text);
+    --color-scheme-1--background: var(--color-scheme-2--background);
+    --color-scheme-1--foreground: var(--color-scheme-2--foreground);
+    --color-scheme-1--border: var(--color-scheme-2--border);
+    --color-scheme-1--accent: var(--color-scheme-2--accent);
+}
+
+.button.is-icon-only {
+    align-self: stretch;
+    flex-grow: 0;
+    flex-shrink: 0;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    padding-right: var(--_spacing-semantics---padding--pad-section-2xs);
+    padding-left: var(--_spacing-semantics---padding--pad-section-2xs);
+}
+
 .button-group {
-    column-gap: var(--pe---gap--tight);
-    row-gap: var(--pe---gap--tight);
+    --pe-cta-gap: var(--_spacing-semantics---gap--gap-2xs);
+    column-gap: var(--pe-cta-gap);
+    row-gap: calc(var(--pe---volume) + var(--pe-cta-gap));
     flex-wrap: wrap;
     align-items: center;
     display: flex;
@@ -358,6 +461,93 @@ a {
    (that's why event-card tag rows showed gaps locally but not on live). */
 .button-group.max-width-full {
     width: 100%;
+}
+
+.button-group.is-pair {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: stretch;
+}
+
+.button-group.is-pair > .button {
+    white-space: nowrap;
+}
+
+/* flex-basis 0 shares the row equally; the max-content floor is what wraps
+   a pair that cannot fit, instead of squeezing its labels */
+.button-group.is-pair.is-fill > .button {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0%;
+    min-width: max-content;
+}
+
+.button-group.is-stack {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    width: 100%;
+}
+
+.button-group.is-with-link {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: var(--_spacing-semantics---gap--gap-lg);
+    row-gap: calc(var(--pe---volume) + var(--_spacing-semantics---gap--gap-sm));
+}
+
+.button-group.is-with-link > .button {
+    white-space: nowrap;
+}
+
+.button-group.is-with-icon {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    width: 100%;
+}
+
+.button-group.is-with-icon > .button {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0%;
+    min-width: 0;
+}
+
+.button-group.is-with-icon > .button.is-icon-only {
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: auto;
+}
+
+@media (max-width: 767px) {
+    .button-group.is-with-link {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .button-group.is-with-link > .button.is-link {
+        min-height: 2.75rem;
+    }
+
+    .button-group.is-with-link.is-fill {
+        align-items: stretch;
+        width: 100%;
+    }
+}
+
+@media (max-width: 478px) {
+    .button-group.is-pair {
+        width: 100%;
+    }
+
+    .button-group.is-pair > .button {
+        flex-grow: 1;
+        flex-shrink: 1;
+        flex-basis: 0%;
+        min-width: max-content;
+    }
 }
 
 
@@ -2007,8 +2197,6 @@ a {
     }
 
     .button-group.max-width-full {
-        column-gap: var(--_spacing-semantics---gap--gap-0);
-        row-gap: var(--_spacing-semantics---gap--gap-0);
         flex-direction: row;
         flex-wrap: nowrap;
     }
@@ -3637,11 +3825,7 @@ iframe[src*="vanny.chat"] { color-scheme: light !important; }
     color: color-mix(in srgb, var(--pe---color--stark-white) 50%, transparent);
 }
 .booking-result_actions {
-    display: flex;
-    flex-wrap: wrap;
     justify-content: center;
-    column-gap: var(--pe---gap--tight);
-    row-gap: var(--pe---gap--tight);
     margin-top: 2.5rem;
 }
 
@@ -3658,10 +3842,6 @@ iframe[src*="vanny.chat"] { color-scheme: light !important; }
     }
     .checkout_step-divider {
         width: 2rem;
-    }
-    .booking-result_actions {
-        flex-direction: column;
-        align-items: stretch;
     }
 }
 
@@ -3737,11 +3917,6 @@ iframe[src*="vanny.chat"] { color-scheme: light !important; }
     border-bottom-color: var(--color-scheme-1--text);
     border-left-color: var(--color-scheme-1--text);
     color: var(--color-scheme-1--text);
-}
-
-.button.is-secondary.is-simple.is-alternate:hover {
-    background-color: var(--color-scheme-1--text);
-    color: var(--color-scheme-1--background);
 }
 
 /* ── N3. Hero header: the logo gives way to the dock ────────────────────
@@ -3836,10 +4011,6 @@ iframe[src*="vanny.chat"] { color-scheme: light !important; }
     white-space: nowrap;
 }
 
-.hero_cta-row {
-    flex-wrap: wrap;
-}
-
 @media (max-width: 478px) {
     .button.is-large {
         padding-right: var(--_spacing-semantics---padding--pad-section-sm);
@@ -3885,7 +4056,6 @@ iframe[src*="vanny.chat"] { color-scheme: light !important; }
 @media (max-width: 478px) {
     .button-group.max-width-full {
         flex-wrap: wrap;
-        row-gap: var(--pe---gap--tight);
     }
 
     .button.max-width-full {
@@ -3908,20 +4078,6 @@ iframe[src*="vanny.chat"] { color-scheme: light !important; }
     width: 100%;
     max-width: none;
     height: auto;
-}
-
-/* ── N14. Hover never swallows a label ─────────────────────────────────
-   The tiny/small simple buttons hovered to a pale yellow fill while their
-   text stayed cream on dark sections (hero pills: the word vanished).
-   They now invert against the current scheme, readable everywhere. */
-.button.is-secondary.is-simple.is-tiny:hover {
-    background-color: var(--color-scheme-1--text);
-    color: var(--color-scheme-1--background);
-}
-
-.button.is-secondary.is-simple.is-small:hover {
-    background-color: var(--color-scheme-1--text);
-    color: var(--color-scheme-1--background);
 }
 
 /* ── N15. The footer ends in the yellow control bar (.pe-dockbar, css/pe-bar.css),
@@ -4990,38 +5146,6 @@ iframe[src*="vanny.chat"] { color-scheme: light !important; }
     row-gap: var(--_spacing-semantics---gap--gap-2xs);
 }
 
-/* ── E6. Agenda "Ver detalles" on cream: the button-2 secondary ink is
-   cream, so it vanished. It now reads the current scheme; the whole card
-   link's hover fills it (parent to child through custom properties). */
-.personas_section_item-link {
-    --caras-btn-bg: transparent;
-    --caras-btn-ink: var(--color-scheme-1--text);
-}
-
-.personas_section_item-link:hover {
-    --caras-btn-bg: var(--color-scheme-1--text);
-    --caras-btn-ink: var(--color-scheme-1--background);
-}
-
-.personas_section_item-link:focus-visible {
-    --caras-btn-bg: var(--color-scheme-1--text);
-    --caras-btn-ink: var(--color-scheme-1--background);
-}
-
-.button-2.is-secondary.caras_agenda-btn {
-    border-top-color: var(--color-scheme-1--text);
-    border-right-color: var(--color-scheme-1--text);
-    border-bottom-color: var(--color-scheme-1--text);
-    border-left-color: var(--color-scheme-1--text);
-    box-shadow: 0 var(--pe---volume, 5px) 0 0 var(--color-scheme-1--text);
-    background-color: var(--caras-btn-bg);
-    color: var(--caras-btn-ink);
-    transition-property: background-color, color;
-    transition-duration: 0.3s;
-    transition-timing-function: ease;
-    transition-delay: 0s;
-}
-
 /* ── E8. Testimonial: quote, name, workshop, asterisk rating (design).
    The rating is an inline SVG asterisk on currentColor = scheme accent. */
 .caras_testimonial {
@@ -5225,10 +5349,8 @@ iframe[src*="vanny.chat"] { color-scheme: light !important; }
         justify-content: flex-end;
     }
 
-    .button-group.gap-0.mobile-rule.hero_cta-group {
+    .button-group.hero_cta-group {
         width: 100%;
-        flex-direction: row;
-        flex-wrap: nowrap;
     }
 }
 
@@ -5512,30 +5634,6 @@ iframe[src*="vanny.chat"] { color-scheme: light !important; }
     --pe-feat-bg: var(--pe-feat-lift);
 }
 
-.button-group.is-chips.pe-fechas_ctas {
-    column-gap: var(--pe---gap--tight);
-    row-gap: var(--pe---gap--tight);
-}
-
-.button-2.is-secondary.pe-fechas_cta {
-    border-top-color: var(--color-scheme-1--text);
-    border-right-color: var(--color-scheme-1--text);
-    border-bottom-color: var(--color-scheme-1--text);
-    border-left-color: var(--color-scheme-1--text);
-    box-shadow: 0 var(--pe---volume, 5px) 0 0 var(--color-scheme-1--text);
-    color: var(--color-scheme-1--text);
-}
-
-.button.pe-fechas_cta {
-    border-top-color: var(--color-scheme-1--text);
-    border-right-color: var(--color-scheme-1--text);
-    border-bottom-color: var(--color-scheme-1--text);
-    border-left-color: var(--color-scheme-1--text);
-    background-color: var(--color-scheme-4--background);
-    box-shadow: 0 var(--pe---volume, 5px) 0 0 var(--color-scheme-1--text);
-    color: var(--color-scheme-4--text);
-}
-
 /* ── T5. Calendario inline. The hidden legacy modal copy of the filter
    embed loads later in the page and re-declares a few of these rules with
    older values; the inline copy's controls carry .is-cal to keep the home
@@ -5616,6 +5714,7 @@ iframe[src*="vanny.chat"] { color-scheme: light !important; }
    hero-dock embed, which sub-pages do not carry. Same values here. */
 .hero_cta-row {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     column-gap: var(--_spacing-semantics---gap--gap-sm);
@@ -5872,12 +5971,6 @@ iframe[src*="vanny.chat"] { color-scheme: light !important; }
         min-width: 0;
     }
 
-    .button-group.mobile-rule.taller-item_ctas {
-        flex-direction: column;
-        align-items: stretch;
-        row-gap: var(--pe---gap--tight);
-        width: 100%;
-    }
 }
 
 /* I4. Detail + similar-card chip rows are .button-group.gap-0.max-width-full,
@@ -6800,13 +6893,7 @@ div.radio-button_filter {
     margin-bottom: 0;
 }
 .pe-util_actions {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
-    column-gap: var(--pe---gap--tight);
-    row-gap: var(--pe---gap--tight);
 }
 .pe-util_actions.is-start {
     justify-content: flex-start;
@@ -6834,11 +6921,6 @@ div.radio-button_filter {
         padding-right: var(--_spacing-semantics---padding--pad-section-md);
         padding-bottom: var(--_spacing-semantics---padding--pad-section-md);
         padding-left: var(--_spacing-semantics---padding--pad-section-md);
-    }
-    .pe-util_actions {
-        flex-direction: column;
-        align-items: stretch;
-        width: 100%;
     }
     .pe-util_hint {
         display: none;
@@ -7848,7 +7930,6 @@ html .cart-modal_empty-text.cart-modal_empty-text.cart-modal_empty-text::after {
 /* normal-size buttons can't always share a row: they wrap and share the width */
 .pe-lc_cta.pe-lc_cta {
     flex-wrap: wrap;
-    row-gap: var(--_spacing---step--2);
 }
 .pe-lc_cta.pe-lc_cta .button {
     flex-grow: 1;
@@ -8369,10 +8450,6 @@ html .cart-modal_empty-text.cart-modal_empty-text.cart-modal_empty-text::after {
 .booking-modal_card-add.booking-modal_card-add.button:hover {
     background-color: transparent;
     color: var(--pe---color--fuel-yellow);
-}
-
-.booking-modal_card-add.booking-modal_card-add.button:disabled {
-    opacity: 0.6;
 }
 
 /* ── Packs strip: primary + secondary, same family, same height ────────── */
@@ -9491,7 +9568,7 @@ a.hero-opt_day:hover { transform: translateY(0.1875rem); box-shadow: 0 0 0 0 var
     }
     /* the phone hero rule keeps CTAs clear of the fixed MENU cluster with a
        9rem margin; this hero is not full-screen, so it is dead space here */
-    .button-group.gap-0.mobile-rule.hero_cta-group.pe-bento_cta-group {
+    .button-group.hero_cta-group.pe-bento_cta-group {
         margin-bottom: 0;
     }
     .pe-bento_item {
@@ -9848,16 +9925,6 @@ a.hero-opt_day:hover { transform: translateY(0.1875rem); box-shadow: 0 0 0 0 var
 .pe-ficha_seats-text {
     font-weight: var(--_typography---weight--regular);
 }
-.pe-ficha_ctas {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    column-gap: var(--pe---gap--tight);
-    row-gap: var(--pe---gap--tight);
-}
-.button.pe-ficha_cta {
-    margin-bottom: 0;
-}
 .button.is-link.pe-ficha_info {
     color: var(--pe---color--aztec);
     text-decoration-line: underline;
@@ -9909,14 +9976,6 @@ a.hero-opt_day:hover { transform: translateY(0.1875rem); box-shadow: 0 0 0 0 var
     }
     .pe-ficha_row {
         grid-template-columns: 6.5rem minmax(0, 1fr);
-    }
-    .pe-ficha_ctas {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    .button.pe-ficha_cta {
-        width: 100%;
-        text-align: center;
     }
     .pe-ficha_strip {
         padding-right: var(--_spacing---step--4);
@@ -10330,10 +10389,6 @@ a.hero-opt_day:hover { transform: translateY(0.1875rem); box-shadow: 0 0 0 0 var
     margin-bottom: 0;
     font-weight: var(--_typography---weight--light);
 }
-.button-group.ti-fechas_packs-ctas {
-    column-gap: var(--pe---gap--tight);
-    row-gap: var(--pe---gap--tight);
-}
 
 /* El taller: summary frame (sticky) + the temario */
 .ti-taller_grid {
@@ -10424,30 +10479,6 @@ a.hero-opt_day:hover { transform: translateY(0.1875rem); box-shadow: 0 0 0 0 var
     background-size: 0.5rem 1.5px;
     background-repeat: no-repeat;
     background-position: 0 0.75em;
-}
-.button-group.ti-resumen_ctas {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    column-gap: var(--pe---gap--tight);
-    row-gap: var(--pe---gap--tight);
-}
-.button.ti-resumen_cta {
-    width: 100%;
-    margin-bottom: 0;
-}
-/* the summary sits on aztec: primary = yellow, secondary = cream outline */
-.button.is-alternate.ti-resumen_cta {
-    border-top-color: var(--pe---color--fuel-yellow-dark);
-    border-right-color: var(--pe---color--fuel-yellow-dark);
-    border-bottom-color: var(--pe---color--fuel-yellow-dark);
-    border-left-color: var(--pe---color--fuel-yellow-dark);
-    background-color: transparent;
-    color: var(--pe---color--fuel-yellow);
-    box-shadow: 0 var(--pe---volume) 0 0 var(--pe---color--fuel-yellow-dark);
-}
-.button.is-secondary.ti-resumen_cta {
-    color: var(--pe---color--stark-white);
-    box-shadow: 0 var(--pe---volume) 0 0 var(--pe---color--stark-white);
 }
 .ti-temario {
     grid-column-start: 7;
@@ -10705,11 +10736,6 @@ a.hero-opt_day:hover { transform: translateY(0.1875rem); box-shadow: 0 0 0 0 var
         padding-left: var(--_spacing---space--4);
     }
 }
-@media (max-width: 478px) {
-    .button-group.ti-resumen_ctas {
-        grid-template-columns: minmax(0, 1fr);
-    }
-}
 /* ═══ end SITE FIXES 2026-10-07 — buying path ═══ */
 
 /* ═══ SITE FIXES 2026-10-07 — part 2 ═══
@@ -10717,7 +10743,7 @@ a.hero-opt_day:hover { transform: translateY(0.1875rem); box-shadow: 0 0 0 0 var
    5. packs: quick access (comprar / regalar / canjear)
    6. profile pages (persona.html)
    7. team page: the founders text follows the photo grid (sticky)
-   8. talleres/cenas fechas chips: secondaries stop painting yellow on cream */
+   */
 
 /* ── 4. checkout ───────────────────────────────────────────────── */
 .hero_component.is-simplified.is-checkout-bar {
@@ -10893,16 +10919,6 @@ a.hero-opt_day:hover { transform: translateY(0.1875rem); box-shadow: 0 0 0 0 var
     }
 }
 
-/* ── 8. fechas chips (talleres / cenas): the secondary is an outline ─ */
-.button.is-secondary.pe-fechas_cta {
-    background-color: transparent;
-    border-top-color: var(--pe---color--aztec);
-    border-right-color: var(--pe---color--aztec);
-    border-bottom-color: var(--pe---color--aztec);
-    border-left-color: var(--pe---color--aztec);
-    color: var(--pe---color--aztec);
-    box-shadow: 0 var(--pe---volume) 0 0 var(--pe---color--aztec);
-}
 /* ═══ end SITE FIXES 2026-10-07 — part 2 ═══ */
 
 /* site-fixes 2026-10-07: workshop list, the explainer link (secondary) */
@@ -10985,29 +11001,6 @@ a.hero-opt_day:hover { transform: translateY(0.1875rem); box-shadow: 0 0 0 0 var
     padding-top: var(--_size-primitives---sm);
     padding-bottom: var(--_size-primitives---sm);
     column-gap: var(--_spacing---space--2);
-    background-color: transparent;
-    border-top-color: var(--pe---color--fuel-yellow-dark);
-    border-right-color: var(--pe---color--fuel-yellow-dark);
-    border-bottom-color: var(--pe---color--fuel-yellow-dark);
-    border-left-color: var(--pe---color--fuel-yellow-dark);
-    border-top-left-radius: var(--_radius---control);
-    border-top-right-radius: var(--_radius---control);
-    border-bottom-left-radius: var(--_radius---control);
-    border-bottom-right-radius: var(--_radius---control);
-    color: var(--pe---color--fuel-yellow);
-    box-shadow: 0 var(--pe---volume) 0 0 var(--pe---color--fuel-yellow-dark);
-}
-.button.checkout_pay-button:hover {
-    background-color: transparent;
-    color: var(--pe---color--fuel-yellow);
-}
-.button.checkout_pay-button:active {
-    transform: translate(0, var(--pe---volume));
-    box-shadow: 0 0 0 0 var(--pe---color--fuel-yellow-dark);
-}
-.button.checkout_pay-button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
 }
 /* ═══ end checkout on the site's own form parts ═══ */
 
@@ -11151,14 +11144,11 @@ a.hero-opt_day:hover { transform: translateY(0.1875rem); box-shadow: 0 0 0 0 var
 }
 
 /* ═══ R27 tight gap: one separation token for rows of small controls ═══
-   --pe---gap--tight (variables.css) is the only gap between sibling buttons,
-   chips, pills, icon buttons and marquee items. Nothing touches or overlaps.
-   Button rows keep the gap alone: the .button bottom margin would add to it
-   in a stacked group. */
+   --pe---gap--tight (variables.css) is the gap between small peers: chips,
+   pills, icon buttons and marquee items. Full-size buttons use the CTA groups
+   (section 2). Button rows keep the gap alone: the .button bottom margin
+   would add to it in a stacked group. */
 .button-group > .button,
-.booking-result_actions > .button,
-.pe-util_actions > .button,
-.pe-ficha_ctas > .button,
 .hero_cta-row > .button {
     margin-bottom: 0;
 }
@@ -11166,8 +11156,9 @@ a.hero-opt_day:hover { transform: translateY(0.1875rem); box-shadow: 0 0 0 0 var
 
 /* =============================================================
    BRAND ICONS (the approved UI, [UI] Wireframe Design.pdf)
-   The arrow of the Regístrate card, the MENU bars and the CERRAR X. Carousels
-   keep their own arrows; the console's keys are hardware.
+   The big arrow is for main booking calls only (Reservar, Regístrate); every
+   other button keeps its small chevron. Also the MENU bars and the CERRAR X.
+   Carousels keep their own arrows; the console's keys are hardware.
    The bars are one drawing: the X is the same bar turned 45 degrees.
    ============================================================= */
 .pe-arrow {
@@ -11175,9 +11166,6 @@ a.hero-opt_day:hover { transform: translateY(0.1875rem); box-shadow: 0 0 0 0 var
     flex-shrink: 0;
     width: 1.6em;
     height: auto;
-}
-.pe-arrow.is-back {
-    transform: scaleX(-1);
 }
 .pe-x {
     display: block;

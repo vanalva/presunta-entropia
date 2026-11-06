@@ -635,7 +635,13 @@
     'reserva': 'Elegir fecha',
     'saber más': 'Ver detalles'
   };
-  var RISE_GLYPH = '<svg class="pe-rise_glyph" viewBox="0 0 102.82 48.29" fill="currentColor" aria-hidden="true"><path d="M45.96 48.29V39.19L97.19 24.14L45.96 9.1V0L102.82 17.22V31.06L45.96 48.29ZM0 19.88H99.51V28.42H0Z"/></svg>';
+  // the small triangle is the default on every button (MENU included); the big
+  // brand arrow is only for the main booking calls, picked by label because
+  // data-modal-open also sits on links that only open the calendar
+  var RISE_GLYPH = '<svg class="pe-rise_glyph" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 0 L9 5 L2 10 Z" fill="currentColor"/></svg>';
+  var BOOK_GLYPH = '<svg class="pe-rise_glyph is-book" viewBox="0 0 102.82 48.29" fill="currentColor" aria-hidden="true"><path d="M45.96 48.29V39.19L97.19 24.14L45.96 9.1V0L102.82 17.22V31.06L45.96 48.29ZM0 19.88H99.51V28.42H0Z"/></svg>';
+  var BOOK_LABEL = /^(reserva( ya| tu lugar)?|reservar( ahora| plaza)?|reg[ií]strate)$/i;
+  function riseGlyph(label) { return BOOK_LABEL.test(label) ? BOOK_GLYPH : RISE_GLYPH; }
   // the colour of the surface a button sits on: its own background if
   // opaque, else the nearest ancestor's (the inverted state's ink)
   function surfaceBg(el) {
@@ -657,7 +663,7 @@
     for (var i = 0; i < tries.length; i++) {
       // measure an inline wrapper: the flex box itself never reports less
       // than its own width
-      alt.innerHTML = '<span class="pe-rise_txt">' + (tries[i][1] ? RISE_GLYPH : '') + '</span>';
+      alt.innerHTML = '<span class="pe-rise_txt">' + (tries[i][1] ? riseGlyph(alt.__peLabel) : '') + '</span>';
       alt.firstChild.appendChild(document.createTextNode(tries[i][0]));
       if (alt.firstChild.getBoundingClientRect().width <= room) break;
     }

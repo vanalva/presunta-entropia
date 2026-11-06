@@ -824,6 +824,8 @@
   margin-top: -0.6cqi;
   background-image: radial-gradient(circle, var(--pe-english-walnut-dark) 0.6cqi, transparent 0.7cqi);
   background-size: 2.3cqi 2.2cqi;
+  /* space: whole holes only, spread to fill the width (a plain repeat cut the end holes in half) */
+  background-repeat: space repeat;
   background-position: center 0;
   pointer-events: none;
 }
@@ -1509,6 +1511,9 @@
   border-bottom: none;
   border-top: 1px solid var(--pe-aztec-3);
   background-color: var(--pe-aztec);
+  /* an opaque skirt under the footer: a shadow adds no scroll height, and it covers any strip below the footer
+     (sticky pinning rounds, the screen's scale) so no row shows between the button and the screen's bottom edge */
+  box-shadow: 0 24px 0 0 var(--pe-aztec);
   cursor: pointer;
 }
 .pe-os_flist .pe-os_list-item.is-play.is-sel { background-color: var(--pe-aztec); color: var(--pe-stark-white); }
@@ -1815,6 +1820,13 @@ html.pe-con-in-view .vanny-launch {
 :host(.pe-dock--sheet) .pe-con_body {
   width: calc(100% - 2 * var(--wheel-out));
   margin-left: var(--wheel-out);
+}
+/* phones: the wheel sits within a thumb of the screen edge, where the system back gesture lives. Its
+   invisible grab strip grows inward, to just inside the screen's right padding (clear of CERRAR and the
+   rows); the visible wheel does not move */
+.pe-con.pe-dock--sheet .pe-con_wheel-hit,
+:host(.pe-dock--sheet) .pe-con_wheel-hit {
+  width: max(34px, calc(var(--wheel-out) + 8.6cqi));
 }
 .pe-dock-backdrop {
   position: fixed;

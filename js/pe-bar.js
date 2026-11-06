@@ -364,7 +364,7 @@
       var hot = chaos(), on = !!(M && M.playing && M.playing()) || !!(guest && guest.playing());
       var live = !!(M && M.bytes && M.bytes(freq)), synth = !live && on;
       var top = STATUS + 20, room = H - top - 6;
-      var px = Math.max(3, Math.round(room / 15)), col = px + 2, n = Math.floor((W - 8) / col), mid = Math.round(top + room / 2);
+      var px = Math.max(3, Math.round(room / 15)), col = px + 2, n = Math.floor((W - 8 + 2) / col), mid = Math.round(top + room / 2), x0 = Math.round((W - (n * col - 2)) / 2);
       var sum = 0;
       for (var i = 0; i < n; i++) {
         var d = Math.min(1, Math.abs(i - (n - 1) / 2) / (n / 2)), v;
@@ -389,8 +389,8 @@
         for (var j = 0; j < cells; j++) {
           var color = (on || live) ? (hot ? (i % 3 === 0 ? P.cream : (i % 3 === 1 ? P.rustL : P.y)) : (j > cells * 0.72 ? P.cream : P.y)) : P.az3;
           c.fillStyle = color;
-          c.fillRect(4 + i * col, my - (j + 1) * (px + 1), px, px);
-          c.fillRect(4 + i * col, my + j * (px + 1) + 1, px, px);
+          c.fillRect(x0 + i * col, my - (j + 1) * (px + 1), px, px);
+          c.fillRect(x0 + i * col, my + j * (px + 1) + 1, px, px);
         }
       }
       bass += ((sum / Math.max(1, n * 0.2)) - bass) * 0.3;

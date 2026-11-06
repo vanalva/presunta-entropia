@@ -63,7 +63,8 @@
     if (!db || !db.sesiones) return null;
     var list = db.sesionesAll || db.sesiones, s = null;
     for (var i = 0; i < list.length; i++) if (list[i].itemId === id) { s = list[i]; break; }
-    var all = (db.talleres || []).concat(db.cenas || [], db['team-building'] || []);
+    // Team Building is inquiry-only: never bookable from the site (pe-explorer.js, INQUIRY_ONLY)
+    var all = (db.talleres || []).concat(db.cenas || []);
     var slug = s ? s.item : null, it = null;
     for (var j = 0; j < all.length; j++) {
       if ((slug && all[j].slug === slug) || (!slug && all[j].entropicalId === id)) { it = all[j]; break; }

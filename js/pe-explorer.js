@@ -25,7 +25,12 @@
   var MESES_C = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
   var DIAS = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
   var DIAS_C = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
-  var TYPES = [['talleres', 'Talleres'], ['cenas', "Chef's Table"], ['team-building', 'Team Building']];
+  var TYPES = [['talleres', 'Talleres'], ['cenas', "Chef's Table"]];
+  // Collections that are NOT self-service: Team Building is inquiry-only (contact the owner).
+  // This is the one place the rule lives: loadData() never builds these items or their sessions,
+  // so every Explorador (page, light or dark, and the PEBookingModal overlay) inherits it and
+  // no chip, card, calendar day, search hit, "Ver fechas" or Reservar can exist for them.
+  var INQUIRY_ONLY = ['team-building'];
   var SORTS = [['', 'Ordenar'], ['fecha-asc', 'Fecha: próximas primero'], ['fecha-desc', 'Fecha: más lejanas primero'],
     ['price-asc', 'Precio: de menor a mayor'], ['price-desc', 'Precio: de mayor a menor'], ['name-asc', 'Nombre: A-Z']];
   var COMPACT_KEY = 'pe-xp-compact';
@@ -66,13 +71,13 @@
     var items = [];
     db.talleres.forEach(function (t) { items.push(Object.assign({}, t, { coleccion: 'talleres' })); });
     (db.cenas || []).forEach(function (t) { items.push(Object.assign({}, t, { coleccion: 'cenas' })); });
-    (db['team-building'] || []).forEach(function (t) { items.push(Object.assign({}, t, { coleccion: 'team-building' })); });
+    items = items.filter(function (it) { return INQUIRY_ONLY.indexOf(it.coleccion) === -1; });
     var bySlug = {};
     items.forEach(function (it) { bySlug[it.slug] = it; it.sessions = []; });
     var sessions = [];
     (db.sesionesAll || db.sesiones || []).forEach(function (x) {
       var it = bySlug[x.item];
-      if (!it) return;
+      if (!it || INQUIRY_ONLY.indexOf(x.coleccion) !== -1) return;
       var ses = {
         iso: x.iso, day: x.fecha, itemId: x.itemId || it.entropicalId, item: it,
         seatsLeft: typeof x.seatsLeft === 'number' ? x.seatsLeft : it.seatsLeft,

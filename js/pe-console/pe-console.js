@@ -1976,7 +1976,14 @@
     function choose(i) {
       var it = items[i];
       if (!it) return;
-      if (it.play) { sfx('open'); go(launcher); return; }
+      if (it.play) {
+        // straight to the games: the launcher's first card is Fechas (the calendar), so land on the first game instead
+        sfx('open');
+        var firstGame = apps.filter(function (a) { return a.game; })[0];
+        if (firstGame) launcher.focus(firstGame.id);
+        go(launcher);
+        return;
+      }
       if (it.here) { sfx('back'); closeNav(); return; }
       if (it.modal) { sfx('open'); closeNav(); setTimeout(function () { it.el.click(); }, 60); return; }
       // straight to the page: the next page's preloader is the transition. The console's own
@@ -2012,6 +2019,15 @@
 
   // ---- docking: the one console instance leaves its slot and comes back ----
   var dockPh = null, dockBackdrop = null, dockKind = null, closeKey = null;
+  // the device's safe-area insets (notch, home bar) in px, read once per dock through a throwaway probe
+  function safeInsets() {
+    var pr = document.createElement('div');
+    pr.style.cssText = 'position:fixed;visibility:hidden;pointer-events:none;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)';
+    document.body.appendChild(pr);
+    var cs = getComputedStyle(pr), o = { t: parseFloat(cs.paddingTop) || 0, r: parseFloat(cs.paddingRight) || 0, b: parseFloat(cs.paddingBottom) || 0, l: parseFloat(cs.paddingLeft) || 0 };
+    document.body.removeChild(pr);
+    return o;
+  }
   function dock(kind) {
     // reopened while the last close is still sliding out: finish that close first, or its
     // pending cleanup lands after this dock and strips it (menu open, console gone)
@@ -2033,10 +2049,10 @@
     hostEl.classList.add('pe-dock', 'pe-dock--' + kind);
     if (kind === 'sheet') {
       // the console at its own phone width, scaled to fit the screen height
-      var vw = document.documentElement.clientWidth;
-      hostEl.style.width = Math.min(440, vw - 24) + 'px';
+      var vw = document.documentElement.clientWidth, sa = safeInsets();
+      hostEl.style.width = Math.min(440, vw - 2 * (4 + Math.max(sa.l, sa.r))) + 'px';
       hostEl.style.height = '';
-      s = Math.min(1, (window.innerHeight - 24) / Math.max(1, hostEl.offsetHeight));
+      s = Math.min(1, (window.innerHeight - 2 * (12 + Math.max(sa.t, sa.b))) / Math.max(1, hostEl.offsetHeight));
       if (!dockBackdrop) {
         dockBackdrop = document.createElement('div');
         dockBackdrop.className = 'pe-dock-backdrop';

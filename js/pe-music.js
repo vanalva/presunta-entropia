@@ -397,7 +397,7 @@
       c.setTransform(dpr, 0, 0, dpr, 0, 0);
       c.fillStyle = AZ; c.fillRect(0, 0, W, H);
       s.host.classList.toggle('is-title', showTitle);
-      var px = Math.max(2, Math.round(H / 10)), col = px + 1, n = Math.floor((W - 4) / col), mid = H / 2;
+      var px = Math.max(2, Math.round(H / 10)), col = px + 1, n = Math.floor((W - 4 + 1) / col), mid = H / 2, x0 = Math.round((W - (n * col - 1)) / 2);
       for (var i = 0; i < n; i++) {
         var v;
         if (live) {
@@ -416,8 +416,8 @@
         var cells = Math.max(1, Math.round(v * (H - 4) / 2 / px));
         c.fillStyle = (live || synth) ? Y : AZ3;
         for (var j = 0; j < cells; j++) {
-          c.fillRect(2 + i * col, Math.round(mid - (j + 1) * px), px, px - 1);
-          c.fillRect(2 + i * col, Math.round(mid + j * px + 1), px, px - 1);
+          c.fillRect(x0 + i * col, Math.round(mid - (j + 1) * px), px, px - 1);
+          c.fillRect(x0 + i * col, Math.round(mid + j * px + 1), px, px - 1);
         }
       }
     });

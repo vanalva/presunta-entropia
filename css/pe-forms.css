@@ -31,3 +31,19 @@ body [data-flwr] select:autofill {
   box-shadow: 0 0 0 1000px var(--color-scheme-1--background, var(--pe---color--aztec)) inset;
   -webkit-text-fill-color: var(--color-scheme-1--text, var(--pe---color--stark-white));
 }
+
+/* ============================================================
+   Placeholders never use the brown/burgundy neutral (PE-005).
+   The framework paints every placeholder with --_section---text-subtle,
+   which resolves to --_palette---neutral--400 (oklch 0.43 0.03 35, a brown)
+   on these pages: css/framework.css "[data-flwr] ::placeholder". A control's
+   placeholder is now its own text colour at 72%, so it follows the section
+   (aztec on cream, cream on dark) and keeps the contrast of the value.
+   Rules with a class of their own (newsletter, checkout, ep-input) keep theirs
+   only when they are as specific; this is (0,1,2) so it wins over the framework's.
+   ============================================================ */
+[data-flwr] input::placeholder,
+[data-flwr] textarea::placeholder {
+  color: color-mix(in oklab, currentColor 72%, transparent);
+  opacity: 1;
+}

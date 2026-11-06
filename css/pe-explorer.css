@@ -71,7 +71,24 @@
 
 /* ---- bar: the LIST CONTROLS bar; selects and type chips ---- */
 .pe-xp_bar { margin: 0; }
+/* peer controls (search, Mes, Ordenar, Disponibilidad, type chips) sit on the tight gap token in
+   both themes; the larger space between the bar and the results stays on .pe-xp_stage / .pe-xp */
+.pe-xp .pe-xp_bar { --pe-lc-gap: var(--pe---gap--tight); }
+/* the primary search is the inverse of its calendar: dark field on the light calendar, light field on the
+   dark one (--xp-ink / --xp-paper swap with .is-dark). Typed text and placeholder stay readable on it;
+   the focus ring comes from .pe-lc_control:focus-visible/-within and is kept. */
+.pe-xp .pe-xp_bar .pe-xp_search.pe-lc_control {
+  background-color: var(--xp-ink); color: var(--xp-paper);
+  border-top-color: var(--xp-ink); border-right-color: var(--xp-ink); border-bottom-color: var(--xp-ink); border-left-color: var(--xp-ink);
+  -webkit-text-fill-color: var(--xp-paper); caret-color: var(--xp-paper);
+}
+.pe-xp .pe-xp_bar .pe-xp_search.pe-lc_control:focus-visible {
+  border-top-color: var(--xp-focus); border-right-color: var(--xp-focus); border-bottom-color: var(--xp-focus); border-left-color: var(--xp-focus);
+  outline: 2px solid var(--xp-focus); outline-offset: 2px;
+}
+.pe-xp .pe-xp_bar .pe-xp_search::placeholder { color: color-mix(in oklab, var(--xp-paper) 72%, transparent); opacity: 1; }
 .pe-xp_search::-webkit-search-cancel-button { filter: grayscale(1); }
+.pe-xp:not(.is-dark) .pe-xp_search::-webkit-search-cancel-button { filter: grayscale(1) invert(1); }
 .pe-xp_select { position: relative; }
 .pe-xp_select-trigger { display: flex; align-items: center; justify-content: space-between; gap: var(--_spacing---space--2); width: 100%; cursor: pointer; }
 .pe-xp_select-trigger.is-set { background: var(--xp-soft); }
