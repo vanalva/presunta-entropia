@@ -705,34 +705,12 @@ a {
     display: flex;
 }
 
-/* Cerrar mirrors the MENU button exactly (squared 12px, thin amber border) —
-   the site's button language is squared; no pills. */
+/* Cerrar IS a .button.is-secondary, the same as Reservar beside it: border,
+   shadow, radius, colour and height all come from there. Only its place on
+   the page is its own. Do not style the button here: three layers of overrides
+   kept it looking almost, but never quite, like the others. */
 .navbar_menu-close-button-wrapper {
     z-index: 110000;
-    column-gap: 0rem;
-    row-gap: 0rem;
-    color: var(--_color-primitives---colors--fuel-yellow-lightest);
-    background-color: var(--pe---color--aztec);
-    border-top-width: 1.5px;
-    border-right-width: 1.5px;
-    border-bottom-width: 1.5px;
-    border-left-width: 1.5px;
-    border-top-style: solid;
-    border-right-style: solid;
-    border-bottom-style: solid;
-    border-left-style: solid;
-    border-top-color: var(--pe---color--fuel-yellow-dark);
-    border-right-color: var(--pe---color--fuel-yellow-dark);
-    border-bottom-color: var(--pe---color--fuel-yellow-dark);
-    border-left-color: var(--pe---color--fuel-yellow-dark);
-    border-top-left-radius: var(--_radius---control);
-    border-top-right-radius: var(--_radius---control);
-    border-bottom-left-radius: var(--_radius---control);
-    border-bottom-right-radius: var(--_radius---control);
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-items: center;
-    display: flex;
     position: absolute;
     top: auto;
     right: 1.5rem;
@@ -740,27 +718,12 @@ a {
     left: auto;
 }
 
+/* original.css zeroes the padding at this specificity: these are .button's own */
 .navbar_menu-close-button-wrapper.button {
-    padding-top: 0;
-    padding-right: 0;
-    padding-bottom: 0;
-    padding-left: var(--_spacing-semantics---padding--pad-section-sm);
-    border-top-width: 1.5px;
-    border-right-width: 1.5px;
-    border-bottom-width: 1.5px;
-    border-left-width: 1.5px;
-    border-top-style: solid;
-    border-right-style: solid;
-    border-bottom-style: solid;
-    border-left-style: solid;
-    border-top-color: var(--pe---color--fuel-yellow-dark);
-    border-right-color: var(--pe---color--fuel-yellow-dark);
-    border-bottom-color: var(--pe---color--fuel-yellow-dark);
-    border-left-color: var(--pe---color--fuel-yellow-dark);
-    border-top-left-radius: var(--_radius---control);
-    border-top-right-radius: var(--_radius---control);
-    border-bottom-left-radius: var(--_radius---control);
-    border-bottom-right-radius: var(--_radius---control);
+    padding-top: 0.625rem;
+    padding-right: var(--_spacing-semantics---padding--pad-section-md);
+    padding-bottom: 0.625rem;
+    padding-left: var(--_spacing-semantics---padding--pad-section-md);
 }
 
 .menu-close_line-top,
@@ -7499,42 +7462,6 @@ html .cart-modal_empty-text.cart-modal_empty-text.cart-modal_empty-text::after {
 }
 
 
-/* ═══ MENU — Reservar/Cerrar pair ═══ */
-/* One matched pair in the open menu: same 40px box, same top edge, same cream
-   1px border + offset shadow as Reservar. The ✕ keeps its original drawing
-   (two 24×4px amber bars). Its shared 48px .menu-icon box overflows the 24px
-   row invisibly (transparent, centred), so it no longer pushes the height;
-   padding-right is short because that box already carries ~12px of air. */
-.navbar_menu-close-button-wrapper.button {
-    margin-top: 1px;    /* pe-console.css side layout puts Cerrar at top 32px, Reservar at 33px */
-    padding-top: 7px;
-    padding-right: 10px;
-    padding-bottom: 7px;
-    padding-left: var(--_spacing-semantics---padding--pad-section-md);
-    border-top-width: 1px;
-    border-right-width: 1px;
-    border-bottom-width: 1px;
-    border-left-width: 1px;
-    border-top-color: var(--color-scheme-1--text);
-    border-right-color: var(--color-scheme-1--text);
-    border-bottom-color: var(--color-scheme-1--text);
-    border-left-color: var(--color-scheme-1--text);
-    justify-content: center;
-    align-items: center;
-}
-
-.navbar_menu-close-button-content {
-    column-gap: 0rem;
-    height: 24px;
-    align-items: center;
-}
-
-.menu-close_line-top,
-.menu-close_line-bottom {
-    width: 24px;
-    height: 4px;
-}
-
 /* ═══ LIST CONTROLS — unified search/filter/sort/columns ═══
    One controls bar (.pe-lc) and one grid (.pe-lc_list) for every event / workshop
    list: Calendario on index, talleres, cenas, team-building and the legacy modal
@@ -11255,8 +11182,8 @@ a.hero-opt_day:hover { transform: translateY(0.1875rem); box-shadow: 0 0 0 0 var
 .pe-x {
     display: block;
     flex-shrink: 0;
-    width: 0.85em;
-    height: 0.85em;
+    width: 0.7em;
+    height: 0.7em;
 }
 .icon-embed-xxsmall.pe-arrow-wrap {
     width: auto;
@@ -11269,13 +11196,22 @@ a.hero-opt_day:hover { transform: translateY(0.1875rem); box-shadow: 0 0 0 0 var
     vertical-align: -0.05em;
 }
 .navbar_menu-button .menu-icon_wrapper {
-    row-gap: 6px;
+    row-gap: 5px;
+}
+/* the shared 48px icon box would make Cerrar taller and wider than its text */
+.navbar_menu-close-button-content {
+    column-gap: var(--_spacing-semantics---gap--gap-2xs);
+    row-gap: var(--_spacing-semantics---gap--gap-2xs);
+}
+.navbar_menu-close-button-content .menu-icon {
+    width: 1rem;
+    height: 1rem;
 }
 .navbar_menu-button .menu-icon4_line-top,
 .navbar_menu-button .menu-icon4_line-bottom,
 .navbar_menu-close-button-content .menu-close_line-top,
 .navbar_menu-close-button-content .menu-close_line-bottom {
-    width: 28px;
-    height: 5px;
+    width: 20px;
+    height: 3px;
     background-color: var(--pe---color--fuel-yellow);
 }

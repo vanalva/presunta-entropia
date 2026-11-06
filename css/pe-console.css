@@ -1832,7 +1832,7 @@ html.pe-menu-sheet .pe-dock-backdrop { background-color: #0d161d; }
    sideLayout() in pe-console.js). Buttons form one row level with the logo
    top; the socials close the address row. */
 html.pe-menu-side .navbar_menu-wrapper .navbar_menu-close-button-wrapper {
-  top: 32px;
+  top: 33px;
   bottom: auto;
   left: auto;
   right: var(--pe-zone-r);
