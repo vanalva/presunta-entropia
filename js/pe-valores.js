@@ -360,10 +360,14 @@
     var p = v.duration ? v.currentTime / v.duration : 0, n = Math.round(p * SEG);
     if (n !== lit) {
       lit = n;
-      for (var i = 0; i < SEG; i++) segs[i].className = i < n ? 'is-on' : '';
+      for (var i = 0; i < SEG; i++) {
+        var cls = i < n ? 'is-on' : '';
+        if (segs[i].className !== cls) segs[i].className = cls;   // every write restyles this page
+      }
       track.setAttribute('aria-valuenow', Math.round(p * 100));
     }
-    tEl.textContent = fmt(v.currentTime) + '/' + fmt(v.duration);
+    var label = fmt(v.currentTime) + '/' + fmt(v.duration);
+    if (tEl.textContent !== label) tEl.textContent = label;
   }
   function wake() {
     el.setAttribute('data-ui', 'on');

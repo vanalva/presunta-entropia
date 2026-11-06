@@ -6,10 +6,9 @@
    leaves. After their first two seconds on screen while scrolling down they
    follow the direction: up brings them back, down sends them off, top row
    upward and bottom row downward. Music that is playing never leaves.
-   The state classes on <html>:
-     pe-mnav-hide    the rows are away
-     pe-mnav-sound   something is playing
-     pe-mnav-top     the top of the page: the rows are off
+   The leaving and returning are Web Animations (js/pe-mobile-nav.js), so a
+   change of direction restyles nothing but these elements.
+   pe-mnav-top on <html>: the top of the page, the rows are off.
    The music screen steps aside for the footer console, which has its own
    (html.pe-bar-near, css/pe-bar.css), even while it plays.
    ============================================================= */
@@ -40,6 +39,14 @@
     padding-right: 0;
     padding-bottom: 0;
     padding-left: 0;
+  }
+  /* cart and MENU live inside this navbar shell. Pinned to the bottom (its place
+     on desktop), the browser bar dragged it, and them, as it collapsed. */
+  html .navbar_fullscreen.color-scheme-1 {
+    top: 0;
+    right: 0;
+    bottom: auto;
+    left: auto;
   }
   .pe-mnav_logo {
     position: fixed;
@@ -126,24 +133,6 @@
     transition-delay: 0s, 0s, 0.35s;
   }
 
-  /* ---------- away ---------- */
-  html.pe-mnav-hide .pe-mnav_logo,
-  html.pe-mnav-hide .navbar_wrapper .navbar_fixed-button-container {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transform: translateY(calc(-100% - var(--pe-mnav-top)));
-    transition-delay: 0s, 0s, 0.35s;
-  }
-  html.pe-mnav-hide .pe-mnav_chat,
-  html.pe-mnav-hide:not(.pe-mnav-sound) .pe-float {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transform: translateY(calc(100% + var(--pe-mnav-bottom)));
-    transition-delay: 0s, 0s, 0.35s;
-  }
-
   /* the console carries its own music screen, and the phone menu covers the page */
   html.pe-con-in-view .pe-float,
   html.pe-menu-sheet .pe-float,
@@ -158,14 +147,5 @@
   /* the last screen of the page leaves room for the bottom row */
   html .footer15_component {
     padding-bottom: calc(var(--pe-mnav-gutter) * 2 + var(--pe-mnav-tall));
-  }
-}
-
-@media (max-width: 767px) and (prefers-reduced-motion: reduce) {
-  html.pe-mnav-hide .pe-mnav_logo,
-  html.pe-mnav-hide .navbar_wrapper .navbar_fixed-button-container,
-  html.pe-mnav-hide .pe-mnav_chat,
-  html.pe-mnav-hide:not(.pe-mnav-sound) .pe-float {
-    transform: none;
   }
 }

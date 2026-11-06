@@ -143,8 +143,9 @@
       }
       if (add.getAttribute('data-item-id') !== id) add.setAttribute('data-item-id', id);   // only on change: the observer watches this attribute
       var name = (b.getAttribute('aria-label') || '').replace(/^Reservar\s*/, '');
-      add.setAttribute('aria-label', 'Añadir al carrito' + (name ? ': ' + name : ''));
-      add.title = 'Añadir al carrito';
+      var label = 'Añadir al carrito' + (name ? ': ' + name : '');
+      if (add.getAttribute('aria-label') !== label) add.setAttribute('aria-label', label);
+      if (add.title !== 'Añadir al carrito') add.title = 'Añadir al carrito';
     });
   }
   var queued = false;
