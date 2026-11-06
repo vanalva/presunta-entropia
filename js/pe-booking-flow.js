@@ -146,7 +146,8 @@
       var row = b.parentNode && b.parentNode.classList && b.parentNode.classList.contains('pe-book') ? b.parentNode : null;
       if (!id) { if (row) row.parentNode.replaceChild(b, row); return; }
       if (!row) {
-        row = el('span', 'pe-book');
+        // on a card: the button system's primary + icon group, at the tight gap
+        row = el('span', 'pe-book' + (b.closest('.pe-tcard') ? ' button-group is-with-icon gap-0' : ''));
         b.parentNode.insertBefore(row, b);
         row.appendChild(b);
       }

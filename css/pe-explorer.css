@@ -151,8 +151,12 @@ body .pe-tcard .pe-tcard_fact.is-next { padding-right: 0; align-self: stretch; }
    The volume hangs below a button, inside the row gap: the gap is the volume plus the tight token, so nothing touches */
 .pe-tcard_ctas { display: flex; flex-direction: column; row-gap: calc(var(--pe---volume) + var(--pe---gap--tight)); margin-top: auto; padding-top: var(--_spacing---space--2); }
 body .pe-tcard .button.pe-tcard_cta { width: 100%; min-height: 2.75rem; margin: 0; white-space: nowrap; text-align: center; justify-content: center; }
+/* off (Finalizado, Completo, Cancelada in Reservar's place): pressed flat, no volume */
+body .pe-tcard .button.is-unavailable { --pe-btn-depth: 0px; }
 /* the cart next to Reservar (js/pe-booking-flow.js): the card's compact secondary, a square as tall as Reservar */
 body .pe-tcard .button.pe-book_cart { aspect-ratio: 1 / 1; margin-bottom: 0; padding-right: 0; padding-left: 0; }
+/* Reservar shares its row with the cart: the side padding gives way so the label never overflows */
+body .pe-tcard .pe-book > .button.pe-tcard_cta { padding-right: var(--_spacing---space--2); padding-left: var(--_spacing---space--2); }
 body .pe-tcard .button.pe-book_cart:hover,
 body .pe-tcard .button.pe-book_cart:focus-visible {
   border-top-color: var(--pe-tcard-ink); border-right-color: var(--pe-tcard-ink); border-bottom-color: var(--pe-tcard-ink); border-left-color: var(--pe-tcard-ink);
@@ -168,10 +172,10 @@ body .tag.pe-tcard_pill.is-dates:hover { background-color: var(--pe---color--azt
 body .pe-tcard.is-dark .tag.pe-tcard_pill.is-dates:hover { background-color: var(--pe---color--fuel-yellow); color: var(--pe---color--aztec); border-color: var(--pe---color--fuel-yellow); }
 body .tag.pe-tcard_pill.is-dates:focus-visible { outline: 2px solid var(--pe---color--fuel-yellow-dark, var(--pe---color--fuel-yellow)); outline-offset: 2px; }
 body .tag.pe-tcard_pill { margin: 0; font-weight: var(--_typography---weight--normal, 400); text-transform: none; letter-spacing: 0; white-space: nowrap; padding: 0.25rem 0.625rem; line-height: 1.2; }
-/* narrow cards (4 across, phones): the two columns stack */
-.pe-xp_grid.is-cols-4 .pe-tcard_facts, .pe-tcard.is-narrow .pe-tcard_facts { grid-template-columns: minmax(0, 1fr); }
-.pe-tcard.is-narrow .pe-tcard_fact { padding-right: 0; }
-.pe-tcard.is-narrow .pe-tcard_fact.is-next { padding-left: 0; padding-top: var(--_spacing---space--2); border-left-width: 0; border-top: 1px solid var(--pe---color--stark-white-dark); }
+/* narrow cards (4 across, phones) and the grid's pack card: the two columns stack */
+.pe-xp_grid.is-cols-4 .pe-tcard_facts, .pe-tcard.is-narrow .pe-tcard_facts, .pe-tcard.is-stacked .pe-tcard_facts { grid-template-columns: minmax(0, 1fr); }
+.pe-tcard.is-narrow .pe-tcard_fact, .pe-tcard.is-stacked .pe-tcard_fact { padding-right: 0; }
+.pe-tcard.is-narrow .pe-tcard_fact.is-next, .pe-tcard.is-stacked .pe-tcard_fact.is-next { padding-left: 0; padding-top: var(--_spacing---space--2); border-left-width: 0; border-top: 1px solid var(--pe---color--stark-white-dark); }
 .pe-tcard.is-narrow.is-dark .pe-tcard_fact.is-next { border-top-color: var(--pe---color--aztec-light); }
 .pe-xp_grid.is-cols-4 .pe-tcard_fact.is-next { padding-left: 0; padding-top: var(--_spacing---space--2); border-left-width: 0; border-top: 1px solid var(--pe---color--stark-white-dark); }
 .pe-xp_grid.is-cols-4 .pe-tcard_fact { padding-right: 0; }
@@ -216,8 +220,9 @@ body .tag.pe-tcard_pill { margin: 0; font-weight: var(--_typography---weight--no
 .pe-tcard_date.is-pack { background-color: var(--pe---color--fuel-yellow); color: var(--pe---color--aztec); border-color: var(--pe---color--fuel-yellow); }
 .pe-tcard.is-pack.is-wide { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); column-gap: var(--_spacing---space--4); }
 .pe-tcard.is-pack.is-wide .pe-tcard_media { aspect-ratio: auto; min-height: 12rem; height: 100%; }
-.pe-tcard.is-pack.is-wide .pe-tcard_ctas { flex-direction: row; column-gap: var(--pe---gap--tight); }
-.pe-tcard.is-pack.is-wide .button.pe-tcard_cta { width: auto; flex: 1 1 0; }
+/* its two buttons side by side, wherever they fit */
+.pe-tcard.is-pack.is-wide .pe-tcard_ctas, .pe-tcard.is-pack.is-stacked:not(.is-narrow) .pe-tcard_ctas { flex-direction: row; column-gap: var(--pe---gap--tight); }
+.pe-tcard.is-pack.is-wide .button.pe-tcard_cta, .pe-tcard.is-pack.is-stacked:not(.is-narrow) .button.pe-tcard_cta { width: auto; flex: 1 1 0; }
 @media (max-width: 767px) {
   .pe-tcard.is-pack.is-wide { display: flex; flex-direction: column; }
   .pe-tcard.is-pack.is-wide .pe-tcard_ctas { flex-direction: column; }
@@ -466,7 +471,13 @@ html body .pe-tcard.pe-tcard :is(h3, p)::after { content: none; display: none; }
 .talleres_card.pe-tcard.is-cancelled .pe-tcard_title { text-decoration-line: line-through; text-decoration-thickness: 1px; }
 /* finished: the same on the light page and the dark overlay. Everything drops to the muted cream (readable
    on aztec), the yellow goes, the frame stops lighting up; only the FINALIZADO flag stays at full strength */
-.talleres_card.pe-tcard.is-past.is-dark { --pe-tcard-frame: var(--pe---color--aztec-light); --pe-tcard-ink: var(--pe---color--stark-white-dark); color: var(--pe---color--stark-white-dark); }
+.talleres_card.pe-tcard.is-past.is-dark {
+  --pe-tcard-frame: var(--pe---color--aztec-light);
+  --pe-tcard-ink: var(--pe---color--stark-white-dark);
+  --pe-btn-ink: var(--pe---color--stark-white-dark);
+  --pe-btn-stroke: var(--pe---color--stark-white-dark);
+  color: var(--pe---color--stark-white-dark);
+}
 .talleres_card.pe-tcard.is-past.is-dark:hover,
 .talleres_card.pe-tcard.is-past.is-dark:focus-within { --pe-tcard-frame: var(--pe---color--stark-white-dark); }
 .talleres_card.pe-tcard.is-past .pe-tcard_image { opacity: 0.4; }

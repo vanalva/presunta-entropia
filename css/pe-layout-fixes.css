@@ -8,24 +8,26 @@
    ============================================================ */
 
 /* ---- PE-002. Carousel slides never touch ---------------------------------
-   Swiper positions slides by their widths only. The slide's own spacing is
-   the inline padding from the page's slider embed:
-     padding-inline: calc(var(--_gap---size) / 2)
+   Swiper positions slides by their widths only. The old spacing was inline
+   padding from the page's slider embed (padding-inline: var(--_gap---size)/2),
    and project.css reset --_gap---size to 0px on every slide ("T7"), so the
-   cards ran edge to edge. The slide takes the tight gap token instead:
-   half of it each side, so two neighbours sit one --pe---gap--tight apart.
-   The wrapper's own column-gap stays 0 (project.css T7): Swiper's maths
-   would count it twice. */
-.slider_list > *,
-.slider_list > .w-dyn-list > * > * > * {
-  --_gap---size: var(--pe---gap--tight);
+   cards ran edge to edge. Padding is the wrong tool: on taller-item the
+   slide IS the bordered card, so padding only moves the image inside its
+   own border. The gap is a margin on the slide's trailing edge instead.
+   Swiper (slidesPerView: auto) counts a slide's margins in its step, so
+   the position maths and the pagination stay right, and loop duplicates
+   get it too. The wrapper's column-gap stays 0 (project.css T7): it would
+   be counted twice. The embed's width: calc(100% / n) !important is not
+   touched, so n cards plus the peek keep their size. */
+.slider_list > .swiper-slide {
+  margin-right: var(--pe---gap--tight);
 }
-/* The offset box pulled the track out by half the OLD slide padding (0.5rem
-   each side, original.css). With 0.125rem of slide padding the first and
-   last card sit on the content edge: pull out by exactly that padding. */
+/* original.css pulled the track out by 0.5rem each side to cancel the old
+   1rem slide padding. Nothing is cancelled any more: the first card sits on
+   the content edge like the heading above it. */
 .slider_offset {
-  margin-left: calc(var(--pe---gap--tight) / -2);
-  margin-right: calc(var(--pe---gap--tight) / -2);
+  margin-left: 0;
+  margin-right: 0;
 }
 
 /* ---- PE-003. Checkout bar ------------------------------------------------

@@ -72,6 +72,7 @@
         flex-shrink: 0;
         font-size: 1.125rem;
         line-height: 1;
+        text-transform: uppercase;
         white-space: nowrap;
     }
     .pe-ficha_silk.pe-ficha_tab-name {

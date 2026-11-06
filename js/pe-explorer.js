@@ -160,7 +160,8 @@
   function facts(L, R) { var f = h('div', 'pe-tcard_facts'); f.appendChild(L); f.appendChild(R); return f; }
   // a narrow card (4 across, a slider slide, a phone) stacks its lower half: measured per card,
   // because the same card sits in grids, sliders and the hover card at any width
-  var NARROW = 360;
+  // 400: below it the left column cannot hold Reservar's label beside the cart
+  var NARROW = 400;
   var narrowRO = window.ResizeObserver ? new ResizeObserver(function (list) {
     list.forEach(function (e) { e.target.classList.toggle('is-narrow', e.contentRect.width < NARROW); });
   }) : null;
@@ -254,15 +255,17 @@
     var L = fact('Precio', priceEl);
     var ctas = h('div', 'pe-tcard_ctas');
     if (ses && (st === 'open' || st === 'low')) ctas.appendChild(reservarBtn(ses, dark));
+    // unbookable: a real disabled button with the state in Reservar's place. No data-pe-add, so no
+    // booking and no cart; Más info stays live
+    else if (STATE_FLAG[st]) ctas.appendChild(attr(h('button', btnCls(dark, true) + ' is-unavailable', STATE_FLAG[st]), { type: 'button', disabled: true }));
     ctas.appendChild(attr(h('a', btnCls(dark, false), 'Más info'), { href: itemHref(it), 'data-ep-role': 'secondary', 'aria-label': 'Más información sobre ' + it.name }));
     L.appendChild(ctas);
 
-    var seatsVal;
-    if (st === 'past') seatsVal = h('div', 'pe-tcard_fact-value f-text-h6', 'Finalizado');
-    else if (st === 'cancelled') seatsVal = h('div', 'pe-tcard_fact-value f-text-h6', 'Cancelada');
-    else if (ses && typeof ses.seatsLeft === 'number') seatsVal = meter(ses.seatsLeft, ses.capacity || it.capacityTotal);
-    else seatsVal = h('div', 'pe-tcard_fact-value f-text-h6', it.capacityTotal ? it.capacityTotal + ' plazas' : '—');
-    var R = fact('Plazas', seatsVal, 'is-next');
+    // gone (past, cancelled): no seats to count, the flag and the button already say so; the column is the date
+    var gone = st === 'past' || st === 'cancelled', seatsVal = null;
+    if (ses && !gone && typeof ses.seatsLeft === 'number') seatsVal = meter(ses.seatsLeft, ses.capacity || it.capacityTotal);
+    else if (!gone) seatsVal = h('div', 'pe-tcard_fact-value f-text-h6', it.capacityTotal ? it.capacityTotal + ' plazas' : '—');
+    var R = fact(gone ? 'Fecha' : 'Plazas', seatsVal, 'is-next');
     var others = it.upcoming ? it.upcoming.filter(function (x) { return x !== ses; }).length : 0;
     var dateTxt = ses ? cap(madrid(ses.iso, { weekday: 'short', day: 'numeric', month: 'short' }).replace(/\./g, '')) + ' · ' + madrid(ses.iso, { hour: '2-digit', minute: '2-digit' }) : '';
     var canDates = !!(it.upcoming && it.upcoming.length) && !(opts && opts.noDates);
@@ -312,7 +315,8 @@
   }
   // an offer, not an event: the yellow card, on the light page and on the dark overlay alike
   function pack(opts) {
-    var c = shell(false, ' is-pack' + (opts && opts.wide ? ' is-wide' : ''));
+    // in a grid its lower half always stacks: the chips are long and need the card's full width
+    var c = shell(false, ' is-pack' + (opts && opts.wide ? ' is-wide' : ' is-stacked'));
     c.setAttribute('data-pe-card-href', 'packs.html');
     var media = h('div', 'pe-tcard_media');
     media.appendChild(attr(h('img', 'pe-tcard_image'), { loading: 'lazy', alt: '', src: 'assets/images/r4-2026-10/friends-cooking.webp' }));
