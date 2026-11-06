@@ -48,3 +48,28 @@
 .checkout_section.is-single {
   padding-top: 0;
 }
+
+/* ---- PE-002. One pagination on every carousel -----------------------------
+   The size of La Experiencia and the home carousel: 24px segments, a 64px
+   active one, 12px tall, at every width. original.css made the active one
+   10rem wide and 0.5rem tall on phones, which is a different thing.
+   Whole pixels and room inside the clipped carousel: a 12.8px bar flush against
+   a clip is the likely source of the hairline and notch on iPhone. The animation
+   of the active segment stays exactly as original.css has it. */
+.slider_bullet_list {
+    align-items: center;
+    padding-top: var(--pe---gap--tight);
+    padding-bottom: var(--pe---gap--tight);
+}
+.slider_bullet_list .slider_bullet_item,
+.slider_bullet_list .slider_bullet_item.is-active {
+    flex-shrink: 0;
+    height: 12px;
+    aspect-ratio: auto;
+}
+.slider_bullet_list .slider_bullet_item {
+    width: 24px;
+}
+.slider_bullet_list .slider_bullet_item.is-active {
+    width: 64px;
+}

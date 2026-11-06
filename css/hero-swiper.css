@@ -54,10 +54,14 @@
     display: flex;
     justify-content: center;
     column-gap: var(--pe---gap--tight);
+    padding-top: var(--pe---gap--tight);
+    padding-bottom: var(--pe---gap--tight);
   }
+  /* whole pixels: see the pagination note in pe-layout-fixes.css */
   .hero-swiper_bullet {
-    width: 1.5rem;
-    height: 0.8rem;
+    flex-shrink: 0;
+    width: 24px;
+    height: 12px;
     padding-top: 0;
     padding-right: 0;
     padding-bottom: 0;
@@ -70,10 +74,10 @@
     border-right-style: solid;
     border-bottom-style: solid;
     border-left-style: solid;
-    border-top-color: #bf8024;
-    border-right-color: #bf8024;
-    border-bottom-color: #bf8024;
-    border-left-color: #bf8024;
+    border-top-color: var(--pe---color--fuel-yellow-dark);
+    border-right-color: var(--pe---color--fuel-yellow-dark);
+    border-bottom-color: var(--pe---color--fuel-yellow-dark);
+    border-left-color: var(--pe---color--fuel-yellow-dark);
     border-top-left-radius: var(--_radius---xs);
     border-top-right-radius: var(--_radius---xs);
     border-bottom-left-radius: var(--_radius---xs);
@@ -85,11 +89,11 @@
     cursor: pointer;
   }
   .hero-swiper_bullets .hero-swiper_bullet.is-active {
-    width: 4rem;
-    border-top-color: #efa02e;
-    border-right-color: #efa02e;
-    border-bottom-color: #efa02e;
-    border-left-color: #efa02e;
-    background-color: #efa02e;
+    width: 64px;
+    border-top-color: var(--pe---color--fuel-yellow);
+    border-right-color: var(--pe---color--fuel-yellow);
+    border-bottom-color: var(--pe---color--fuel-yellow);
+    border-left-color: var(--pe---color--fuel-yellow);
+    background-color: var(--pe---color--fuel-yellow);
   }
 }
