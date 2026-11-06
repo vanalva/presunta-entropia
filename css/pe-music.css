@@ -54,6 +54,8 @@
 .pe-mlcd.is-waiting .pe-mlcd_title {
   opacity: 1;
   column-gap: 5px;
+}
+.pe-mlcd.is-waiting .pe-mlcd_title > * {
   animation-name: peMlcdBlink;
   animation-duration: 1.2s;
   animation-timing-function: steps(2, jump-none);

@@ -53,7 +53,7 @@
   .hero-swiper_bullets {
     display: flex;
     justify-content: center;
-    column-gap: 0.4rem;
+    column-gap: var(--pe---gap--tight);
   }
   .hero-swiper_bullet {
     width: 1.5rem;

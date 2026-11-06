@@ -1,0 +1,172 @@
+/* =============================================================
+   PHONE NAVIGATION (js/pe-mobile-nav.js)
+   Top row: isotype left, cart + MENU right.
+   Bottom row: music left, assistant right.
+   The hero keeps its own logo and dock, so the top row takes over when
+   the dock leaves. After the first two seconds of scrolling down the rows
+   follow the direction: up brings them back, down sends them off, top row
+   upward and bottom row downward. Music that is playing never leaves.
+   The state classes on <html>:
+     pe-mnav-hide    the rows are away
+     pe-mnav-sound   something is playing
+     pe-mnav-tight   the hero has content under the bottom row, so it waits
+   ============================================================= */
+.pe-mnav_logo,
+.pe-mnav_chat {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  html {
+    --pe-mnav-gutter: 1rem;
+    --pe-mnav-frame: 1.0625rem;     /* the hero frame's inner edge, past the gutter */
+    --pe-mnav-key: 3.1875rem;       /* the height of the cart, MENU and assistant */
+    --pe-mnav-tall: calc(var(--pe-mnav-key) + var(--pe---volume));
+    --pe-mnav-top: calc(var(--pe-mnav-gutter) + env(safe-area-inset-top, 0px));
+    --pe-mnav-bottom: calc(var(--pe-mnav-gutter) + var(--pe---volume) + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* ---------- top row ---------- */
+  .navbar_fixed-button-container {
+    position: fixed;
+    top: var(--pe-mnav-top);
+    right: var(--pe-mnav-gutter);
+    bottom: auto;
+    left: auto;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+  }
+  .pe-mnav_logo {
+    position: fixed;
+    z-index: 900;
+    top: var(--pe-mnav-top);
+    left: var(--pe-mnav-gutter);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--pe-mnav-key);
+    height: var(--pe-mnav-key);
+    border-top-width: var(--pe---border-width-2);
+    border-right-width: var(--pe---border-width-2);
+    border-bottom-width: var(--pe---border-width-2);
+    border-left-width: var(--pe---border-width-2);
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-color: var(--pe---color--stark-white);
+    border-right-color: var(--pe---color--stark-white);
+    border-bottom-color: var(--pe---color--stark-white);
+    border-left-color: var(--pe---color--stark-white);
+    border-top-left-radius: var(--_radius---control);
+    border-top-right-radius: var(--_radius---control);
+    border-bottom-left-radius: var(--_radius---control);
+    border-bottom-right-radius: var(--_radius---control);
+    background-color: var(--pe---color--aztec);
+    color: var(--pe---color--stark-white);
+    box-shadow: 0 var(--pe---volume) 0 0 var(--pe---color--fuel-yellow-dark);
+    transition-property: opacity, transform, visibility;
+    transition-duration: 0.3s, 0.35s, 0s;
+    transition-timing-function: ease, cubic-bezier(0.2, 0.9, 0.3, 1), linear;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .pe-mnav_logo svg {
+    display: block;
+    width: 1.875rem;
+    height: auto;
+    fill: currentColor;
+  }
+
+  /* ---------- bottom row ---------- */
+  .pe-float {
+    left: var(--pe-mnav-gutter);
+    bottom: var(--pe-mnav-bottom);
+  }
+  .pe-float .pe-mlcd {
+    height: var(--pe-mnav-key);
+    box-shadow: 0 var(--pe---volume) 0 0 var(--pe---color--fuel-yellow-dark);
+  }
+  /* stopped, the screen names what a tap will play */
+  .pe-float .pe-mlcd:not(.is-playing) .pe-mlcd_title { opacity: 1; }
+  .pe-mnav_chat {
+    position: fixed;
+    z-index: 900;
+    right: var(--pe-mnav-gutter);
+    bottom: var(--pe-mnav-bottom);
+    display: flex;
+    transition-property: opacity, transform, visibility;
+    transition-duration: 0.3s, 0.35s, 0s;
+    transition-timing-function: ease, cubic-bezier(0.2, 0.9, 0.3, 1), linear;
+  }
+
+  /* ---------- the hero: the bottom row stands inside its frame ---------- */
+  html.hero-dock-in-view .pe-float {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translate(var(--pe-mnav-frame), calc(var(--pe-mnav-frame) * -1));
+    transition-delay: 0s, 0s, 0s;
+  }
+  html.hero-dock-in-view .pe-mnav_chat {
+    transform: translate(calc(var(--pe-mnav-frame) * -1), calc(var(--pe-mnav-frame) * -1));
+  }
+  /* the hero dock is the top row while it is on screen */
+  html.hero-dock-in-view .pe-mnav_logo,
+  html.hero-dock-in-view .navbar_wrapper .navbar_fixed-button-container {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-12px);
+    transition-delay: 0s, 0s, 0.35s;
+  }
+  .hero_cta-row {
+    margin-bottom: calc(var(--pe-mnav-tall) + 0.75rem);
+  }
+
+  /* ---------- away ---------- */
+  html.pe-mnav-hide .pe-mnav_logo,
+  html.pe-mnav-hide .navbar_wrapper .navbar_fixed-button-container {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(calc(-100% - var(--pe-mnav-top)));
+    transition-delay: 0s, 0s, 0.35s;
+  }
+  html.pe-mnav-hide .pe-mnav_chat,
+  html.pe-mnav-hide:not(.pe-mnav-sound) .pe-float,
+  html.hero-dock-in-view.pe-mnav-tight .pe-mnav_chat,
+  html.hero-dock-in-view.pe-mnav-tight:not(.pe-mnav-sound) .pe-float {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(calc(100% + var(--pe-mnav-bottom)));
+    transition-delay: 0s, 0s, 0.35s;
+  }
+
+  /* the console carries its own music screen, and the phone menu covers the page */
+  html.pe-con-in-view .pe-float,
+  html.pe-menu-sheet .pe-float,
+  html.pe-menu-sheet .pe-mnav_logo,
+  html.pe-menu-sheet .pe-mnav_chat {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition-delay: 0s, 0s, 0.35s;
+  }
+
+  /* the last screen of the page leaves room for the bottom row */
+  .footer15_component {
+    padding-bottom: calc(var(--pe-mnav-gutter) * 2 + var(--pe-mnav-tall));
+  }
+}
+
+@media (max-width: 767px) and (prefers-reduced-motion: reduce) {
+  html.pe-mnav-hide .pe-mnav_logo,
+  html.pe-mnav-hide .navbar_wrapper .navbar_fixed-button-container,
+  html.pe-mnav-hide .pe-mnav_chat,
+  html.pe-mnav-hide:not(.pe-mnav-sound) .pe-float {
+    transform: none;
+  }
+}

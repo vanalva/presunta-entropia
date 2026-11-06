@@ -43,7 +43,7 @@
 .pe-xp_head-left { display: flex; flex-direction: column; row-gap: var(--_spacing---space--3); max-width: 42rem; }
 .pe-xp_title, .pe-xp_lead { margin: 0; }
 .pe-xp_head-right { display: flex; flex-direction: column; align-items: flex-end; row-gap: var(--_spacing---space--2); margin-left: auto; }
-.pe-xp_tabs { display: inline-flex; padding: 3px; border: var(--border-width--main) solid var(--xp-ink); border-radius: var(--_radius---control); }
+.pe-xp_tabs { display: inline-flex; column-gap: var(--pe---gap--tight); padding: 3px; border: var(--border-width--main) solid var(--xp-ink); border-radius: var(--_radius---control); }
 .pe-xp_tab {
   padding: var(--_spacing---space--2) var(--_spacing---space--4);
   background: transparent; color: inherit; border: 0;
@@ -52,7 +52,7 @@
   transition: background-color .2s ease, color .2s ease;
 }
 .pe-xp_tab.is-active { background: var(--xp-hi); color: var(--xp-hi-ink); }
-.pe-xp_tags { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: var(--_spacing---space--2); min-height: 2.5rem; }
+.pe-xp_tags { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: var(--pe---gap--tight); min-height: 2.5rem; }
 /* active filters: solid ink chips (aztec on light, cream on dark) with the x to remove */
 .pe-xp_tag {
   display: inline-flex; align-items: center; gap: var(--_spacing---space--2);
@@ -99,10 +99,9 @@
 .pe-xp_stage.is-settling > .pe-xp_panel { opacity: 0.45; transition: opacity .18s ease; }
 .pe-xp_stage.is-settling::before { opacity: 1; width: 100%; transition: width .28s linear; }
 
-/* ---- Experiencias: the workshop cards, 1–4 columns ---- */
+/* ---- Experiencias: the workshop cards (phones: one column) ---- */
 .pe-xp_grid { display: grid; gap: var(--_spacing---space--5); grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: stretch; }
 .pe-xp_grid.is-cols-1 { grid-template-columns: minmax(0, 1fr); }
-.pe-xp_grid.is-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .pe-xp_grid.is-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--_spacing---space--4); }
 .pe-xp_grid.is-cols-1 .pe-tcard { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); column-gap: var(--_spacing---space--4); }
 .pe-xp_grid.is-cols-1 .pe-tcard_media { aspect-ratio: auto; min-height: 14rem; }
@@ -111,7 +110,6 @@
 }
 @media (max-width: 767px) {
   .pe-xp_grid, .pe-xp_grid.is-cols-1, .pe-xp_grid.is-cols-3, .pe-xp_grid.is-cols-4 { grid-template-columns: minmax(0, 1fr); }
-  .pe-xp_grid.is-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .pe-xp_grid.is-cols-1 .pe-tcard { display: flex; flex-direction: column; }
 }
 /* the workshop card on dark (the booking overlay) */
@@ -128,11 +126,11 @@ body .pe-tcard .pe-tcard_facts { align-items: stretch; column-gap: 0; row-gap: v
 body .pe-tcard .pe-tcard_fact { min-width: 0; padding-right: var(--_spacing---space--2); }
 body .pe-tcard .pe-tcard_fact.is-next { padding-right: 0; align-self: stretch; }
 /* the buttons sit on the footer's bottom line: the left column stretches to the right one, Precio stays on top, the buttons take the slack */
-.pe-tcard_ctas { display: flex; flex-direction: column; row-gap: var(--_spacing---space--1); margin-top: auto; padding-top: var(--_spacing---space--2); }
+.pe-tcard_ctas { display: flex; flex-direction: column; row-gap: var(--pe---gap--tight); margin-top: auto; padding-top: var(--_spacing---space--2); }
 body .pe-tcard .button.pe-tcard_cta { width: 100%; margin: 0; white-space: nowrap; text-align: center; justify-content: center; }
 .pe-tcard_seats { margin-top: 0.375rem; display: flex; }
 .pe-tcard_seats .pe-ficha_meter { flex-wrap: nowrap; }
-.pe-tcard_pills { display: flex; flex-wrap: wrap; gap: 0.375rem; margin: var(--_spacing---space--3) 0 0; padding: 0; list-style: none; }
+.pe-tcard_pills { display: flex; flex-wrap: wrap; gap: var(--pe---gap--tight); margin: var(--_spacing---space--3) 0 0; padding: 0; list-style: none; }
 .pe-tcard_pill-item { display: contents; }
 body .tag.pe-tcard_pill.is-dates { gap: 0.35rem; background-color: transparent; font-family: inherit; cursor: pointer; transition: background-color .15s ease, color .15s ease, border-color .15s ease; }
 body .tag.pe-tcard_pill.is-dates svg { flex: none; }
@@ -168,7 +166,7 @@ body .tag.pe-tcard_pill { margin: 0; font-weight: var(--_typography---weight--no
 .pe-tcard_date.is-pack { background-color: var(--pe---color--fuel-yellow); color: var(--pe---color--aztec); border-color: var(--pe---color--fuel-yellow); }
 .pe-tcard.is-pack.is-wide { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); column-gap: var(--_spacing---space--4); }
 .pe-tcard.is-pack.is-wide .pe-tcard_media { aspect-ratio: auto; min-height: 12rem; height: 100%; }
-.pe-tcard.is-pack.is-wide .pe-tcard_ctas { flex-direction: row; column-gap: var(--_spacing---space--2); }
+.pe-tcard.is-pack.is-wide .pe-tcard_ctas { flex-direction: row; column-gap: var(--pe---gap--tight); }
 .pe-tcard.is-pack.is-wide .button.pe-tcard_cta { width: auto; flex: 1 1 0; }
 @media (max-width: 767px) {
   .pe-tcard.is-pack.is-wide { display: flex; flex-direction: column; }
@@ -189,10 +187,10 @@ body .tag.pe-tcard_pill { margin: 0; font-weight: var(--_typography---weight--no
 
 /* ---- Calendario ---- */
 .pe-xp_calbar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--_spacing---space--3); margin-bottom: var(--_spacing---space--3); }
-.pe-xp_seg { display: inline-flex; align-items: center; gap: 2px; padding: 3px; }
+.pe-xp_seg { display: inline-flex; align-items: center; gap: var(--pe---gap--tight); padding: 3px; }
 .pe-xp_seg-btn { padding: 0.4rem 0.9rem; background: transparent; color: inherit; border: 0; border-radius: calc(var(--_radius---control) - 3px); cursor: pointer; }
 .pe-xp_seg-btn.is-active { background: var(--xp-hi); color: var(--xp-hi-ink); }
-.pe-xp_nav { display: flex; align-items: center; gap: var(--_spacing---space--2); }
+.pe-xp_nav { display: flex; align-items: center; gap: var(--pe---gap--tight); }
 .pe-xp_navbtn { display: inline-flex; align-items: center; justify-content: center; width: var(--pe-lc-h, 2.75rem); padding: 0; cursor: pointer; }
 .pe-xp_navlabel { min-width: 11rem; margin: 0; text-align: center; }
 .pe-xp_today { width: auto; padding: 0 0.9rem; cursor: pointer; }
@@ -471,6 +469,12 @@ html body .pe-tcard.pe-tcard :is(h3, p)::after { content: none; display: none; }
   .pe-xp_head-right { align-items: flex-start; margin-left: 0; }
   .pe-xp_tags { justify-content: flex-start; }
 }
+/* phones: the Calendario / Experiencias switch spans the full width, both options equal */
+@media (max-width: 767px) {
+  .pe-xp_head-right { align-items: stretch; width: 100%; }
+  .pe-xp_tabs { display: flex; width: 100%; }
+  .pe-xp_tab { flex-grow: 1; flex-shrink: 1; flex-basis: 0; text-align: center; }
+}
 /* the Reservar + cart pair inside calendar rows: the pair takes the CTA slot */
 body .pe-xp_row > .pe-book { width: auto; }
 body .pe-xp_row.is-compact > .pe-book { width: 100%; }
@@ -498,7 +502,7 @@ body .pe-xp_row.is-compact > .pe-book { width: 100%; }
 .pe-tcard.is-compact .pe-tcard_fact.is-next > .pe-tcard_fact-label { grid-column: 2; grid-row: 1; }
 .pe-tcard.is-compact .pe-tcard_fact.is-next > .pe-tcard_fact-value,
 .pe-tcard.is-compact .pe-tcard_fact.is-next > .pe-ficha_seats { grid-column: 2; grid-row: 2; align-self: center; margin-top: 0; }
-.pe-tcard.is-compact .pe-tcard_ctas { grid-column: 1 / -1; grid-row: 3; flex-direction: row; column-gap: var(--_spacing---space--1); margin-top: var(--_spacing---space--2); padding-top: 0; }
+.pe-tcard.is-compact .pe-tcard_ctas { grid-column: 1 / -1; grid-row: 3; flex-direction: row; column-gap: var(--pe---gap--tight); margin-top: var(--_spacing---space--2); padding-top: 0; }
 .pe-tcard.is-compact .pe-tcard_ctas > * { flex: 1 1 0; min-width: 0; }
 .pe-tcard.is-compact .pe-tcard_pills { grid-column: 1 / -1; grid-row: 4; margin-top: var(--_spacing---space--2); }
 .pe-tcard.is-compact .button.pe-tcard_cta { padding-left: 0.75rem; padding-right: 0.75rem; }

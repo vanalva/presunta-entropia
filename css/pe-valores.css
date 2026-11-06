@@ -685,6 +685,46 @@
 .pe-val_signal i:nth-child(3) { height: 75%; }
 .pe-val_signal i:nth-child(4) { height: 100%; background-color: var(--pe---color--aztec-light); }
 
+/* phones: the value's pages (js/pe-valores.js) */
+.pe-val_pages { display: none; }
+.pe-val_page {
+  position: relative;
+  padding-top: 0.125rem;
+  padding-right: 0;
+  padding-bottom: 0.1875rem;
+  padding-left: 0;
+  border-top-width: 0;
+  border-right-width: 0;
+  border-bottom-width: 2px;
+  border-left-width: 0;
+  border-bottom-style: solid;
+  border-bottom-color: transparent;
+  background-color: transparent;
+  color: var(--pe-val-paper);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0.7;
+  -webkit-tap-highlight-color: transparent;
+}
+.pe-val_page::after {               /* a 44px target without moving the line */
+  content: '';
+  position: absolute;
+  top: -0.75rem;
+  right: -0.5rem;
+  bottom: -0.75rem;
+  left: -0.5rem;
+}
+.pe-val_page.is-on {
+  border-bottom-color: var(--pe-val-yellow);
+  color: var(--pe-val-yellow);
+  opacity: 1;
+}
+
 /* the legend along the foot of the screen */
 .pe-val_legend {
   display: flex;
@@ -781,7 +821,9 @@
 /* phones: it stands up, a handheld */
 @media (max-width: 767px) {
   .talleres_caracteristicas-2_image-wrapper.metodo_video {
+    width: 100%;
     height: auto;
+    min-height: 0;
     aspect-ratio: 16 / 10;
   }
   .metodo_video .pe-os_vkey-txt { display: none; }
@@ -793,15 +835,71 @@
     border-bottom-left-radius: 2rem;
     border-bottom-right-radius: 2rem;
   }
+  /* a fade that doesn't swallow the cartridges at this size */
+  .pe-val::before { height: calc(var(--pe-val-cart-h) * 0.4); }
+
+  /* the screen is a handheld's: a fixed size, the value in pages inside it */
+  .pe-val_pages {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    column-gap: 1.25rem;
+    height: 2.25rem;
+    padding-left: 0.875rem;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: color-mix(in srgb, var(--pe---color--stark-white) 14%, transparent);
+  }
+  .pe-val .metodo_valores {
+    height: 15.25rem;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-top: 0.625rem;
+    padding-right: 0.625rem;
+    padding-bottom: 0.625rem;
+    padding-left: 0.625rem;
+  }
   .pe-val .metodo_valor {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: 10rem auto auto;
+    grid-template-rows: 7rem auto;
+    row-gap: 0.5rem;
   }
-  .pe-val .metodo_valor .talleres_encabezado_content.metodo_fase-text {
-    grid-column-start: 1;
-    grid-row-start: 3;
+  .pe-val .metodo_fase-title { font-size: 1.375rem; }
+  .pe-val .metodo_fase-glyph {
+    width: 2.25rem;
+    height: 1.75rem;
+    margin-top: 0.5rem;
+    margin-right: 0.5rem;
+    padding-top: 0.375rem;
+    padding-right: 0.375rem;
+    padding-bottom: 0.375rem;
+    padding-left: 0.375rem;
+  }
+  .pe-val .metodo_valor::after {
+    margin-top: 0.5rem;
+    margin-left: 0.5rem;
+  }
+  .pe-val .metodo_chips .tag { font-size: 0.625rem; }
+  /* page one: card and chips */
+  .pe-val .metodo_valores[data-page="0"] .metodo_valor .talleres_encabezado_content.metodo_fase-text { display: none; }
+  /* pages two and three: only the text */
+  .metodo_valores[data-page="1"] .metodo_valor,
+  .metodo_valores[data-page="2"] .metodo_valor { display: block; }
+  .metodo_valores[data-page="1"] .metodo_valor::before,
+  .metodo_valores[data-page="1"] .metodo_valor::after,
+  .metodo_valores[data-page="2"] .metodo_valor::before,
+  .metodo_valores[data-page="2"] .metodo_valor::after,
+  .metodo_valores[data-page="1"] .metodo_fase-head,
+  .metodo_valores[data-page="2"] .metodo_fase-head { display: none; }
+  .pe-val .metodo_valores[data-page] .metodo_valor .talleres_encabezado_content.metodo_fase-text {
+    grid-column-start: auto;
+    grid-row-start: auto;
     grid-row-end: auto;
   }
+  .metodo_valores[data-page="1"] .talleres_encabezado_content-right p:last-child { display: none; }
+  .metodo_valores[data-page="2"] .talleres_encabezado_content-left,
+  .metodo_valores[data-page="2"] .talleres_encabezado_content-right p:first-child { display: none; }
+  .metodo_valores[data-page="2"] .talleres_encabezado_content-right p:last-child { margin-top: 0; }
+  .pe-val_body { row-gap: 0.875rem; }
   .pe-val_top .pe-val_silk:nth-child(2) { display: none; }
-  .pe-val_side .pe-con_speaker { display: none; }
 }

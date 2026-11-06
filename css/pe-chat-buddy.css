@@ -112,17 +112,9 @@ button.chat-buddy {   /* element + class: outranks base.css "button, [type=butto
 /* the old ¿Hablamos? pill is replaced by the chat buddy */
 html.has-chat-buddy .vanny-launch { display: none; }
 
-/* phones: the buddy sits left of the cart, so a right-anchored bubble ran
-   off the left edge. Grow it to the right instead. */
+/* phones: the buddy stands bottom-right (css/pe-mobile-nav.css) */
 @media (max-width: 767px) {
-  .chat-buddy_bubble {
-    right: auto;
-    left: 0;
-    max-width: min(15rem, calc(100vw - 2rem));
-    transform-origin: left bottom;
-  }
-  .chat-buddy_bubble::before,
-  .chat-buddy_bubble::after { right: auto; left: 1.1rem; }
+  .chat-buddy_bubble { max-width: min(15rem, calc(100vw - 2rem)); }
 }
 
 /* =============================================================

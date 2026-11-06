@@ -28,7 +28,6 @@
   var TYPES = [['talleres', 'Talleres'], ['cenas', "Chef's Table"], ['team-building', 'Team Building']];
   var SORTS = [['', 'Ordenar'], ['fecha-asc', 'Fecha: próximas primero'], ['fecha-desc', 'Fecha: más lejanas primero'],
     ['price-asc', 'Precio: de menor a mayor'], ['price-desc', 'Precio: de mayor a menor'], ['name-asc', 'Nombre: A-Z']];
-  var COLS_KEY = 'pe-xp-cols';
   var COMPACT_KEY = 'pe-xp-compact';
   var AVAIL = [['', 'Disponibilidad'], ['plazas', 'Con plazas'], ['pocas', 'Últimas plazas'], ['promo', 'En promoción']];
   var DEBOUNCE = 280;
@@ -52,12 +51,10 @@
   function madrid(iso, o) { return new Intl.DateTimeFormat('es-ES', Object.assign({ timeZone: 'Europe/Madrid' }, o)).format(new Date(iso)); }
   function seatsText(n) { return n === null || n === undefined ? '' : n <= 0 ? 'Completo' : n === 1 ? 'Queda 1 plaza' : 'Quedan ' + n + ' plazas'; }
   function itemHref(it) { return it.coleccion === 'cenas' ? 'cenas.html' : 'taller-item.html?slug=' + encodeURIComponent(it.slug); }
-  // Columns are a phone-only choice (1 or 2). Tablet and desktop use the CSS layout (the grid default, 3).
-  function effCols() { return window.matchMedia && matchMedia('(max-width: 767px)').matches ? (getCols() === 2 ? 2 : 1) : 3; }
-  function getCols() { try { var v = parseInt(localStorage.getItem(COLS_KEY), 10); return v >= 1 && v <= 4 ? v : 3; } catch (e) { return 3; } }
+  // Phones are always one column. Tablet and desktop use the CSS layout (the grid default, 3).
+  function effCols() { return window.matchMedia && matchMedia('(max-width: 767px)').matches ? 1 : 3; }
   function getCompact() { try { return localStorage.getItem(COMPACT_KEY) === '1'; } catch (e) { return false; } }
   function setCompact(v) { try { localStorage.setItem(COMPACT_KEY, v ? '1' : '0'); } catch (e) { /* private mode */ } }
-  function setCols(v) { try { localStorage.setItem(COLS_KEY, String(v)); } catch (e) { /* private mode */ } }
 
   // ---------- data ----------
   // Sessions come from PE_CMS.sesionesAll (data/pe-cms.js): past and cancelled ones are
@@ -364,7 +361,7 @@
       tab: mount.getAttribute('data-tab') === 'experiencias' ? 'experiencias' : 'calendario',
       q: '', month: '', sort: '', types: {}, item: '', avail: '',
       view: 'month', cursor: new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12), selected: '',
-      cols: getCols(), compact: getCompact()
+      compact: getCompact()
     };
     var uid = 'xp' + Math.random().toString(36).slice(2, 7);
 
@@ -394,7 +391,7 @@
     headR.appendChild(tabs); headR.appendChild(tags);
     head.appendChild(headL); head.appendChild(headR);
 
-    // ---- filter bar (the home's: Buscar, Mes, Ordenar, types, Columnas) ----
+    // ---- filter bar (the home's: Buscar, Mes, Ordenar, types) ----
     var bar = attr(h('form', 'pe-lc pe-xp_bar'), { role: 'search', 'aria-label': 'Filtrar experiencias' });
     var barRow = h('div', 'pe-lc_bar');
     var search = attr(h('input', 'pe-lc_control pe-lc_field pe-lc_search pe-xp_search'), { type: 'search', placeholder: 'Buscar talleres', 'aria-label': 'Buscar talleres', autocomplete: 'off' });
@@ -411,17 +408,7 @@
       chipBtns[t[0]] = b;
       chips.appendChild(b);
     });
-    var colsWrap = attr(h('div', 'pe-lc_control pe-lc_cols pe-xp_cols'), { role: 'group', 'aria-label': 'Número de columnas' });
-    var colsLabel = h('span', 'pe-lc_cols-label f-text-label f-text-ui-sm', 'Columnas');
-    var colsOut = attr(h('output', 'pe-lc_cols-out f-text-label f-text-ui-sm', String(effCols())), { 'aria-live': 'polite' });
-    var colsMinus = attr(h('button', 'pe-lc_step f-text-label f-text-ui-sm', '−'), { type: 'button', 'aria-label': 'Menos columnas' });
-    var colsPlus = attr(h('button', 'pe-lc_step f-text-label f-text-ui-sm', '+'), { type: 'button', 'aria-label': 'Más columnas' });
-    function syncColsCtl() { var n = effCols(); colsOut.textContent = String(n); colsMinus.disabled = n <= 1; colsPlus.disabled = n >= 2; }
-    colsMinus.addEventListener('click', function () { state.cols = 1; setCols(1); applyCols(); });
-    colsPlus.addEventListener('click', function () { state.cols = 2; setCols(2); applyCols(); });
-    colsWrap.appendChild(colsLabel); colsWrap.appendChild(colsMinus); colsWrap.appendChild(colsOut); colsWrap.appendChild(colsPlus);
-    syncColsCtl();
-    barRow.appendChild(search); barRow.appendChild(monthSel.el); barRow.appendChild(sortSel.el); barRow.appendChild(availSel.el); barRow.appendChild(chips); barRow.appendChild(colsWrap);
+    barRow.appendChild(search); barRow.appendChild(monthSel.el); barRow.appendChild(sortSel.el); barRow.appendChild(availSel.el); barRow.appendChild(chips);
     bar.appendChild(barRow);
     bar.addEventListener('submit', function (e) { e.preventDefault(); });
     var qT = 0;
@@ -556,7 +543,6 @@
       var grid = panelExp.querySelector('.pe-xp_grid');
       if (!grid) return;
       grid.className = 'pe-xp_grid is-cols-' + effCols();
-      syncColsCtl();
     }
     // Experiencias shows a page at a time: three rows of the chosen columns on a desktop
     // (never fewer than 6), 6 on tablet and phone. "Ver más" adds the next page; any new
@@ -1009,7 +995,6 @@
       });
       panelCal.hidden = t !== 'calendario';
       panelExp.hidden = t !== 'experiencias';
-      colsWrap.hidden = t !== 'experiencias';
       root.setAttribute('data-tab', t);
       refresh();
     }

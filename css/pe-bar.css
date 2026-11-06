@@ -747,7 +747,7 @@ html.pe-bar-docked span.cart-header_badge {
     flex-direction: row;
     align-items: stretch;
     min-height: calc(var(--pe-bar-control) + var(--pe-bar-volume));
-    padding-right: 11rem;           /* the cart and MENU */
+    padding-right: 0;
     padding-bottom: 0;
   }
   .pe-bar_toggle { flex-grow: 1; flex-basis: 100%; justify-content: center; }

@@ -191,7 +191,7 @@ body .pe-lightbox {
 /* ---- Reservar + the small cart button (js/pe-booking-flow.js) ----
    Every Reservar with a session id sits in a .pe-book row with a square
    cart button: Reservar books (dialog → pay), the cart adds one seat. */
-body .pe-book { display: flex; align-items: stretch; column-gap: var(--_spacing---space--1); width: 100%; min-width: 0; }
+body .pe-book { display: flex; align-items: stretch; column-gap: var(--pe---gap--tight); width: 100%; min-width: 0; }
 body .pe-book > [data-pe-add] { flex: 1 1 auto; width: auto; min-width: 0; margin: 0; }
 /* the dock cart button as is (.cart-header_button); only its place in the row changes:
    in line after Reservar (its dock order:-9999 would put it first), as tall as Reservar */

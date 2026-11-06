@@ -80,6 +80,8 @@
        ──────────────────────────────────────────────── */
 
     /* Primary — Fuel Yellow */
+    --pe---gap--tight:                  0.25rem;
+    --pe---gap--tight:                  0.25rem;
     --pe---color--fuel-yellow:          #efa02e;
     --pe---color--fuel-yellow-lighter:  #fbecd5;
     --pe---color--fuel-yellow-lightest: #fdf5ea;
@@ -438,7 +440,7 @@
     --_spacing---section-space--page-top: clamp(10rem, 8.5rem + 7.5vw, 14rem);
 
     /* Spacing semantics — gaps */
-    --_spacing-semantics---gap--gap-0:   -1px;
+    --_spacing-semantics---gap--gap-0:   var(--pe---gap--tight);
     --_spacing-semantics---gap--gap-2xs: 0.5rem;
     --_spacing-semantics---gap--gap-xs:  0.75rem;
     --_spacing-semantics---gap--gap-sm:  1rem;

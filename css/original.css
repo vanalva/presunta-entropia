@@ -38,7 +38,7 @@
   --_typography---font-size--h4: clamp(1.75 * 1rem, ((1.75 - ((2 - 1.75) / (var(--site--viewport-max)  - var(--site--viewport-min)) * var(--site--viewport-min))) * 1rem + ((2 - 1.75) / (var(--site--viewport-max)  - var(--site--viewport-min))) * 100vw), 2 * 1rem);
   --_color-primitives---opacity--white-60: #fff9;
   --_spacing-semantics---gap--gap-xs: var(--_size-primitives---xs);
-  --_spacing-semantics---gap--gap-0: var(--_size-primitives---overlap);
+  --_spacing-semantics---gap--gap-0: var(--pe---gap--tight);
   --_spacing-semantics---gap--gap-2xs: var(--_size-primitives---2xs);
   --_ui-styles-semantics---stroke--border-width: 1.5px;
   --color-scheme-1--border: var(--_color-primitives---colors--stark-white);
@@ -1315,16 +1315,16 @@ figcaption {
 }
 
 .button-group {
-  grid-column-gap: var(--_spacing-semantics---gap--gap-sm);
-  grid-row-gap: var(--_spacing-semantics---gap--gap-sm);
+  grid-column-gap: var(--pe---gap--tight);
+  grid-row-gap: var(--pe---gap--tight);
   flex-wrap: wrap;
   align-items: center;
   display: flex;
 }
 
 .button-group.gap-0 {
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
+  grid-column-gap: var(--pe---gap--tight);
+  grid-row-gap: var(--pe---gap--tight);
 }
 
 .button-group.gap-0.hide-tablet {
@@ -2567,8 +2567,8 @@ figcaption {
 }
 
 .gap-0 {
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
+  grid-column-gap: var(--pe---gap--tight);
+  grid-row-gap: var(--pe---gap--tight);
 }
 
 .border-full {
@@ -2732,8 +2732,8 @@ figcaption {
 
 .navbar_fixed-button-container {
   padding: var(--_spacing-semantics---padding--pad-section-md) var(--_spacing-semantics---padding--pad-section-2xl) var(--_spacing-semantics---padding--pad-section-2xl) var(--_spacing-semantics---padding--pad-section-md);
-  grid-column-gap: var(--_spacing-semantics---gap--gap-xs);
-  grid-row-gap: var(--_spacing-semantics---gap--gap-xs);
+  grid-column-gap: var(--pe---gap--tight);
+  grid-row-gap: var(--pe---gap--tight);
   display: flex;
   position: sticky;
   inset: 0 0% 0% auto;
@@ -3545,8 +3545,8 @@ figcaption {
 }
 
 .slider_bullet_list {
-  grid-column-gap: clamp(.375 * 1rem, ((.375 - ((.5 - .375) / (90 - 20) * 20)) * 1rem + ((.5 - .375) / (90 - 20)) * 100vw), .5 * 1rem);
-  grid-row-gap: clamp(.375 * 1rem, ((.375 - ((.5 - .375) / (90 - 20) * 20)) * 1rem + ((.5 - .375) / (90 - 20)) * 100vw), .5 * 1rem);
+  grid-column-gap: var(--pe---gap--tight);
+  grid-row-gap: var(--pe---gap--tight);
   flex: 1;
   justify-content: center;
   align-items: center;
@@ -3822,7 +3822,7 @@ figcaption {
 
 
 .u-gap-0 {
-  gap: var(--_spacing---space--0);
+  gap: var(--pe---gap--tight);
 }
 
 .u-gap-1 {
@@ -6123,8 +6123,8 @@ figcaption {
   }
 
   .button-group.gap-0.mobile-rule {
-    grid-column-gap: var(--_spacing-semantics---gap--gap-xs);
-    grid-row-gap: var(--_spacing-semantics---gap--gap-xs);
+    grid-column-gap: var(--pe---gap--tight);
+    grid-row-gap: var(--pe---gap--tight);
     flex-flow: column;
     justify-content: flex-start;
     align-self: flex-start;

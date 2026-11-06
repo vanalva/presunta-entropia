@@ -69,8 +69,29 @@
   }
 
   /* ---------- the screen ---------- */
+  /* On phones the screen stays a handheld's size: one value is three pages inside it
+     (Valor, Texto, Icono), by the tabs or the d-pad's up and down. */
+  var pageTabs = Array.prototype.slice.call(root.querySelectorAll('[data-pe-val-page]'));
+  var pageBox = root.querySelector('.metodo_valores'), page = 0, stayT = 0;
+  var phoneMq = window.matchMedia ? matchMedia('(max-width: 767px)') : null;
+  function isPhone() { return !!(phoneMq && phoneMq.matches); }
+  function setPage(n, user) {
+    page = (n + pageTabs.length) % pageTabs.length;
+    if (pageBox) { pageBox.setAttribute('data-page', page); pageBox.scrollTop = 0; }
+    pageTabs.forEach(function (b, k) {
+      b.classList.toggle('is-on', k === page);
+      b.setAttribute('aria-selected', k === page ? 'true' : 'false');
+    });
+    if (user) {                            // someone's reading: the rotation waits
+      over = true;
+      clearTimeout(timer); timer = 0;
+      clearTimeout(stayT);
+      stayT = setTimeout(function () { over = false; plan(); }, 20000);
+    }
+  }
   function show(v) {
     active = v;
+    setPage(0);
     tabs.forEach(function (t, k) {
       var on = k === v;
       t.setAttribute('aria-selected', on ? 'true' : 'false');
@@ -231,8 +252,13 @@
       b.addEventListener('click', function () {
         heard = true;
         sfx('click');
+        var d = b.getAttribute('data-dir');
+        if (isPhone() && (d === 'up' || d === 'down')) { setPage(page + (d === 'down' ? 1 : -1), true); return; }
         request(parseInt(b.getAttribute('data-pe-val-go'), 10));
       });
+    });
+    pageTabs.forEach(function (b, k) {
+      b.addEventListener('click', function () { heard = true; sfx('nav'); setPage(k, true); });
     });
     var menu = root.querySelector('[data-pe-val-menu]');
     if (menu) {

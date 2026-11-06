@@ -967,13 +967,16 @@
 
     // the controls land when the bar's last edge is on screen: an element at
     // that edge, so the bar's height at any layout doesn't matter
+    // (phones keep their two rows all the way down: css/pe-mobile-nav.css)
+    var phone = window.matchMedia ? matchMedia('(max-width: 767px)') : null;
+    var large = function () { return !(phone && phone.matches); };
     var end = el('span', 'pe-bar_end');
     bar.appendChild(end);
     new IntersectionObserver(function (en) {
-      document.documentElement.classList.toggle('pe-bar-docked', en[0].isIntersecting);
+      document.documentElement.classList.toggle('pe-bar-docked', en[0].isIntersecting && large());
     }, { threshold: 0 }).observe(end);
     new IntersectionObserver(function (en) {
-      document.documentElement.classList.toggle('pe-bar-near', en[0].isIntersecting);
+      document.documentElement.classList.toggle('pe-bar-near', en[0].isIntersecting && large());
     }, { threshold: 0 }).observe(bar);
 
     // the switch: the same site-wide mode the hero and console switches drive

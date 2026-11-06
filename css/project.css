@@ -320,16 +320,16 @@ a {
 }
 
 .button-group {
-    column-gap: var(--_spacing-semantics---gap--gap-sm);
-    row-gap: var(--_spacing-semantics---gap--gap-sm);
+    column-gap: var(--pe---gap--tight);
+    row-gap: var(--pe---gap--tight);
     flex-wrap: wrap;
     align-items: center;
     display: flex;
 }
 
 .button-group.gap-0 {
-    column-gap: 0px;
-    row-gap: 0px;
+    column-gap: var(--pe---gap--tight);
+    row-gap: var(--pe---gap--tight);
 }
 
 .button-group.gap-0.hide-tablet {
@@ -687,8 +687,8 @@ a {
     padding-right: var(--_spacing-semantics---padding--pad-section-2xl);
     padding-bottom: var(--_spacing-semantics---padding--pad-section-2xl);
     padding-left: var(--_spacing-semantics---padding--pad-section-md);
-    column-gap: var(--_spacing-semantics---gap--gap-xs);
-    row-gap: var(--_spacing-semantics---gap--gap-xs);
+    column-gap: var(--pe---gap--tight);
+    row-gap: var(--pe---gap--tight);
     display: flex;
     position: sticky;
     top: 0;
@@ -1518,7 +1518,7 @@ a {
 
 /* Gap utilities */
 
-.u-gap-0      { row-gap: var(--_spacing---space--0);  column-gap: var(--_spacing---space--0); }
+.u-gap-0      { row-gap: var(--pe---gap--tight);  column-gap: var(--pe---gap--tight); }
 .u-gap-1      { row-gap: var(--_spacing---space--1);  column-gap: var(--_spacing---space--1); }
 .u-gap-2      { row-gap: var(--_spacing---space--2);  column-gap: var(--_spacing---space--2); }
 .u-gap-3      { row-gap: var(--_spacing---space--3);  column-gap: var(--_spacing---space--3); }
@@ -2051,8 +2051,8 @@ a {
     }
 
     .button-group.max-width-full.gap-0 {
-        column-gap: var(--_spacing-semantics---gap--gap-xs);
-        row-gap: var(--_spacing-semantics---gap--gap-xs);
+        column-gap: var(--pe---gap--tight);
+        row-gap: var(--pe---gap--tight);
         flex-direction: column;
         flex-wrap: nowrap;
         justify-content: flex-start;
@@ -2114,7 +2114,7 @@ a {
     }
 
     .navbar_menu-button {
-        margin-left: -0.5rem;
+        margin-left: 0;
         padding-top: 0;
         padding-right: 0;
         padding-bottom: 0;
@@ -2221,10 +2221,6 @@ a {
 
     .navbar_hero-inline {
         min-height: 4rem;
-    }
-
-    .footer15_menu-wrapper {
-        grid-template-columns: 1fr;
     }
 
     .footer15_bottom-wrapper {
@@ -3681,8 +3677,8 @@ iframe[src*="vanny.chat"] { color-scheme: light !important; }
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    column-gap: var(--_spacing-semantics---gap--gap-sm);
-    row-gap: var(--_spacing-semantics---gap--gap-xs);
+    column-gap: var(--pe---gap--tight);
+    row-gap: var(--pe---gap--tight);
     margin-top: 2.5rem;
 }
 
@@ -3926,7 +3922,7 @@ iframe[src*="vanny.chat"] { color-scheme: light !important; }
 @media (max-width: 478px) {
     .button-group.max-width-full {
         flex-wrap: wrap;
-        row-gap: var(--_spacing-semantics---gap--gap-2xs);
+        row-gap: var(--pe---gap--tight);
     }
 
     .button.max-width-full {
@@ -3980,7 +3976,7 @@ iframe[src*="vanny.chat"] { color-scheme: light !important; }
    top strip stays visible under the next, and a tab on that strip names
    it (El taller · El local · Zurbano 83), staggered like folder tabs.
    Heights shrink by the same offset so every card still fits the screen.
-   Phones: the cards are static (original rule), tabs sit top-left. */
+   Phones: the same sticky stack, tabs sit top-left. */
 .espacios_tab {
     position: absolute;
     top: 0;
@@ -4025,17 +4021,23 @@ iframe[src*="vanny.chat"] { color-scheme: light !important; }
 }
 
 @media (max-width: 767px) {
-    /* static here (original), so the card must anchor its own tab and
-       keep a strip for it above its content */
+    /* Phones keep the sticky stack: each card sticks 2.75rem below the one
+       before, so the tab strip of every covered card stays visible. The card
+       anchors its own tab and keeps a strip for it above its content. */
     .espacios_card {
-        position: relative;
+        position: sticky;
+        top: 1rem;
         padding-top: 2.75rem;
     }
 
-    .espacios_card.card-2,
+    .espacios_card.card-2 {
+        height: auto;
+        top: 3.75rem;
+    }
+
     .espacios_card.card-3 {
         height: auto;
-        top: auto;
+        top: 6.5rem;
     }
 
     .espacios_card-image-wrapper {
@@ -4112,8 +4114,8 @@ iframe[src*="vanny.chat"] { color-scheme: light !important; }
    and read "Energía / Talleres" like the design, first word bold. */
 .button-group.gap-0.hero_pills {
     margin-bottom: 0;
-    column-gap: 0.25rem;
-    row-gap: 0.25rem;
+    column-gap: var(--pe---gap--tight);
+    row-gap: var(--pe---gap--tight);
 }
 
 .button.is-secondary.is-simple.is-tiny.hero_pill {
@@ -4377,8 +4379,8 @@ iframe[src*="vanny.chat"] { color-scheme: light !important; }
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
-    column-gap: var(--_spacing-semantics---gap--gap-2xs);
-    row-gap: var(--_spacing-semantics---gap--gap-2xs);
+    column-gap: var(--pe---gap--tight);
+    row-gap: var(--pe---gap--tight);
 }
 
 @media (max-width: 767px) {
@@ -4623,8 +4625,8 @@ iframe[src*="vanny.chat"] { color-scheme: light !important; }
 
 .button-group.is-chips.metodo_chips {
     max-width: 30rem;
-    column-gap: 0.375rem;
-    row-gap: 0.375rem;
+    column-gap: var(--pe---gap--tight);
+    row-gap: var(--pe---gap--tight);
 }
 
 /* ── M3. Manifesto: the word at poster scale, the question, and the
@@ -5412,8 +5414,8 @@ iframe[src*="vanny.chat"] { color-scheme: light !important; }
 }
 
 .button-group.is-chips.pe-taller-card_chips {
-    column-gap: 0.25rem;
-    row-gap: 0.25rem;
+    column-gap: var(--pe---gap--tight);
+    row-gap: var(--pe---gap--tight);
     margin-top: auto;
     padding-top: var(--_spacing-semantics---padding--pad-section-3xs);
 }
@@ -5548,8 +5550,8 @@ iframe[src*="vanny.chat"] { color-scheme: light !important; }
 }
 
 .button-group.is-chips.pe-fechas_ctas {
-    column-gap: var(--_spacing-semantics---gap--gap-xs);
-    row-gap: var(--_spacing-semantics---gap--gap-xs);
+    column-gap: var(--pe---gap--tight);
+    row-gap: var(--pe---gap--tight);
 }
 
 .button-2.is-secondary.pe-fechas_cta {
@@ -5618,15 +5620,6 @@ iframe[src*="vanny.chat"] { color-scheme: light !important; }
 .slider_list.swiper-wrapper.is-gapless {
     column-gap: 0;
     row-gap: 0;
-}
-
-/* Phones: these pages do not load the hero dock script, so the fixed
-   MENU + cart cluster and the "¿Hablamos?" launcher above it sit over the
-   bottom of the hero at first paint. The CTA row keeps clear of both. */
-@media (max-width: 767px) {
-    .button-group.gap-0.mobile-rule.hero_cta-group {
-        margin-bottom: 9rem;
-    }
 }
 
 /* The Precios pill for the page you are on reads as selected (design
@@ -5919,7 +5912,7 @@ iframe[src*="vanny.chat"] { color-scheme: light !important; }
     .button-group.mobile-rule.taller-item_ctas {
         flex-direction: column;
         align-items: stretch;
-        row-gap: var(--_spacing-semantics---gap--gap-2xs);
+        row-gap: var(--pe---gap--tight);
         width: 100%;
     }
 }
@@ -6764,6 +6757,16 @@ div.radio-button_filter {
     flex-basis: 100%;
 }
 
+/* Phones: the export clipped the page with overflow hidden, which turns .page-wrapper into a scroll
+   container and kills every position: sticky inside it (the Espacios card stack). clip hides the same
+   overflow without becoming a scroll container. */
+@media (max-width: 478px) {
+    .page-wrapper {
+        overflow-x: clip;
+        overflow-y: visible;
+    }
+}
+
 /* ═══ MIGRATION P0b — utility pages (cs, baja, 404) ═══ */
 /* One centred message panel on the dark scheme (confirmar-suscripcion, baja) and the 404 hero
    with the console on the page. Radius tokens only, no pill, no raw colour. */
@@ -6839,8 +6842,8 @@ div.radio-button_filter {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    column-gap: var(--_spacing-semantics---gap--gap-sm);
-    row-gap: var(--_spacing-semantics---gap--gap-sm);
+    column-gap: var(--pe---gap--tight);
+    row-gap: var(--pe---gap--tight);
 }
 .pe-util_actions.is-start {
     justify-content: flex-start;
@@ -7538,8 +7541,8 @@ html .cart-modal_empty-text.cart-modal_empty-text.cart-modal_empty-text::after {
    copies, plus the Todos list. Everything reads flwr tokens: field padding, field
    radius (radius role control), body/small type, accent, focus ring, spacing steps.
    flwr gaps (logged in notes): no control-height token, and no range or segmented
-   control, so --pe-lc-h and the column slider are built here from flwr tokens.
-   js/pe-list-controls.js sets --pe-list-cols and the combo class is-cols-N. */
+   control, so --pe-lc-h is built here from flwr tokens.
+   js/pe-list-controls.js sets --pe-list-cols and the combo class is-cols-N (phones: always 1). */
 
 /* ── Controls bar: one height, one border, one radius, one type role ───── */
 .pe-lc {
@@ -7632,8 +7635,8 @@ html .cart-modal_empty-text.cart-modal_empty-text.cart-modal_empty-text::after {
     display: flex;
     flex-wrap: wrap;
     align-items: stretch;
-    column-gap: var(--_spacing---step--2);
-    row-gap: var(--_spacing---step--2);
+    column-gap: var(--pe---gap--tight);
+    row-gap: var(--pe---gap--tight);
 }
 
 .pe-lc_chip.pe-lc_chip {
@@ -7661,61 +7664,6 @@ html .cart-modal_empty-text.cart-modal_empty-text.cart-modal_empty-text::after {
     border-right-color: var(--_theme---accent--main);
     border-bottom-color: var(--_theme---accent--main);
     border-left-color: var(--_theme---accent--main);
-}
-
-/* Column stepper: phone only (the control hides at 768px and up), 1 or 2 columns.
-   Same box as the other filters (.pe-lc_control); label, then - value +. */
-.pe-lc_cols.pe-lc_cols {
-    display: none;
-    align-items: center;
-    column-gap: var(--_spacing---step--2);
-    flex-grow: 0;
-    flex-shrink: 0;
-    margin-left: auto;
-    padding-right: 0;
-}
-
-.pe-lc_cols.pe-lc_cols[hidden] {
-    display: none;
-}
-
-.pe-lc_cols-label {
-    white-space: nowrap;
-}
-
-.pe-lc_cols-out {
-    display: inline-block;
-    min-width: 1ch;
-    text-align: center;
-}
-
-.pe-lc_step {
-    box-sizing: border-box;
-    align-self: stretch;
-    min-width: 44px;
-    min-height: 44px;
-    margin-top: 0;
-    margin-bottom: 0;
-    margin-right: 0;
-    margin-left: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    padding-right: 0;
-    padding-left: 0;
-    border-top-width: 0;
-    border-right-width: 0;
-    border-bottom-width: 0;
-    border-left-width: 0;
-    background-color: transparent;
-    color: inherit;
-    font-family: inherit;
-    font-size: inherit;
-    cursor: pointer;
-}
-
-.pe-lc_step:disabled {
-    opacity: 0.35;
-    cursor: default;
 }
 
 /* ── List grid: column count from --pe-list-cols, cap per breakpoint ───── */
@@ -7861,7 +7809,7 @@ html .cart-modal_empty-text.cart-modal_empty-text.cart-modal_empty-text::after {
 
 /* Todos: the search input fills its own wrapper (the wrapper carries the flex) */
 
-/* ── Tablet: 2 columns at most. Phone: 1 column, slider hidden ─────────── */
+/* ── Tablet: 2 columns at most. Phone: 1 column ─────────────────────────── */
 @media (max-width: 991px) {
     .pe-lc_list.pe-lc_list {
         --pe-lc-cap: 2;
@@ -7887,33 +7835,6 @@ html .cart-modal_empty-text.cart-modal_empty-text.cart-modal_empty-text::after {
         --pe-lc-body-c: 1; --pe-lc-body-cs: 2; --pe-lc-body-r: 2; --pe-lc-body-rs: 1;
         --pe-lc-tags-c: 1; --pe-lc-tags-cs: 2; --pe-lc-tags-r: 3; --pe-lc-tags-rs: 1;
         --pe-lc-cta-c: 1; --pe-lc-cta-cs: 2; --pe-lc-cta-r: 4; --pe-lc-cta-rs: 1;
-    }
-
-    .pe-lc_cols.pe-lc_cols {
-        height: 44px;
-        min-height: 44px;
-    }
-
-    /* phone: two narrow columns use the stacked card */
-    .pe-lc_list.is-cols-2 {
-        --pe-lc-ratio: auto;
-        --pe-lc-tpl: minmax(0, 1fr);
-        --pe-lc-clamp: 4;
-        --pe-lc-cta-dir: column;
-        --pe-lc-side-align: start;
-        --pe-lc-date-c: 1; --pe-lc-date-cs: 1; --pe-lc-date-r: 1; --pe-lc-date-rs: 1;
-        --pe-lc-price-c: 1; --pe-lc-price-cs: 1; --pe-lc-price-r: 2; --pe-lc-price-rs: 1;
-        --pe-lc-body-c: 1; --pe-lc-body-cs: 1; --pe-lc-body-r: 3; --pe-lc-body-rs: 1;
-        --pe-lc-tags-c: 1; --pe-lc-tags-cs: 1; --pe-lc-tags-r: 4; --pe-lc-tags-rs: 1;
-        --pe-lc-cta-c: 1; --pe-lc-cta-cs: 1; --pe-lc-cta-r: 5; --pe-lc-cta-rs: 1;
-    }
-
-    .pe-lc_cols.pe-lc_cols {
-        display: flex;
-    }
-
-    .pe-lc_cols.pe-lc_cols[hidden] {
-        display: none;
     }
 
     .pe-lc_bar.pe-lc_bar {
@@ -7970,9 +7891,6 @@ html .cart-modal_empty-text.cart-modal_empty-text.cart-modal_empty-text::after {
 .pe-lc_chips.pe-lc_chips > * {
     flex-grow: 1;
 }
-.pe-lc_cols.pe-lc_cols {
-    flex-grow: 0;
-}
 
 .eventos_item.pe-lc_card {
     background-color: var(--color-scheme-1--background);
@@ -8019,11 +7937,6 @@ html .cart-modal_empty-text.cart-modal_empty-text.cart-modal_empty-text::after {
 }
 .pe-lc_list.is-cols-1 {
     --pe-lc-ratio: auto;
-}
-@media (max-width: 767px) {
-    .pe-lc_list.is-cols-2 {
-        --pe-lc-ratio: auto;
-    }
 }
 
 @keyframes pe-lc-in {
@@ -8158,6 +8071,24 @@ html .cart-modal_empty-text.cart-modal_empty-text.cart-modal_empty-text::after {
 .booking-modal_topbar.booking-modal_topbar {
     column-gap: var(--_spacing---step--5);
     row-gap: var(--_spacing---step--3);
+}
+
+/* Phones: the full-screen calendar header reads logo mark left, Cerrar right. */
+.booking-modal_mark {
+    display: none;
+}
+
+@media (max-width: 767px) {
+    .booking-modal_topbar.booking-modal_topbar {
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .booking-modal_mark {
+        display: block;
+        width: 3rem;
+        height: auto;
+    }
 }
 
 .booking-modal_title.booking-modal_title {
@@ -9994,8 +9925,8 @@ a.hero-opt_day:hover { transform: translateY(0.1875rem); box-shadow: 0 0 0 0 var
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    column-gap: var(--_spacing---step--4);
-    row-gap: var(--_spacing---step--3);
+    column-gap: var(--pe---gap--tight);
+    row-gap: var(--pe---gap--tight);
 }
 .button.pe-ficha_cta {
     margin-bottom: 0;
@@ -10266,8 +10197,8 @@ a.hero-opt_day:hover { transform: translateY(0.1875rem); box-shadow: 0 0 0 0 var
 .button-group.pe-tcard_ctas {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    column-gap: var(--_spacing---space--2);
-    row-gap: var(--_spacing---space--2);
+    column-gap: var(--pe---gap--tight);
+    row-gap: var(--pe---gap--tight);
     margin-top: auto;
     padding-top: var(--_spacing---space--1);
 }
@@ -10473,8 +10404,8 @@ a.hero-opt_day:hover { transform: translateY(0.1875rem); box-shadow: 0 0 0 0 var
     font-weight: var(--_typography---weight--light);
 }
 .button-group.ti-fechas_packs-ctas {
-    column-gap: var(--_spacing---space--2);
-    row-gap: var(--_spacing---space--2);
+    column-gap: var(--pe---gap--tight);
+    row-gap: var(--pe---gap--tight);
 }
 
 /* El taller: summary frame (sticky) + the temario */
@@ -10570,8 +10501,8 @@ a.hero-opt_day:hover { transform: translateY(0.1875rem); box-shadow: 0 0 0 0 var
 .button-group.ti-resumen_ctas {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    column-gap: var(--_spacing---space--2);
-    row-gap: var(--_spacing---space--2);
+    column-gap: var(--pe---gap--tight);
+    row-gap: var(--pe---gap--tight);
 }
 .button.ti-resumen_cta {
     width: 100%;
@@ -11291,3 +11222,17 @@ a.hero-opt_day:hover { transform: translateY(0.1875rem); box-shadow: 0 0 0 0 var
 .navbar18_social-link[href="#"] {
     display: none;
 }
+
+/* ═══ R27 tight gap: one separation token for rows of small controls ═══
+   --pe---gap--tight (variables.css) is the only gap between sibling buttons,
+   chips, pills, icon buttons and marquee items. Nothing touches or overlaps.
+   Button rows keep the gap alone: the .button bottom margin would add to it
+   in a stacked group. */
+.button-group > .button,
+.booking-result_actions > .button,
+.pe-util_actions > .button,
+.pe-ficha_ctas > .button,
+.hero_cta-row > .button {
+    margin-bottom: 0;
+}
+

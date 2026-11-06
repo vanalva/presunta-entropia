@@ -36,8 +36,10 @@
     // mirror the cart count (webflow-cart.js only updates the real badge)
     function syncCount() {
       if (!realCount || !dockCount) return;
+      var n = realCount.textContent.trim();
+      if (realCount.getAttribute('data-count') !== n) realCount.setAttribute('data-count', n);
       dockCount.textContent = realCount.textContent;
-      dockCount.setAttribute('data-count', realCount.textContent.trim());
+      dockCount.setAttribute('data-count', n);
       dockCount.className = realCount.className;
     }
     if (realCount) {

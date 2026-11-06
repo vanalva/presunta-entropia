@@ -130,7 +130,8 @@
   function updateLift() {
     // lift the open frame above the fixed buttons so the robot can close it
     var top = Infinity;
-    ['.navbar_menu-button', '.cart-header_button', 'button.chat-buddy'].forEach(function (s) {
+    var phone = window.innerWidth <= 767;   // there the buddy stands alone at the bottom
+    (phone ? ['button.chat-buddy'] : ['.navbar_menu-button', '.cart-header_button', 'button.chat-buddy']).forEach(function (s) {
       var e = document.querySelector(s); if (!e) return;
       var r = e.getBoundingClientRect(); if (r.height > 0 && r.top < top) top = r.top;
     });

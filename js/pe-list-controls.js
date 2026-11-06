@@ -2,12 +2,9 @@
    PRESUNTA ENTROPIA — unified list controls (no framework)
    Pairs with the "LIST CONTROLS" block at the end of css/project.css.
 
-   1. Column stepper (phone only, 1 or 2). Any [data-pe-list-cols-target] drives the list that
-      lives in its [data-pe-list-root] section. The chosen count is stored in
-      localStorage (one value per visitor) and written to the list as the
-      custom property --pe-list-cols plus the combo class is-cols-N, which the
-      CSS reads to pick the card shape. The cap per breakpoint comes from the
-      CSS (--pe-lc-cap), so the script never knows a breakpoint.
+   1. Card columns. The CSS cap (--pe-lc-cap: 3 desktop, 2 tablet) picks the card shape through the
+      combo class is-cols-N, which this file writes on every [data-pe-list]. Phones are always one
+      column. There is no visitor control for it.
 
    2. Calendario data flow (local preview). pe-cms-lists.js appends every
       hydrated event card INSIDE the single template .collection-item, so
@@ -20,7 +17,6 @@
 (function () {
     'use strict';
 
-    var KEY = 'pe-list-cols';
     var MONTHS_EN = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     var MONTHS_ES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
 
@@ -138,69 +134,33 @@
         });
     }
 
-    /* ---------- 1. column slider ---------- */
-    function readSaved() {
-        try {
-            var v = parseInt(localStorage.getItem(KEY), 10);
-            return v >= 1 && v <= 3 ? v : 3;
-        } catch (e) { return 3; }
-    }
-
-    function save(n) {
-        try { localStorage.setItem(KEY, String(n)); } catch (e) { /* private mode */ }
-    }
-
+    /* ---------- 1. card columns ---------- */
     function capOf(list) {
         var c = parseInt(getComputedStyle(list).getPropertyValue('--pe-lc-cap'), 10);
         return c >= 1 ? c : 3;
     }
 
-    function listFor(input) {
-        var root = input.closest('[data-pe-list-root]');
-        return root ? root.querySelector('[data-pe-list]') : null;
-    }
-
     var PHONE = '(max-width: 767px)';
     function isPhone() { return !!(window.matchMedia && window.matchMedia(PHONE).matches); }
 
-    /* Phone only: 1 or 2 columns, the visitor's choice. Tablet and desktop use the
-       CSS cap (2 / 3) and ignore the saved value. */
-    function apply(wanted) {
+    /* Phones: always one column. Tablet and desktop use the CSS cap (2 / 3). */
+    function apply() {
         var phone = isPhone();
-        document.querySelectorAll('[data-pe-list-cols-target]').forEach(function (ctl) {
-            var list = listFor(ctl);
-            if (!list) return;
-            var n = phone ? (wanted === 2 ? 2 : 1) : capOf(list);
+        document.querySelectorAll('[data-pe-list]').forEach(function (list) {
+            var n = phone ? 1 : capOf(list);
             list.style.setProperty('--pe-list-cols', String(n));
             list.classList.remove('is-cols-1', 'is-cols-2', 'is-cols-3');
             list.classList.add('is-cols-' + n);
-            var out = ctl.querySelector('[data-pe-list-cols-out]');
-            if (out) out.textContent = String(n);
-            ctl.querySelectorAll('[data-pe-list-cols-step]').forEach(function (b) {
-                var to = n + parseInt(b.getAttribute('data-pe-list-cols-step'), 10);
-                b.disabled = to < 1 || to > 2;
-            });
         });
     }
 
-    function initSliders() {
-        var ctls = document.querySelectorAll('[data-pe-list-cols-target]');
-        if (!ctls.length) return;
-        var wanted = readSaved() === 2 ? 2 : 1;
-        apply(wanted);
-        ctls.forEach(function (ctl) {
-            ctl.addEventListener('click', function (e) {
-                var b = e.target.closest('[data-pe-list-cols-step]');
-                if (!b || b.disabled) return;
-                wanted = Math.max(1, Math.min(2, (wanted === 2 ? 2 : 1) + parseInt(b.getAttribute('data-pe-list-cols-step'), 10)));
-                save(wanted);
-                apply(wanted);
-            });
-        });
+    function initCols() {
+        if (!document.querySelector('[data-pe-list]')) return;
+        apply();
         var raf = 0;
         window.addEventListener('resize', function () {
             cancelAnimationFrame(raf);
-            raf = requestAnimationFrame(function () { apply(wanted); });
+            raf = requestAnimationFrame(apply);
         });
     }
 
@@ -338,7 +298,7 @@
         initEqualRows();
         var a = splitItems();
         var b = enrichCards();
-        initSliders();
+        initCols();
         watchEmpty();
         if (document.querySelector('[data-pe-list] .pe-lc_card')) syncFinsweet();
         void a; void b;

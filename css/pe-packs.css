@@ -270,7 +270,7 @@ html .pe-packs_state-text.pe-packs_state-text::after { content: none; display: n
 
 /* hero: two long CTAs do not fit side by side on phones */
 @media (max-width: 478px) {
-  .pe-packs_hero .button-group.gap-0.mobile-rule.hero_cta-group { flex-direction: column; align-items: stretch; row-gap: 0.75rem; }
+  .pe-packs_hero .button-group.gap-0.mobile-rule.hero_cta-group { flex-direction: column; align-items: stretch; row-gap: var(--pe---gap--tight); }
   .pe-packs_hero .hero_cta { width: 100%; }
 }
 
